@@ -6,7 +6,7 @@ import { del, head, put } from '@vercel/blob';
  */
 class BlobStorageService {
     private isConfigured(): boolean {
-        return !!process.env.BLOB_READ_WRITE_TOKEN;
+        return !!process.env.CARM_BLOB_READ_WRITE_TOKEN;
     }
 
     /**
@@ -19,7 +19,7 @@ class BlobStorageService {
     ): Promise<{ url: string; filename: string } | null> {
         try {
             if (!this.isConfigured()) {
-                console.warn('⚠️ Vercel Blob no configurado. BLOB_READ_WRITE_TOKEN faltante.');
+                console.warn('⚠️ Vercel Blob no configurado. CARM_BLOB_READ_WRITE_TOKEN faltante.');
                 return null;
             }
 

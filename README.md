@@ -27,7 +27,7 @@ npm run reset-and-load      # Reset + seed + carga CSV completa
 npm run contingency         # Reset + seed + primeros 50 juegos (contingencia rápida)
 npm run recalculate         # Solo recalcular puntos (sin resetear)
 
-# Nota: Los comandos de crypto se han movido al repositorio carm-crypto
+# Nota: Sistema simplificado - ahora usamos DATABASE_URL estándar sin cifrado custom
 ```
 
 ## 🛠️ Requisitos
@@ -153,16 +153,6 @@ Admin: http://localhost:3000/admin
    - URIs de redirección autorizados: `http://localhost:3000/api/auth/callback/google`
 
 3. **Configurar las variables en tu archivo .env** (ver sección de variables de entorno más abajo)
-
-### **🔑 Configuración de Encriptación (Opcional)**
-
-Si necesitas encriptar contraseñas de base de datos:
-
-1. **Instalar herramientas de crypto:**
-   - Ir al repositorio: [carm-crypto](https://github.com/nikopfleger/carm-crypto)
-   - Seguir instrucciones para generar claves RSA
-
-2. **Configurar la clave privada en tu archivo .env** (ver sección de variables de entorno más abajo)
 
 ### **👤 Configuración de Owner**
 
@@ -342,18 +332,14 @@ OWNER_NAME=Super Admin
 
 ## 🔧 **Variables de Entorno (.env)**
 
-### 📦 **Repositorio de Crypto:**
-El sistema de encriptación RSA para contraseñas de base de datos se ha movido a un repositorio separado:
-- **Ubicación**: [https://github.com/nikopfleger/carm-crypto](https://github.com/nikopfleger/carm-crypto)
-- **Funcionalidades**: Generación de claves RSA, encriptación/desencriptación de contraseñas
-- **Binarios compilados**: Disponibles para Windows x64
-
 ### 🔧 **Configuración Completa del .env:**
+
+**Formato estándar Vercel/Prisma** (recomendado para desarrollo y producción):
+
 ```bash
-# Formato JDBC (recomendado)
-JDBC_URL=jdbc:postgresql://localhost:5432/database_name?currentSchema=carm
-JDBC_USER=username
-JDBC_PASS=contraseña_encriptada
+# Database URLs (formato estándar)
+DATABASE_URL=postgresql://username:password@localhost:5432/database_name?schema=carm
+DIRECT_URL=postgresql://username:password@localhost:5432/database_name?schema=carm
 
 # Database Pool Configuration
 DB_POOL_MAX=20
@@ -361,9 +347,6 @@ DB_POOL_MIN=2
 DB_POOL_TIMEOUT=60000
 DB_CONNECT_TIMEOUT=60000
 DB_KEEP_ALIVE_INTERVAL=30000
-
-# Clave privada para desencriptar (OBLIGATORIA en producción)
-PRIVATE_KEY=MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC...
 
 # OAuth con Google
 GOOGLE_CLIENT_ID=your_google_client_id_here
@@ -380,13 +363,18 @@ PORT=3000
 OWNER_EMAIL=tu_email_aqui
 ```
 
-### 🛡️ **Seguridad:**
-- **Clave privada en variable de entorno** - Obligatoria para desencriptar
-- **Contraseñas encriptadas** - Nunca en texto plano
-- **Repositorio separado** - Mejor organización del código de crypto
-- **Claves privadas nunca en Git** - Archivos de claves en `.gitignore`
+### 🛡️ **Seguridad en Vercel:**
+- **Variables en Vercel**: Configurar `DATABASE_URL` y `DIRECT_URL` en Vercel → Settings → Environment Variables
+- **Cifrado automático**: Vercel cifra las variables de entorno en reposo y en tránsito
+- **Sin credenciales en repo**: El archivo `.env` está en `.gitignore` 
+- **Logs seguros**: Las variables no se imprimen en logs de Vercel
 
-**Nota:** Para usar las utilidades de encriptación, clona el repositorio [carm-crypto](https://github.com/nikopfleger/carm-crypto) y sigue las instrucciones allí.
+### 📝 **Migración desde JDBC:**
+Si vienes del sistema anterior con JDBC/crypto:
+1. Reemplaza `JDBC_URL`, `JDBC_USER`, `JDBC_PASS` por `DATABASE_URL` 
+2. Elimina `PRIVATE_KEY` (ya no necesaria)
+3. En Vercel, configura `DATABASE_URL` con las credenciales reales
+4. Para desarrollo local, usa `.env` con credenciales de desarrollo
 
 ## 📄 Licencia
 

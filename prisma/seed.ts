@@ -1,13 +1,6 @@
 import { PrismaClient, UserRole } from '@prisma/client';
-import { getPrismaDatabaseUrl } from '../lib/database/config';
 
-const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: getPrismaDatabaseUrl()
-    }
-  }
-});
+const prisma = new PrismaClient();
 
 // Fail-fast siempre activo para el seed
 const seedFail = (message: string): never => {

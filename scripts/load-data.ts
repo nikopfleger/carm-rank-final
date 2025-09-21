@@ -5,7 +5,6 @@ import { config } from 'dotenv';
 import * as fs from 'fs';
 import * as path from 'path';
 import { configCache } from '../lib/config-cache';
-import { getPrismaDatabaseUrl } from '../lib/database/config';
 import {
     calculateGameResults
 } from '../lib/game-calculations';
@@ -32,14 +31,8 @@ const isAllGames = allArg || gameLimit === Infinity;
 console.log(`🎮 Modo: ${isAllGames ? 'TODOS los juegos' : `Primeros ${gameLimit} juegos`}`);
 
 
-// Crear PrismaClient con URL desencriptada desde JDBC
-const prisma = new PrismaClient({
-    datasources: {
-        db: {
-            url: getPrismaDatabaseUrl()
-        }
-    }
-});
+// Crear PrismaClient con DATABASE_URL estándar
+const prisma = new PrismaClient();
 
 // === Reserva de legajos (JSON) y sets de control ===
 const legajosRealesPathAbs = path.join(__dirname, '..', 'data', 'legajos-reales-correcto.json');

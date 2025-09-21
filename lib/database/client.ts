@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
 import { initializeConfigurations } from '../config-initializer';
-import { getPrismaDatabaseUrl } from './config';
 import { createVersionedPrismaClient } from './prisma-interceptor';
 
 // Prevent multiple instances of Prisma Client in development
@@ -8,16 +7,27 @@ const globalForPrisma = globalThis as unknown as {
   prisma: ReturnType<typeof createVersionedPrismaClient> | undefined;
 };
 
-// Crear cliente base de Prisma con URL desencriptada
-// Configurar URL con parámetros de pool
-const databaseUrl = getPrismaDatabaseUrl();
-const urlWithPool = `${databaseUrl}?connection_limit=${process.env.DB_POOL_MAX || '50'}&pool_timeout=${process.env.DB_POOL_TIMEOUT || '30000'}`;
+// Crear cliente base de Prisma con DATABASE_URL estándar
+// Prisma toma automáticamente DATABASE_URL del environment
+// Agregamos parámetros de pool si no están en la URL base
+const getDatabaseUrlWithPool = () => {
+  const baseUrl = process.env.DATABASE_URL;
+  if (!baseUrl) {
+    throw new Error('DATABASE_URL no está configurada');
+  }
+
+  // Si la URL ya tiene parámetros, agregarlos con &, sino con ?
+  const separator = baseUrl.includes('?') ? '&' : '?';
+  const poolParams = `connection_limit=${process.env.DB_POOL_MAX || '50'}&pool_timeout=${process.env.DB_POOL_TIMEOUT || '30000'}`;
+
+  return `${baseUrl}${separator}${poolParams}`;
+};
 
 const basePrisma = new PrismaClient({
   log: ['error'],
   datasources: {
     db: {
-      url: urlWithPool,
+      url: getDatabaseUrlWithPool(),
     },
   },
 });

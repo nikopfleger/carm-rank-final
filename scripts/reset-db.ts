@@ -1,6 +1,5 @@
 import { execSync } from 'child_process';
 import { config } from 'dotenv';
-import { getPrismaDatabaseUrl } from '../lib/database/config';
 
 // Cargar variables de entorno desde .env
 config();
@@ -9,17 +8,18 @@ async function resetDatabase() {
     console.log('🔄 Iniciando reset de base de datos...');
 
     try {
-        // Obtener la URL desencriptada
-        const databaseUrl = getPrismaDatabaseUrl();
-        console.log('🔐 URL de base de datos obtenida correctamente');
+        // Usar DATABASE_URL del environment
+        if (!process.env.DATABASE_URL) {
+            throw new Error('DATABASE_URL no está configurada');
+        }
+        console.log('🔐 DATABASE_URL configurada correctamente');
 
-        // Ejecutar prisma db push con la URL desencriptada
+        // Ejecutar prisma db push
         console.log('🗑️  Ejecutando prisma db push --force-reset...');
         execSync('npx prisma db push --force-reset', {
             stdio: 'inherit',
             env: {
-                ...process.env,
-                DATABASE_URL: databaseUrl
+                ...process.env
             }
         });
 
@@ -30,8 +30,7 @@ async function resetDatabase() {
         execSync('npm run db:seed', {
             stdio: 'inherit',
             env: {
-                ...process.env,
-                DATABASE_URL: databaseUrl
+                ...process.env
             }
         });
 

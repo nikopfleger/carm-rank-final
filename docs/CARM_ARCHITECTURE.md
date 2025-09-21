@@ -105,7 +105,6 @@ carm-rank/
 │   ├── config-cache.ts
 │   ├── config-initializer.ts
 │   ├── countryFlags.ts
-│   ├── crypto-helper.js
 │   ├── database/
 │   │   ├── client.ts
 │   │   └── migrations/

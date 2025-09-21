@@ -6,18 +6,11 @@
  */
 
 import { PrismaClient } from '@prisma/client';
-import { getPrismaDatabaseUrl } from '../lib/database/config';
 
 // Cargar variables de entorno
 require('dotenv').config({ path: '.env' });
 
-const prisma = new PrismaClient({
-    datasources: {
-        db: {
-            url: getPrismaDatabaseUrl()
-        }
-    }
-});
+const prisma = new PrismaClient();
 
 async function resetOAuthAccounts() {
     console.log('🔄 Iniciando reset completo de OAuth Accounts...\n');

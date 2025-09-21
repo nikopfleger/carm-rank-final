@@ -35,10 +35,9 @@
 ## 🔧 **Variables de Entorno**
 
 ```env
-# Base de datos (JDBC - recomendado)
-JDBC_URL=jdbc:postgresql://localhost:5432/carm_ranking?currentSchema=carm
-JDBC_USER=carm_admin
-JDBC_PASS=tu_password_aqui
+# Base de datos (formato estándar Vercel/Prisma)
+DATABASE_URL=postgresql://username:password@localhost:5432/carm_ranking?schema=carm
+DIRECT_URL=postgresql://username:password@localhost:5432/carm_ranking?schema=carm
 
 # OAuth con Google
 GOOGLE_CLIENT_ID=tu_google_client_id_aqui

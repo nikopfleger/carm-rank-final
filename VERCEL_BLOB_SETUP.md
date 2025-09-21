@@ -22,19 +22,50 @@ Este proyecto ahora usa **Vercel Blob** como storage principal para imágenes, c
 3. Agrega la variable de entorno en Vercel:
 
 ```
-BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxxx
+CARM_BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xDW0UcmfAvqYQPEh_ndz3gFikPFmqnZmRnsBsAW69ocRNGS
 ```
 
-### 3. Variables de Entorno Requeridas
+### 3. Configurar Next.js para Blob Storage
+
+En `next.config.mjs`, agregar patrón para imágenes remotas:
+
+```javascript
+// next.config.mjs
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*.public.blob.vercel-storage.com',
+      },
+      // ... otros patrones existentes
+    ],
+  },
+};
+```
+
+### 4. Variables de Entorno Requeridas
 
 En el dashboard de Vercel, asegúrate de tener:
 
 ```bash
 # Required para Blob Storage
-BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxxx
+CARM_BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xDW0UcmfAvqYQPEh_ndz3gFikPFmqnZmRnsBsAW69ocRNGS
 
-# Required para fallback (ya existentes)
+# Database URLs (formato estándar Vercel/Prisma)
+DATABASE_URL=postgresql://user:password@host:5432/database?schema=carm
+DIRECT_URL=postgresql://user:password@host:5432/database?schema=carm
+
+# OAuth con Google
+GOOGLE_CLIENT_ID=tu_client_id_produccion
+GOOGLE_CLIENT_SECRET=tu_client_secret_produccion
+
+# NextAuth
+NEXTAUTH_SECRET=tu_super_secret_muy_largo_para_produccion
 NEXTAUTH_URL=https://tu-app.vercel.app
+
+# Owner
+OWNER_EMAIL=tu_email@ejemplo.com
 ```
 
 ## 🔄 Comportamiento del Sistema
@@ -54,10 +85,10 @@ NEXTAUTH_URL=https://tu-app.vercel.app
 
 ## 🐛 Troubleshooting
 
-### Error: "BLOB_READ_WRITE_TOKEN faltante"
+### Error: "CARM_BLOB_READ_WRITE_TOKEN faltante"
 ```bash
 # Verificar en Vercel Dashboard > Settings > Environment Variables
-BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxx
+CARM_BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxx
 ```
 
 ### Error: "Access denied to blob"
@@ -98,7 +129,7 @@ Para desarrollo local, el sistema funciona sin Blob:
 
 ```bash
 # .env (local)
-# No es necesario BLOB_READ_WRITE_TOKEN
+# No es necesario CARM_BLOB_READ_WRITE_TOKEN
 # El sistema usa storage local automáticamente
 ```
 

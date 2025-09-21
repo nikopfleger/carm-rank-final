@@ -4,13 +4,11 @@ const nextConfig = {
   images: {
     qualities: [25, 50, 75, 95],
     remotePatterns: [
-      // Permitir imágenes desde el dominio configurado en NEXTAUTH_URL
-      ...(process.env.NEXTAUTH_URL ? [{
-        protocol: new URL(process.env.NEXTAUTH_URL).protocol.replace(':', ''),
-        hostname: new URL(process.env.NEXTAUTH_URL).hostname,
-        port: new URL(process.env.NEXTAUTH_URL).port || '',
-        pathname: '/images/games/**',
-      }] : []),
+      // Permitir imágenes desde Vercel Blob Storage
+      {
+        protocol: 'https',
+        hostname: '*.public.blob.vercel-storage.com',
+      },
     ],
   },
 
