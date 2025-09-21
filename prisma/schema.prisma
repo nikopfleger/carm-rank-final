@@ -34,7 +34,6 @@ model Country {
   updatedAt     DateTime @updatedAt @map("updated_at")
   updatedBy     String?  @map("updated_by") @db.VarChar(255)
   updatedIp     String?  @map("updated_ip") @db.VarChar(45)
-  version      Int       @default(0)
   players     Player[]
 
   @@map("country")
