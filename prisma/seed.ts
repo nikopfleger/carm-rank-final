@@ -274,12 +274,19 @@ async function main() {
     const countryMap: { [key: string]: number } = {
       'ARG': argCountry.id,
       'JPN': (await prisma.country.findUnique({ where: { isoCode: 'JPN' } }))?.id || argCountry.id,
-      'CHL': (await prisma.country.findUnique({ where: { isoCode: 'CHL' } }))?.id || argCountry.id,
+      'CHN': (await prisma.country.findUnique({ where: { isoCode: 'CHN' } }))?.id || argCountry.id,
+      'USA': (await prisma.country.findUnique({ where: { isoCode: 'USA' } }))?.id || argCountry.id,
+      'ESP': (await prisma.country.findUnique({ where: { isoCode: 'ESP' } }))?.id || argCountry.id,
+      'FRA': (await prisma.country.findUnique({ where: { isoCode: 'FRA' } }))?.id || argCountry.id,
+      'ITA': (await prisma.country.findUnique({ where: { isoCode: 'ITA' } }))?.id || argCountry.id,
+      'DEU': (await prisma.country.findUnique({ where: { isoCode: 'DEU' } }))?.id || argCountry.id,
       'BRA': (await prisma.country.findUnique({ where: { isoCode: 'BRA' } }))?.id || argCountry.id,
       'MEX': (await prisma.country.findUnique({ where: { isoCode: 'MEX' } }))?.id || argCountry.id,
+      'CHL': (await prisma.country.findUnique({ where: { isoCode: 'CHL' } }))?.id || argCountry.id,
       'URY': (await prisma.country.findUnique({ where: { isoCode: 'URY' } }))?.id || argCountry.id,
-      'COL': (await prisma.country.findUnique({ where: { isoCode: 'COL' } }))?.id || argCountry.id,
       'PER': (await prisma.country.findUnique({ where: { isoCode: 'PER' } }))?.id || argCountry.id,
+      'COL': (await prisma.country.findUnique({ where: { isoCode: 'COL' } }))?.id || argCountry.id,
+      'CAN': (await prisma.country.findUnique({ where: { isoCode: 'CAN' } }))?.id || argCountry.id,
     };
 
     const playersData = [
