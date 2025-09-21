@@ -5,7 +5,6 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["carm"]
 }
 
 // Tipo base para todos los modelos con campos de auditoría

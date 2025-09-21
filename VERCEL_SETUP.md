@@ -51,15 +51,21 @@ DB_KEEP_ALIVE_INTERVAL=30000
 ### **🔧 Cómo Funciona en Vercel:**
 
 ```bash
-# Configuración simplificada:
+# Configuración flexible - Prisma usa el schema de la URL:
+
+# Opción A: Schema específico (ej: carm)
 DATABASE_URL=postgresql://user:password@host:5432/db?schema=carm
 DIRECT_URL=postgresql://user:password@host:5432/db?schema=carm
 
+# Opción B: Schema por defecto (public - más simple)
+DATABASE_URL=postgresql://user:password@host:5432/db
+DIRECT_URL=postgresql://user:password@host:5432/db
+
 # Vercel automáticamente:
 # 1. Cifra las variables en reposo
-# 2. Las transmite por canal seguro
+# 2. Las transmite por canal seguro  
 # 3. No las imprime en logs
-# 4. Prisma las consume directamente
+# 4. Prisma usa el schema especificado en la URL
 ```
 
 ## 🗄️ Base de Datos
