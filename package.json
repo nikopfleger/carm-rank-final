@@ -27,6 +27,7 @@
     "db:migrate:prod": "prisma migrate deploy",
     "db:migrate:win": "prisma migrate dev",
     "db:reset": "prisma db push --force-reset",
+    "seed": "prisma db seed",
     "db:seed": "tsx prisma/seed.ts",
     "db:seed:win": "tsx prisma/seed.ts",
     "db:seed:prod": "NODE_ENV=production tsx prisma/seed.ts",
