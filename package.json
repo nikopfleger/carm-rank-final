@@ -15,7 +15,7 @@
     "dev:uat": "next dev -H 0.0.0.0 -p 3000",
     "dev:public": "next dev -H 0.0.0.0",
     "setup:uat": "node scripts/setup-oauth-uat.js",
-    "build": "npm run migrate:deploy && node scripts/run-load-data-if-needed.mjs && next build",
+    "build": "npm run migrate:deploy && npm run seed && node scripts/run-load-data-if-needed.mjs && next build",
     "start": "next start",
     "start:uat": "next start -H 0.0.0.0 -p 3000",
     "lint": "next lint",
