@@ -1,0 +1,152 @@
+[
+    {
+        "id": "1",
+        "name": "2do torneo presencial",
+        "startDate": "2017-07-16",
+        "endDate": "2017-07-16"
+    },
+    {
+        "id": "2",
+        "name": "Tercero torneo presencial",
+        "startDate": "2017-12-16",
+        "endDate": "2017-12-17"
+    },
+    {
+        "id": "3",
+        "name": "1er torneo online",
+        "startDate": "2017-09-05",
+        "endDate": "2017-12-07"
+    },
+    {
+        "id": "4",
+        "name": "2do torneo sudamericano SAMA",
+        "startDate": "2018-02-25",
+        "endDate": "2018-09-02"
+    },
+    {
+        "id": "5",
+        "name": "Liga CARM 2018",
+        "startDate": "2018-02-25",
+        "endDate": "2018-09-02"
+    },
+    {
+        "id": "6",
+        "name": "Primer minitorneo (online)",
+        "startDate": "2019-03-17",
+        "endDate": "2019-03-17"
+    },
+    {
+        "id": "7",
+        "name": "Segundo minitorneo (presencial)",
+        "startDate": "2019-04-27",
+        "endDate": "2019-04-27"
+    },
+    {
+        "id": "8",
+        "name": "Tercer minitorneo (online)",
+        "startDate": "2019-05-11",
+        "endDate": "2019-05-11"
+    },
+    {
+        "id": "9",
+        "name": "Cuarto minitorneo (presencial)",
+        "startDate": "2019-06-30",
+        "endDate": "2019-06-30"
+    },
+    {
+        "id": "10",
+        "name": "Quinto minitorneo (online)",
+        "startDate": "2019-08-04",
+        "endDate": "2019-08-04"
+    },
+    {
+        "id": "11",
+        "name": "Sexto minitorneo (presencial)",
+        "startDate": "2019-10-06",
+        "endDate": "2019-10-13"
+    },
+    {
+        "id": "12",
+        "name": "1er torneo online 2019",
+        "startDate": "2019-12-01",
+        "endDate": "2019-12-01"
+    },
+    {
+        "id": "13",
+        "name": "Olimpiadas de la mente 2019",
+        "startDate": "2019-12-21",
+        "endDate": "2019-12-21"
+    },
+    {
+        "id": "14",
+        "name": "4to torneo presencial",
+        "startDate": "2020-03-01",
+        "endDate": "2020-03-01"
+    },
+    {
+        "id": "15",
+        "name": "10mo Minitorneo Online",
+        "startDate": "2020-04-19",
+        "endDate": "2020-04-19"
+    },
+    {
+        "id": "16",
+        "name": "2do torneo online 2019",
+        "startDate": "2020-08-16",
+        "endDate": "2020-08-17"
+    },
+    {
+        "id": "17",
+        "name": "Primer minitorneo (presencial) 2020",
+        "startDate": "2020-09-26",
+        "endDate": "2020-09-27"
+    },
+    {
+        "id": "18",
+        "name": "Torneo online abril 2020 Tenhou",
+        "startDate": "2020-10-10",
+        "endDate": "2020-10-11"
+    },
+    {
+        "id": "19",
+        "name": "Torneo Relámpago CARM",
+        "startDate": "2017-09-01",
+        "endDate": "2017-11-21"
+    },
+    {
+        "id": "20",
+        "name": "Torneo Septiembre 2020",
+        "startDate": "2020-09-26",
+        "endDate": "2020-09-27"
+    },
+    {
+        "id": "21",
+        "name": "Mahjong Soul 2020",
+        "startDate": "2020-05-26",
+        "endDate": "2020-05-26"
+    },
+    {
+        "id": "22",
+        "name": "Torneo Apertura 2023",
+        "startDate": "2023-03-18",
+        "endDate": "2023-03-19"
+    },
+    {
+        "id": "23",
+        "name": "Olimpiadas de la mente 2023",
+        "startDate": "2023-11-12",
+        "endDate": "2023-11-12"
+    },
+    {
+        "id": "24",
+        "name": "Torneo Abril 2024",
+        "startDate": "2024-04-02",
+        "endDate": "2024-03-31"
+    },
+    {
+        "id": "25",
+        "name": "Torneo Diciembre 2024",
+        "startDate": "2024-12-07",
+        "endDate": "2024-12-07"
+    }
+]

@@ -1,0 +1,4 @@
+# Este archivo mantiene el directorio images/ en Git
+# Las imágenes se suben a través de la aplicación
+# En desarrollo local: C:\CARM\images
+# En producción Vercel: /public/images

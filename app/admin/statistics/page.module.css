@@ -1,0 +1,28 @@
+/* Página de Estadísticas */
+.statisticsPage {
+  @apply min-h-screen bg-gray-100 dark:bg-gray-900 py-8;
+}
+
+.statisticsContainer {
+  /* El contenedor ahora se maneja por el PageContainer global */
+}
+
+.statisticsCard {
+  @apply bg-white dark:bg-gray-800 shadow-lg rounded-lg;
+}
+
+.statisticsHeader {
+  @apply px-6 py-4 border-b border-gray-200 dark:border-gray-700;
+}
+
+.statisticsTitle {
+  @apply text-2xl font-bold text-gray-900 dark:text-white;
+}
+
+.statisticsDescription {
+  @apply text-gray-600 dark:text-gray-400 mt-2;
+}
+
+.statisticsContent {
+  @apply p-6;
+}

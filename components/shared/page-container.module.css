@@ -1,0 +1,31 @@
+/* ===== CONTENEDOR GLOBAL DE PÁGINAS ===== */
+.pageContainer {
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    min-height: calc(100vh - 80px);
+    /* Ajustar según la altura del nav */
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+@media (max-width: 640px) {
+    .pageContainer {
+        @apply px-3;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+    .pageContainer {
+        @apply px-4;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .pageContainer {
+        @apply px-6;
+    }
+}
+
+@media (min-width: 1025px) {
+    .pageContainer {
+        @apply px-8;
+    }
+}

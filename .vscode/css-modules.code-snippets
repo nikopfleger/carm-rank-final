@@ -1,0 +1,88 @@
+{
+    "CSS Module Import": {
+        "prefix": "css-import",
+        "body": [
+            "import styles from \"./${1:component}.module.css\";"
+        ],
+        "description": "Import CSS Module"
+    },
+    "CSS Module Class": {
+        "prefix": "css-class",
+        "body": [
+            "className={styles.${1:className}}"
+        ],
+        "description": "CSS Module className"
+    },
+    "CSS Module with Conditional": {
+        "prefix": "css-conditional",
+        "body": [
+            "className={`${styles.${1:baseClass}} ${${2:condition} ? styles.${3:activeClass} : styles.${4:inactiveClass}}`}"
+        ],
+        "description": "CSS Module with conditional classes"
+    },
+    "CSS Module File Template": {
+        "prefix": "css-module-file",
+        "body": [
+            "/* ${1:Component Name} */",
+            ".${2:componentName} {",
+            "  @apply ${3:tailwind-classes};",
+            "}",
+            "",
+            ".${4:elementName} {",
+            "  @apply ${5:tailwind-classes};",
+            "}",
+            "",
+            "/* States */",
+            ".${6:stateName} {",
+            "  @apply ${7:tailwind-classes};",
+            "}",
+            "",
+            "/* Responsive */",
+            "@media (max-width: 768px) {",
+            "  .${8:mobileClass} {",
+            "    @apply ${9:mobile-styles};",
+            "  }",
+            "}"
+        ],
+        "description": "CSS Module file template"
+    },
+    "Next.js Page with CSS Module": {
+        "prefix": "next-page-css",
+        "body": [
+            "import React from \"react\";",
+            "import styles from \"./page.module.css\";",
+            "",
+            "export default function ${1:PageName}() {",
+            "  return (",
+            "    <div className={styles.${2:container}}>",
+            "      <h1 className={styles.${3:title}}>${4:Page Title}</h1>",
+            "      <p className={styles.${5:description}}>${6:Page description}</p>",
+            "    </div>",
+            "  );",
+            "}"
+        ],
+        "description": "Next.js page with CSS Module"
+    },
+    "React Component with CSS Module": {
+        "prefix": "react-component-css",
+        "body": [
+            "\"use client\";",
+            "",
+            "import React from \"react\";",
+            "import styles from \"./${1:component}.module.css\";",
+            "",
+            "interface ${2:ComponentName}Props {",
+            "  ${3:prop}: ${4:string};",
+            "}",
+            "",
+            "export function ${2:ComponentName}({ ${3:prop} }: ${2:ComponentName}Props) {",
+            "  return (",
+            "    <div className={styles.${5:container}}>",
+            "      ${6:Component content}",
+            "    </div>",
+            "  );",
+            "}"
+        ],
+        "description": "React component with CSS Module"
+    }
+}

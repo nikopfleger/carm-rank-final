@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+.yarn/install-state.gz
 
 # testing
 /coverage
@@ -17,20 +18,65 @@
 
 # misc
 .DS_Store
+
+# Crypto keys (NUNCA subir a Git)
+/keys/
+*.key
+*.pub
 *.pem
+
+# Binarios compilados (movidos a C:\CARM\crypto\)
+/bin/
+crypto-utils.exe
 
 # debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
-.env*.local
-.env
 
-# vercel
+# ============================================================================
+# VARIABLES DE ENTORNO Y CONFIGURACIÓN
+# ============================================================================
+
+# Archivos de entorno (NO subir a Git)
+.env
+.env*.local
+.env.production
+
+# ============================================================================
+# VERCEL
+# ============================================================================
+
+# Vercel
 .vercel
+
+# ============================================================================
+# IMÁGENES Y ARCHIVOS TEMPORALES
+# ============================================================================
+
+# Imágenes temporales
+/tmp/images/*
+/public/images/temp/*
+
+# Archivos temporales de imágenes
+/tmp/images/*
+/public/images/temp/*
+
+# ============================================================================
+# LOGS Y ARCHIVOS DE DESARROLLO
+# ============================================================================
+
+# Logs
+*.log
+load-output.log
+
+# Archivos de desarrollo
+.cursorrules
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.cursorrules
+

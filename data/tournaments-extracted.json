@@ -1,0 +1,177 @@
+[
+  {
+    "id": 1,
+    "name": "24",
+    "start_date": "2024-03-28",
+    "end_date": "2024-04-02",
+    "season_id": 1
+  },
+  {
+    "id": 2,
+    "name": "25",
+    "start_date": "2024-12-07",
+    "end_date": "2024-12-07",
+    "season_id": 1
+  },
+  {
+    "id": 3,
+    "name": "1",
+    "start_date": "2017-07-16",
+    "end_date": "2017-07-16",
+    "season_id": 1
+  },
+  {
+    "id": 4,
+    "name": "19",
+    "start_date": "2017-09-05",
+    "end_date": "2017-12-08",
+    "season_id": 1
+  },
+  {
+    "id": 5,
+    "name": "2",
+    "start_date": "2017-12-16",
+    "end_date": "2017-12-17",
+    "season_id": 1
+  },
+  {
+    "id": 6,
+    "name": "4",
+    "start_date": "2018-02-25",
+    "end_date": "2018-09-02",
+    "season_id": 1
+  },
+  {
+    "id": 7,
+    "name": "3",
+    "start_date": "2018-06-02",
+    "end_date": "2018-06-03",
+    "season_id": 1
+  },
+  {
+    "id": 8,
+    "name": "5",
+    "start_date": "2019-03-02",
+    "end_date": "2019-03-02",
+    "season_id": 1
+  },
+  {
+    "id": 9,
+    "name": "6",
+    "start_date": "2019-03-17",
+    "end_date": "2019-03-17",
+    "season_id": 1
+  },
+  {
+    "id": 10,
+    "name": "20",
+    "start_date": "2019-04-07",
+    "end_date": "2019-04-07",
+    "season_id": 1
+  },
+  {
+    "id": 11,
+    "name": "7",
+    "start_date": "2019-04-27",
+    "end_date": "2019-04-27",
+    "season_id": 1
+  },
+  {
+    "id": 12,
+    "name": "8",
+    "start_date": "2019-05-11",
+    "end_date": "2019-05-11",
+    "season_id": 1
+  },
+  {
+    "id": 13,
+    "name": "21",
+    "start_date": "2019-05-26",
+    "end_date": "2019-05-26",
+    "season_id": 1
+  },
+  {
+    "id": 14,
+    "name": "9",
+    "start_date": "2019-06-30",
+    "end_date": "2019-06-30",
+    "season_id": 1
+  },
+  {
+    "id": 15,
+    "name": "10",
+    "start_date": "2019-08-04",
+    "end_date": "2019-08-04",
+    "season_id": 1
+  },
+  {
+    "id": 16,
+    "name": "11",
+    "start_date": "2019-10-06",
+    "end_date": "2019-10-13",
+    "season_id": 1
+  },
+  {
+    "id": 17,
+    "name": "12",
+    "start_date": "2019-12-01",
+    "end_date": "2019-12-01",
+    "season_id": 1
+  },
+  {
+    "id": 18,
+    "name": "13",
+    "start_date": "2019-12-21",
+    "end_date": "2019-12-21",
+    "season_id": 1
+  },
+  {
+    "id": 19,
+    "name": "14",
+    "start_date": "2020-03-01",
+    "end_date": "2020-03-01",
+    "season_id": 1
+  },
+  {
+    "id": 20,
+    "name": "15",
+    "start_date": "2020-04-19",
+    "end_date": "2020-04-19",
+    "season_id": 1
+  },
+  {
+    "id": 21,
+    "name": "16",
+    "start_date": "2020-08-16",
+    "end_date": "2020-08-17",
+    "season_id": 1
+  },
+  {
+    "id": 22,
+    "name": "17",
+    "start_date": "2020-09-26",
+    "end_date": "2020-09-27",
+    "season_id": 1
+  },
+  {
+    "id": 23,
+    "name": "18",
+    "start_date": "2020-10-10",
+    "end_date": "2020-10-11",
+    "season_id": 1
+  },
+  {
+    "id": 24,
+    "name": "22",
+    "start_date": "2023-03-18",
+    "end_date": "2023-03-19",
+    "season_id": 1
+  },
+  {
+    "id": 25,
+    "name": "23",
+    "start_date": "2023-11-12",
+    "end_date": "2023-11-12",
+    "season_id": 1
+  }
+]

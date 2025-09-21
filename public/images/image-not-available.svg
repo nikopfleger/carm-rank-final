@@ -1,0 +1,34 @@
+<svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo gris claro -->
+  <rect width="400" height="300" fill="#F3F4F6"/>
+  
+  <!-- Borde punteado -->
+  <rect x="20" y="20" width="360" height="260" fill="none" stroke="#D1D5DB" stroke-width="2" stroke-dasharray="8,4"/>
+  
+  <!-- Icono de imagen central -->
+  <g transform="translate(160, 90)">
+    <!-- Rectángulo principal -->
+    <rect x="0" y="0" width="80" height="60" fill="none" stroke="#9CA3AF" stroke-width="3" rx="6"/>
+    
+    <!-- Sol/círculo -->
+    <circle cx="60" cy="20" r="8" fill="#D1D5DB"/>
+    
+    <!-- Montañas -->
+    <path d="M12 45 L28 28 L44 45 M32 45 L48 25 L68 45" stroke="#9CA3AF" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Texto principal -->
+  <text x="200" y="200" text-anchor="middle" fill="#6B7280" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="600">
+    Imagen no disponible
+  </text>
+  
+  <!-- Texto secundario -->
+  <text x="200" y="225" text-anchor="middle" fill="#9CA3AF" font-family="Inter, system-ui, sans-serif" font-size="14">
+    No se pudo cargar la imagen del juego
+  </text>
+  
+  <!-- Texto CARM -->
+  <text x="200" y="250" text-anchor="middle" fill="#1E3A8A" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700">
+    CARM
+  </text>
+</svg>

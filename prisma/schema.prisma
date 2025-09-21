@@ -1,0 +1,773 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["carm"]
+}
+
+// Tipo base para todos los modelos con campos de auditoría
+// Nota: Prisma no soporta herencia directa como Java, pero podemos usar este comentario
+// como referencia para mantener consistencia en todos los modelos
+// 
+// Campos que deben tener todos los modelos:
+//   version   Int      @default(0)
+//   deleted   Boolean  @default(false)
+//   createdAt   DateTime @default(now()) @map("created_at")
+//   createdBy String?  @map("created_by") @db.VarChar(255)
+//   createdIp String?  @map("created_ip") @db.VarChar(45)
+//   updatedAt   DateTime @updatedAt @map("updated_at")
+//   updatedBy String?  @map("updated_by") @db.VarChar(255)
+//   updatedIp String?  @map("updated_ip") @db.VarChar(45)
+
+model Country {
+  id          Int      @id @default(autoincrement())
+  isoCode     String   @unique @map("iso_code") @db.VarChar(3)
+  fullName    String   @map("full_name") @db.VarChar(255)
+  nationality String   @db.VarChar(255)
+  version     Int      @default(0)
+  deleted     Boolean  @default(false)
+  createdAt     DateTime @default(now()) @map("created_at")
+  createdBy   String?  @map("created_by") @db.VarChar(255)
+  createdIp   String?  @map("created_ip") @db.VarChar(45)
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  updatedBy     String?  @map("updated_by") @db.VarChar(255)
+  updatedIp     String?  @map("updated_ip") @db.VarChar(45)
+  players     Player[]
+
+  @@map("country")
+  @@schema("carm")
+}
+
+model Player {
+  id                    Int                @id @default(autoincrement())
+  nickname              String             @unique @db.VarChar(255)
+  fullname              String?            @db.VarChar(255)
+  countryId             Int                @map("country_id")
+  playerNumber          Int                @unique @map("player_number")
+  birthday              DateTime?          @db.Date
+  version               Int                @default(0)
+  deleted               Boolean            @default(false)
+  createdAt               DateTime           @default(now()) @map("created_at")
+  createdBy             String?            @map("created_by") @db.VarChar(255)
+  createdIp             String?            @map("created_ip") @db.VarChar(45)
+  updatedAt               DateTime           @updatedAt @map("updated_at")
+  updatedBy             String?            @map("updated_by") @db.VarChar(255)
+  updatedIp             String?            @map("updated_ip") @db.VarChar(45)
+  gameResults           GameResult[]
+  onlineUsers           OnlineUser[]
+  pendingGamesAsPlayer1 PendingGame[]      @relation("PendingGamePlayer1")
+  pendingGamesAsPlayer2 PendingGame[]      @relation("PendingGamePlayer2")
+  pendingGamesAsPlayer3 PendingGame[]      @relation("PendingGamePlayer3")
+  pendingGamesAsPlayer4 PendingGame[]      @relation("PendingGamePlayer4")
+
+  country               Country            @relation(fields: [countryId], references: [id])
+  rankings              PlayerRanking[]
+  tournamentResults     TournamentResult[]
+  points                Points[]
+  userPlayerLink        UserPlayerLink[]        @relation("Player_UserPlayerLink")
+  userPlayerLinkRequests UserPlayerLinkRequest[] @relation("Player_UserPlayerLinkRequest")
+  seasonResults         SeasonResult[]
+
+  @@map("player")
+  @@schema("carm")
+}
+
+model Uma {
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(255)
+  firstPlace  Int       @map("first_place")
+  secondPlace Int       @map("second_place")
+  thirdPlace  Int       @map("third_place")
+  fourthPlace Int?      @map("fourth_place")
+  version     Int       @default(0)
+  deleted     Boolean   @default(false)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  createdBy   String?   @map("created_by") @db.VarChar(255)
+  createdIp   String?   @map("created_ip") @db.VarChar(45)
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  updatedBy     String?   @map("updated_by") @db.VarChar(255)
+  updatedIp     String?   @map("updated_ip") @db.VarChar(45)
+  rulesets    Ruleset[]
+
+  @@map("uma")
+  @@schema("carm")
+}
+
+model Ruleset {
+  id           Int           @id @default(autoincrement())
+  name         String        @db.VarChar(255)
+  umaId        Int           @map("uma_id")
+  oka          Int
+  chonbo       Int
+  aka          Boolean       @default(false)
+  inPoints     Int           @map("in_points")
+  outPoints    Int           @map("out_points")
+  sanma        Boolean       @default(false)
+  extraData    Json?         @map("extra_data")
+  version      Int           @default(0)
+  deleted      Boolean       @default(false)
+  createdAt      DateTime      @default(now()) @map("created_at")
+  createdBy    String?       @map("created_by") @db.VarChar(255)
+  createdIp    String?       @map("created_ip") @db.VarChar(45)
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+  updatedBy    String?       @map("updated_by") @db.VarChar(255)
+  updatedIp    String?       @map("updated_ip") @db.VarChar(45)
+  games        Game[]
+  pendingGames PendingGame[]
+  uma          Uma           @relation(fields: [umaId], references: [id])
+
+  @@map("ruleset")
+  @@schema("carm")
+}
+
+model Season {
+  id           Int             @id @default(autoincrement())
+  name         String          @db.VarChar(255)
+  startDate    DateTime        @map("start_date") @db.Date
+  endDate      DateTime        @map("end_date") @db.Date
+  isActive     Boolean         @default(false) @map("is_active")
+  isClosed     Boolean         @default(false) @map("is_closed")
+  extraData    Json?           @map("extra_data")
+  version      Int             @default(0)
+  deleted      Boolean         @default(false)
+  createdAt      DateTime        @default(now()) @map("created_at")
+  createdBy    String?         @map("created_by") @db.VarChar(255)
+  createdIp    String?         @map("created_ip") @db.VarChar(45)
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+  updatedBy      String?         @map("updated_by") @db.VarChar(255)
+  updatedIp      String?         @map("updated_ip") @db.VarChar(45)
+  games        Game[]
+  pendingGames PendingGame[]
+  tournaments  Tournament[]
+  seasonConfigs SeasonConfig[]
+  seasonResults  SeasonResult[]
+
+  @@map("season")
+  @@schema("carm")
+}
+
+model Location {
+  id          Int          @id @default(autoincrement())
+  name        String       @db.VarChar(255)
+  address     String?
+  city        String?      @db.VarChar(255)
+  country     String?      @db.VarChar(255)
+  extraData   Json?        @map("extra_data")
+  version     Int          @default(0)
+  deleted     Boolean      @default(false)
+  createdAt     DateTime     @default(now()) @map("created_at")
+  createdBy   String?      @map("created_by") @db.VarChar(255)
+  createdIp   String?      @map("created_ip") @db.VarChar(45)
+  updatedAt     DateTime     @updatedAt @map("updated_at")
+  updatedBy     String?      @map("updated_by") @db.VarChar(255)
+  updatedIp     String?      @map("updated_ip") @db.VarChar(45)
+  games       Game[]
+  tournaments Tournament[]
+  pendingGames PendingGame[]
+
+  @@map("location")
+  @@schema("carm")
+}
+
+model PendingGame {
+  id                 Int               @id @default(autoincrement())
+  gameDate           DateTime          @map("game_date") @db.Date
+  nroJuegoDia        Int?              @map("nro_juego_dia")
+  locationId         Int?              @map("location_id")
+  duration           GameType          @map("duration")
+  sanma              Boolean           @default(false)
+  seasonId           Int?              @map("season_id")
+  tournamentId       Int?              @map("tournament_id")
+  rulesetId          Int               @map("ruleset_id")
+  imageUrl           String?           @map("image_url")
+  imageFileName      String?           @map("image_file_name")
+  imageFormat        String?           @map("image_format")
+  player1Id          Int               @map("player1_id")
+  player1Wind        String?           @map("player1_wind") @db.VarChar(1)
+  player1OorasuScore Int?              @map("player1_oorasu_score")
+  player1GameScore   Int               @map("player1_game_score")
+  player1Chonbos     Int               @default(0) @map("player1_chonbos")
+  player1FinalScore  Decimal?          @map("player1_final_score") @db.Decimal(10, 1)
+  player2Id          Int               @map("player2_id")
+  player2Wind        String?           @map("player2_wind") @db.VarChar(1)
+  player2OorasuScore Int?              @map("player2_oorasu_score")
+  player2GameScore   Int               @map("player2_game_score")
+  player2Chonbos     Int               @default(0) @map("player2_chonbos")
+  player2FinalScore  Decimal?          @map("player2_final_score") @db.Decimal(10, 1)
+  player3Id          Int               @map("player3_id")
+  player3Wind        String?           @map("player3_wind") @db.VarChar(1)
+  player3OorasuScore Int?              @map("player3_oorasu_score")
+  player3GameScore   Int               @map("player3_game_score")
+  player3Chonbos     Int               @default(0) @map("player3_chonbos")
+  player3FinalScore  Decimal?          @map("player3_final_score") @db.Decimal(10, 1)
+  player4Id          Int?              @map("player4_id")
+  player4Wind        String?           @map("player4_wind") @db.VarChar(1)
+  player4OorasuScore Int?              @map("player4_oorasu_score")
+  player4GameScore   Int?              @map("player4_game_score")
+  player4Chonbos     Int?              @default(0) @map("player4_chonbos")
+  player4FinalScore  Decimal?          @map("player4_final_score") @db.Decimal(10, 1)
+  status             PendingGameStatus @default(PENDING)
+  submittedBy        String?           @map("submitted_by")
+  validatedBy        String?           @map("validated_by")
+  validatedAt        DateTime?         @map("validated_at")
+  rejectedReason     String?           @map("rejected_reason")
+  gameId             Int?              @map("game_id")
+  version            Int               @default(0)
+  deleted            Boolean           @default(false)
+  createdAt            DateTime          @default(now()) @map("created_at")
+  createdBy          String?           @map("created_by") @db.VarChar(255)
+  createdIp          String?           @map("created_ip") @db.VarChar(45)
+  updatedAt            DateTime          @updatedAt @map("updated_at")
+  updatedBy            String?           @map("updated_by") @db.VarChar(255)
+  updatedIp            String?           @map("updated_ip") @db.VarChar(45)
+  game               Game?             @relation("PendingGameGame", fields: [gameId], references: [id])
+  player1            Player            @relation("PendingGamePlayer1", fields: [player1Id], references: [id])
+  player2            Player            @relation("PendingGamePlayer2", fields: [player2Id], references: [id])
+  player3            Player            @relation("PendingGamePlayer3", fields: [player3Id], references: [id])
+  player4            Player?           @relation("PendingGamePlayer4", fields: [player4Id], references: [id])
+  ruleset            Ruleset           @relation(fields: [rulesetId], references: [id])
+  season             Season?           @relation(fields: [seasonId], references: [id])
+  tournament         Tournament?       @relation(fields: [tournamentId], references: [id])
+  location           Location?         @relation(fields: [locationId], references: [id])
+
+  @@map("pending_game")
+  @@schema("carm")
+}
+
+model Game {
+  id           Int           @id @default(autoincrement())
+  seasonId     Int?          @map("season_id")
+  rulesetId    Int           @map("ruleset_id")
+  locationId   Int?          @map("location_id")
+  tournamentId Int?          @map("tournament_id")
+  gameType     GameType      @map("game_type")
+  gameDate     DateTime      @map("game_date") @db.Date
+  isValidated  Boolean       @default(false) @map("is_validated")
+  imageUrl     String?       @map("image_url")
+  extraData    Json?         @map("extra_data")
+  version      Int           @default(0)
+  deleted      Boolean       @default(false)
+  createdAt      DateTime      @default(now()) @map("created_at")
+  createdBy    String?       @map("created_by") @db.VarChar(255)
+  createdIp    String?       @map("created_ip") @db.VarChar(45)
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+  updatedBy      String?       @map("updated_by") @db.VarChar(255)
+  updatedIp      String?       @map("updated_ip") @db.VarChar(45)
+  location     Location?     @relation(fields: [locationId], references: [id])
+  ruleset      Ruleset       @relation(fields: [rulesetId], references: [id])
+  season       Season?       @relation(fields: [seasonId], references: [id])
+  tournament   Tournament?   @relation(fields: [tournamentId], references: [id])
+  gameResults  GameResult[]
+  pendingGames PendingGame[] @relation("PendingGameGame")
+  points       Points[]
+
+  @@map("game")
+  @@schema("carm")
+}
+
+model GameResult {
+  id              Int      @id @default(autoincrement())
+  gameId          Int      @map("game_id")
+  playerId        Int      @map("player_id")
+  finalPosition   Int      @map("final_position")
+  finalScore      Decimal  @map("final_score") @db.Decimal(10, 1)
+  danPointsEarned    Decimal  @map("dan_points_earned") @db.Decimal(10, 4)
+  rateChange         Decimal  @map("rate_change") @db.Decimal(10, 4)
+  seasonPointsEarned Decimal? @map("season_points_earned") @db.Decimal(10, 4)
+  extraData          Json?    @map("extra_data")
+  version         Int      @default(0)
+  deleted         Boolean  @default(false)
+  createdAt         DateTime @default(now()) @map("created_at")
+  createdBy       String?  @map("created_by") @db.VarChar(255)
+  createdIp       String?  @map("created_ip") @db.VarChar(45)
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  updatedBy       String?  @map("updated_by") @db.VarChar(255)
+  updatedIp       String?  @map("updated_ip") @db.VarChar(45)
+  game            Game     @relation(fields: [gameId], references: [id])
+  player          Player   @relation(fields: [playerId], references: [id])
+
+  @@unique([gameId, playerId])
+  @@map("game_result")
+  @@schema("carm")
+}
+
+model Tournament {
+  id                Int                @id @default(autoincrement())
+  seasonId          Int?               @map("season_id")
+  locationId        Int?               @map("location_id")
+  name              String             @db.VarChar(255)
+  description       String?
+  type              TournamentType
+  startDate         DateTime           @map("start_date") @db.Date
+  endDate           DateTime           @map("end_date") @db.Date
+  maxPlayers        Int?               @map("max_players")
+  entryFee          Decimal?           @map("entry_fee") @db.Money
+  prizePool         Decimal?           @map("prize_pool") @db.Money
+  isCompleted       Boolean            @default(false) @map("is_completed")
+  sanma             Boolean            @default(false) @map("sanma")
+  extraData         Json?              @map("extra_data")
+  version           Int                @default(0)
+  deleted           Boolean            @default(false)
+  createdAt           DateTime           @default(now()) @map("created_at")
+  createdBy         String?            @map("created_by") @db.VarChar(255)
+  createdIp         String?            @map("created_ip") @db.VarChar(45)
+  updatedAt           DateTime           @updatedAt @map("updated_at")
+  updatedBy           String?            @map("updated_by") @db.VarChar(255)
+  updatedIp           String?            @map("updated_ip") @db.VarChar(45)
+  location          Location?          @relation(fields: [locationId], references: [id])
+  season            Season?            @relation(fields: [seasonId], references: [id])
+  games             Game[]
+  pendingGames      PendingGame[]
+  tournamentResults TournamentResult[]
+  points            Points[]
+
+  @@map("tournament")
+  @@schema("carm")
+}
+
+model TournamentResult {
+  id           Int        @id @default(autoincrement())
+  tournamentId Int        @map("tournament_id")
+  playerId     Int        @map("player_id")
+  position     Int        @map("position")
+  pointsWon    Int        @map("points_won")
+  prizeWon     Decimal?   @map("prize_won") @db.Money
+  extraData    Json?      @map("extra_data")
+  version      Int        @default(0)
+  deleted      Boolean    @default(false)
+  createdAt      DateTime   @default(now()) @map("created_at")
+  createdBy    String?    @map("created_by") @db.VarChar(255)
+  createdIp    String?    @map("created_ip") @db.VarChar(45)
+  updatedAt      DateTime   @updatedAt @map("updated_at")
+  updatedBy    String?    @map("updated_by") @db.VarChar(255)
+  updatedIp    String?    @map("updated_ip") @db.VarChar(45)
+  player       Player     @relation(fields: [playerId], references: [id])
+  tournament   Tournament @relation(fields: [tournamentId], references: [id])
+
+  @@unique([tournamentId, playerId])
+  @@map("tournament_result")
+  @@schema("carm")
+}
+
+model Points {
+  id           Int        @id @default(autoincrement())
+  playerId     Int        @map("player_id")
+  player       Player     @relation(fields: [playerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_points_player_id")
+  seasonId     Int        @map("season_id")
+  pointsValue  Decimal    @map("points_value") @db.Decimal(15, 10)
+  description  String?
+  extraData    Json?      @map("extra_data")
+  version      Int        @default(0)
+  deleted      Boolean    @default(false)
+  createdAt      DateTime   @default(now()) @map("created_at")
+  createdBy    String?    @map("created_by") @db.VarChar(255)
+  createdIp    String?    @map("created_ip") @db.VarChar(45)
+  updatedAt      DateTime   @updatedAt @map("updated_at")
+  updatedBy      String?    @map("updated_by") @db.VarChar(255)
+  updatedIp      String?    @map("updated_ip") @db.VarChar(45)
+  pointsType   PointsType @default(DAN) @map("points_type")
+  gameId       Int?       @map("game_id")
+  game         Game?      @relation(fields: [gameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_points_game_id")
+  tournamentId Int?       @map("tournament_id")
+  tournament   Tournament? @relation(fields: [tournamentId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_points_tournament_id")
+  isSanma      Boolean    @default(false) @map("is_sanma")
+
+  @@map("points")
+  @@schema("carm")
+}
+
+model PlayerRanking {
+  id              Int      @id @default(autoincrement())
+  playerId        Int      @map("player_id")
+  isSanma         Boolean  @default(false) @map("is_sanma") // 3-player vs 4-player
+  totalGames      Int      @default(0) @map("total_games")
+  averagePosition Float    @default(2.5) @map("average_position")
+  danPoints       Float    @default(1000) @map("dan_points")
+  ratePoints      Float    @default(1500) @map("rate_points")
+  seasonPoints    Float    @default(0) @map("season_points") // acumulado de temporada
+  seasonTotalGames      Int      @default(0) @map("season_total_games")
+  seasonAveragePosition Float    @default(0) @map("season_average_position")
+  seasonFirstPlaceH     Int      @default(0) @map("season_first_place_h")
+  seasonSecondPlaceH    Int      @default(0) @map("season_second_place_h")
+  seasonThirdPlaceH     Int      @default(0) @map("season_third_place_h")
+  seasonFourthPlaceH    Int      @default(0) @map("season_fourth_place_h")
+  seasonFirstPlaceT     Int      @default(0) @map("season_first_place_t")
+  seasonSecondPlaceT    Int      @default(0) @map("season_second_place_t")
+  seasonThirdPlaceT     Int      @default(0) @map("season_third_place_t")
+  seasonFourthPlaceT    Int      @default(0) @map("season_fourth_place_t")
+  maxRate         Float    @default(1500) @map("max_rate")
+  firstPlaceH     Int      @default(0) @map("first_place_h")
+  secondPlaceH    Int      @default(0) @map("second_place_h")
+  thirdPlaceH     Int      @default(0) @map("third_place_h")
+  fourthPlaceH    Int      @default(0) @map("fourth_place_h")
+  firstPlaceT     Int      @default(0) @map("first_place_t")
+  secondPlaceT    Int      @default(0) @map("second_place_t")
+  thirdPlaceT     Int      @default(0) @map("third_place_t")
+  fourthPlaceT    Int      @default(0) @map("fourth_place_t")
+  version         Int      @default(0)
+  deleted         Boolean  @default(false)
+  createdAt         DateTime @default(now()) @map("created_at")
+  createdBy       String?  @map("created_by") @db.VarChar(255)
+  createdIp       String?  @map("created_ip") @db.VarChar(45)
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  updatedBy         String?  @map("updated_by") @db.VarChar(255)
+  updatedIp         String?  @map("updated_ip") @db.VarChar(45)
+  player          Player   @relation(fields: [playerId], references: [id])
+
+  @@unique([playerId, isSanma])
+  @@map("player_ranking")
+  @@schema("carm")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @map("refresh_token")
+  access_token      String? @map("access_token")
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @map("id_token")
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("account")
+  @@schema("carm")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+  @@schema("carm")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime? @map("email_verified")
+  image         String?
+  role          UserRole  @default(USER)
+  authorities   String[]  @default([])
+  isActive      Boolean   @default(true) @map("is_active")
+  sessionInvalidatedAt DateTime? @map("session_invalidated_at") // Para forzar logout de tokens JWT
+  receiveGameNotifications Boolean @default(true) @map("receive_game_notifications")
+  receiveLinkNotifications Boolean @default(true) @map("receive_link_notifications")
+  version       Int       @default(0)
+  deleted       Boolean   @default(false)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  createdBy     String?   @map("created_by") @db.VarChar(255)
+  createdIp     String?   @map("created_ip") @db.VarChar(45)
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  updatedBy       String?   @map("updated_by") @db.VarChar(255)
+  updatedIp       String?   @map("updated_ip") @db.VarChar(45)
+  accounts      Account[]
+  sessions      Session[]
+  userPlayerLink        UserPlayerLink[]        @relation("User_UserPlayerLink")
+  userPlayerLinkRequests UserPlayerLinkRequest[] @relation("User_UserPlayerLinkRequest")
+  // Sin relación con PendingGame - submittedBy es solo string
+
+  @@map("user")
+  @@schema("carm")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_token")
+  @@schema("carm")
+}
+
+model OnlineUser {
+  id        Int      @id @default(autoincrement())
+  playerId   Int      @map("player_id")
+  platform  String   @db.VarChar(50)
+  username  String   @db.VarChar(255)
+  idOnline  String?  @map("id_online") @db.VarChar(255)
+  userId    String?  @map("user_id") @db.VarChar(255)
+  isActive  Boolean  @default(true) @map("is_active")
+  version   Int      @default(0)
+  deleted   Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+  createdBy String?  @map("created_by") @db.VarChar(255)
+  createdIp String?  @map("created_ip") @db.VarChar(45)
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  updatedBy String?  @map("updated_by") @db.VarChar(255)
+  updatedIp String?  @map("updated_ip") @db.VarChar(45)
+  player    Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@map("online_user")
+  @@schema("carm")
+}
+
+model UserPlayerLink {
+  id        Int      @id @default(autoincrement())
+  userId    String   @map("user_id") @db.VarChar(255)
+  playerId   Int      @map("player_id")
+  version   Int      @default(0)
+  deleted   Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+  createdBy String?  @map("created_by") @db.VarChar(255)
+  createdIp String?  @map("created_ip") @db.VarChar(45)
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  updatedBy   String?  @map("updated_by") @db.VarChar(255)
+  updatedIp   String?  @map("updated_ip") @db.VarChar(45)
+  user      User     @relation("User_UserPlayerLink", fields: [userId], references: [id], onDelete: Cascade)
+  player    Player   @relation("Player_UserPlayerLink", fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
+  @@unique([playerId])
+  @@map("user_player_link")
+  @@schema("carm")
+}
+
+model UserPlayerLinkRequest {
+  id         Int                 @id @default(autoincrement())
+  userId     String              @map("user_id") @db.VarChar(255)
+  playerId    Int               @map("player_id")
+  status     LinkRequestStatus   @default(PENDING)
+  note       String?
+  approvedBy String?             @map("approved_by") @db.VarChar(255)
+  approvedAt DateTime?           @map("approved_at")
+  version    Int                 @default(0)
+  deleted    Boolean             @default(false)
+  createdAt    DateTime            @default(now()) @map("created_at")
+  createdBy  String?             @map("created_by") @db.VarChar(255)
+  createdIp  String?             @map("created_ip") @db.VarChar(45)
+  updatedAt    DateTime            @updatedAt @map("updated_at")
+  updatedBy    String?             @map("updated_by") @db.VarChar(255)
+  updatedIp    String?             @map("updated_ip") @db.VarChar(45)
+  user       User                @relation("User_UserPlayerLinkRequest", fields: [userId], references: [id], onDelete: Cascade)
+  player     Player              @relation("Player_UserPlayerLinkRequest", fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([playerId])
+  @@index([userId])
+  @@map("user_player_link_request")
+  @@schema("carm")
+}
+
+enum GameType {
+  HANCHAN
+  TONPUUSEN
+
+  @@map("game_type")
+  @@schema("carm")
+}
+
+enum TournamentType {
+  INDIVIDUAL
+  TEAM
+  LEAGUE
+
+  @@map("tournament_type")
+  @@schema("carm")
+}
+
+enum OnlinePlatform {
+  TENHOU
+  MAHJONG_SOUL
+
+  @@map("online_platform")
+  @@schema("carm")
+}
+
+enum PointsType {
+  DAN
+  RATE
+  SEASON
+
+  @@map("points_type")
+  @@schema("carm")
+}
+
+enum LinkRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+
+  @@map("link_request_status")
+  @@schema("carm")
+}
+
+enum PendingGameStatus {
+  PENDING
+  VALIDATED
+  REJECTED
+
+  @@map("pending_game_status")
+  @@schema("carm")
+}
+
+enum UserRole {
+  OWNER
+  SUPER_ADMIN
+  ADMIN
+  MODERATOR
+  USER
+
+  @@map("user_role")
+  @@schema("carm")
+}
+
+model EmailAccount {
+  id                    Int      @id @default(autoincrement())
+  name                  String   @db.VarChar(255)
+  isPrimary             Boolean  @default(false) @map("is_primary")
+  origin                String   @db.VarChar(255)
+  fromAddress           String   @map("from_address") @db.VarChar(255)
+  replyAddress          String?  @map("reply_address") @db.VarChar(255)
+  organization          String?  @db.VarChar(255)
+  server                String   @db.VarChar(255)
+  port                  Int
+  username              String   @db.VarChar(255)
+  password              String   @db.VarChar(255)
+  connectionSecurity    String   @map("connection_security") @db.VarChar(50)
+  isActive              Boolean  @default(true) @map("is_active")
+  version               Int      @default(0)
+  deleted               Boolean  @default(false)
+  createdAt               DateTime @default(now()) @map("created_at")
+  createdBy             String?  @map("created_by") @db.VarChar(255)
+  createdIp             String?  @map("created_ip") @db.VarChar(45)
+  updatedAt               DateTime @updatedAt @map("updated_at")
+  updatedBy               String?  @map("updated_by") @db.VarChar(255)
+  updatedIp               String?  @map("updated_ip") @db.VarChar(45)
+
+  @@map("email_account")
+  @@schema("carm")
+}
+
+model DanConfig {
+  id          Int      @id @default(autoincrement())
+  rank        String   @db.VarChar(50) // "新人", "9級", "初段", etc.
+  sanma       Boolean  @default(false)
+  minPoints   Int      @map("min_points")
+  maxPoints   Int?     @map("max_points")
+  firstPlace  Int      @map("first_place")
+  secondPlace Int      @map("second_place")
+  thirdPlace  Int      @map("third_place")
+  fourthPlace Int?     @map("fourth_place")
+  isProtected Boolean  @default(false) @map("is_protected")
+  color       String   @db.VarChar(7) // Hex color
+  cssClass    String   @db.VarChar(50) @map("css_class")
+  isLastRank  Boolean  @default(false) @map("is_last_rank")
+  version     Int      @default(0)
+  deleted     Boolean  @default(false)
+  createdAt     DateTime @default(now()) @map("created_at")
+  createdBy   String?  @map("created_by") @db.VarChar(255)
+  createdIp   String?  @map("created_ip") @db.VarChar(45)
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  updatedBy   String?  @map("updated_by") @db.VarChar(255)
+  updatedIp   String?  @map("updated_ip") @db.VarChar(45)
+
+  @@unique([rank, sanma])
+  @@map("dan_config")
+  @@schema("carm")
+}
+
+model RateConfig {
+  id              Int      @id @default(autoincrement())
+  name            String   @db.VarChar(255)
+  sanma           Boolean  @default(false)
+  firstPlace      Int      @map("first_place")
+  secondPlace     Int      @map("second_place")
+  thirdPlace      Int      @map("third_place")
+  fourthPlace     Int?     @map("fourth_place")
+  adjustmentRate  Float    @map("adjustment_rate") // Factor de ajuste (ej: 0.002)
+  adjustmentLimit Int      @map("adjustment_limit") // Límite de juegos para ajuste (ej: 400)
+  minAdjustment   Float    @map("min_adjustment") // Ajuste mínimo (ej: 0.2)
+  version         Int      @default(0)
+  deleted         Boolean  @default(false)
+  createdAt         DateTime @default(now()) @map("created_at")
+  createdBy       String?  @map("created_by") @db.VarChar(255)
+  createdIp       String?  @map("created_ip") @db.VarChar(45)
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  updatedBy         String?  @map("updated_by") @db.VarChar(255)
+  updatedIp         String?  @map("updated_ip") @db.VarChar(45)
+
+  @@unique([name, sanma])
+  @@map("rate_config")
+  @@schema("carm")
+}
+
+model SeasonConfig {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+  sanma       Boolean  @default(false)
+  firstPlace  Int      @map("first_place")
+  secondPlace Int      @map("second_place")
+  thirdPlace  Int      @map("third_place")
+  fourthPlace Int?     @map("fourth_place")
+  seasonId    Int?     @map("season_id")
+  isDefault   Boolean  @default(false) @map("is_default")
+  version     Int      @default(0)
+  deleted     Boolean  @default(false)
+  createdAt     DateTime @default(now()) @map("created_at")
+  createdBy   String?  @map("created_by") @db.VarChar(255)
+  createdIp   String?  @map("created_ip") @db.VarChar(45)
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  updatedBy     String?  @map("updated_by") @db.VarChar(255)
+  updatedIp     String?  @map("updated_ip") @db.VarChar(45)
+  season      Season?  @relation(fields: [seasonId], references: [id], onDelete: SetNull)
+
+  @@index([name, sanma, seasonId])
+  @@index([name, sanma, isDefault])
+  @@map("season_config")
+  @@schema("carm")
+}
+
+model SeasonResult {
+  id                  Int      @id @default(autoincrement())
+  seasonId            Int      @map("season_id")
+  playerId            Int      @map("player_id")
+  isSanma             Boolean  @default(false) @map("is_sanma")
+
+  // Aggregates for the season
+  seasonTotalGames    Int      @default(0) @map("season_total_games")
+  seasonAveragePosition Decimal @default(0) @map("season_avg_position") @db.Decimal(10, 4)
+
+  // Hanchan breakdown
+  seasonFirstPlaceH   Int      @default(0) @map("season_first_h")
+  seasonSecondPlaceH  Int      @default(0) @map("season_second_h")
+  seasonThirdPlaceH   Int      @default(0) @map("season_third_h")
+  seasonFourthPlaceH  Int      @default(0) @map("season_fourth_h")
+
+  // Tonpu breakdown
+  seasonFirstPlaceT   Int      @default(0) @map("season_first_t")
+  seasonSecondPlaceT  Int      @default(0) @map("season_second_t")
+  seasonThirdPlaceT   Int      @default(0) @map("season_third_t")
+  seasonFourthPlaceT  Int      @default(0) @map("season_fourth_t")
+
+  seasonPoints        Decimal  @default(0) @map("season_points") @db.Decimal(10, 4)
+
+  extraData           Json?    @map("extra_data")
+  version             Int      @default(0)
+  deleted             Boolean  @default(false)
+  createdAt             DateTime @default(now()) @map("created_at")
+  createdBy           String?  @map("created_by") @db.VarChar(255)
+  createdIp           String?  @map("created_ip") @db.VarChar(45)
+  updatedAt           DateTime @updatedAt @map("updated_at")
+  updatedBy           String?  @map("updated_by") @db.VarChar(255)
+  updatedIp           String?  @map("updated_ip") @db.VarChar(45)
+
+  season              Season   @relation(fields: [seasonId], references: [id])
+  player              Player   @relation(fields: [playerId], references: [id])
+
+  @@unique([seasonId, playerId, isSanma])
+  @@map("season_result")
+  @@schema("carm")
+}

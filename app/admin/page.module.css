@@ -1,0 +1,69 @@
+/* Página Principal de Admin */
+.adminPage {
+  @apply min-h-screen bg-gray-100 dark:bg-gray-900 py-8;
+}
+
+.adminContainer {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.adminCard {
+  @apply bg-white dark:bg-gray-800 shadow-lg rounded-lg;
+}
+
+.adminHeader {
+  @apply px-6 py-4 border-b border-gray-200 dark:border-gray-700;
+}
+
+.adminTitle {
+  @apply text-2xl font-bold text-gray-900 dark:text-white;
+}
+
+.adminDescription {
+  @apply text-gray-600 dark:text-gray-400 mt-2;
+}
+
+.adminContent {
+  @apply p-6;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .adminPage {
+    @apply py-6;
+  }
+
+  .adminContainer {
+    @apply px-3;
+  }
+
+  .adminHeader {
+    @apply px-4 py-3;
+  }
+
+  .adminTitle {
+    @apply text-xl;
+  }
+
+  .adminDescription {
+    @apply text-sm mt-1;
+  }
+
+  .adminContent {
+    @apply p-4;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .adminContainer {
+    @apply px-4;
+  }
+
+  .adminHeader {
+    @apply px-5 py-3;
+  }
+
+  .adminContent {
+    @apply p-5;
+  }
+}

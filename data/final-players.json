@@ -1,0 +1,1010 @@
+[
+  {
+    "nickname": "Mati",
+    "fullname": "Mati",
+    "countryId": 1,
+    "playerId": 1,
+    "birthday": null
+  },
+  {
+    "nickname": "Mati G. (minimati)",
+    "fullname": "Mati G. (minimati)",
+    "countryId": 1,
+    "playerId": 24,
+    "birthday": null
+  },
+  {
+    "nickname": "Mati S.",
+    "fullname": "Mati S.",
+    "countryId": 1,
+    "playerId": 31,
+    "birthday": null
+  },
+  {
+    "nickname": "Nico",
+    "fullname": "Nico",
+    "countryId": 1,
+    "playerId": 2,
+    "birthday": null
+  },
+  {
+    "nickname": "Nicolas (Claudio friend)",
+    "fullname": "Nicolas (Claudio friend)",
+    "countryId": 1,
+    "playerId": 36,
+    "birthday": null
+  },
+  {
+    "nickname": "Nicolas M.",
+    "fullname": "Nicolas M.",
+    "countryId": 1,
+    "playerId": 37,
+    "birthday": null
+  },
+  {
+    "nickname": "Lukas",
+    "fullname": "Lukas",
+    "countryId": 1,
+    "playerId": 3,
+    "birthday": null
+  },
+  {
+    "nickname": "Guile",
+    "fullname": "Guile",
+    "countryId": 1,
+    "playerId": 4,
+    "birthday": null
+  },
+  {
+    "nickname": "Chiwi",
+    "fullname": "Chiwi",
+    "countryId": 1,
+    "playerId": 5,
+    "birthday": null
+  },
+  {
+    "nickname": "Pato",
+    "fullname": "Pato",
+    "countryId": 1,
+    "playerId": 6,
+    "birthday": null
+  },
+  {
+    "nickname": "Fofo",
+    "fullname": "Fofo",
+    "countryId": 1,
+    "playerId": 7,
+    "birthday": null
+  },
+  {
+    "nickname": "Mati G",
+    "fullname": "Mati G",
+    "countryId": 1,
+    "playerId": 8,
+    "birthday": null
+  },
+  {
+    "nickname": "Fran",
+    "fullname": "Fran",
+    "countryId": 1,
+    "playerId": 9,
+    "birthday": null
+  },
+  {
+    "nickname": "Franco",
+    "fullname": "Franco",
+    "countryId": 1,
+    "playerId": 38,
+    "birthday": null
+  },
+  {
+    "nickname": "Franco Albor",
+    "fullname": "Franco Albor",
+    "countryId": 1,
+    "playerId": 39,
+    "birthday": null
+  },
+  {
+    "nickname": "German",
+    "fullname": "German",
+    "countryId": 1,
+    "playerId": 10,
+    "birthday": null
+  },
+  {
+    "nickname": "Adrian",
+    "fullname": "Adrian",
+    "countryId": 1,
+    "playerId": 11,
+    "birthday": null
+  },
+  {
+    "nickname": "Ian",
+    "fullname": "Ian",
+    "countryId": 1,
+    "playerId": 40,
+    "birthday": null
+  },
+  {
+    "nickname": "Ailen",
+    "fullname": "Ailen",
+    "countryId": 1,
+    "playerId": 12,
+    "birthday": null
+  },
+  {
+    "nickname": "Leonardo (CL) (caballo)",
+    "fullname": "Leonardo (CL) (caballo)",
+    "countryId": 1,
+    "playerId": 13,
+    "birthday": null
+  },
+  {
+    "nickname": "Claudia",
+    "fullname": "Claudia",
+    "countryId": 1,
+    "playerId": 14,
+    "birthday": null
+  },
+  {
+    "nickname": "Mauro",
+    "fullname": "Mauro",
+    "countryId": 1,
+    "playerId": 15,
+    "birthday": null
+  },
+  {
+    "nickname": "Gabriela",
+    "fullname": "Gabriela",
+    "countryId": 1,
+    "playerId": 16,
+    "birthday": null
+  },
+  {
+    "nickname": "Haku/Kozi",
+    "fullname": "Haku/Kozi",
+    "countryId": 1,
+    "playerId": 17,
+    "birthday": null
+  },
+  {
+    "nickname": "Andres",
+    "fullname": "Andres",
+    "countryId": 1,
+    "playerId": 18,
+    "birthday": null
+  },
+  {
+    "nickname": "Andre",
+    "fullname": "Andre",
+    "countryId": 1,
+    "playerId": 41,
+    "birthday": null
+  },
+  {
+    "nickname": "Tomas",
+    "fullname": "Tomas",
+    "countryId": 1,
+    "playerId": 19,
+    "birthday": null
+  },
+  {
+    "nickname": "Daniela",
+    "fullname": "Daniela",
+    "countryId": 1,
+    "playerId": 20,
+    "birthday": null
+  },
+  {
+    "nickname": "Daniel",
+    "fullname": "Daniel",
+    "countryId": 1,
+    "playerId": 42,
+    "birthday": null
+  },
+  {
+    "nickname": "Jess",
+    "fullname": "Jess",
+    "countryId": 1,
+    "playerId": 21,
+    "birthday": null
+  },
+  {
+    "nickname": "Paula",
+    "fullname": "Paula",
+    "countryId": 1,
+    "playerId": 23,
+    "birthday": null
+  },
+  {
+    "nickname": "Adriel",
+    "fullname": "Adriel",
+    "countryId": 1,
+    "playerId": 24,
+    "birthday": null
+  },
+  {
+    "nickname": "San",
+    "fullname": "San",
+    "countryId": 1,
+    "playerId": 25,
+    "birthday": null
+  },
+  {
+    "nickname": "Javilo",
+    "fullname": "Javilo",
+    "countryId": 1,
+    "playerId": 27,
+    "birthday": null
+  },
+  {
+    "nickname": "Azul",
+    "fullname": "Azul",
+    "countryId": 1,
+    "playerId": 28,
+    "birthday": null
+  },
+  {
+    "nickname": "Somar",
+    "fullname": "Somar",
+    "countryId": 1,
+    "playerId": 30,
+    "birthday": null
+  },
+  {
+    "nickname": "Agus",
+    "fullname": "Agus",
+    "countryId": 1,
+    "playerId": 31,
+    "birthday": null
+  },
+  {
+    "nickname": "Laura",
+    "fullname": "Laura",
+    "countryId": 1,
+    "playerId": 32,
+    "birthday": null
+  },
+  {
+    "nickname": "Sofi",
+    "fullname": "Sofi",
+    "countryId": 1,
+    "playerId": 33,
+    "birthday": null
+  },
+  {
+    "nickname": "Kime",
+    "fullname": "Kime",
+    "countryId": 1,
+    "playerId": 34,
+    "birthday": null
+  },
+  {
+    "nickname": "Diego",
+    "fullname": "Diego",
+    "countryId": 1,
+    "playerId": 35,
+    "birthday": null
+  },
+  {
+    "nickname": "Diego (old)",
+    "fullname": "Diego (old)",
+    "countryId": 1,
+    "playerId": 43,
+    "birthday": null
+  },
+  {
+    "nickname": "Diego C.",
+    "fullname": "Diego C.",
+    "countryId": 1,
+    "playerId": 44,
+    "birthday": null
+  },
+  {
+    "nickname": "Agus I",
+    "fullname": "Agus I",
+    "countryId": 1,
+    "playerId": 36,
+    "birthday": null
+  },
+  {
+    "nickname": "Agustina H",
+    "fullname": "Agustina H",
+    "countryId": 1,
+    "playerId": 37,
+    "birthday": null
+  },
+  {
+    "nickname": "Akito",
+    "fullname": "Akito",
+    "countryId": 1,
+    "playerId": 38,
+    "birthday": null
+  },
+  {
+    "nickname": "Alan",
+    "fullname": "Alan",
+    "countryId": 1,
+    "playerId": 39,
+    "birthday": null
+  },
+  {
+    "nickname": "Alberto",
+    "fullname": "Alberto",
+    "countryId": 1,
+    "playerId": 40,
+    "birthday": null
+  },
+  {
+    "nickname": "Aldana",
+    "fullname": "Aldana",
+    "countryId": 1,
+    "playerId": 41,
+    "birthday": null
+  },
+  {
+    "nickname": "Alejandro",
+    "fullname": "Alejandro",
+    "countryId": 1,
+    "playerId": 42,
+    "birthday": null
+  },
+  {
+    "nickname": "Alex",
+    "fullname": "Alex",
+    "countryId": 1,
+    "playerId": 43,
+    "birthday": null
+  },
+  {
+    "nickname": "Amauri (BR)",
+    "fullname": "Amauri (BR)",
+    "countryId": 1,
+    "playerId": 44,
+    "birthday": null
+  },
+  {
+    "nickname": "Angel",
+    "fullname": "Angel",
+    "countryId": 1,
+    "playerId": 45,
+    "birthday": null
+  },
+  {
+    "nickname": "Angie",
+    "fullname": "Angie",
+    "countryId": 1,
+    "playerId": 46,
+    "birthday": null
+  },
+  {
+    "nickname": "Ariel M.",
+    "fullname": "Ariel M.",
+    "countryId": 1,
+    "playerId": 47,
+    "birthday": null
+  },
+  {
+    "nickname": "Arthur (BR)",
+    "fullname": "Arthur (BR)",
+    "countryId": 1,
+    "playerId": 48,
+    "birthday": null
+  },
+  {
+    "nickname": "Arthur M (MX)",
+    "fullname": "Arthur M (MX)",
+    "countryId": 1,
+    "playerId": 49,
+    "birthday": null
+  },
+  {
+    "nickname": "Auca",
+    "fullname": "Auca",
+    "countryId": 1,
+    "playerId": 50,
+    "birthday": null
+  },
+  {
+    "nickname": "Bata",
+    "fullname": "Bata",
+    "countryId": 1,
+    "playerId": 51,
+    "birthday": null
+  },
+  {
+    "nickname": "Camilo",
+    "fullname": "Camilo",
+    "countryId": 1,
+    "playerId": 52,
+    "birthday": null
+  },
+  {
+    "nickname": "Carlos",
+    "fullname": "Carlos",
+    "countryId": 1,
+    "playerId": 53,
+    "birthday": null
+  },
+  {
+    "nickname": "Cecilia",
+    "fullname": "Cecilia",
+    "countryId": 1,
+    "playerId": 54,
+    "birthday": null
+  },
+  {
+    "nickname": "Cristian (CL)",
+    "fullname": "Cristian (CL)",
+    "countryId": 1,
+    "playerId": 55,
+    "birthday": null
+  },
+  {
+    "nickname": "Cristóbal (CL) (Kenzo)",
+    "fullname": "Cristóbal (CL) (Kenzo)",
+    "countryId": 1,
+    "playerId": 56,
+    "birthday": null
+  },
+  {
+    "nickname": "Danbliz",
+    "fullname": "Danbliz",
+    "countryId": 1,
+    "playerId": 57,
+    "birthday": null
+  },
+  {
+    "nickname": "Daniel (old)",
+    "fullname": "Daniel (old)",
+    "countryId": 1,
+    "playerId": 58,
+    "birthday": null
+  },
+  {
+    "nickname": "Davy",
+    "fullname": "Davy",
+    "countryId": 1,
+    "playerId": 59,
+    "birthday": null
+  },
+  {
+    "nickname": "Duro",
+    "fullname": "Duro",
+    "countryId": 1,
+    "playerId": 60,
+    "birthday": null
+  },
+  {
+    "nickname": "Emi",
+    "fullname": "Emi",
+    "countryId": 1,
+    "playerId": 61,
+    "birthday": null
+  },
+  {
+    "nickname": "Emma",
+    "fullname": "Emma",
+    "countryId": 1,
+    "playerId": 62,
+    "birthday": null
+  },
+  {
+    "nickname": "Emo",
+    "fullname": "Emo",
+    "countryId": 1,
+    "playerId": 63,
+    "birthday": null
+  },
+  {
+    "nickname": "Enio",
+    "fullname": "Enio",
+    "countryId": 1,
+    "playerId": 64,
+    "birthday": null
+  },
+  {
+    "nickname": "Ernesto",
+    "fullname": "Ernesto",
+    "countryId": 1,
+    "playerId": 65,
+    "birthday": null
+  },
+  {
+    "nickname": "Eze",
+    "fullname": "Eze",
+    "countryId": 1,
+    "playerId": 66,
+    "birthday": null
+  },
+  {
+    "nickname": "Ezequiel",
+    "fullname": "Ezequiel",
+    "countryId": 1,
+    "playerId": 67,
+    "birthday": null
+  },
+  {
+    "nickname": "Facu (UY)",
+    "fullname": "Facu (UY)",
+    "countryId": 1,
+    "playerId": 68,
+    "birthday": null
+  },
+  {
+    "nickname": "Falconer",
+    "fullname": "Falconer",
+    "countryId": 1,
+    "playerId": 69,
+    "birthday": null
+  },
+  {
+    "nickname": "FedeRama",
+    "fullname": "FedeRama",
+    "countryId": 1,
+    "playerId": 70,
+    "birthday": null
+  },
+  {
+    "nickname": "Federico",
+    "fullname": "Federico",
+    "countryId": 1,
+    "playerId": 71,
+    "birthday": null
+  },
+  {
+    "nickname": "Federico Albor",
+    "fullname": "Federico Albor",
+    "countryId": 1,
+    "playerId": 72,
+    "birthday": null
+  },
+  {
+    "nickname": "Felipe (CL)",
+    "fullname": "Felipe (CL)",
+    "countryId": 1,
+    "playerId": 73,
+    "birthday": null
+  },
+  {
+    "nickname": "Fer",
+    "fullname": "Fer",
+    "countryId": 1,
+    "playerId": 74,
+    "birthday": null
+  },
+  {
+    "nickname": "Uma",
+    "fullname": "Uma",
+    "countryId": 1,
+    "playerId": 75,
+    "birthday": null
+  },
+  {
+    "nickname": "Fernando A",
+    "fullname": "Fernando A",
+    "countryId": 1,
+    "playerId": 76,
+    "birthday": null
+  },
+  {
+    "nickname": "Figo/Iori",
+    "fullname": "Figo/Iori",
+    "countryId": 1,
+    "playerId": 77,
+    "birthday": null
+  },
+  {
+    "nickname": "Gilberto K.",
+    "fullname": "Gilberto K.",
+    "countryId": 1,
+    "playerId": 78,
+    "birthday": null
+  },
+  {
+    "nickname": "Guido (BR)",
+    "fullname": "Guido (BR)",
+    "countryId": 1,
+    "playerId": 79,
+    "birthday": null
+  },
+  {
+    "nickname": "Guille",
+    "fullname": "Guille",
+    "countryId": 1,
+    "playerId": 80,
+    "birthday": null
+  },
+  {
+    "nickname": "Huan",
+    "fullname": "Huan",
+    "countryId": 1,
+    "playerId": 81,
+    "birthday": null
+  },
+  {
+    "nickname": "Ini",
+    "fullname": "Ini",
+    "countryId": 1,
+    "playerId": 82,
+    "birthday": null
+  },
+  {
+    "nickname": "JC",
+    "fullname": "JC",
+    "countryId": 1,
+    "playerId": 83,
+    "birthday": null
+  },
+  {
+    "nickname": "Szarps",
+    "fullname": "Szarps",
+    "countryId": 1,
+    "playerId": 84,
+    "birthday": null
+  },
+  {
+    "nickname": "Jhony",
+    "fullname": "Jhony",
+    "countryId": 1,
+    "playerId": 85,
+    "birthday": null
+  },
+  {
+    "nickname": "Jonathan",
+    "fullname": "Jonathan",
+    "countryId": 1,
+    "playerId": 86,
+    "birthday": null
+  },
+  {
+    "nickname": "Jorge",
+    "fullname": "Jorge",
+    "countryId": 1,
+    "playerId": 87,
+    "birthday": null
+  },
+  {
+    "nickname": "Jrash",
+    "fullname": "Jrash",
+    "countryId": 1,
+    "playerId": 88,
+    "birthday": null
+  },
+  {
+    "nickname": "Juan",
+    "fullname": "Juan",
+    "countryId": 1,
+    "playerId": 89,
+    "birthday": null
+  },
+  {
+    "nickname": "Juan Mateo",
+    "fullname": "Juan Mateo",
+    "countryId": 1,
+    "playerId": 90,
+    "birthday": null
+  },
+  {
+    "nickname": "Kelo",
+    "fullname": "Kelo",
+    "countryId": 1,
+    "playerId": 91,
+    "birthday": null
+  },
+  {
+    "nickname": "Kevin",
+    "fullname": "Kevin",
+    "countryId": 1,
+    "playerId": 92,
+    "birthday": null
+  },
+  {
+    "nickname": "Koki",
+    "fullname": "Koki",
+    "countryId": 1,
+    "playerId": 93,
+    "birthday": null
+  },
+  {
+    "nickname": "Kress",
+    "fullname": "Kress",
+    "countryId": 1,
+    "playerId": 94,
+    "birthday": null
+  },
+  {
+    "nickname": "Lautaro (LP) DiG.",
+    "fullname": "Lautaro (LP) DiG.",
+    "countryId": 1,
+    "playerId": 95,
+    "birthday": null
+  },
+  {
+    "nickname": "Lloocky",
+    "fullname": "Lloocky",
+    "countryId": 1,
+    "playerId": 96,
+    "birthday": null
+  },
+  {
+    "nickname": "Lucas Albor",
+    "fullname": "Lucas Albor",
+    "countryId": 1,
+    "playerId": 97,
+    "birthday": null
+  },
+  {
+    "nickname": "Lucila (Luuucilu",
+    "fullname": "Lucila (Luuucilu",
+    "countryId": 1,
+    "playerId": 98,
+    "birthday": null
+  },
+  {
+    "nickname": "Lui",
+    "fullname": "Lui",
+    "countryId": 1,
+    "playerId": 99,
+    "birthday": null
+  },
+  {
+    "nickname": "Luli",
+    "fullname": "Luli",
+    "countryId": 1,
+    "playerId": 100,
+    "birthday": null
+  },
+  {
+    "nickname": "Manuel P.",
+    "fullname": "Manuel P.",
+    "countryId": 1,
+    "playerId": 101,
+    "birthday": null
+  },
+  {
+    "nickname": "Marce",
+    "fullname": "Marce",
+    "countryId": 1,
+    "playerId": 102,
+    "birthday": null
+  },
+  {
+    "nickname": "Marcelo",
+    "fullname": "Marcelo",
+    "countryId": 1,
+    "playerId": 103,
+    "birthday": null
+  },
+  {
+    "nickname": "Maria C.",
+    "fullname": "Maria C.",
+    "countryId": 1,
+    "playerId": 104,
+    "birthday": null
+  },
+  {
+    "nickname": "Marian",
+    "fullname": "Marian",
+    "countryId": 1,
+    "playerId": 105,
+    "birthday": null
+  },
+  {
+    "nickname": "Martin",
+    "fullname": "Martin",
+    "countryId": 1,
+    "playerId": 106,
+    "birthday": null
+  },
+  {
+    "nickname": "Martin O.",
+    "fullname": "Martin O.",
+    "countryId": 1,
+    "playerId": 107,
+    "birthday": null
+  },
+  {
+    "nickname": "Mathias",
+    "fullname": "Mathias",
+    "countryId": 1,
+    "playerId": 108,
+    "birthday": null
+  },
+  {
+    "nickname": "Max D.",
+    "fullname": "Max D.",
+    "countryId": 1,
+    "playerId": 109,
+    "birthday": null
+  },
+  {
+    "nickname": "Maxi",
+    "fullname": "Maxi",
+    "countryId": 1,
+    "playerId": 110,
+    "birthday": null
+  },
+  {
+    "nickname": "Mayra",
+    "fullname": "Mayra",
+    "countryId": 1,
+    "playerId": 111,
+    "birthday": null
+  },
+  {
+    "nickname": "MegaJL",
+    "fullname": "MegaJL",
+    "countryId": 1,
+    "playerId": 112,
+    "birthday": null
+  },
+  {
+    "nickname": "Mel",
+    "fullname": "Mel",
+    "countryId": 1,
+    "playerId": 113,
+    "birthday": null
+  },
+  {
+    "nickname": "Michael",
+    "fullname": "Michael",
+    "countryId": 1,
+    "playerId": 114,
+    "birthday": null
+  },
+  {
+    "nickname": "Miguel",
+    "fullname": "Miguel",
+    "countryId": 1,
+    "playerId": 115,
+    "birthday": null
+  },
+  {
+    "nickname": "Mikami",
+    "fullname": "Mikami",
+    "countryId": 1,
+    "playerId": 116,
+    "birthday": null
+  },
+  {
+    "nickname": "Nadia",
+    "fullname": "Nadia",
+    "countryId": 1,
+    "playerId": 117,
+    "birthday": null
+  },
+  {
+    "nickname": "Nahuel",
+    "fullname": "Nahuel",
+    "countryId": 1,
+    "playerId": 118,
+    "birthday": null
+  },
+  {
+    "nickname": "Nakanaki",
+    "fullname": "Nakanaki",
+    "countryId": 1,
+    "playerId": 119,
+    "birthday": null
+  },
+  {
+    "nickname": "Naoko",
+    "fullname": "Naoko",
+    "countryId": 1,
+    "playerId": 120,
+    "birthday": null
+  },
+  {
+    "nickname": "Octavio",
+    "fullname": "Octavio",
+    "countryId": 1,
+    "playerId": 121,
+    "birthday": null
+  },
+  {
+    "nickname": "Oli",
+    "fullname": "Oli",
+    "countryId": 1,
+    "playerId": 122,
+    "birthday": null
+  },
+  {
+    "nickname": "Lucio",
+    "fullname": "Lucio",
+    "countryId": 1,
+    "playerId": 123,
+    "birthday": null
+  },
+  {
+    "nickname": "Pablo (2de6)",
+    "fullname": "Pablo (2de6)",
+    "countryId": 1,
+    "playerId": 124,
+    "birthday": null
+  },
+  {
+    "nickname": "Pablo G.",
+    "fullname": "Pablo G.",
+    "countryId": 1,
+    "playerId": 125,
+    "birthday": null
+  },
+  {
+    "nickname": "Pedro",
+    "fullname": "Pedro",
+    "countryId": 1,
+    "playerId": 126,
+    "birthday": null
+  },
+  {
+    "nickname": "Pol",
+    "fullname": "Pol",
+    "countryId": 1,
+    "playerId": 127,
+    "birthday": null
+  },
+  {
+    "nickname": "Quimei",
+    "fullname": "Quimei",
+    "countryId": 1,
+    "playerId": 128,
+    "birthday": null
+  },
+  {
+    "nickname": "Romo",
+    "fullname": "Romo",
+    "countryId": 1,
+    "playerId": 129,
+    "birthday": null
+  },
+  {
+    "nickname": "Sebas (CO)",
+    "fullname": "Sebas (CO)",
+    "countryId": 1,
+    "playerId": 130,
+    "birthday": null
+  },
+  {
+    "nickname": "Sebastián (PE) (SethSeroly)",
+    "fullname": "Sebastián (PE) (SethSeroly)",
+    "countryId": 1,
+    "playerId": 131,
+    "birthday": null
+  },
+  {
+    "nickname": "Juli",
+    "fullname": "Juli",
+    "countryId": 1,
+    "playerId": 158,
+    "birthday": null
+  },
+  {
+    "nickname": "Juli F",
+    "fullname": "Juli F",
+    "countryId": 1,
+    "playerId": 45,
+    "birthday": null
+  },
+  {
+    "nickname": "Felicitas",
+    "fullname": "Felicitas",
+    "countryId": 1,
+    "playerId": 216,
+    "birthday": null
+  },
+  {
+    "nickname": "Lucas",
+    "fullname": "Lucas",
+    "countryId": 1,
+    "playerId": 812,
+    "birthday": null
+  },
+  {
+    "nickname": "Dario",
+    "fullname": "Dario",
+    "countryId": 1,
+    "playerId": 855,
+    "birthday": null
+  }
+]

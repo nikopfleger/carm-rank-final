@@ -1,0 +1,128 @@
+/* Email Accounts Management Styles */
+.container {
+    @apply space-y-6;
+}
+
+.header {
+    @apply flex justify-between items-center;
+}
+
+.title {
+    @apply text-2xl font-bold text-foreground;
+}
+
+.description {
+    @apply text-muted-foreground;
+}
+
+.filters {
+    @apply flex space-x-2;
+}
+
+.loadingContainer {
+    @apply flex items-center justify-center p-8;
+}
+
+.loadingContent {
+    @apply text-center;
+}
+
+.spinner {
+    @apply animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto;
+}
+
+.loadingText {
+    @apply mt-2 text-sm text-muted-foreground;
+}
+
+.accountsGrid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
+}
+
+.accountCard {
+    @apply relative;
+}
+
+.cardHeader {
+    @apply flex justify-between items-start;
+}
+
+.cardTitle {
+    @apply text-lg font-semibold text-foreground;
+}
+
+.cardSubtitle {
+    @apply text-sm text-muted-foreground;
+}
+
+.primaryBadge {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-accent text-accent-foreground;
+}
+
+.cardContent {
+    @apply space-y-3;
+}
+
+.infoItem {
+    @apply flex items-center justify-between;
+}
+
+.infoLabel {
+    @apply text-sm font-medium text-foreground;
+}
+
+.infoValue {
+    @apply text-sm text-muted-foreground;
+}
+
+.actionsContainer {
+    @apply flex justify-end space-x-2;
+}
+
+.formContainer {
+    @apply space-y-4;
+}
+
+.formGroup {
+    @apply space-y-2;
+}
+
+.formLabel {
+    @apply text-sm font-medium text-foreground;
+}
+
+.formInput {
+    @apply w-full;
+}
+
+.formSelect {
+    @apply w-full;
+}
+
+.formSwitch {
+    @apply flex items-center space-x-2;
+}
+
+.formSwitchLabel {
+    @apply text-sm text-foreground;
+}
+
+.formActions {
+    @apply flex justify-end space-x-2;
+}
+
+.emptyState {
+    @apply text-center py-8;
+}
+
+.emptyIcon {
+    @apply h-12 w-12 text-muted-foreground mx-auto mb-4;
+}
+
+.emptyTitle {
+    @apply text-lg font-medium text-foreground mb-2;
+}
+
+.emptyDescription {
+    @apply text-muted-foreground;
+}

@@ -1,0 +1,340 @@
+/* Season Detail Page Styles - Solo estilos específicos que Tailwind no cubre */
+.seasonDetailPage {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: white;
+    /* El padding ahora se maneja por el PageContainer global */
+}
+
+.content {
+    max-width: 56rem;
+    /* max-w-4xl */
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+    .content {
+        padding: 0 1.5rem;
+    }
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: #94a3b8;
+    font-size: 1.125rem;
+}
+
+.backButton {
+    display: flex;
+    align-items: center;
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+    margin-bottom: 1rem;
+}
+
+.backButton:hover {
+    color: #2563eb;
+}
+
+.backButton svg {
+    margin-right: 0.5rem;
+}
+
+.seasonInfo {
+    background: #1e293b;
+    border: 1px solid #475569;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.seasonInfo h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.infoGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.infoItem {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.infoItem svg {
+    color: #64748b;
+    flex-shrink: 0;
+}
+
+.infoItem div {
+    flex: 1;
+}
+
+.infoItem p:first-child {
+    font-size: 0.875rem;
+    color: #94a3b8;
+    margin-bottom: 0.25rem;
+}
+
+.infoItem p:last-child {
+    font-weight: 500;
+    color: white;
+}
+
+.results {
+    background: #1e293b;
+    border: 1px solid #475569;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+}
+
+.results h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.resultsList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.resultItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border: 1px solid #475569;
+    border-radius: 0.5rem;
+    background: #334155;
+    transition: all 0.2s;
+}
+
+.resultItem:hover {
+    background: #475569;
+    border-color: #64748b;
+}
+
+.resultLeft {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.positionIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+}
+
+.positionIcon svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.positionIcon span {
+    font-size: 0.875rem;
+    font-weight: bold;
+    color: #64748b;
+}
+
+.playerInfo h4 {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: white;
+    margin-bottom: 0.25rem;
+}
+
+.playerInfo span {
+    font-size: 0.875rem;
+    color: #94a3b8;
+}
+
+.resultRight {
+    text-align: right;
+}
+
+.resultRight p:first-child {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #3b82f6;
+    margin-bottom: 0.25rem;
+}
+
+.resultRight p:last-child {
+    font-size: 0.875rem;
+    color: #94a3b8;
+}
+
+.emptyState {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #94a3b8;
+}
+
+.emptyState svg {
+    width: 3rem;
+    height: 3rem;
+    margin: 0 auto 1rem;
+    color: #64748b;
+}
+
+.emptyState p {
+    font-size: 1.125rem;
+}
+
+.loading {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #94a3b8;
+}
+
+.notFound {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #94a3b8;
+}
+
+.notFound button {
+    margin-top: 1rem;
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.notFound button:hover {
+    color: #2563eb;
+}
+
+/* Badge styles */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-top: 0.25rem;
+}
+
+.badgeGold {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.badgeSilver {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+.badgeBronze {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.badgeSecondary {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+
+/* Dark mode badge styles */
+@media (prefers-color-scheme: dark) {
+    .badgeGold {
+        background-color: rgba(251, 191, 36, 0.2);
+        color: #fbbf24;
+    }
+
+    .badgeSilver {
+        background-color: rgba(156, 163, 175, 0.2);
+        color: #9ca3af;
+    }
+
+    .badgeBronze {
+        background-color: rgba(245, 158, 11, 0.2);
+        color: #f59e0b;
+    }
+
+    .badgeSecondary {
+        background-color: rgba(107, 114, 128, 0.2);
+        color: #9ca3af;
+    }
+}
+
+/* Responsive */
+/* Pantallas grandes (PC) */
+@media (min-width: 1024px) {
+    .infoGrid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+    }
+}
+
+/* Pantallas medianas (laptop) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .infoGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+    }
+}
+
+/* Móviles */
+@media (max-width: 767px) {
+    .infoGrid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .resultItem {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .resultRight {
+        text-align: left;
+        width: 100%;
+    }
+
+    .resultLeft {
+        width: 100%;
+    }
+
+    .title {
+        font-size: 2rem;
+    }
+}

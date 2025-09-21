@@ -1,0 +1,290 @@
+/* Perfil de Jugador */
+.playerProfile {
+  @apply flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 py-10 px-4 sm:px-6 lg:px-8;
+}
+
+.profileContainer {
+  @apply max-w-6xl w-full space-y-8;
+}
+
+.profileHeader {
+  @apply text-center;
+}
+
+.profileTitle {
+  @apply mt-6 text-3xl font-extrabold text-gray-900 dark:text-gray-100;
+}
+
+/* Información básica del jugador */
+.playerInfoCard {
+  @apply p-6 bg-white dark:bg-gray-800;
+}
+
+.playerInfoContent {
+  @apply space-y-6;
+}
+
+.playerHeader {
+  @apply text-center;
+}
+
+.playerName {
+  @apply text-2xl font-bold text-gray-900 dark:text-gray-100;
+}
+
+.playerFullname {
+  @apply text-gray-600 dark:text-gray-400 mt-1;
+}
+
+.playerBadges {
+  @apply mt-4 flex justify-center gap-4;
+}
+
+.playerBadge {
+  @apply text-lg font-bold;
+}
+
+.playerBadgeActive {
+  @apply bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400;
+}
+
+.playerBadgeInactive {
+  @apply bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300;
+}
+
+.danBadge {
+  @apply bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400;
+}
+
+/* Estadísticas */
+.statsGrid {
+  @apply grid grid-cols-2 md:grid-cols-4 gap-4 mt-6;
+}
+
+.statCard {
+  @apply text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg;
+}
+
+.statValue {
+  @apply text-2xl font-bold text-gray-900 dark:text-white;
+}
+
+.statLabel {
+  @apply text-sm text-gray-600 dark:text-gray-400 mt-1;
+}
+
+/* Gráficos */
+.chartsSection {
+  @apply grid md:grid-cols-2 gap-8;
+}
+
+.chartCard {
+  @apply p-6 bg-white dark:bg-gray-800;
+}
+
+.chartTitle {
+  @apply text-xl font-semibold text-gray-900 dark:text-white mb-4;
+}
+
+.chartContainer {
+  @apply h-64;
+}
+
+/* Historial de juegos */
+.gamesSection {
+  @apply space-y-6;
+}
+
+.gamesTitle {
+  @apply text-2xl font-bold text-gray-900 dark:text-white;
+}
+
+.gamesFilters {
+  @apply flex flex-wrap gap-4 items-center;
+}
+
+.filterButton {
+  @apply px-4 py-2 rounded-md text-sm font-medium transition-colors;
+}
+
+.filterButtonActive {
+  @apply bg-red-600 text-white;
+}
+
+.filterButtonInactive {
+  @apply bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600;
+}
+
+.gamesList {
+  @apply space-y-4;
+}
+
+.gameCard {
+  @apply p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700;
+}
+
+.gameHeader {
+  @apply flex items-center justify-between mb-3;
+}
+
+.gameDate {
+  @apply text-sm text-gray-600 dark:text-gray-400;
+}
+
+.gameType {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.gameTypeHanchan {
+  @apply bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400;
+}
+
+.gameTypeTonpuusen {
+  @apply bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400;
+}
+
+.gameTypeSanma {
+  @apply bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400;
+}
+
+.gamePlayers {
+  @apply grid grid-cols-2 md:grid-cols-4 gap-2;
+}
+
+.gamePlayer {
+  @apply flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded;
+}
+
+.gamePlayerName {
+  @apply text-sm font-medium text-gray-900 dark:text-white;
+}
+
+.gamePlayerScore {
+  @apply text-sm text-gray-600 dark:text-gray-400;
+}
+
+.gamePlayerCurrent {
+  @apply bg-red-100 dark:bg-red-900/20;
+}
+
+.gamePlayerCurrentName {
+  @apply font-semibold;
+}
+
+.gamePlayerCurrentScore {
+  @apply font-semibold text-red-600 dark:text-red-400;
+}
+
+/* Estados de carga y error */
+.loadingContainer {
+  @apply flex items-center justify-center py-12;
+}
+
+.loadingSpinner {
+  @apply w-8 h-8 animate-spin rounded-full border-4 border-gray-300 border-t-red-600;
+}
+
+.loadingText {
+  @apply ml-3 text-gray-600 dark:text-gray-400;
+}
+
+.errorContainer {
+  @apply text-center py-8;
+}
+
+.errorMessage {
+  @apply text-red-600 dark:text-red-400 mb-2;
+}
+
+.errorDetails {
+  @apply text-gray-600 dark:text-gray-400;
+}
+
+.retryButton {
+  @apply mt-4;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .playerProfile {
+    @apply px-3 py-6;
+  }
+
+  .profileHeader {
+    @apply p-4;
+  }
+
+  .profileAvatar {
+    @apply w-16 h-16;
+  }
+
+  .profileName {
+    @apply text-xl;
+  }
+
+  .profileLegajo {
+    @apply text-sm;
+  }
+
+  .statsGrid {
+    @apply grid-cols-2 gap-3;
+  }
+
+  .statCard {
+    @apply p-3;
+  }
+
+  .statValue {
+    @apply text-lg;
+  }
+
+  .statLabel {
+    @apply text-xs;
+  }
+
+  .chartsSection {
+    @apply grid-cols-1 gap-4;
+  }
+
+  .gamesFilters {
+    @apply flex-col items-start gap-3;
+  }
+
+  .gamePlayers {
+    @apply grid-cols-1 gap-2;
+  }
+
+  .gameCard {
+    @apply p-3;
+  }
+
+  .gameHeader {
+    @apply p-3;
+  }
+
+  .gameTitle {
+    @apply text-base;
+  }
+
+  .gameMeta {
+    @apply flex-col items-start gap-1;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .statsGrid {
+    @apply grid-cols-3 gap-4;
+  }
+
+  .chartsSection {
+    @apply grid-cols-1;
+  }
+
+  .gamesFilters {
+    @apply flex-col items-start;
+  }
+
+  .gamePlayers {
+    @apply grid-cols-2;
+  }
+}

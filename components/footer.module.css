@@ -1,0 +1,129 @@
+/* Footer Styles */
+.footer {
+    @apply bg-slate-900 border-t border-slate-800 mt-16;
+}
+
+.footerContainer {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6;
+}
+
+.footerGrid {
+    @apply grid grid-cols-1 md:grid-cols-3 gap-8;
+}
+
+.footerSection {
+    @apply text-center md:text-left;
+}
+
+.footerSectionCenter {
+    @apply text-center;
+}
+
+.footerSectionRight {
+    @apply text-center md:text-right;
+}
+
+.footerTitleWithLogo {
+    @apply flex items-center space-x-3 mb-3;
+}
+
+.footerLogo {
+    @apply w-6 h-6 bg-white rounded-lg flex items-center justify-center flex-shrink-0;
+}
+
+.footerTitle {
+    @apply text-base font-semibold text-white;
+}
+
+.footerDescription {
+    @apply text-slate-300 text-sm;
+}
+
+.socialLinks {
+    @apply flex justify-center space-x-4;
+}
+
+.socialLink {
+    @apply text-brand-400 hover:text-brand-500 transition-colors;
+}
+
+.socialLinkFacebook {
+    @apply hover:text-blue-500;
+}
+
+.socialLinkInstagram {
+    @apply hover:text-pink-500;
+}
+
+.socialLinkLinkedin {
+    @apply hover:text-blue-600;
+}
+
+.socialLinkTwitter {
+    @apply hover:text-blue-400;
+}
+
+.socialLinkTwitch {
+    @apply hover:text-purple-500;
+}
+
+.socialLinkDiscord {
+    @apply hover:text-indigo-500;
+}
+
+.creditsText {
+    @apply text-slate-300 text-sm;
+}
+
+.creditsLink {
+    @apply hover:underline text-brand-500 hover:text-brand-400;
+}
+
+.copyrightSection {
+    @apply border-t border-slate-800 mt-6 pt-4;
+}
+
+.copyrightText {
+    @apply text-center text-slate-300;
+}
+
+.copyrightDate {
+    @apply text-sm mt-2;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+    .footerContainer {
+        @apply py-4;
+    }
+
+    .footerGrid {
+        @apply grid-cols-1 gap-4;
+    }
+
+    .footerSection,
+    .footerSectionCenter,
+    .footerSectionRight {
+        @apply text-center;
+    }
+
+    .footerTitleWithLogo {
+        @apply justify-center space-x-2 mb-2;
+    }
+
+    .footerLogo {
+        @apply w-5 h-5;
+    }
+
+    .footerTitle {
+        @apply text-sm;
+    }
+
+    .socialLinks {
+        @apply justify-center space-x-3;
+    }
+
+    .copyrightSection {
+        @apply mt-4 pt-3;
+    }
+}

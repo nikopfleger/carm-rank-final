@@ -1,0 +1,106 @@
+/* Página de Torneos */
+.tournamentsPage {
+    @apply pt-4;
+}
+
+.hero {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8;
+}
+
+.heroTitle {
+    @apply text-4xl font-bold text-gray-900 dark:text-white mb-2 flex items-center justify-center gap-3;
+}
+
+.heroIcon {
+    @apply h-8 w-8 text-yellow-500;
+}
+
+.heroSubtitle {
+    @apply text-xl text-gray-600 dark:text-gray-400;
+}
+
+.content {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8;
+}
+
+.section {
+    @apply mb-8;
+}
+
+.sectionTitle {
+    @apply text-2xl font-bold text-gray-900 dark:text-white mb-4;
+}
+
+.tournamentsGrid {
+    @apply grid gap-6 md:grid-cols-2 lg:grid-cols-3;
+}
+
+/* Estilos específicos para torneos - ahora usando unifiedStyles */
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+    .hero {
+        @apply px-3 py-6;
+    }
+
+    .heroTitle {
+        @apply text-2xl mb-2 gap-2;
+    }
+
+    .heroIcon {
+        @apply h-6 w-6;
+    }
+
+    .heroSubtitle {
+        @apply text-lg;
+    }
+
+    .content {
+        @apply px-3 pb-6;
+    }
+
+    .section {
+        @apply mb-6;
+    }
+
+    .sectionTitle {
+        @apply text-xl mb-3;
+    }
+
+    .tournamentsGrid {
+        @apply grid-cols-1 gap-4;
+    }
+
+    /* Mejoras específicas para mobile */
+    .tournamentsGrid>div {
+        @apply p-4;
+        /* Reducir padding en mobile */
+    }
+
+    .tournamentsGrid h3 {
+        @apply text-base;
+        /* Título más pequeño en mobile */
+    }
+
+    /* Los estilos de las cards ahora están en unifiedStyles */
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+    .heroTitle {
+        @apply text-3xl;
+    }
+
+    .heroSubtitle {
+        @apply text-xl;
+    }
+
+    .tournamentsGrid {
+        @apply grid-cols-2 gap-5;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .tournamentsGrid {
+        @apply grid-cols-2 gap-6;
+    }
+}

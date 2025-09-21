@@ -1,0 +1,1199 @@
+[
+  {
+    "nickname": "Mati",
+    "fullname": "Matias Alloatti",
+    "countryId": 1,
+    "playerNumber": 1,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Nico",
+    "fullname": "Nicolas Pfleger",
+    "countryId": 1,
+    "playerNumber": 2,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Lukas",
+    "fullname": "Lucas",
+    "countryId": 1,
+    "playerNumber": 3,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Guile",
+    "fullname": "Guile",
+    "countryId": 1,
+    "playerNumber": 4,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Chiwi",
+    "fullname": "Claudio",
+    "countryId": 1,
+    "playerNumber": 5,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Pato",
+    "fullname": "Pato",
+    "countryId": 1,
+    "playerNumber": 6,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Marce",
+    "fullname": "Marcelo",
+    "countryId": 1,
+    "playerNumber": 7,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Mati G",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 8,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Lucas",
+    "fullname": "Lucas P",
+    "countryId": 1,
+    "playerNumber": 9,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "German",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 10,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Adrian",
+    "fullname": "Adrian Porta",
+    "countryId": 1,
+    "playerNumber": 11,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Ailén",
+    "fullname": "Ailén",
+    "countryId": 1,
+    "playerNumber": 12,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Leo",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 13,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Claudia",
+    "fullname": "Claudia",
+    "countryId": 1,
+    "playerNumber": 14,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Mauro",
+    "fullname": "Mauro",
+    "countryId": 1,
+    "playerNumber": 15,
+    "nationality": "Chilena"
+  },
+  {
+    "nickname": "Gabriela",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 16,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Haku/Kozi",
+    "fullname": "Facundo Zorrilla Jimenez",
+    "countryId": 1,
+    "playerNumber": 17,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Andres",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 18,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Tomas",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 19,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Danbliz",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 20,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Jess",
+    "fullname": "Jess",
+    "countryId": 1,
+    "playerNumber": 21,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "MegaJL",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 22,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Paula",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 23,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Fran",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 24,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "San",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 25,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Huan",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 26,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Javilo",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 27,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Maxi",
+    "fullname": "Maximiliano",
+    "countryId": 1,
+    "playerNumber": 28,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Sofi",
+    "fullname": "Sofia",
+    "countryId": 1,
+    "playerNumber": 29,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Somar",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 30,
+    "nationality": ""
+  },
+  {
+    "nickname": "Adriel",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 31,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Agus",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 32,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Fofo",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 33,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Agus I",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 34,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Agustina H",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 35,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Ailen",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 36,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Akito",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 37,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Laura",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 38,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Alan",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 39,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Alberto",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 40,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Aldana",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 41,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Daniel",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 42,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Alejandro",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 43,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Alex",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 44,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Amauri (BR)",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 45,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Andre",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 46,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Angel",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 47,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Angie",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 48,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Ariel M.",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 49,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Arthur (BR)",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 50,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Arthur M (MX)",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 51,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Auca",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 52,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Azul",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 53,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Bata",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 54,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Camilo",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 55,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Carlos",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 56,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Cecilia",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 57,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Cristian (CL)",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 58,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Cristóbal (CL) (Kenzo)",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 59,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Daniel (old)",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 60,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Daniela",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 61,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Davy",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 62,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Diego (old)",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 63,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Diego C.",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 64,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Duro",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 65,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Emi",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 66,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Emma",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 67,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Emo",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 68,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Kime",
+    "fullname": "Nicolas Ishihara",
+    "countryId": 1,
+    "playerNumber": 69,
+    "nationality": "Japonesa"
+  },
+  {
+    "nickname": "Enio",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 70,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Ernesto",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 71,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Eze",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 72,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Diego",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 73,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Ezequiel",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 74,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Uma",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 75,
+    "nationality": ""
+  },
+  {
+    "nickname": "Facu (UY)",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 76,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Guille",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 77,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Falconer",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 78,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "FedeRama",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 79,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Federico",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 80,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Federico Albor",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 81,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Felipe (CL)",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 82,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Fer",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 83,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Fernando A",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 84,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Figo/Iori",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 85,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Franco",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 86,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Franco (CL) (furanchizuko)",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 87,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Franco Albor",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 88,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Gilberto K.",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 89,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Guido (BR)",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 90,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Ian",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 91,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Ini",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 92,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Dario",
+    "fullname": "Dario",
+    "countryId": 1,
+    "playerNumber": 93,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Szarps",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 94,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "JC",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 95,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Jhony",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 96,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Jonathan",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 97,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Jorge",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 98,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Jrash",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 99,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Juan",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 100,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Juan M.",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 101,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Juan Mateo",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 102,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Juli F",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 103,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Kelo",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 104,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Kevin",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 105,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Koki",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 106,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Kress",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 107,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Lautaro (LP) DiG.",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 108,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Leonardo (CL) (caballo)",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 109,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Lucas Albor",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 110,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Lucas R. (BR) (LagadoBR)",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 111,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Lucila (Luuucilu",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 112,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Lui",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 113,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Luli",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 114,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Manuel P.",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 115,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Marcelo",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 116,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Marcos O",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 117,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Maria C.",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 118,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Marian",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 119,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Martin",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 120,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Martin O.",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 121,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Mathias",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 122,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Lucio",
+    "fullname": "Lucio",
+    "countryId": 1,
+    "playerNumber": 123,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Mati G. (minimati)",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 124,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Mati S.",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 125,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Max D.",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 126,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Mayra",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 127,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Michael",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 128,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Miguel",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 129,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Feli",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 130,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Mikami",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 131,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Nadia",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 132,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Nahuel",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 133,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Nakanaki",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 134,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Naoko",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 135,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Juli",
+    "fullname": "Julián",
+    "countryId": 1,
+    "playerNumber": 136,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Nicolas (Claudio friend)",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 137,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Nicolas (old)",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 138,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Nicolas M.",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 139,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Nyamikki (DISCORD)",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 140,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Octavio",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 141,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Oli",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 142,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Osqui",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 143,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Pablo (2de6)",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 144,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Pablo G.",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 145,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Pancho",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 146,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Pedro",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 147,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Pol",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 148,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Quimei",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 149,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Romo",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 150,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Roy",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 151,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Samanta",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 152,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Santiago",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 153,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Santiago Albor",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 154,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Saulo",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 155,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Sebas (CO)",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 156,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Sebastián (PE) (SethSeroly)",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 157,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Tamara",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 158,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Taro",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 159,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Valeria",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 160,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Virginia",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 161,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Wapuro",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 162,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Lloocky",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 201,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Felicitas",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 216,
+    "nationality": ""
+  },
+  {
+    "nickname": "Tami",
+    "fullname": "Tamara",
+    "countryId": 1,
+    "playerNumber": 303,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Dario A",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 420,
+    "nationality": ""
+  },
+  {
+    "nickname": "Lautaro",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 729,
+    "nationality": ""
+  },
+  {
+    "nickname": "Mel",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 813,
+    "nationality": ""
+  },
+  {
+    "nickname": "Lucas?",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 912,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Buli",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 999,
+    "nationality": "Argentina"
+  },
+  {
+    "nickname": "Walt",
+    "fullname": "",
+    "countryId": 1,
+    "playerNumber": 9023,
+    "nationality": "Argentina"
+  }
+]

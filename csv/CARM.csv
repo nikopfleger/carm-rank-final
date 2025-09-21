@@ -1,0 +1,2007 @@
+date,game,season,tournament,gameLength,firstPoints,firstNick,secondPoints,secondNick,thirdPoints,thirdNick,fourthPoints,fourthNick
+03/09/2016,1,1,,H,-51.0,Koki,-16.0,Naoko,63.0,Nico,4.0,Pato
+03/09/2016,2,1,,H,-43.0,Koki,11.0,Mayra,-15.0,Naoko,47.0,Nico
+03/09/2016,3,1,,H,65.0,Bata,-58.0,Juli F,-18.0,Mayra,11.0,Nico
+03/09/2016,4,1,,H,-41.0,Bata,61.0,Ezequiel,6.0,Nico,-26.0,Pato
+03/09/2016,5,1,,T,42.0,Bata,7.0,Ezequiel,-16.0,Nico,-33.0,Pato
+03/09/2016,6,1,,H,9.0,Koki,-14.0,Mayra,-38.0,Naoko,43.0,Pedro
+03/09/2016,7,1,,H,-53.0,Koki,6.0,Mati,65.0,Naoko,-18.0,Pedro
+24/09/2016,8,1,,H,-16.0,Alejandro,-40.0,Haku/Kozi,12.0,Mati,44.0,Mayra
+02/10/2016,9,1,,T,6.0,Ezequiel,-16.0,Mati,44.0,Nico,-34.0,Pato
+02/10/2016,10,1,,T,6.0,Chiwi,-15.0,Ezequiel,-29.0,Mati,38.0,Nico
+02/10/2016,11,1,,T,9.0,Chiwi,-14.0,Ezequiel,41.0,Lui,-36.0,Nico
+02/10/2016,12,1,,T,-21.0,Bata,-42.0,Ezequiel,54.0,Lui,9.0,Mati
+22/10/2016,13,1,,H,-26.0,Ezequiel,49.0,Figo/Iori,18.0,Naoko,-41.0,Nico
+22/10/2016,14,1,,H,-1.0,Alejandro,-30.0,Davy,-40.0,Ezequiel,71.0,Figo/Iori
+22/10/2016,15,1,,H,7.0,Ezequiel,-32.0,Koki,40.0,Naoko,-15.0,Pato
+22/10/2016,16,1,,H,-21.0,Adriel,2.0,Koki,-38.0,Mati,57.0,Pato
+22/10/2016,17,1,,T,10.0,Daniela,-12.0,Ezequiel,45.0,Koki,-43.0,Naoko
+01/11/2016,18,1,,H,-54.0,Haku/Kozi,-22.0,Nico,56.0,Pato,20.0,Pedro
+01/11/2016,19,1,,H,-17.0,Haku/Kozi,10.0,Nico,48.0,Pato,-41.0,Pedro
+04/11/2016,20,1,,H,13.0,Haku/Kozi,-8.0,Nico,44.0,Pedro,-49.0,Wapuro
+06/11/2016,21,1,,H,-42.0,Bata,-28.0,Chiwi,52.0,Lautaro (LP) DiG.,18.0,Nico
+06/11/2016,22,1,,H,-41.0,Chiwi,-21.0,Lautaro (LP) DiG.,49.0,Mati,13.0,Nico
+06/11/2016,23,1,,H,12.0,Chiwi,-50.0,Mati,-13.0,Nico,51.0,Pato
+06/11/2016,24,1,,T,-42.0,Bata,-25.0,Lui,53.0,Nico,14.0,Pato
+06/11/2016,25,1,,H,-30.0,Mati,6.0,Mayra,-14.0,Pato,38.0,Pedro
+06/11/2016,26,1,,H,-16.0,Juan,-44.0,Lui,5.0,Pato,55.0,Pedro
+13/11/2016,27,1,,H,26.0,Adriel,-59.0,Chiwi,58.0,Ezequiel,-25.0,Koki
+13/11/2016,28,1,,H,-44.0,Adriel,47.0,Chiwi,15.0,Ezequiel,-18.0,Koki
+13/11/2016,29,1,,T,-48.0,Koki,19.0,Mati,-24.0,Mayra,53.0,Naoko
+11/12/2016,30,1,,H,-16.0,Chiwi,14.0,Ezequiel,-48.0,Nico,50.0,Pato
+11/12/2016,31,1,,H,-23.0,Chiwi,1.0,Ezequiel,-34.0,Nico,56.0,Pato
+11/12/2016,32,1,,H,-46.0,Chiwi,22.0,Ezequiel,-28.0,Nico,52.0,Pato
+11/12/2016,33,1,,H,-52.0,Chiwi,52.0,Ezequiel,-14.0,Nico,14.0,Pato
+11/12/2016,34,1,,H,17.0,Bata,-47.0,Lui,56.0,Mati,-26.0,Mayra
+11/12/2016,35,1,,H,-40.0,Bata,-21.0,Lui,48.0,Mati,13.0,Mayra
+17/12/2016,36,1,,H,-47.0,Chiwi,-28.0,Ezequiel,57.0,Koki,18.0,Pato
+17/12/2016,37,1,,H,-53.0,Chiwi,-15.0,Haku/Kozi,15.0,Mati,53.0,Mayra
+17/12/2016,38,1,,T,-21.0,Ezequiel,10.0,Koki,-38.0,Haku/Kozi,49.0,Pato
+17/12/2016,39,1,,T,9.0,Ezequiel,48.0,Koki,-13.0,Mati,-44.0,Mayra
+30/12/2016,40,1,,H,43.0,Ezequiel,14.0,Haku/Kozi,-37.0,Mati,-20.0,Nico
+30/12/2016,41,1,,H,-19.0,Ezequiel,7.0,Haku/Kozi,-30.0,Mati,42.0,Nico
+30/12/2016,42,1,,H,-14.0,Ezequiel,-49.0,Ini,11.0,Haku/Kozi,52.0,Nico
+30/12/2016,43,1,,H,-10.0,Ezequiel,-42.0,Ini,37.0,Haku/Kozi,15.0,Mati
+30/12/2016,44,1,,H,49.0,Azul,-16.0,Ezequiel,17.0,Ini,-50.0,Nico
+06/01/2017,45,1,,H,74.0,JC,-30.0,Kime,3.0,Pato,-47.0,Pedro
+06/01/2017,46,1,,H,-21.0,Agus,-37.0,Akito,44.0,Haku/Kozi,14.0,Nico
+06/01/2017,47,1,,H,48.0,Azul,-42.0,Ini,-14.0,Haku/Kozi,8.0,Nico
+06/01/2017,48,1,,H,-29.0,Azul,-52.0,Ini,25.0,Haku/Kozi,56.0,Nico
+08/01/2017,49,1,,H,44.0,Chiwi,11.0,Max D.,-22.0,Nico,-33.0,Roy
+08/01/2017,50,1,,H,-15.0,Chiwi,43.0,Max D.,5.0,Nico,-33.0,Roy
+08/01/2017,51,1,,H,-50.0,Chiwi,13.0,Daniel (old),47.0,Nico,-10.0,Roy
+08/01/2017,52,1,,H,-19.0,Adriel,13.0,Daniel (old),44.0,Mati,-38.0,Pedro
+08/01/2017,53,1,,H,-32.0,Adriel,10.0,Mati,43.0,Mayra,-21.0,Pedro
+11/02/2017,54,1,,H,-19.0,Ezequiel,7.0,Jess,-33.0,Haku/Kozi,45.0,Nico
+11/02/2017,55,1,,H,2.0,Akito,-34.0,Ezequiel,-20.0,Jess,52.0,Nico
+11/02/2017,56,1,,H,11.0,Emi,-42.0,Ezequiel,56.0,Haku/Kozi,-25.0,Nico
+12/02/2017,57,1,,H,-57.0,Ezequiel,51.0,Haku/Kozi,-14.0,Max D.,20.0,Nico
+12/02/2017,58,1,,H,-26.0,Ezequiel,22.0,Haku/Kozi,-51.0,Max D.,55.0,Nico
+12/02/2017,59,1,,H,9.0,Koki,67.0,Haku/Kozi,-25.0,Max D.,-51.0,Nico
+12/02/2017,60,1,,H,-26.0,Chiwi,53.0,Ezequiel,-39.0,Juan,12.0,Lautaro (LP) DiG.
+12/02/2017,61,1,,H,-43.0,Koki,-17.0,Mati,7.0,Max D.,53.0,Naoko
+12/02/2017,62,1,,H,-40.0,Chiwi,9.0,Koki,56.0,Mati,-25.0,Mayra
+12/02/2017,63,1,,H,49.0,Chiwi,-45.0,Mati,-12.0,Mayra,8.0,Naoko
+18/02/2017,64,1,,H,55.0,Dario,-50.0,Ezequiel,-21.0,Haku/Kozi,16.0,Nico
+18/02/2017,65,1,,H,6.0,Alejandro,-58.0,Dario,-16.0,Figo/Iori,68.0,Haku/Kozi
+18/02/2017,66,1,,H,53.0,Dario,-43.0,Figo/Iori,13.0,Nadia,-23.0,Nico
+18/02/2017,67,1,,H,-23.0,Ezequiel,14.0,Mati,-44.0,Max D.,53.0,Virginia
+18/02/2017,68,1,,H,4.0,Ezequiel,-24.0,Mati,56.0,Max D.,-36.0,Virginia
+21/02/2017,69,1,,H,-23.0,Duro,54.0,Figo/Iori,4.0,Lucio,-35.0,Romo
+21/02/2017,70,1,,H,8.0,Diego (old),-14.0,Duro,44.0,Figo/Iori,-38.0,Lucio
+04/03/2017,71,1,,H,-16.0,Alberto,4.0,Azul,-50.0,Koki,62.0,Pato
+04/03/2017,72,1,,H,-18.0,Haku/Kozi,7.0,Max D.,40.0,Mayra,-29.0,Naoko
+04/03/2017,73,1,,H,12.0,Haku/Kozi,-19.0,Mati,-52.0,Max D.,59.0,Naoko
+04/03/2017,74,1,,H,49.0,Haku/Kozi,14.0,Mati,-47.0,Max D.,-16.0,Naoko
+04/03/2017,75,1,,H,1.0,Haku/Kozi,-36.0,Max D.,-53.0,Mayra,88.0,Naoko
+04/03/2017,76,1,,H,9.0,Chiwi,-50.0,Jorge,69.0,Mati,-28.0,Nico
+04/03/2017,77,1,,H,-52.0,Azul,-26.0,Koki,62.0,Nico,16.0,Pato
+04/03/2017,78,1,,H,57.0,Koki,-23.0,Naoko,3.0,Nico,-37.0,Pato
+07/03/2017,79,1,,H,-32.0,Chiwi,-17.0,Fer,41.0,Figo/Iori,8.0,Pablo (2de6)
+12/03/2017,80,1,,H,-39.0,Chiwi,54.0,Juli F,10.0,Pato,-25.0,Pedro
+12/03/2017,81,1,,H,-21.0,Chiwi,-32.0,Koki,46.0,Mati,7.0,Naoko
+12/03/2017,82,1,,H,49.0,Chiwi,4.0,Koki,-16.0,Naoko,-37.0,Pato
+12/03/2017,83,1,,H,-54.0,Chiwi,10.0,Mati,56.0,Naoko,-12.0,Pato
+01/04/2017,84,1,,H,54.0,Angel,-20.0,Duro,-50.0,Lucio,16.0,Romo
+08/04/2017,85,1,,H,59.0,Koki,-42.0,Naoko,12.0,Nico,-29.0,Virginia
+08/04/2017,86,1,,H,1.0,Jorge,-39.0,Koki,-20.0,Naoko,58.0,Nico
+08/04/2017,87,1,,H,-31.0,Adriel,-50.0,Ezequiel,57.0,Haku/Kozi,24.0,Mati
+08/04/2017,88,1,,H,2.0,Azul,52.0,Chiwi,-20.0,Haku/Kozi,-34.0,Samanta
+08/04/2017,89,1,,H,-49.0,Akito,13.0,Azul,-17.0,Chiwi,53.0,Max D.
+08/04/2017,90,1,,H,-34.0,Adriel,1.0,Mati,-23.0,Max D.,56.0,Mayra
+08/04/2017,91,1,,H,-23.0,Jorge,5.0,Koki,56.0,Naoko,-38.0,Virginia
+08/04/2017,92,1,,H,-26.0,Duro,13.0,Figo/Iori,-43.0,Lucio,56.0,Romo
+15/04/2017,93,1,,H,-57.0,Adriel,22.0,Koki,-22.0,Mati,57.0,Naoko
+16/04/2017,94,1,,H,-56.0,Juli F,71.0,Koki,5.0,Naoko,-20.0,Pedro
+16/04/2017,95,1,,H,11.0,Figo/Iori,-22.0,Ini,69.0,Pato,-58.0,Romo
+22/04/2017,96,1,,H,67.0,Figo/Iori,-56.0,Ini,28.0,Pato,-39.0,Romo
+22/04/2017,97,1,,H,79.0,Figo/Iori,-54.0,Ini,-28.0,Pato,3.0,Romo
+22/04/2017,98,1,,H,17.0,Dario,-43.0,Duro,53.0,Figo/Iori,-27.0,Jess
+27/04/2017,99,1,,H,-20.0,Carlos,8.0,Chiwi,44.0,Mati,-32.0,Octavio
+27/04/2017,100,1,,H,-43.0,Carlos,1.0,Chiwi,68.0,Haku/Kozi,-26.0,Octavio
+27/04/2017,101,1,,H,-41.0,Dario,3.0,Kime,-23.0,Haku/Kozi,61.0,Nico
+30/04/2017,102,1,,H,44.0,Dario,-34.0,Kime,13.0,Haku/Kozi,-23.0,Nico
+09/05/2017,103,1,,T,-53.0,Angel,17.0,Dario,49.0,Figo/Iori,-13.0,Luli
+09/05/2017,104,1,,T,-31.0,Ini,40.0,Jhony,8.0,Michael,-17.0,Nico
+13/05/2017,105,1,,H,3.0,Figo/Iori,-19.0,Octavio,71.0,Pato,-55.0,Quimei
+13/05/2017,106,1,,H,12.0,Figo/Iori,69.0,Michael,-26.0,Octavio,-55.0,Pato
+13/05/2017,107,1,,H,46.0,Figo/Iori,8.0,Lucio,-17.0,Quimei,-37.0,Romo
+13/05/2017,108,1,,H,-13.0,Carlos,54.0,Chiwi,9.0,Koki,-50.0,Naoko
+13/05/2017,109,1,,H,59.0,Carlos,8.0,Chiwi,-16.0,Koki,-51.0,Naoko
+13/05/2017,110,1,,H,-50.0,Carlos,11.0,Chiwi,56.0,Koki,-17.0,Naoko
+13/05/2017,111,1,,H,45.0,Jess,-14.0,Michael,-42.0,Octavio,11.0,Pato
+13/05/2017,112,1,,H,9.0,Akito,-13.0,Azul,44.0,Ernesto,-40.0,Haku/Kozi
+16/05/2017,113,1,,H,10.0,Figo/Iori,-19.0,Lucas,-48.0,Luli,57.0,Max D.
+16/05/2017,114,1,,H,10.0,Chiwi,46.0,Jhony,-43.0,Koki,-13.0,Naoko
+16/05/2017,115,1,,H,64.0,Chiwi,11.0,Dario,-31.0,Koki,-44.0,Naoko
+19/05/2017,116,1,,H,55.0,Guile,-53.0,Ini,-23.0,Pato,21.0,Romo
+19/05/2017,117,1,,H,9.0,Figo/Iori,-46.0,Guile,58.0,Ini,-21.0,Pato
+19/05/2017,118,1,,H,58.0,Figo/Iori,-46.0,Ini,9.0,Pato,-21.0,Romo
+20/05/2017,119,1,,H,-45.0,Adriel,-28.0,Koki,15.0,Michael,58.0,Naoko
+20/05/2017,120,1,,H,-55.0,Carlos,-24.0,Figo/Iori,69.0,Lucio,10.0,Nico
+20/05/2017,121,1,,H,-20.0,Adriel,19.0,Figo/Iori,-57.0,Lucio,58.0,Nico
+20/05/2017,122,1,,H,52.0,Mati,-34.0,Max D.,-19.0,Mayra,1.0,Romo
+20/05/2017,123,1,,H,7.0,Akito,-34.0,Koki,46.0,Michael,-19.0,Naoko
+20/05/2017,124,1,,H,-25.0,Figo/Iori,64.0,Michael,13.0,Nico,-52.0,Romo
+20/05/2017,125,1,,H,-40.0,Akito,8.0,Koki,-24.0,Lucio,56.0,Naoko
+20/05/2017,126,1,,H,42.0,Carlos,-21.0,Mati,13.0,Max D.,-34.0,Mayra
+23/05/2017,127,1,,H,17.0,Dario,51.0,Figo/Iori,-29.0,Lucas,-39.0,Lucio
+23/05/2017,128,1,,H,45.0,Angel,13.0,Fer,-17.0,Ini,-41.0,Michael
+23/05/2017,129,1,,H,-20.0,Chiwi,54.0,Jhony,-46.0,Luli,12.0,Mauro
+23/05/2017,130,1,,T,-31.0,Fer,-18.0,Jhony,42.0,Lucas,7.0,Lucio
+23/05/2017,131,1,,T,54.0,Figo/Iori,-46.0,Luli,-20.0,Mauro,12.0,Michael
+27/05/2017,132,1,,H,-1.0,Figo/Iori,59.0,Michael,-34.0,Nico,-24.0,Romo
+27/05/2017,133,1,,H,-17.0,Figo/Iori,-52.0,Michael,6.0,Nico,63.0,Romo
+28/05/2017,134,1,,H,-28.0,Juli F,6.0,Mati,65.0,Mayra,-43.0,Pedro
+28/05/2017,135,1,,H,6.0,Adriel,-27.0,Chiwi,-16.0,Koki,37.0,Naoko
+28/05/2017,136,1,,H,-32.0,Adriel,-21.0,Chiwi,51.0,Koki,2.0,Naoko
+28/05/2017,137,1,,H,-54.0,Juli F,-10.0,Koki,16.0,Naoko,48.0,Pedro
+28/05/2017,138,1,,H,68.0,Adriel,8.0,Chiwi,-51.0,Mati,-25.0,Mayra
+30/05/2017,139,1,,H,0.0,Alejandro,-36.0,Angel,-24.0,Chiwi,60.0,Figo/Iori
+30/05/2017,140,1,,H,54.0,Jhony,8.0,Koki,-25.0,Lucas,-37.0,Luli
+30/05/2017,141,1,,H,-46.0,Alejandro,-32.0,Chiwi,76.0,Figo/Iori,2.0,Naoko
+30/05/2017,142,1,,H,-31.0,Ernesto,1.0,Koki,50.0,Lucas,-20.0,Mauro
+03/06/2017,143,1,,H,11.0,Carlos,-15.0,Fer,-49.0,Figo/Iori,53.0,Nico
+03/06/2017,144,1,,H,1.0,Angel,-48.0,Carlos,68.0,Figo/Iori,-21.0,Romo
+03/06/2017,145,1,,H,-20.0,Akito,-40.0,Jess,4.0,Haku/Kozi,56.0,Nico
+03/06/2017,146,1,,H,53.0,Figo/Iori,-39.0,Ini,4.0,Jess,-18.0,Nico
+03/06/2017,147,1,,H,-57.0,Akito,52.0,Ini,17.0,Haku/Kozi,-12.0,Nico
+03/06/2017,148,1,,H,-55.0,Azul,55.0,Figo/Iori,11.0,Jess,-11.0,Haku/Kozi
+03/06/2017,149,1,,H,-28.0,Akito,71.0,Azul,-38.0,Haku/Kozi,-5.0,Nico
+06/06/2017,150,1,,H,12.0,Alejandro,-34.0,Enio,42.0,Figo/Iori,-20.0,Luli
+06/06/2017,151,1,,H,-13.0,Koki,-51.0,Lucas,7.0,Lucio,57.0,Naoko
+06/06/2017,152,1,,H,-21.0,Koki,-50.0,Lucio,60.0,Mauro,11.0,Naoko
+06/06/2017,153,1,,H,-16.0,Koki,8.0,Lucas,-40.0,Mauro,48.0,Max D.
+10/06/2017,154,1,,H,-38.0,Chiwi,58.0,Figo/Iori,6.0,Max D.,-26.0,Michael
+10/06/2017,155,1,,H,47.0,Akito,-39.0,Haku/Kozi,7.0,Michael,-15.0,Pato
+10/06/2017,156,1,,H,-24.0,Koki,-54.0,Lucio,12.0,Naoko,66.0,Romo
+10/06/2017,157,1,,H,-57.0,Chiwi,80.0,Figo/Iori,-23.0,Haku/Kozi,0.0,Romo
+10/06/2017,158,1,,H,45.0,Fer,-17.0,Koki,7.0,Lucio,-35.0,Naoko
+10/06/2017,159,1,,H,48.0,Fer,12.0,Haku/Kozi,-50.0,Lucio,-10.0,Romo
+10/06/2017,160,1,,H,-7.0,Akito,84.0,Koki,-33.0,Michael,-44.0,Naoko
+11/06/2017,161,1,,H,22.0,Jess,-79.0,Kime,65.0,Haku/Kozi,-8.0,Nico
+11/06/2017,162,1,,H,8.0,Jess,-44.0,Kime,52.0,Haku/Kozi,-16.0,Nico
+11/06/2017,163,1,,H,-56.0,Ini,-18.0,Koki,7.0,Naoko,67.0,Wapuro
+11/06/2017,164,1,,H,-16.0,Ini,40.0,Mati,8.0,Max D.,-32.0,Mayra
+11/06/2017,165,1,,H,-36.0,Koki,41.0,Mati,-16.0,Max D.,11.0,Mayra
+11/06/2017,166,1,,H,39.0,Koki,-17.0,Max D.,6.0,Mayra,-28.0,Naoko
+11/06/2017,167,1,,H,6.0,Alan,-39.0,Koki,58.0,Max D.,-25.0,Mayra
+13/06/2017,168,1,,H,-53.0,Fer,48.0,Figo/Iori,-9.0,Jhony,14.0,Naoko
+13/06/2017,169,1,,T,40.0,Alejandro,8.0,Ini,-29.0,Koki,-19.0,Luli
+13/06/2017,170,1,,H,-50.0,Ernesto,4.0,Jhony,-19.0,Lucas,65.0,Naoko
+13/06/2017,171,1,,T,5.0,Fer,47.0,Ini,-19.0,Koki,-33.0,Luli
+13/06/2017,172,1,,H,-21.0,Ernesto,10.0,Lucas,-44.0,Naoko,55.0,Tamara
+13/06/2017,173,1,,H,-44.0,Alejandro,-33.0,Ini,65.0,Koki,12.0,Luli
+17/06/2017,174,1,,H,86.0,Figo/Iori,4.0,Michael,-38.0,Nadia,-52.0,Pato
+17/06/2017,175,1,,H,54.0,Koki,-24.0,Nadia,8.0,Naoko,-38.0,Pato
+17/06/2017,176,1,,H,-25.0,Dario,-41.0,Figo/Iori,62.0,Michael,4.0,Nico
+17/06/2017,177,1,,T,-33.0,Dario,-20.0,Koki,1.0,Nico,52.0,Pato
+17/06/2017,178,1,,T,42.0,Koki,-11.0,Nadia,11.0,Naoko,-42.0,Nico
+20/06/2017,179,1,,H,-40.0,Figo/Iori,-19.0,Jhony,7.0,Lucas,52.0,Lucio
+20/06/2017,180,1,,H,15.0,Enio,57.0,Figo/Iori,-20.0,Jhony,-52.0,Lucio
+24/06/2017,181,1,,H,65.0,Koki,3.0,Michael,-41.0,Naoko,-27.0,Romo
+24/06/2017,182,1,,H,3.0,Alejandro,-31.0,Lucio,47.0,Max D.,-19.0,Naoko
+24/06/2017,183,1,,H,-23.0,Fer,17.0,Koki,-43.0,Michael,49.0,Romo
+25/06/2017,184,1,,H,-49.0,Carlos,-17.0,Chiwi,4.0,Pato,62.0,Quimei
+25/06/2017,185,1,,H,57.0,Chiwi,-15.0,Koki,13.0,Naoko,-55.0,Quimei
+25/06/2017,186,1,,H,58.0,Chiwi,11.0,Mati,-40.0,Mayra,-29.0,Naoko
+27/06/2017,187,1,,H,-37.0,Dario,-21.0,Koki,7.0,Lucio,51.0,Naoko
+27/06/2017,188,1,,H,-17.0,Chiwi,-28.0,Fer,5.0,Luli,40.0,Max D.
+27/06/2017,189,1,,H,79.0,Alejandro,-29.0,Lucas,-1.0,Mauro,-49.0,Michael
+27/06/2017,190,1,,H,42.0,Chiwi,13.0,Dario,-36.0,Lucio,-19.0,Luli
+01/07/2017,191,1,,H,46.0,Ernesto,-56.0,Lucio,15.0,Michael,-5.0,Naoko
+01/07/2017,192,1,,H,-40.0,Akito,6.0,Alejandro,49.0,Fer,-15.0,Romo
+01/07/2017,193,1,,H,-51.0,Angie,9.0,Figo/Iori,54.0,Koki,-12.0,Marcos O
+01/07/2017,194,1,,H,-30.0,Ernesto,3.0,Lucio,76.0,Michael,-49.0,Naoko
+01/07/2017,195,1,,H,-53.0,Adrian,18.0,Duro,49.0,Figo/Iori,-14.0,Koki
+01/07/2017,196,1,,H,77.0,Akito,2.0,Angie,-30.0,Lucio,-49.0,Michael
+01/07/2017,197,1,,H,49.0,Alejandro,-21.0,Ernesto,-41.0,Fer,13.0,Naoko
+04/07/2017,198,1,,T,4.0,Chiwi,-39.0,Luli,55.0,Mauro,-20.0,Romo
+04/07/2017,199,1,,T,46.0,Jess,11.0,Koki,-40.0,Lucas,-17.0,Naoko
+04/07/2017,200,1,,T,-33.0,Juli F,42.0,Luli,7.0,Mauro,-16.0,Pedro
+04/07/2017,201,1,,T,48.0,Dario,-24.0,Lucio,-42.0,Max D.,18.0,Santiago
+04/07/2017,202,1,,H,-18.0,Chiwi,4.0,Ini,44.0,Jess,-30.0,Naoko
+04/07/2017,203,1,,T,-14.0,Dario,10.0,Ini,43.0,Lucas,-39.0,Lucio
+04/07/2017,204,1,,T,-26.0,Fer,60.0,Figo/Iori,15.0,Michael,-49.0,Romo
+04/07/2017,205,1,,T,54.0,Chiwi,6.0,Jess,-16.0,Koki,-44.0,Naoko
+04/07/2017,206,1,,T,-35.0,Enio,12.0,Koki,43.0,Luli,-20.0,Mauro
+04/07/2017,207,1,,T,-51.0,Dario,9.0,Enio,58.0,Ini,-16.0,Mauro
+04/07/2017,208,1,,T,12.0,Fer,-44.0,Lucas,58.0,Michael,-26.0,Romo
+04/07/2017,209,1,,T,2.0,Juli F,-24.0,Max D.,38.0,Pedro,-16.0,Santiago
+04/07/2017,210,1,,T,-19.0,Juli F,-36.0,Lucio,5.0,Max D.,50.0,Santiago
+06/07/2017,211,1,,T,11.0,Fer,-16.0,Figo/Iori,-37.0,Lucio,42.0,Nico
+06/07/2017,212,1,,H,-39.0,Akito,49.0,Figo/Iori,-18.0,Lucio,8.0,Nico
+11/07/2017,213,1,,T,13.0,Alejandro,44.0,Jess,-20.0,Koki,-37.0,Mati
+11/07/2017,214,1,,T,12.0,Alejandro,-20.0,Jess,44.0,Koki,-36.0,Mati
+11/07/2017,215,1,,T,7.0,Fer,42.0,Jess,-19.0,Koki,-30.0,Luli
+11/07/2017,216,1,,T,55.0,Chiwi,-37.0,Fer,2.0,Lucas Albor,-20.0,Luli
+11/07/2017,217,1,,T,11.0,Figo/Iori,-38.0,Jhony,-18.0,Lucio,45.0,Michael
+11/07/2017,218,1,,T,-34.0,Figo/Iori,45.0,Jhony,-20.0,Lucio,9.0,Michael
+11/07/2017,219,1,,T,-15.0,Jhony,5.0,Lucas,-33.0,Lucio,43.0,Mauro
+11/07/2017,220,1,,T,17.0,Chiwi,52.0,Lucas,-19.0,Lucas Albor,-50.0,Mauro
+11/07/2017,221,1,,T,14.0,Jhony,-19.0,Lucas,47.0,Lucio,-42.0,Mauro
+11/07/2017,222,1,,T,46.0,Chiwi,14.0,Lucas,-19.0,Lucas Albor,-41.0,Mauro
+16/07/2017,223,2,1,T,49.0,Akito,-39.0,Alejandro,7.0,Lucio,-17.0,Nico
+16/07/2017,224,2,1,T,7.0,Koki,-16.0,Lucas,-40.0,Luli,50.0,Pato
+16/07/2017,225,2,1,T,-45.0,Chiwi,55.0,Juli F,-17.0,Mauro,8.0,Pedro
+16/07/2017,226,2,1,T,49.0,Ini,-39.0,Jhony,-17.0,Romo,8.0,Tamara
+16/07/2017,227,2,1,T,-19.0,Adrian,3.0,Adriel,-47.0,Michael,64.0,Taro
+16/07/2017,228,2,1,T,56.0,Azul,9.0,Dario,-48.0,Jess,-17.0,Nadia
+16/07/2017,229,2,1,T,-40.0,Figo/Iori,-18.0,Haku/Kozi,4.0,Lucio,54.0,Mauro
+16/07/2017,230,2,1,T,66.0,Jess,1.0,Michael,-48.0,Nico,-19.0,Pato
+16/07/2017,231,2,1,T,-20.0,Adrian,60.0,Akito,1.0,Azul,-41.0,Luli
+16/07/2017,232,2,1,T,-47.0,Alejandro,54.0,Chiwi,11.0,Lucas,-18.0,Nadia
+16/07/2017,233,2,1,T,56.0,Adriel,-19.0,Ini,-41.0,Juli F,4.0,Koki
+16/07/2017,234,2,1,T,18.0,Dario,-27.0,Mati,61.0,Pedro,-62.0,Taro
+16/07/2017,235,2,1,T,4.0,Figo/Iori,-44.0,Ini,64.0,Mati,-24.0,Romo
+16/07/2017,236,2,1,T,-14.0,Juli F,51.0,Lucas,8.0,Michael,-44.0,Tamara
+16/07/2017,237,2,1,T,55.0,Adriel,-20.0,Ernesto,6.0,Jess,-40.0,Pedro
+16/07/2017,238,2,1,T,-43.0,Luli,56.0,Mauro,-19.0,Nadia,6.0,Taro
+16/07/2017,239,2,1,T,-41.0,Azul,-21.0,Jhony,63.0,Koki,-1.0,Haku/Kozi
+16/07/2017,240,2,1,T,-53.0,Adrian,-12.0,Chiwi,57.0,Dario,8.0,Pato
+16/07/2017,241,2,1,T,6.0,Adriel,-17.0,Jhony,-38.0,Juli F,50.0,Pato
+16/07/2017,242,2,1,T,-45.0,Lucio,-17.0,Luli,55.0,Michael,8.0,Pedro
+16/07/2017,243,2,1,T,-43.0,Chiwi,-20.0,Haku/Kozi,58.0,Nico,5.0,Romo
+16/07/2017,244,2,1,T,-38.0,Adrian,7.0,Ernesto,-17.0,Lucas,49.0,Mati
+16/07/2017,245,2,1,T,6.0,Akito,58.0,Figo/Iori,-18.0,Koki,-46.0,Taro
+16/07/2017,246,2,1,T,50.0,Alejandro,8.0,Ini,-46.0,Mauro,-12.0,Tamara
+16/07/2017,247,2,1,T,-25.0,Ernesto,-3.0,Ini,74.0,Jess,-46.0,Lucio
+16/07/2017,248,2,1,T,-21.0,Alejandro,12.0,Dario,-60.0,Figo/Iori,69.0,Jhony
+16/07/2017,249,2,1,T,-17.0,Akito,55.0,Mati,5.0,Nadia,-43.0,Tamara
+16/07/2017,250,2,1,T,-41.0,Azul,-17.0,Haku/Kozi,52.0,Nico,6.0,Romo
+16/07/2017,251,2,1,H,-38.0,Adriel,5.0,Akito,-17.0,Jess,51.0,Mati
+18/07/2017,252,2,,H,23.0,Chiwi,56.0,Koki,-51.0,Luli,-28.0,Nico
+18/07/2017,253,2,,T,-18.0,Adrian,42.0,Ini,-29.0,Lucas Albor,5.0,Tamara
+18/07/2017,254,2,,H,-30.0,Enio,73.0,Figo/Iori,10.0,Lucas,-53.0,Luli
+18/07/2017,255,2,,H,-21.0,Chiwi,59.0,Koki,-47.0,Mauro,9.0,Nico
+18/07/2017,256,2,,H,-43.0,Enio,-10.0,Figo/Iori,12.0,Lucas Albor,41.0,Luli
+18/07/2017,257,2,,H,-53.0,Chiwi,-11.0,Koki,50.0,Michael,14.0,Nico
+22/07/2017,258,2,,H,49.0,Akito,12.0,Duro,-10.0,Max D.,-51.0,Romo
+22/07/2017,259,2,,T,13.0,Adrian,-18.0,Fer,-50.0,Mati G. (minimati),55.0,Michael
+22/07/2017,260,2,,T,45.0,Adrian,5.0,Alejandro,-31.0,Fer,-19.0,Mati G. (minimati)
+22/07/2017,261,2,,T,-36.0,Adrian,40.0,Alejandro,-12.0,Mati G. (minimati),8.0,Romo
+22/07/2017,262,2,,H,3.0,Akito,76.0,Figo/Iori,-45.0,Max D.,-34.0,Michael
+22/07/2017,263,2,,H,-64.0,Adrian,78.0,Figo/Iori,9.0,Max D.,-23.0,Romo
+22/07/2017,264,2,,H,10.0,Adrian,-42.0,Figo/Iori,51.0,Max D.,-19.0,Romo
+22/07/2017,265,2,,H,-17.0,Adrian,11.0,Figo/Iori,-40.0,Max D.,46.0,Romo
+22/07/2017,266,2,,T,-13.0,Adrian,-44.0,Figo/Iori,10.0,Max D.,47.0,Romo
+22/07/2017,267,2,,H,-14.0,Adrian,39.0,Figo/Iori,7.0,Max D.,-32.0,Romo
+25/07/2017,268,2,,H,-23.0,Dario,11.0,Enio,-36.0,Ini,48.0,Jess
+25/07/2017,269,2,,H,20.0,Koki,-67.0,Lucas Albor,60.0,Mati G. (minimati),-13.0,Mauro
+25/07/2017,270,2,,H,-45.0,Chiwi,23.0,Figo/Iori,56.0,Lucas,-34.0,Tamara
+25/07/2017,271,2,,H,22.0,Koki,-35.0,Lucas Albor,59.0,Mati G. (minimati),-46.0,Mauro
+25/07/2017,272,2,,H,-54.0,Enio,-26.0,Ini,5.0,Lucas,75.0,Tamara
+25/07/2017,273,2,,H,11.0,Fer,-10.0,Lucio,-49.0,Luli,48.0,Max D.
+25/07/2017,274,2,,H,8.0,Fer,42.0,Figo/Iori,-30.0,Lucas Albor,-20.0,Mati G. (minimati)
+25/07/2017,275,2,,H,-20.0,Lucio,-46.0,Luli,5.0,Max D.,61.0,Michael
+25/07/2017,276,2,,H,51.0,Dario,16.0,Fer,-21.0,Figo/Iori,-46.0,Jess
+29/07/2017,277,2,,H,-18.0,Koki,-39.0,Mati G. (minimati),54.0,Michael,3.0,Nico
+29/07/2017,278,2,,H,-44.0,Adrian,10.0,Fer,54.0,Lucio,-20.0,Romo
+29/07/2017,279,2,,H,-19.0,Figo/Iori,-54.0,Max D.,15.0,Michael,58.0,Pato
+29/07/2017,280,2,,H,46.0,Akito,-14.0,Koki,13.0,Mati G. (minimati),-45.0,Nico
+29/07/2017,281,2,,T,-19.0,Akito,46.0,Koki,14.0,Mati G. (minimati),-41.0,Nico
+29/07/2017,282,2,,H,-54.0,Duro,-11.0,Ernesto,48.0,Lucio,17.0,Romo
+29/07/2017,283,2,,H,55.0,Figo/Iori,11.0,Max D.,-14.0,Michael,-52.0,Pato
+29/07/2017,284,2,,H,17.0,Fer,-17.0,Juli F,-53.0,Lucas Albor,53.0,Pedro
+30/07/2017,285,2,,H,64.0,Adrian,-43.0,Figo/Iori,8.0,Ini,-29.0,Lucio
+30/07/2017,286,2,,H,-54.0,Adrian,75.0,Figo/Iori,-27.0,Ini,6.0,Lucio
+30/07/2017,287,2,,H,-22.0,Adrian,13.0,Figo/Iori,-42.0,Ini,51.0,Lucio
+30/07/2017,288,2,,H,40.0,Adrian,9.0,Figo/Iori,-30.0,Ini,-19.0,Lucio
+31/07/2017,289,2,,H,57.0,Adrian,3.0,Figo/Iori,-23.0,Mati G. (minimati),-37.0,Michael
+31/07/2017,290,2,,H,19.0,Adrian,73.0,Figo/Iori,-33.0,Michael,-59.0,Romo
+31/07/2017,291,2,,H,71.0,Adrian,1.0,Figo/Iori,-48.0,Michael,-24.0,Romo
+01/08/2017,292,2,,H,49.0,Chiwi,-51.0,Fer,-10.0,Koki,12.0,Pato
+01/08/2017,293,2,,H,7.0,Mati G. (minimati),-22.0,Mauro,54.0,Nico,-39.0,Tamara
+01/08/2017,294,2,,H,11.0,Chiwi,-20.0,Koki,54.0,Lucio,-45.0,Pato
+01/08/2017,295,2,,H,9.0,Chiwi,66.0,Koki,-56.0,Lucio,-19.0,Pato
+01/08/2017,296,2,,H,-51.0,Diego (old),-17.0,Fer,51.0,Mauro,17.0,Nico
+01/08/2017,297,2,,T,-40.0,Chiwi,52.0,Koki,14.0,Lucio,-26.0,Pato
+01/08/2017,298,2,,H,48.0,Lucas,-19.0,Luli,-39.0,Max D.,10.0,Michael
+05/08/2017,299,2,,H,51.0,Dario,-13.0,Haku/Kozi,-51.0,Nakanaki,13.0,Pedro
+05/08/2017,300,2,,H,8.0,Mati,51.0,Michael,-22.0,Nico,-37.0,Pato
+05/08/2017,301,2,,H,53.0,Michael,-24.0,Nico,-45.0,Pato,16.0,Wapuro
+05/08/2017,302,2,,H,-32.0,Koki,23.0,Lucas,-54.0,Lucio,63.0,Naoko
+05/08/2017,303,2,,H,-29.0,Fer,21.0,Figo/Iori,52.0,Mati,-44.0,Mati G. (minimati)
+05/08/2017,304,2,,H,12.0,Koki,-52.0,Mati G. (minimati),49.0,Michael,-9.0,Nico
+05/08/2017,305,2,,H,-24.0,Haku/Kozi,7.0,Nico,-44.0,Pato,61.0,Pedro
+05/08/2017,306,2,,H,8.0,Haku/Kozi,41.0,Nico,-19.0,Pato,-30.0,Pedro
+06/08/2017,307,2,,T,61.0,Lucio,7.0,Mauro,-44.0,Max D.,-24.0,Romo
+06/08/2017,308,2,,T,8.0,Adrian,41.0,Figo/Iori,-19.0,Lucas,-30.0,Lucio
+06/08/2017,309,2,,T,-18.0,Mauro,-33.0,Max D.,10.0,Pablo (2de6),41.0,Romo
+06/08/2017,310,2,,T,8.0,Adrian,48.0,Lucas,-35.0,Lucio,-21.0,Romo
+06/08/2017,311,2,,T,-32.0,Figo/Iori,41.0,Lucas,8.0,Mauro,-17.0,Max D.
+06/08/2017,312,2,,T,-16.0,Adrian,6.0,Lucas,-33.0,Lucio,43.0,Romo
+06/08/2017,313,2,,T,56.0,Figo/Iori,-50.0,Mauro,7.0,Max D.,-13.0,Romo
+06/08/2017,314,2,,T,-42.0,Adrian,10.0,Figo/Iori,45.0,Lucas,-13.0,Lucio
+07/08/2017,315,2,,T,42.0,Figo/Iori,7.0,Lucas,-32.0,Mauro,-17.0,Romo
+07/08/2017,316,2,,H,-54.0,Haku/Kozi,13.0,Nico,-16.0,Pato,57.0,Pedro
+07/08/2017,317,2,,H,-20.0,Haku/Kozi,-58.0,Nico,66.0,Pato,12.0,Pedro
+07/08/2017,318,2,,H,11.0,Haku/Kozi,42.0,Nico,-16.0,Pato,-37.0,Pedro
+07/08/2017,319,2,,H,50.0,JC,-18.0,Nico,3.0,Pato,-35.0,Pedro
+07/08/2017,320,2,,H,-15.0,Figo/Iori,-38.0,JC,44.0,Nico,9.0,Pedro
+08/08/2017,321,2,,H,-51.0,Adrian,82.0,Koki,-27.0,Mati G. (minimati),-4.0,Naoko
+08/08/2017,322,2,,H,8.0,Adrian,-48.0,Koki,62.0,Mati G. (minimati),-22.0,Naoko
+08/08/2017,323,2,,H,-33.0,Lucas,-51.0,Mauro,15.0,Nico,69.0,Tamara
+08/08/2017,324,2,,H,-56.0,Chiwi,52.0,Lucio,-15.0,Luli,19.0,Pato
+08/08/2017,325,2,,H,-40.0,Figo/Iori,47.0,Koki,15.0,Mati G. (minimati),-22.0,Naoko
+08/08/2017,326,2,,H,-31.0,Lucas,-51.0,Michael,77.0,Nico,5.0,Pedro
+08/08/2017,327,2,,H,-33.0,Lucio,9.0,Luli,43.0,Mauro,-19.0,Pato
+08/08/2017,328,2,,H,-14.0,Chiwi,-57.0,Juli F,53.0,Naoko,18.0,Pedro
+08/08/2017,329,2,,H,-41.0,Fer,78.0,Figo/Iori,15.0,Lucas,-52.0,Michael
+09/08/2017,330,2,,H,-21.0,Adrian,-33.0,Haku/Kozi,10.0,Mauro,44.0,Nico
+09/08/2017,331,2,,H,63.0,JC,9.0,Haku/Kozi,-21.0,Mauro,-51.0,Pedro
+09/08/2017,332,2,,H,6.0,JC,53.0,Haku/Kozi,-15.0,Nico,-44.0,Pedro
+10/08/2017,333,2,,H,-26.0,Jess,-38.0,Haku/Kozi,16.0,Mauro,48.0,Pedro
+10/08/2017,334,2,,H,40.0,JC,-16.0,Nico,5.0,Pato,-29.0,Romo
+10/08/2017,335,2,,H,-68.0,Mauro,3.0,Nico,-24.0,Pedro,89.0,Romo
+10/08/2017,336,2,,H,-52.0,JC,56.0,Nico,19.0,Pedro,-23.0,Romo
+10/08/2017,337,2,,H,-23.0,Facu (UY),6.0,JC,56.0,Pedro,-39.0,Romo
+10/08/2017,338,2,,H,13.0,Dario,-26.0,Haku/Kozi,-37.0,Mauro,50.0,Pedro
+10/08/2017,339,2,,H,10.0,Dario,44.0,Haku/Kozi,-35.0,Nico,-19.0,Pedro
+10/08/2017,340,2,,H,-51.0,Haku/Kozi,13.0,Mauro,58.0,Nico,-20.0,Pedro
+11/08/2017,341,2,,H,-52.0,Chiwi,47.0,Mati,-11.0,Max D.,16.0,Pato
+11/08/2017,342,2,,H,57.0,Chiwi,-45.0,Mati,-16.0,Max D.,4.0,Pato
+12/08/2017,343,2,,H,-56.0,Fer,-15.0,Lucas Albor,59.0,Michael,12.0,Nico
+12/08/2017,344,2,,H,49.0,Figo/Iori,-41.0,Lucas Albor,7.0,Michael,-15.0,Nico
+12/08/2017,345,2,,H,24.0,Alejandro,-51.0,Lucio,-34.0,Mati G. (minimati),61.0,Romo
+12/08/2017,346,2,,H,-33.0,Alejandro,-43.0,Lucas Albor,12.0,Mati G. (minimati),64.0,Nico
+12/08/2017,347,2,,H,-34.0,Akito,61.0,Figo/Iori,-51.0,Lucio,24.0,Romo
+12/08/2017,348,2,,H,-51.0,Adrian,73.0,Koki,7.0,Lucas,-29.0,Naoko
+12/08/2017,349,2,,H,-26.0,Adrian,-37.0,Koki,51.0,Lucas,12.0,Naoko
+12/08/2017,350,2,,H,-29.0,Fer,5.0,Juli F,-15.0,Michael,39.0,Pedro
+12/08/2017,351,2,,H,-22.0,Adrian,-58.0,Alejandro,3.0,Lucas,77.0,Mati G. (minimati)
+12/08/2017,352,2,,H,-22.0,Akito,2.0,Koki,54.0,Lucio,-34.0,Naoko
+12/08/2017,353,2,,H,10.0,Adrian,-35.0,Facu (UY),42.0,Lucas,-17.0,Pedro
+12/08/2017,354,2,,H,-41.0,Adrian,-13.0,Facu (UY),11.0,Lucas,43.0,Nico
+12/08/2017,355,2,,H,-40.0,Adrian,53.0,Facu (UY),-27.0,Lucas,14.0,Nico
+12/08/2017,356,2,,H,20.0,Adrian,-28.0,Facu (UY),-41.0,Lucas,49.0,Pedro
+13/08/2017,357,2,,H,-29.0,Dario,8.0,Facu (UY),38.0,Nico,-17.0,Pedro
+13/08/2017,358,2,,H,-1.0,Dario,55.0,Mati G. (minimati),-21.0,Nico,-33.0,Pedro
+14/08/2017,359,2,,H,-48.0,Dario,-13.0,Lucas,54.0,Pedro,7.0,Romo
+14/08/2017,360,2,,H,-33.0,Adrian,-22.0,Figo/Iori,54.0,Lucas,1.0,Nico
+14/08/2017,361,2,,H,14.0,Adrian,-19.0,Figo/Iori,46.0,Lucas,-41.0,Nico
+14/08/2017,362,2,,H,-33.0,Adrian,92.0,Figo/Iori,-61.0,Lucas,2.0,Nico
+15/08/2017,363,2,,H,53.0,Chiwi,8.0,Juli F,-36.0,Koki,-25.0,Pedro
+15/08/2017,364,2,,H,9.0,Chiwi,-16.0,Juli F,-46.0,Koki,53.0,Pedro
+15/08/2017,365,2,,H,39.0,Chiwi,-30.0,Juli F,-16.0,Koki,7.0,Pedro
+15/08/2017,366,2,,H,8.0,Lucio,-41.0,Mati G. (minimati),-24.0,Mauro,57.0,Naoko
+15/08/2017,367,2,,H,-30.0,Alejandro,-48.0,Enio,15.0,Fer,63.0,Michael
+15/08/2017,368,2,,H,-34.0,Figo/Iori,11.0,Lucas,-23.0,Luli,46.0,Pato
+15/08/2017,369,2,,H,15.0,Figo/Iori,63.0,Lucio,-48.0,Mati G. (minimati),-30.0,Naoko
+15/08/2017,370,2,,H,45.0,Lucas,-35.0,Luli,-16.0,Mauro,6.0,Naoko
+15/08/2017,371,2,,H,-24.0,Enio,8.0,Fer,62.0,Figo/Iori,-46.0,Mauro
+16/08/2017,372,2,,H,-22.0,Adrian,51.0,Haku/Kozi,-38.0,Lucas,9.0,Pedro
+16/08/2017,373,2,,H,11.0,Adrian,-53.0,Lucas,59.0,Nico,-17.0,Pato
+16/08/2017,374,2,,H,-18.0,Adrian,-51.0,Lucas,66.0,Nico,3.0,Pato
+17/08/2017,375,2,,H,-18.0,Adrian,-36.0,JC,8.0,Nico,46.0,Pedro
+17/08/2017,376,2,,H,-21.0,Adrian,-59.0,JC,16.0,Lucas,64.0,Nico
+17/08/2017,377,2,,H,50.0,Adrian,13.0,Facu (UY),-20.0,JC,-43.0,Lucas
+18/08/2017,378,2,,H,9.0,Chiwi,-51.0,Fran,60.0,Pato,-18.0,Pedro
+18/08/2017,379,2,,H,5.0,Chiwi,-20.0,Fran,-37.0,Juli F,52.0,Pedro
+18/08/2017,380,2,,H,-32.0,Adrian,43.0,Facu (UY),7.0,Haku/Kozi,-18.0,Pedro
+19/08/2017,381,2,,H,-28.0,Lucio,-46.0,Mati G. (minimati),21.0,Nico,53.0,Romo
+19/08/2017,382,2,,H,-22.0,Adrian,13.0,Michael,49.0,Nico,-40.0,Pedro
+19/08/2017,383,2,,H,8.0,Fer,53.0,Lucas Albor,-21.0,Lucio,-40.0,Mati G. (minimati)
+19/08/2017,384,2,,H,52.0,Adrian,-51.0,Chiwi,-17.0,Michael,16.0,Pedro
+19/08/2017,385,2,,T,46.0,Adrian,15.0,Michael,-24.0,Nico,-37.0,Pedro
+19/08/2017,386,2,,H,-38.0,Juli F,-23.0,Lucas,-1.0,Max D.,62.0,Romo
+19/08/2017,387,2,,T,15.0,Fer,-24.0,Lucas,-37.0,Lucio,46.0,Mati G. (minimati)
+19/08/2017,388,2,,H,52.0,Haku/Kozi,5.0,Lucas,-39.0,Mati G. (minimati),-18.0,Pedro
+19/08/2017,389,2,,H,-31.0,Adrian,-17.0,Haku/Kozi,7.0,Nico,41.0,Pedro
+19/08/2017,390,2,,H,-45.0,Adrian,-31.0,Haku/Kozi,10.0,Lucas,66.0,Pedro
+19/08/2017,391,2,,H,-36.0,Adrian,-25.0,Haku/Kozi,49.0,Lucas,12.0,Pedro
+19/08/2017,392,2,,H,-35.0,Adrian,7.0,Haku/Kozi,-14.0,Nico,42.0,Pedro
+21/08/2017,393,2,,H,49.0,Azul,18.0,Chiwi,-39.0,Haku/Kozi,-28.0,Pedro
+21/08/2017,394,2,,H,-19.0,Azul,-31.0,Haku/Kozi,9.0,Nico,41.0,Pedro
+21/08/2017,395,2,,H,64.0,Adrian,-40.0,Lucas,-30.0,Nico,6.0,Pedro
+21/08/2017,396,2,,H,-50.0,Adrian,6.0,Lucas,-15.0,Nico,59.0,Pedro
+21/08/2017,397,2,,H,-22.0,Adrian,11.0,Lucas,46.0,Nico,-35.0,Pato
+21/08/2017,398,2,,H,53.0,Adrian,4.0,Lucas,-37.0,Pato,-20.0,Pedro
+22/08/2017,399,2,,H,50.0,Chiwi,-12.0,Fer,-53.0,Mati G. (minimati),15.0,Mauro
+22/08/2017,400,2,,H,-41.0,Chiwi,51.0,Fer,7.0,Mati G. (minimati),-17.0,Mauro
+22/08/2017,401,2,,H,12.0,Chiwi,-8.0,Lucas,-52.0,Lucio,48.0,Luli
+22/08/2017,402,2,,H,-65.0,Chiwi,61.0,Figo/Iori,-17.0,Lucas,21.0,Luli
+22/08/2017,403,2,,H,-30.0,Dario,-41.0,Figo/Iori,5.0,Lucas,66.0,Luli
+22/08/2017,404,2,,H,43.0,Enio,-16.0,Lucio,-37.0,Marcelo,10.0,Michael
+22/08/2017,405,2,,H,-41.0,Fer,-30.0,Mati G. (minimati),5.0,Mauro,66.0,Pato
+22/08/2017,406,2,,H,45.0,Figo/Iori,13.0,Lucas,-49.0,Lucio,-9.0,Michael
+22/08/2017,407,2,,H,9.0,Figo/Iori,41.0,Lucio,-34.0,Mati G. (minimati),-16.0,Michael
+22/08/2017,408,2,,H,-29.0,Azul,68.0,JC,-47.0,Haku/Kozi,8.0,Pedro
+22/08/2017,409,2,,H,-21.0,Azul,-38.0,JC,12.0,Haku/Kozi,47.0,Pedro
+23/08/2017,410,2,,H,9.0,Adrian,-42.0,Duro,50.0,Fer,-17.0,Michael
+23/08/2017,411,2,,H,-52.0,Azul,-27.0,Haku/Kozi,2.0,Nico,77.0,Pedro
+23/08/2017,412,2,,H,-44.0,Azul,-12.0,JC,12.0,Haku/Kozi,44.0,Nico
+23/08/2017,413,2,,H,-53.0,Dario,-29.0,Ini,-8.0,JC,90.0,Haku/Kozi
+23/08/2017,414,2,,H,59.0,Dario,-47.0,Ini,-19.0,JC,7.0,Haku/Kozi
+24/08/2017,415,2,,H,47.0,Figo/Iori,4.0,Lucas,-33.0,Lucio,-18.0,Luli
+24/08/2017,416,2,,T,-35.0,Figo/Iori,6.0,Lucas,-18.0,Lucio,47.0,Mauro
+24/08/2017,417,2,,H,-53.0,Azul,67.0,Haku/Kozi,-20.0,Pato,6.0,Pedro
+24/08/2017,418,2,,H,54.0,Azul,2.0,Dario,-21.0,Haku/Kozi,-35.0,Lucas
+25/08/2017,419,2,,T,8.0,Chiwi,-18.0,Juli F,48.0,Max D.,-38.0,Pedro
+25/08/2017,420,2,,T,1.0,Chiwi,83.0,Juli F,-55.0,Max D.,-29.0,Pato
+25/08/2017,421,2,,T,-56.0,Chiwi,-27.0,Juli F,7.0,Pato,76.0,Pedro
+25/08/2017,422,2,,T,-16.0,Juli F,38.0,Max D.,6.0,Pato,-28.0,Pedro
+25/08/2017,423,2,,H,60.0,Chiwi,-23.0,Juli F,-49.0,Max D.,12.0,Pedro
+26/08/2017,424,2,,H,59.0,Duro,-57.0,Lucio,15.0,Nico,-17.0,Romo
+26/08/2017,425,2,,H,-23.0,Adrian,-49.0,Fer,12.0,Mati G. (minimati),60.0,Michael
+26/08/2017,426,2,,H,60.0,Dario,-51.0,Lucio,-16.0,Nico,7.0,Romo
+26/08/2017,427,2,,H,94.0,Koki,-68.0,Lucas Albor,8.0,Naoko,-34.0,Santiago Albor
+26/08/2017,428,2,,H,-45.0,Adrian,13.0,Fer,-25.0,Mati G. (minimati),57.0,Michael
+26/08/2017,429,2,,H,-24.0,Alejandro,19.0,Koki,-73.0,Naoko,78.0,Nico
+26/08/2017,430,2,,T,38.0,Adrian,-15.0,Dario,6.0,Lucio,-29.0,Michael
+26/08/2017,431,2,,T,16.0,Adrian,47.0,Lucio,-44.0,Mati G. (minimati),-19.0,Michael
+27/08/2017,432,2,,H,52.0,Adrian,-13.0,Fernando A,-46.0,Mauro,7.0,Pato
+27/08/2017,433,2,,H,-40.0,Adrian,3.0,Fernando A,-19.0,Mauro,56.0,Nico
+27/08/2017,434,2,,H,5.0,Adrian,-55.0,Fernando A,-22.0,Mauro,72.0,Nico
+27/08/2017,435,2,,H,-21.0,Adrian,66.0,Facu (UY),-51.0,Fernando A,6.0,Mauro
+27/08/2017,436,2,,H,-40.0,Adrian,-54.0,Fernando A,64.0,Nico,30.0,Pato
+28/08/2017,437,2,,H,-27.0,Duro,-38.0,Fer,65.0,Lucio,0.0,Romo
+28/08/2017,438,2,,H,-12.0,Adrian,14.0,Lucas,-46.0,Luli,44.0,Mauro
+28/08/2017,439,2,,H,10.0,Adrian,54.0,Lucas,-47.0,Luli,-17.0,Mauro
+28/08/2017,440,2,,H,60.0,Adrian,11.0,Chiwi,-50.0,Lucas,-21.0,Nico
+28/08/2017,441,2,,H,-17.0,Adrian,47.0,Lucas,-37.0,Mauro,7.0,Nico
+28/08/2017,442,2,,T,-18.0,Adrian,8.0,Luli,-29.0,Mauro,39.0,Nico
+28/08/2017,443,2,,T,5.0,Adrian,40.0,Lucas,-29.0,Luli,-16.0,Nico
+28/08/2017,444,2,,T,-16.0,Lucas,-29.0,Luli,6.0,Mauro,39.0,Nico
+28/08/2017,445,2,,T,-30.0,Adrian,6.0,Lucas,-15.0,Luli,39.0,Mauro
+28/08/2017,446,2,,H,-26.0,Adrian,-52.0,Lucas,69.0,Mauro,9.0,Nico
+29/08/2017,447,2,,H,47.0,Chiwi,11.0,Lucio,-15.0,Mati G. (minimati),-43.0,Pato
+29/08/2017,448,2,,T,-62.0,Duro,56.0,Fer,18.0,Fernando A,-12.0,Luli
+29/08/2017,449,2,,H,-35.0,Chiwi,46.0,Lucio,7.0,Michael,-18.0,Nico
+29/08/2017,450,2,,H,7.0,Chiwi,-19.0,Lucio,-49.0,Michael,61.0,Nico
+29/08/2017,451,2,,H,-14.0,Enio,8.0,Koki,-60.0,Marcelo,66.0,Naoko
+29/08/2017,452,2,,H,11.0,Enio,-25.0,Koki,-50.0,Marcelo,64.0,Naoko
+29/08/2017,453,2,,H,2.0,Fer,60.0,Lucas,-36.0,Luli,-26.0,Mati G. (minimati)
+29/08/2017,454,2,,H,71.0,Koki,-50.0,Lucio,4.0,Michael,-25.0,Naoko
+29/08/2017,455,2,,T,54.0,Enio,-46.0,Fer,11.0,Lucas,-19.0,Nico
+30/08/2017,456,2,,H,18.0,Adrian,55.0,Duro,-31.0,Fer,-42.0,Michael
+30/08/2017,457,2,,H,-19.0,Chiwi,46.0,Lucas,-32.0,Luli,5.0,Nico
+30/08/2017,458,2,,H,56.0,Dario,-32.0,Fernando A,-46.0,Ini,22.0,JC
+31/08/2017,459,2,,H,-35.0,Adrian,-15.0,Haku/Kozi,43.0,Lucas,7.0,Nico
+31/08/2017,460,2,,H,-48.0,Adrian,-24.0,JC,13.0,Lucas,59.0,Nico
+01/09/2017,461,2,,T,12.0,Duro,-17.0,Fer,47.0,Lucio,-42.0,Romo
+02/09/2017,462,2,,H,54.0,Facu (UY),-45.0,Fernando A,-16.0,JC,7.0,Nico
+02/09/2017,463,2,,H,-53.0,Fernando A,-28.0,JC,21.0,Nico,60.0,Pato
+02/09/2017,464,2,,H,-40.0,Fernando A,49.0,JC,-15.0,Nico,6.0,Pato
+02/09/2017,465,2,,H,-18.0,Fer,-51.0,Lucio,54.0,Michael,15.0,Pato
+02/09/2017,466,2,,H,-22.0,Fer,14.0,Lucio,-44.0,Michael,52.0,Pato
+02/09/2017,467,2,,H,9.0,Adrian,59.0,Koki,-41.0,Mati G. (minimati),-27.0,Naoko
+02/09/2017,468,2,,H,-21.0,Adrian,62.0,Figo/Iori,7.0,Naoko,-48.0,Romo
+02/09/2017,469,2,,H,13.0,Adrian,51.0,Figo/Iori,-51.0,Lucio,-13.0,Romo
+02/09/2017,470,2,,H,-38.0,Adrian,-25.0,Figo/Iori,57.0,Lucio,6.0,Romo
+02/09/2017,471,2,,H,40.0,Adrian,-14.0,Figo/Iori,7.0,Lucio,-33.0,Romo
+02/09/2017,472,2,,H,12.0,Adrian,49.0,Figo/Iori,-23.0,Lucio,-38.0,Romo
+03/09/2017,473,2,,H,-44.0,JC,12.0,Nico,-28.0,Pato,60.0,Pedro
+03/09/2017,474,2,,H,12.0,Adrian,-21.0,Ini,45.0,JC,-36.0,Pato
+05/09/2017,475,2,,H,-32.0,Adrian,-16.0,JC,7.0,Lucas,41.0,Nico
+05/09/2017,476,2,,H,-17.0,Adrian,48.0,JC,-43.0,Lucas,12.0,Nico
+05/09/2017,477,2,19,H,44.0,Cristian (CL),-5.8,Guile,-59.7,Ini,21.5,Pedro
+05/09/2017,478,2,,H,-35.0,Alejandro,-19.0,Fer,51.0,Lucas,3.0,Mati G. (minimati)
+05/09/2017,479,2,,H,-42.0,Duro,2.0,Lucas,-20.0,Mauro,60.0,Michael
+05/09/2017,480,2,,H,-45.0,Duro,84.0,Figo/Iori,-9.0,Mauro,-30.0,Michael
+05/09/2017,481,2,,H,-34.0,Chiwi,6.0,Fer,45.0,Lucio,-17.0,Luli
+05/09/2017,482,2,,H,-35.0,Chiwi,7.0,Figo/Iori,45.0,Lucio,-17.0,Luli
+05/09/2017,483,2,,T,-12.0,Duro,-41.0,Figo/Iori,12.0,Mauro,41.0,Michael
+05/09/2017,484,2,19,H,-7.8,Dario,-48.9,Fer,15.8,Mati,40.9,Nico
+06/09/2017,485,2,,H,-41.0,Facu (UY),64.0,Lucas,-22.0,Luli,-1.0,Nico
+06/09/2017,486,2,,H,5.0,Facu (UY),-41.0,Lucas,-16.0,Luli,52.0,Nico
+07/09/2017,487,2,,H,-47.0,Adrian,45.0,Dario,-11.0,Nico,13.0,Pato
+07/09/2017,488,2,,H,-27.0,Adrian,81.0,Dario,7.0,Nico,-61.0,Pato
+07/09/2017,489,2,,H,-52.0,Adrian,48.0,Dario,-12.0,Nico,16.0,Pato
+08/09/2017,490,2,19,H,-20.6,Fran,-72.0,Jess,10.7,Lucas,81.9,Wapuro
+08/09/2017,491,2,,H,18.0,JC,52.0,Kime,-50.0,Lucas,-20.0,Luli
+08/09/2017,492,2,19,H,-6.0,Adrian,-44.8,Chiwi,15.2,Fran,35.6,Pedro
+09/09/2017,493,2,19,H,33.4,Dario,-11.8,Figo/Iori,-32.3,Kime,10.7,Pato
+09/09/2017,494,2,,H,48.0,Koki,12.0,Mati G. (minimati),-19.0,Michael,-41.0,Naoko
+09/09/2017,495,2,,H,14.0,Koki,-63.0,Lucas,64.0,Michael,-15.0,Naoko
+09/09/2017,496,2,,H,50.0,Fer,-45.0,Lucio,10.0,Nico,-15.0,Romo
+09/09/2017,497,2,,H,61.0,Alejandro,-47.0,Mati G. (minimati),6.0,Naoko,-20.0,Tamara
+09/09/2017,498,2,,H,-26.0,Koki,-50.0,Lucas,20.0,Michael,56.0,Romo
+09/09/2017,499,2,,H,-44.0,Adrian,14.0,Lucas,-25.0,Luli,55.0,Pato
+09/09/2017,500,2,,H,-51.0,Fer,-37.0,JC,92.0,Lucas,-4.0,Mauro
+09/09/2017,501,2,,H,-19.0,Fer,15.0,JC,-48.0,Lucas,52.0,Mauro
+09/09/2017,502,2,,H,9.0,Adrian,-50.0,Lucas,-22.0,Luli,63.0,Mauro
+09/09/2017,503,2,,T,9.0,Chiwi,-34.0,Juli F,38.0,Mati,-13.0,Mayra
+09/09/2017,504,2,,T,-11.0,Chiwi,-51.0,Mati,51.0,Mayra,11.0,Pedro
+09/09/2017,505,2,,T,54.0,Chiwi,0.0,Juli F,-34.0,Mayra,-20.0,Pedro
+09/09/2017,506,2,,T,45.0,Chiwi,-36.0,Juli F,-18.0,Mati,9.0,Pedro
+09/09/2017,507,2,,T,-33.0,Juli F,42.0,Mati,9.0,Mayra,-18.0,Pedro
+09/09/2017,508,2,,H,12.0,Figo/Iori,-25.0,Jess,-37.0,Haku/Kozi,50.0,Nico
+09/09/2017,509,2,,H,2.0,Akito,57.0,Figo/Iori,-19.0,Jess,-40.0,Haku/Kozi
+09/09/2017,510,2,,H,74.0,Figo/Iori,1.0,Ini,-45.0,Jess,-30.0,Nico
+09/09/2017,511,2,,H,-40.0,Azul,-24.0,Figo/Iori,16.0,Ini,48.0,Nico
+10/09/2017,512,2,19,H,11.6,Chiwi,-16.1,Haku/Kozi,56.0,Nico,-51.5,Wapuro
+10/09/2017,513,2,19,H,-10.2,Ernesto,12.1,Ini,48.2,Mati,-50.1,Sebas (CO)
+10/09/2017,514,2,,H,-58.0,Fer,-13.0,JC,9.0,Haku/Kozi,62.0,Pato
+10/09/2017,515,2,,H,-16.0,Fer,-31.0,JC,9.0,Mati G. (minimati),38.0,Pato
+11/09/2017,516,2,,H,52.0,Facu (UY),-51.0,Fernando A,-18.0,Lucas,17.0,Nico
+11/09/2017,517,2,,H,-18.0,Facu (UY),-36.0,Fernando A,5.0,Lucas,49.0,Nico
+11/09/2017,518,2,,H,38.0,Adrian,-29.0,Lucas,6.0,Luli,-15.0,Nico
+11/09/2017,519,2,,H,-41.0,Adrian,-26.0,Lucas,13.0,Luli,54.0,Nico
+11/09/2017,520,2,,H,-29.0,Adrian,-48.0,JC,19.0,Lucas,58.0,Luli
+11/09/2017,521,2,,H,-54.0,Adrian,10.0,JC,-12.0,Lucas,56.0,Nico
+11/09/2017,522,2,,H,-55.0,Adrian,23.0,JC,58.0,Lucas,-26.0,Nico
+11/09/2017,523,2,,H,-17.0,Adrian,-50.0,Ini,49.0,JC,18.0,Nico
+11/09/2017,524,2,,H,-36.0,Adrian,45.0,Ini,14.0,JC,-23.0,Lucas
+12/09/2017,525,2,,H,20.0,Lucas,-23.0,Lucio,61.0,Mauro,-58.0,Pato
+12/09/2017,526,2,,T,-36.0,Figo/Iori,52.0,Lucas,-23.0,Mati G. (minimati),7.0,Pato
+12/09/2017,527,2,,H,45.0,Duro,-19.0,Figo/Iori,11.0,Lucas,-37.0,Pablo (2de6)
+12/09/2017,528,2,,H,-51.0,Fer,-14.0,Koki,16.0,Michael,49.0,Naoko
+12/09/2017,529,2,,H,11.0,Fer,-27.0,Koki,-55.0,Michael,71.0,Naoko
+12/09/2017,530,2,,H,-24.0,Fer,71.0,Koki,3.0,Michael,-50.0,Naoko
+12/09/2017,531,2,,H,-30.0,Chiwi,41.0,Lucio,-17.0,Luli,6.0,Mauro
+12/09/2017,532,2,,H,-37.0,Chiwi,8.0,Luli,-14.0,Mati G. (minimati),43.0,Pablo (2de6)
+13/09/2017,533,2,,H,18.0,JC,-21.0,Lucas,-52.0,Luli,55.0,Nico
+13/09/2017,534,2,,H,-34.0,JC,5.0,Lucas,48.0,Luli,-19.0,Nico
+13/09/2017,535,2,,H,-39.0,Duro,11.0,Fer,-26.0,Michael,54.0,Romo
+14/09/2017,536,2,19,H,51.4,Nico,18.7,Romo,-51.5,Pato,-18.6,Fran
+14/09/2017,537,2,19,H,15.2,Cristian (CL),56.2,Dario,-20.4,Haku/Kozi,-51.0,Sebas (CO)
+15/09/2017,538,2,,H,-52.0,Aldana,11.0,Duro,51.0,Fer,-10.0,Romo
+15/09/2017,539,2,,H,-26.0,Duro,6.0,Fer,-16.0,Lucio,36.0,Romo
+15/09/2017,540,2,,H,-28.0,Facu (UY),-57.0,JC,10.0,Lucas,75.0,Luli
+15/09/2017,541,2,19,H,-37.4,Facu (UY),-15.3,Fer,42.7,Guile,10.0,Wapuro
+15/09/2017,542,2,19,H,21.5,Cristian (CL),-49.5,Facu (UY),43.7,Figo/Iori,-15.7,Fran
+15/09/2017,543,2,19,H,-11.3,Adrian,46.4,Mauro,20.4,Pato,-55.5,Sebas (CO)
+15/09/2017,544,2,19,H,13.2,Chiwi,-45.2,Facu (UY),-8.9,Ini,40.9,Kime
+16/09/2017,545,2,,T,50.0,Koki,13.0,Lucas,-48.0,Mati G. (minimati),-15.0,Naoko
+16/09/2017,546,2,,T,41.0,Alejandro,-17.0,Dario,6.0,Luli,-30.0,Romo
+16/09/2017,547,2,,H,-24.0,Lucas,56.0,Lucio,-42.0,Mati G. (minimati),10.0,Michael
+16/09/2017,548,2,,H,6.0,Akito,-54.0,Jess,-16.0,Lucio,64.0,Michael
+16/09/2017,549,2,,H,-12.0,Alejandro,51.0,Dario,-60.0,Luli,21.0,Romo
+16/09/2017,550,2,,H,-35.0,Adrian,49.0,Figo/Iori,-24.0,Koki,10.0,Naoko
+16/09/2017,551,2,,H,6.0,Adrian,-18.0,Figo/Iori,51.0,Koki,-39.0,Naoko
+16/09/2017,552,2,,H,7.0,Adrian,50.0,Lucas,-19.0,Lucio,-38.0,Luli
+16/09/2017,553,2,,H,-19.0,Figo/Iori,2.0,Lucas,70.0,Mauro,-53.0,Pato
+16/09/2017,554,2,,H,17.0,Adrian,53.0,Lucio,-51.0,Luli,-19.0,Mauro
+16/09/2017,555,2,,H,60.0,Figo/Iori,-15.0,Lucas,17.0,Lucio,-62.0,Pato
+16/09/2017,556,2,,H,53.0,Adrian,-26.0,Figo/Iori,-41.0,Lucio,14.0,Luli
+17/09/2017,557,2,19,H,-14.8,Azul,-42.5,Lucas,8.2,Mauro,49.1,Romo
+17/09/2017,558,2,19,H,-49.1,Akito,-21.6,Azul,22.6,Kime,48.1,Haku/Kozi
+18/09/2017,559,2,19,H,18.3,Akito,57.3,Lucas,-18.4,Pedro,-57.2,Sebas (CO)
+18/09/2017,560,2,,H,7.0,Figo/Iori,-18.0,Mauro,42.0,Nico,-31.0,Sebas (CO)
+18/09/2017,561,2,19,H,16.1,Figo/Iori,-51.7,Guile,-8.1,Mauro,43.7,Nico
+18/09/2017,562,2,,H,-21.0,Ini,7.0,JC,-47.0,Lucas,61.0,Mauro
+18/09/2017,563,2,,H,48.0,Ini,-39.0,JC,-22.0,Lucas,13.0,Mauro
+19/09/2017,564,2,,H,-24.0,Fer,58.0,Figo/Iori,-43.0,Ini,9.0,Pablo (2de6)
+19/09/2017,565,2,,T,-14.0,Figo/Iori,-37.0,Ini,7.0,Lucas,44.0,Mati G. (minimati)
+19/09/2017,566,2,,T,57.0,Enio,-17.0,Lucio,3.0,Luli,-43.0,Michael
+19/09/2017,567,2,,H,11.0,Ini,-35.0,JC,43.0,Lucas,-19.0,Lucio
+19/09/2017,568,2,,H,-10.0,Ini,47.0,JC,17.0,Lucas,-54.0,Lucio
+20/09/2017,569,2,,H,10.0,Adrian,47.0,Alejandro,-34.0,Fer,-23.0,Lucas
+20/09/2017,570,2,,H,55.0,Alejandro,-36.0,Lucas,-22.0,Lucio,3.0,Michael
+20/09/2017,571,2,,H,7.0,Alejandro,-35.0,Duro,47.0,Lucas,-19.0,Lucio
+20/09/2017,572,2,,H,-48.0,Adrian,-17.0,Fer,48.0,Luli,17.0,Nico
+20/09/2017,573,2,19,H,11.1,Adrian,48.1,Cristian (CL),-14.9,Fer,-44.3,Jess
+20/09/2017,574,2,,H,56.0,Dario,-32.0,Fernando A,-46.0,Ini,22.0,JC
+20/09/2017,575,2,,H,6.0,Dario,67.0,JC,-43.0,Lucas,-30.0,Lucio
+20/09/2017,576,2,,H,-15.0,Dario,52.0,JC,-50.0,Lucas,13.0,Lucio
+20/09/2017,577,2,,H,20.0,Dario,-16.0,JC,-55.0,Lucas,51.0,Lucio
+21/09/2017,578,2,,H,-20.0,Facu (UY),53.0,Lucio,-34.0,Luli,1.0,Sebas (CO)
+21/09/2017,579,2,,H,-18.0,JC,6.0,Lucio,55.0,Luli,-43.0,Sebas (CO)
+22/09/2017,580,2,,H,-34.0,JC,42.0,Lucas,-17.0,Lucio,9.0,Sebas (CO)
+23/09/2017,581,2,,H,17.0,Dario,52.0,Lucas,-56.0,Lucio,-13.0,Mauro
+23/09/2017,582,2,,H,41.0,Dario,11.0,Lucas,-36.0,Lucio,-16.0,Mauro
+23/09/2017,583,2,,H,-22.0,JC,54.0,Lucas,-52.0,Lucio,20.0,Mauro
+23/09/2017,584,2,,H,-22.0,JC,-35.0,Lucas,5.0,Lucio,52.0,Mauro
+23/09/2017,585,2,,H,-20.0,Fernando A,7.0,Ini,-40.0,JC,53.0,Sebas (CO)
+23/09/2017,586,2,,H,11.0,Adrian,58.0,Figo/Iori,-22.0,Mati G. (minimati),-47.0,Mauro
+23/09/2017,587,2,,H,54.0,Figo/Iori,-21.0,Lucas,3.0,Lucio,-36.0,Luli
+23/09/2017,588,2,,H,49.0,Adrian,-36.0,Figo/Iori,-20.0,Lucio,7.0,Mauro
+23/09/2017,589,2,,H,46.0,Adrian,-19.0,Lucas,-38.0,Mati G. (minimati),11.0,Mauro
+23/09/2017,590,2,,H,-12.0,Adrian,-49.0,Figo/Iori,53.0,Lucio,8.0,Mauro
+24/09/2017,591,2,,H,-50.0,Adrian,-11.0,Lucio,12.0,Luli,49.0,Mauro
+24/09/2017,592,2,,H,-30.0,Adrian,8.0,Lucas,-17.0,Lucio,39.0,Mauro
+24/09/2017,593,2,,H,-17.0,Adrian,10.0,Lucas,40.0,Lucio,-33.0,Luli
+24/09/2017,594,2,,H,-55.0,Fernando A,-13.0,Ini,16.0,JC,52.0,Sebas (CO)
+26/09/2017,595,2,,H,57.0,Alejandro,-50.0,Duro,-15.0,Lucio,8.0,Luli
+26/09/2017,596,2,,H,-62.0,Chiwi,-33.0,Enio,79.0,Figo/Iori,16.0,Michael
+26/09/2017,597,2,,H,-33.0,Alejandro,50.0,Lucas,-21.0,Lucio,4.0,Mauro
+26/09/2017,598,2,,H,-13.0,Duro,11.0,Fer,41.0,Luli,-39.0,Nicolas (old)
+26/09/2017,599,2,,H,13.0,Chiwi,-57.0,Enio,59.0,Mauro,-15.0,Michael
+26/09/2017,600,2,,H,89.0,Figo/Iori,-7.0,Lucas,-50.0,Lucio,-32.0,Romo
+27/09/2017,601,2,,H,-19.0,Aldana,3.0,Duro,-33.0,Fer,49.0,Michael
+27/09/2017,602,2,19,H,-7.8,Davy,12.2,Jess,-40.1,Mauro,35.7,Pedro
+28/09/2017,603,2,19,H,50.9,Facu (UY),-71.1,Haku/Kozi,-0.5,Lucas,20.7,Mati
+28/09/2017,604,2,19,H,23.7,Azul,-59.1,Guile,-30.9,Jess,66.3,Mati
+28/09/2017,605,2,19,H,19.1,Azul,-12.0,Chiwi,-53.1,Fernando A,46.0,Pato
+28/09/2017,606,2,,H,-40.0,Facu (UY),-24.0,JC,52.0,Lucio,12.0,Sebas (CO)
+30/09/2017,607,2,,H,-14.0,Duro,44.0,Lucas,11.0,Lucio,-41.0,Luli
+30/09/2017,608,2,,H,10.0,Duro,-30.0,Lucas,61.0,Lucio,-41.0,Romo
+30/09/2017,609,2,,H,-25.0,Aldana,47.0,Koki,15.0,Luli,-37.0,Naoko
+30/09/2017,610,2,,H,-40.0,Duro,-28.0,Fer,13.0,Lucio,55.0,Romo
+30/09/2017,611,2,,H,5.0,Aldana,-17.0,Koki,-30.0,Lucas,42.0,Naoko
+30/09/2017,612,2,,H,-23.0,Adrian,12.0,Dario,49.0,Michael,-38.0,Romo
+30/09/2017,613,2,,H,-23.0,Adrian,13.0,Dario,51.0,Figo/Iori,-41.0,Michael
+30/09/2017,614,2,,H,-29.0,Adrian,-57.0,Dario,83.0,Figo/Iori,3.0,Michael
+30/09/2017,615,2,,T,16.0,Adrian,-50.0,Fer,60.0,Lucio,-26.0,Luli
+30/09/2017,616,2,,H,48.0,Adrian,-20.0,Lucas,13.0,Lucio,-41.0,Luli
+30/09/2017,617,2,,H,1.0,Adrian,76.0,Lucas,-50.0,Lucio,-27.0,Luli
+30/09/2017,618,2,,H,56.0,Adrian,-46.0,Lucas,-16.0,Lucio,6.0,Luli
+01/10/2017,619,2,19,H,-49.1,Akito,-9.1,Dario,42.3,Ini,15.9,Romo
+01/10/2017,620,2,19,H,46.7,Adrian,-50.2,Akito,19.3,Figo/Iori,-15.8,Wapuro
+02/10/2017,621,2,,H,-40.0,Fernando A,14.0,JC,44.0,Haku/Kozi,-18.0,Nico
+03/10/2017,622,2,,H,-32.0,Dario,-45.0,JC,15.0,Nico,62.0,Pato
+03/10/2017,623,2,,H,-42.0,Dario,1.0,Facu (UY),-22.0,JC,63.0,Juan M.
+03/10/2017,624,2,,H,-65.0,Alejandro,12.0,Koki,-9.0,Mati G. (minimati),62.0,Naoko
+03/10/2017,625,2,,H,-36.0,Alejandro,11.0,Koki,45.0,Mati G. (minimati),-20.0,Naoko
+03/10/2017,626,2,,H,1.0,Aldana,-21.0,Duro,75.0,Fer,-55.0,Pablo (2de6)
+03/10/2017,627,2,,H,3.0,Aldana,-13.0,Duro,52.0,Koki,-42.0,Naoko
+04/10/2017,628,2,,H,-14.0,Dario,51.0,Facu (UY),-50.0,Fernando A,13.0,JC
+07/10/2017,629,2,,H,-29.0,Adrian,11.0,Lucio,57.0,Michael,-39.0,Nico
+07/10/2017,630,2,,H,51.0,Adrian,-54.0,Fer,12.0,Lucio,-9.0,Nico
+07/10/2017,631,2,,H,-55.0,Adrian,-16.0,Lucio,15.0,Michael,56.0,Nico
+07/10/2017,632,2,,H,-12.0,Dario,14.0,Koki,-51.0,Naoko,49.0,Pato
+07/10/2017,633,2,,H,45.0,Dario,-34.0,Koki,-20.0,Naoko,9.0,Pato
+07/10/2017,634,2,,H,54.0,Adrian,-17.0,Lucio,6.0,Nico,-43.0,Romo
+07/10/2017,635,2,,H,-49.0,Alejandro,11.0,Fer,-11.0,Mati G. (minimati),49.0,Michael
+09/10/2017,636,2,,H,51.0,Dario,14.0,JC,-14.0,Nico,-51.0,Sebas (CO)
+09/10/2017,637,2,19,H,-50.1,Jess,25.9,Kime,-29.8,Luli,54.0,Romo
+11/10/2017,638,2,,H,-18.0,Fer,6.0,Koki,50.0,Lucas Albor,-38.0,Naoko
+11/10/2017,639,2,,H,-14.0,Figo/Iori,-51.0,Lucio,12.0,Mauro,53.0,Pato
+11/10/2017,640,2,,H,62.0,Lucas,-27.0,Luli,15.0,Nico,-50.0,Pablo (2de6)
+11/10/2017,641,2,,H,50.0,Fer,5.0,Koki,-39.0,Michael,-16.0,Naoko
+11/10/2017,642,2,,H,-30.0,Figo/Iori,62.0,Koki,-40.0,Mauro,8.0,Naoko
+11/10/2017,643,2,,H,-34.0,Aldana,-17.0,Lucio,43.0,Michael,8.0,Nico
+11/10/2017,644,2,,T,-45.0,Figo/Iori,9.0,Michael,-17.0,Naoko,53.0,Nico
+12/10/2017,645,2,,H,71.0,Dario,-13.0,Fernando A,8.0,JC,-66.0,Sebas (CO)
+12/10/2017,646,2,,H,19.0,Dario,-26.0,Fernando A,50.0,JC,-43.0,Sebas (CO)
+12/10/2017,647,2,,H,-46.0,Adrian,27.0,Amauri (BR),40.0,Lucas,-21.0,Nico
+12/10/2017,648,2,,H,35.0,Adrian,25.0,Amauri (BR),-22.0,Lucas,-38.0,Nico
+12/10/2017,649,2,,H,8.0,Adrian,33.0,Amauri (BR),-13.0,Lucas,-28.0,Nico
+13/10/2017,650,2,,H,-10.0,Amauri (BR),13.0,Dario,-29.0,Kime,26.0,Lucas
+14/10/2017,651,2,,H,37.0,Figo/Iori,-20.0,Lucas,14.0,Lucio,-31.0,Romo
+14/10/2017,652,2,,H,-30.0,Koki,46.0,Lucas,26.0,Lucio,-42.0,Romo
+14/10/2017,653,2,,H,38.0,Adrian,21.0,Figo/Iori,-17.0,Lucas,-42.0,Lucio
+14/10/2017,654,2,,H,22.0,Alejandro,-3.0,Koki,-53.0,Naoko,34.0,Romo
+14/10/2017,655,2,,H,5.0,Akito,-45.0,Juli F,57.0,Michael,-16.0,Pedro
+14/10/2017,656,2,,H,16.0,Juli F,43.0,Mati G. (minimati),-48.0,Michael,-11.0,Pedro
+14/10/2017,657,2,,H,-39.0,Adrian,15.0,Alejandro,-14.0,Figo/Iori,38.0,Naoko
+14/10/2017,658,2,,H,-16.0,Alejandro,54.0,Koki,-46.0,Mati G. (minimati),7.0,Pedro
+14/10/2017,659,2,,H,-30.0,Adrian,-30.0,Lucas,44.0,Lucio,17.0,Luli
+14/10/2017,660,2,,H,12.0,Adrian,39.0,Lucas,-31.0,Lucio,-19.0,Nico
+14/10/2017,661,2,,H,45.0,Adrian,14.0,Lucas,-21.0,Lucio,-38.0,Nico
+14/10/2017,662,2,,H,14.0,Adrian,37.0,Lucas,-37.0,Lucio,-14.0,Nico
+17/10/2017,663,2,,H,-42.0,Alejandro,54.0,Lucas,8.0,Lucio,-19.0,Luli
+17/10/2017,664,2,,H,-12.0,Chiwi,-45.0,Fer,23.0,Figo/Iori,15.0,Mati G. (minimati)
+17/10/2017,665,2,,H,32.0,Lucas,-32.0,Lucio,-14.0,Mauro,13.0,Michael
+17/10/2017,666,2,,H,15.0,Alejandro,-12.0,Chiwi,44.0,Luli,-47.0,Mati G. (minimati)
+17/10/2017,667,2,,H,-47.0,Fer,72.0,Figo/Iori,-2.0,Mauro,-23.0,Michael
+18/10/2017,668,2,19,H,-16.0,Adrian,-37.3,Fran,6.5,Kime,46.8,Nico
+21/10/2017,669,2,,H,-18.0,Adrian,-38.0,Fer,47.0,Luli,9.0,Nico
+22/10/2017,670,2,19,H,-57.2,Chiwi,49.2,Figo/Iori,15.0,Mati,-7.0,Pato
+22/10/2017,671,2,19,H,24.0,Cristian (CL),-49.8,Mauro,-28.7,Pedro,54.5,Wapuro
+23/10/2017,672,2,19,H,-60.8,Azul,55.9,Dario,19.8,Lucas,-14.9,Romo
+24/10/2017,673,2,,H,-7.0,Alejandro,44.0,Koki,-53.0,Mati G. (minimati),16.0,Naoko
+24/10/2017,674,2,,H,14.0,Figo/Iori,34.0,Koki,-29.0,Lucas,-18.0,Naoko
+24/10/2017,675,2,,H,-36.0,Chiwi,17.0,Fer,-11.0,Lucio,31.0,Luli
+24/10/2017,676,2,,H,13.0,Alejandro,-35.0,Mati G. (minimati),-20.0,Mauro,43.0,Michael
+24/10/2017,677,2,,H,-36.0,Chiwi,33.0,Koki,12.0,Lucas,-9.0,Naoko
+24/10/2017,678,2,,H,-16.0,Chiwi,-33.0,Koki,32.0,Lucas,17.0,Naoko
+24/10/2017,679,2,,H,32.0,Fer,-15.0,Figo/Iori,14.0,Lucio,-31.0,Luli
+25/10/2017,680,2,,H,-16.0,Aldana,6.0,Fer,46.0,Michael,-37.0,Pablo (2de6)
+28/10/2017,681,2,,H,-1.0,Figo/Iori,40.0,Mati,-35.0,Michael,-24.0,Nico
+28/10/2017,682,2,,H,11.0,Figo/Iori,37.0,Lucio,-14.0,Mati,-34.0,Nico
+28/10/2017,683,2,,H,-30.0,Fer,36.0,Figo/Iori,-16.0,Lucio,10.0,Nico
+28/10/2017,684,2,,H,-32.0,Alejandro,15.0,Koki,-21.0,Mati G. (minimati),39.0,Naoko
+28/10/2017,685,2,,H,-42.0,Alejandro,18.0,Koki,-6.0,Mati G. (minimati),31.0,Naoko
+28/10/2017,686,2,,H,12.0,Fer,42.0,Koki,-37.0,Lucio,-16.0,Naoko
+28/10/2017,687,2,,H,-26.0,Adrian,23.0,Alejandro,23.0,Figo/Iori,-39.0,Mati G. (minimati)
+30/10/2017,688,2,,T,-14.0,Duro,-28.0,Lucio,8.0,Luli,34.0,Romo
+30/10/2017,689,2,,H,50.0,Adrian,6.0,Figo/Iori,-37.0,Luli,-19.0,Michael
+30/10/2017,690,2,,H,15.0,Adrian,-39.0,Figo/Iori,30.0,Lucas,-6.0,Mati G. (minimati)
+30/10/2017,691,2,,H,-12.0,Adrian,34.0,Figo/Iori,17.0,Lucas,-39.0,Michael
+30/10/2017,692,2,,H,-16.0,Adrian,9.0,Figo/Iori,-27.0,Lucas,34.0,Michael
+01/11/2017,693,2,,H,-19.0,Alejandro,27.0,Fer,38.0,Lucio,-46.0,Mati G. (minimati)
+01/11/2017,694,2,,H,-36.0,Koki,10.0,Lucas,-17.0,Luli,44.0,Naoko
+01/11/2017,695,2,,H,19.0,Lucas,-4.0,Luli,-47.0,Mati G. (minimati),32.0,Naoko
+01/11/2017,696,2,,H,-43.0,Alejandro,13.0,Fer,-15.0,Figo/Iori,44.0,Lucio
+01/11/2017,697,2,,H,-13.0,Fer,42.0,Figo/Iori,-46.0,Lucio,16.0,Naoko
+01/11/2017,698,2,,H,-36.0,Koki,-10.0,Lucas,12.0,Lucas Albor,34.0,Michael
+01/11/2017,699,2,,T,27.0,Koki,-12.0,Lucas,10.0,Lucas Albor,-25.0,Michael
+01/11/2017,700,2,,H,34.0,Fer,-13.0,Figo/Iori,-30.0,Luli,9.0,Naoko
+01/11/2017,701,2,19,H,38.0,Fran,-49.1,Mauro,-4.7,Pato,15.8,Romo
+01/11/2017,702,2,19,H,7.5,Lucas,-61.3,Mati,71.6,Nico,-17.8,Wapuro
+02/11/2017,703,2,19,H,14.1,Adrian,-58.1,Azul,-19.1,Chiwi,63.1,Pedro
+02/11/2017,704,2,,H,-39.0,Lucio,12.0,Luli,-22.0,Mauro,49.0,Michael
+02/11/2017,705,2,,H,-36.0,Adrian,11.0,Lucas,38.0,Lucio,-13.0,Michael
+02/11/2017,706,2,,H,-9.0,Adrian,-48.0,Lucas,17.0,Luli,41.0,Mauro
+02/11/2017,707,2,,H,-8.0,Lucio,-46.0,Luli,19.0,Mauro,35.0,Michael
+03/11/2017,708,2,,T,8.0,Angel,33.0,Duro,-13.0,Fer,-28.0,Romo
+04/11/2017,709,2,19,H,-79.2,Cristian (CL),52.1,Dario,-1.2,Figo/Iori,28.3,Kime
+04/11/2017,710,2,,H,20.5,Duro,33.3,Lucas,-18.4,Lucio,-35.4,Michael
+04/11/2017,711,2,,H,-34.5,Duro,8.4,Figo/Iori,-21.6,Lucas,47.7,Romo
+04/11/2017,712,2,,H,-17.1,Figo/Iori,29.2,Lucio,16.9,Michael,-29.0,Romo
+04/11/2017,713,2,,H,27.8,Duro,-43.1,Lucas,11.1,Lucio,-15.8,Michael
+04/11/2017,714,2,,H,-45.8,Duro,-20.9,Fer,43.9,Figo/Iori,22.8,Romo
+04/11/2017,715,2,,H,-33.6,Duro,32.8,Figo/Iori,-16.6,Lucio,17.4,Michael
+04/11/2017,716,2,,H,-39.7,Duro,33.6,Figo/Iori,-10.3,Lucio,16.4,Romo
+04/11/2017,717,2,,H,-65.3,Fer,10.6,Lucas,46.1,Lucio,-11.4,Michael
+06/11/2017,718,2,,H,-40.8,Dario,44.7,Facu (UY),-18.3,JC,14.4,Pato
+06/11/2017,719,2,,H,19.4,Dario,-5.2,Facu (UY),33.6,JC,-47.8,Sebas (CO)
+07/11/2017,720,2,,H,-19.2,Fer,21.4,Figo/Iori,39.6,Lucio,-41.8,Luli
+07/11/2017,721,2,,H,-18.3,Duro,42.3,Figo/Iori,-43.3,Lucio,19.3,Michael
+07/11/2017,722,2,,H,63.1,Alejandro,2.8,Marcelo,-20.7,Mati G. (minimati),-45.2,Pato
+07/11/2017,723,2,,H,41.3,Dario,-45.9,Enio,-7.4,Fer,12.0,Luli
+07/11/2017,724,2,,H,-39.0,Enio,17.4,Fer,41.7,Figo/Iori,-20.1,Luli
+07/11/2017,725,2,,H,-14.0,Alejandro,31.9,Koki,-30.5,Mati G. (minimati),12.6,Naoko
+07/11/2017,726,2,,H,36.5,Koki,-18.9,Lucas,12.6,Mauro,-30.2,Naoko
+07/11/2017,727,2,,H,40.4,Koki,8.5,Lucas,-29.9,Mauro,-19.0,Naoko
+07/11/2017,728,2,,H,-37.6,Koki,27.4,Lucas,-5.2,Mauro,15.4,Naoko
+07/11/2017,729,2,,H,-11.0,Duro,-22.5,Emo,24.3,Lucio,9.2,Michael
+08/11/2017,730,2,19,H,-60.3,Cristian (CL),44.0,Pedro,-6.0,Romo,22.3,Wapuro
+08/11/2017,731,2,,H,30.2,Adrian,-19.0,Lucio,-57.9,Luli,46.7,Nico
+08/11/2017,732,2,,H,47.7,Adrian,-60.2,Lucio,-21.3,Michael,33.8,Nico
+08/11/2017,733,2,,H,39.5,Adrian,-69.2,Duro,27.8,Lucio,-18.1,Michael
+08/11/2017,734,2,,H,15.9,Koki,43.2,Lucas,-15.7,Naoko,-43.4,Romo
+08/11/2017,735,2,,H,35.6,Koki,-14.5,Lucas,12.7,Luli,-33.8,Naoko
+08/11/2017,736,2,,H,-42.5,Fer,21.6,Koki,40.0,Naoko,-19.1,Nico
+08/11/2017,737,2,,T,31.6,Lucas,16.2,Lucio,-34.2,Michael,-13.6,Romo
+11/11/2017,738,2,19,H,-60.7,Dario,13.4,Kime,-17.6,Lucas,64.9,Nico
+11/11/2017,739,2,,H,-14.0,Dario,35.2,Ini,21.8,JC,-43.0,Lucas
+11/11/2017,740,2,,H,26.9,Dario,-40.7,Ini,-26.2,JC,40.0,Lucas
+11/11/2017,741,2,,H,33.5,Dario,-49.0,Ini,-35.3,JC,50.8,Lucas
+11/11/2017,742,2,,H,-13.3,Alejandro,-24.8,Figo/Iori,26.3,Mati G. (minimati),11.8,Nico
+11/11/2017,743,2,,H,-4.5,Jess,16.0,Koki,33.5,Haku/Kozi,-46.0,Michael
+11/11/2017,744,2,,H,58.8,Dario,-13.9,Fer,-51.7,Figo/Iori,6.8,Lucio
+11/11/2017,745,2,,H,3.0,Adriel,-20.7,Koki,-50.4,Michael,68.1,Naoko
+11/11/2017,746,2,,H,18.2,Adrian,-8.5,Adriel,29.4,Naoko,-39.1,Romo
+11/11/2017,747,2,,H,-58.0,Fer,8.0,Figo/Iori,8.0,Lucio,42.0,Romo
+11/11/2017,748,2,,H,-17.5,Alejandro,-45.5,Koki,25.2,Michael,37.8,Nico
+11/11/2017,749,2,,H,25.3,Adriel,44.2,Dario,-13.5,Duro,-56.0,Naoko
+11/11/2017,750,2,,H,-39.3,Adrian,38.0,Jess,19.0,Koki,-17.7,Mati G. (minimati)
+11/11/2017,751,2,,H,39.6,Fer,18.6,Figo/Iori,-53.6,Lucio,-4.6,Romo
+11/11/2017,752,2,,H,-35.4,Adrian,39.6,Adriel,13.8,Koki,-18.0,Naoko
+11/11/2017,753,2,,H,33.4,Fer,12.4,Figo/Iori,-18.2,Lucio,-29.6,Romo
+12/11/2017,754,2,,H,-12.9,JC,40.9,Lucas,12.8,Lucio,-40.8,Luli
+12/11/2017,755,2,,H,50.4,Facu (UY),-12.5,Lucas,-46.3,Lucio,8.4,Luli
+12/11/2017,756,2,,H,-43.0,JC,41.1,Lucio,-18.8,Luli,20.7,Pato
+12/11/2017,757,2,,H,-48.2,Camilo,40.3,Duro,14.2,Michael,-6.3,Naoko
+12/11/2017,758,2,,H,11.7,Duro,-34.2,Koki,39.8,Michael,-17.3,Naoko
+12/11/2017,759,2,,H,-54.3,Camilo,-31.9,Duro,-2.2,Koki,88.4,Michael
+12/11/2017,760,2,,H,-14.9,Adrian,18.5,Koki,-42.0,Michael,38.4,Naoko
+12/11/2017,761,2,,H,19.6,Duro,-11.7,Koki,-41.1,Michael,33.2,Naoko
+12/11/2017,762,2,19,H,47.7,Adrian,-21.7,Figo/Iori,-47.7,Fran,21.7,Mati
+14/11/2017,763,2,,H,32.3,Alejandro,-7.5,Lucas,-45.4,Lucio,20.6,Nico
+14/11/2017,764,2,,H,-25.1,Fer,61.8,Figo/Iori,12.7,Koki,-49.4,Naoko
+14/11/2017,765,2,,H,-23.6,Lucas Albor,-41.4,Luli,19.4,Mati G. (minimati),45.6,Mauro
+14/11/2017,766,2,,H,-46.9,Alejandro,9.1,Lucas,52.6,Nico,-14.8,Pato
+14/11/2017,767,2,,H,-12.5,Enio,26.7,Figo/Iori,11.5,Koki,-25.7,Marcelo
+14/11/2017,768,2,,H,-56.5,Lucas Albor,-19.9,Mati G. (minimati),51.8,Mauro,4.6,Michael
+14/11/2017,769,2,,H,29.9,Lucas Albor,14.2,Mauro,-31.0,Michael,-13.1,Naoko
+14/11/2017,770,2,,H,16.9,Duro,-37.1,Fer,31.3,Lucio,-11.1,Naoko
+14/11/2017,771,2,,H,33.9,Fer,-15.2,Figo/Iori,-37.0,Koki,18.3,Nico
+14/11/2017,772,2,,H,-21.6,Aldana,-35.6,Duro,36.7,Enio,20.5,Lucio
+14/11/2017,773,2,,H,55.2,Alejandro,-27.1,Lucas,-47.8,Luli,19.7,Pato
+15/11/2017,774,2,,H,2.0,Fer,-30.3,Koki,46.6,Mati G. (minimati),-18.3,Naoko
+15/11/2017,775,2,,H,-40.3,Duro,-19.6,Fer,47.3,Koki,12.6,Naoko
+15/11/2017,776,2,,H,12.1,Duro,-45.3,Fer,50.7,Koki,-17.5,Naoko
+15/11/2017,777,2,,H,-39.1,Aldana,50.8,Fer,-15.9,Luli,4.2,Naoko
+15/11/2017,778,2,,H,-20.1,Aldana,21.4,Lucas,-36.1,Luli,34.8,Michael
+15/11/2017,779,2,,H,10.3,Duro,66.0,Koki,-25.8,Lucas,-50.5,Michael
+17/11/2017,780,2,19,H,-43.2,Adrian,37.0,Mati,14.4,Pedro,-8.2,Wapuro
+18/11/2017,781,2,,H,-45.2,Alejandro,33.9,Jess,-8.7,Lucas Albor,20.0,Lucio
+18/11/2017,782,2,,H,7.0,Fer,44.4,Figo/Iori,-17.6,Lucas,-33.8,Michael
+18/11/2017,783,2,,H,10.8,Jess,-33.0,Lucas Albor,-17.6,Lucio,38.8,Mati G. (minimati)
+18/11/2017,784,2,,H,11.1,Alejandro,-17.2,Auca,35.0,Figo/Iori,-28.9,Lucas
+18/11/2017,785,2,,H,-24.8,Alejandro,-13.3,Fer,11.8,Figo/Iori,26.3,Mati G. (minimati)
+19/11/2017,786,2,,H,-11.2,Alejandro,9.1,Figo/Iori,-42.2,Ini,44.3,Lucas
+19/11/2017,787,2,,H,-39.8,Alejandro,-11.7,Figo/Iori,40.5,Lucas,11.0,Lucio
+19/11/2017,788,2,,H,-46.3,Figo/Iori,61.3,Ini,9.4,Lucas,-24.4,Lucio
+19/11/2017,789,2,,H,25.0,Alejandro,-24.2,Ini,-12.0,Lucas,11.2,Lucio
+19/11/2017,790,2,,H,-17.1,Alejandro,17.6,Figo/Iori,31.9,Lucas,-32.4,Lucio
+19/11/2017,791,2,,H,36.6,Alejandro,22.3,Figo/Iori,-19.4,Ini,-39.5,Lucio
+19/11/2017,792,2,,H,46.0,Figo/Iori,12.4,Ini,-48.4,Lucas,-10.0,Lucio
+19/11/2017,793,2,,H,-10.6,Duro,25.6,Koki,11.5,Michael,-26.5,Naoko
+19/11/2017,794,2,,H,12.4,Adrian,-8.4,Duro,34.1,Koki,-38.1,Michael
+19/11/2017,795,2,,H,-13.9,Adrian,25.1,Koki,14.0,Lucio,-25.2,Naoko
+19/11/2017,796,2,,H,14.8,Duro,15.4,Lucio,-11.0,Michael,-40.2,Naoko
+19/11/2017,797,2,,T,28.8,Adrian,13.5,Koki,-29.2,Lucas,-13.1,Luli
+19/11/2017,798,2,,H,-14.8,Adrian,-34.7,Koki,14.1,Michael,35.4,Naoko
+19/11/2017,799,2,,H,-53.9,Duro,25.7,Lucas,47.9,Lucio,-19.7,Luli
+19/11/2017,800,2,,H,38.2,Adrian,-47.2,Duro,22.7,Lucas,-13.7,Michael
+19/11/2017,801,2,,H,5.2,Koki,-18.8,Lucio,-42.2,Luli,55.8,Naoko
+19/11/2017,802,2,,H,16.7,Adrian,31.7,Lucio,-30.7,Michael,-17.7,Naoko
+19/11/2017,803,2,,H,-43.8,Duro,32.4,Koki,-9.1,Lucas,20.5,Luli
+20/11/2017,804,2,,H,23.0,Dario,12.0,Figo/Iori,-32.0,Lucas,-3.0,Pato
+20/11/2017,805,2,,H,8.0,Koki,-2.0,Mati,-11.0,Naoko,27.0,Pedro
+20/11/2017,806,2,,H,-29.0,Chiwi,32.0,Lucio,11.0,Mauro,-14.0,Romo
+20/11/2017,807,2,,H,9.0,Guile,-28.0,Jess,24.0,Juli F,-5.0,Mayra
+20/11/2017,808,2,,H,-35.0,Chiwi,35.0,Dario,-5.0,Mayra,7.0,Pedro
+20/11/2017,809,2,,H,29.0,Figo/Iori,-41.0,Juli F,15.0,Koki,-3.0,Romo
+20/11/2017,810,2,,H,-10.0,Guile,7.0,Lucas,40.0,Lucio,-37.0,Naoko
+20/11/2017,811,2,,H,9.0,Jess,-33.0,Mati,32.0,Mauro,-8.0,Pato
+20/11/2017,812,2,,H,9.0,Dario,20.0,Jess,-6.0,Koki,-23.0,Lucio
+20/11/2017,813,2,,H,21.0,Figo/Iori,-9.0,Guile,-23.0,Mauro,11.0,Pedro
+20/11/2017,814,2,,H,-19.0,Chiwi,3.0,Juli F,-8.0,Lucas,24.0,Mati
+20/11/2017,815,2,,H,8.0,Mayra,22.0,Naoko,-24.0,Pato,-6.0,Romo
+20/11/2017,816,2,,H,45.0,Figo/Iori,-21.0,Mauro,3.0,Mayra,-27.0,Pedro
+20/11/2017,817,2,,H,-7.0,Guile,-25.0,Naoko,9.0,Pato,23.0,Romo
+20/11/2017,818,2,,H,22.0,Chiwi,-22.0,Juli F,-37.0,Lucas,37.0,Mati
+20/11/2017,819,2,,H,-12.0,Dario,37.0,Jess,-31.0,Koki,6.0,Lucio
+20/11/2017,820,2,,H,28.8,Adrian,18.3,Lucas,-29.3,Luli,-17.8,Michael
+20/11/2017,821,2,,H,17.0,Adrian,-11.6,Lucas,-40.2,Luli,34.8,Michael
+20/11/2017,822,2,,H,11.1,Adrian,22.0,Lucas,-9.7,Luli,-23.4,Michael
+21/11/2017,823,2,,H,9.8,Fer,-10.7,Lucas Albor,-23.3,Lucio,24.2,Luli
+21/11/2017,824,2,,H,0.7,Lucas Albor,66.9,Lucio,-45.1,Luli,-22.5,Michael
+21/11/2017,825,2,,H,-40.2,Aldana,32.7,Jess,21.9,Lucas,-14.4,Luli
+21/11/2017,826,2,,H,-25.1,Fer,57.8,Jess,12.9,Lucas,-47.6,Michael
+21/11/2017,827,2,,H,10.9,Auca,34.3,Figo/Iori,-10.5,Lucas Albor,-34.7,Lucio
+21/11/2017,828,2,19,H,-15.4,Dario,43.3,Lucas,-36.5,Mati,8.6,Pedro
+22/11/2017,829,2,,H,37.4,Figo/Iori,54.9,Koki,-18.0,Lucio,-74.3,Naoko
+22/11/2017,830,2,,H,16.4,Fer,39.1,Lucas,-50.1,Lucio,-5.4,Michael
+22/11/2017,831,2,,H,15.3,Adrian,-28.0,Figo/Iori,-17.1,Koki,29.8,Naoko
+22/11/2017,832,2,,H,-49.3,Adrian,41.9,Fer,22.4,Lucio,-15.0,Michael
+22/11/2017,833,2,,H,17.8,Figo/Iori,-41.5,Koki,44.9,Lucas,-21.2,Naoko
+23/11/2017,834,2,,H,19.5,Fer,39.2,Figo/Iori,-37.7,Lucas,-21.0,Miguel
+23/11/2017,835,2,,H,-31.9,Auca,33.4,JC,-19.1,Lucas,17.6,Nico
+23/11/2017,836,2,,H,21.9,Amauri (BR),-34.8,Lucas,37.5,Lucio,-24.6,Nico
+25/11/2017,837,2,,H,9.0,Jess,-12.3,Lucas,-22.5,Mati G. (minimati),25.8,Nico
+25/11/2017,838,2,,H,-36.1,Alejandro,17.7,Fer,36.6,Mati G. (minimati),-18.2,Romo
+25/11/2017,839,2,,H,20.6,Alejandro,37.3,Fer,-55.1,Mati G. (minimati),-2.8,Romo
+25/11/2017,840,2,,H,-12.2,Adrian,15.4,Koki,-31.9,Michael,27.7,Naoko
+25/11/2017,841,2,,H,-23.3,Adrian,1.9,Koki,-44.1,Michael,65.5,Naoko
+25/11/2017,842,2,,H,46.7,Jess,7.5,Koki,-20.6,Haku/Kozi,-33.6,Nico
+25/11/2017,843,2,,H,-39.4,Figo/Iori,-9.4,Lucas,34.9,Lucio,13.9,Luli
+25/11/2017,844,2,,H,9.8,Jess,-31.0,Luli,-17.1,Naoko,38.3,Nico
+25/11/2017,845,2,,H,-21.6,Figo/Iori,23.9,Koki,54.7,Lucio,-57.0,Michael
+25/11/2017,846,2,,H,35.1,Adrian,-30.9,Haku/Kozi,-14.4,Lucas,10.2,Mauro
+25/11/2017,847,2,,H,-46.1,Adrian,67.2,Figo/Iori,0.8,Lucas,-21.9,Luli
+25/11/2017,848,2,,H,-43.9,Koki,13.3,Lucio,-26.9,Naoko,57.5,Nico
+25/11/2017,849,2,,H,-29.4,Jess,6.9,Koki,-15.5,Mauro,38.0,Michael
+25/11/2017,850,2,,H,-3.1,Figo/Iori,24.5,Lucio,-45.9,Michael,24.5,Nico
+25/11/2017,851,2,,H,28.7,Adrian,-26.0,Koki,39.0,Lucas,-41.7,Luli
+25/11/2017,852,2,,H,-30.8,Jess,-8.2,Haku/Kozi,-12.1,Mauro,31.1,Naoko
+25/11/2017,853,2,,H,-15.7,Adrian,5.9,Figo/Iori,-29.3,Haku/Kozi,39.1,Michael
+25/11/2017,854,2,,H,0.2,Jess,60.9,Koki,25.1,Lucas,-36.0,Naoko
+25/11/2017,855,2,,H,-15.5,Lucio,34.6,Luli,10.3,Mauro,-29.4,Nico
+25/11/2017,856,2,,H,-35.1,Adrian,37.8,Mauro,-17.8,Naoko,15.1,Nico
+25/11/2017,857,2,,H,19.3,Figo/Iori,-13.8,Koki,44.8,Haku/Kozi,-50.3,Lucas
+25/11/2017,858,2,,H,18.5,Jess,-8.6,Lucio,-48.4,Luli,38.5,Michael
+27/11/2017,859,2,,H,23.8,Figo/Iori,42.5,Lucas,-38.4,Lucio,-27.9,Luli
+27/11/2017,860,2,,H,14.3,Figo/Iori,-22.9,Lucas Albor,53.9,Michael,-45.3,Naoko
+27/11/2017,861,2,,H,39.2,Duro,-15.8,Fer,12.0,Lucas Albor,-35.4,Michael
+27/11/2017,862,2,,H,-13.7,Jess,-24.1,Koki,9.4,Michael,28.4,Naoko
+27/11/2017,863,2,,H,-26.5,Jess,13.7,Koki,59.0,Lucio,-46.2,Pablo (2de6)
+28/11/2017,864,2,,H,22.3,Adrian,-57.3,Dario,2.0,Koki,33.0,Naoko
+28/11/2017,865,2,,H,45.2,Fer,10.6,Figo/Iori,-65.2,Lucio,-10.6,Nico
+28/11/2017,866,2,,H,28.0,Adrian,-13.7,Dario,-27.8,Koki,13.5,Naoko
+28/11/2017,867,2,,H,-41.7,Enio,-6.8,Figo/Iori,0.8,Mauro,29.3,Nico
+28/11/2017,868,2,,H,19.9,Enio,-26.9,Lucio,-49.6,Mauro,56.6,Michael
+28/11/2017,869,2,,H,27.2,Jess,14.5,Lucas,-31.8,Lucio,-9.9,Michael
+28/11/2017,870,2,,H,-41.7,Fer,62.4,Figo/Iori,0.8,Lucas Albor,-21.5,Luli
+28/11/2017,871,2,,H,15.0,Adrian,-39.1,Duro,-9.1,Koki,33.2,Naoko
+28/11/2017,872,2,,T,39.1,Adrian,5.8,Enio,-29.7,Koki,-15.2,Lucio
+28/11/2017,873,2,,H,31.8,Jess,-31.3,Lucas,11.1,Naoko,-31.6,Nico
+02/12/2017,874,2,,H,44.5,Adrian,12.2,Lucio,-9.3,Mati,-47.4,Michael
+02/12/2017,875,2,,H,19.8,Adrian,34.5,Auca,-46.8,Figo/Iori,-7.5,Lucio
+02/12/2017,876,2,,H,-25.1,Fer,12.0,Lucas,-9.9,Mati,23.0,Michael
+02/12/2017,877,2,,H,-52.8,Auca,62.7,Figo/Iori,6.8,Lucio,-16.7,Mati G. (minimati)
+02/12/2017,878,2,,H,-28.5,Aldana,31.4,Duro,-14.7,Fer,11.8,Michael
+02/12/2017,879,2,,H,25.7,Federico Albor,12.2,Figo/Iori,-12.1,Lucas Albor,-25.8,Mati G. (minimati)
+02/12/2017,880,2,,H,-37.7,Aldana,19.0,Duro,-10.5,Figo/Iori,29.2,Michael
+02/12/2017,881,2,,H,12.5,Koki,-7.6,Lucas,28.2,Naoko,-33.1,Romo
+02/12/2017,882,2,,T,-16.9,Koki,35.1,Lucas,-27.8,Naoko,9.6,Romo
+02/12/2017,883,2,,H,-22.7,Alejandro,26.9,Koki,9.2,Lucas,-13.4,Naoko
+02/12/2017,884,2,,T,35.2,Adriel,24.4,Alejandro,-46.9,Auca,-12.7,Lucio
+03/12/2017,885,2,,H,-17.7,Cristian (CL),-40.4,Jess,6.0,Lucas,52.1,Nico
+03/12/2017,886,2,,H,-30.6,Aldana,14.7,Duro,30.6,Michael,-14.7,Miguel
+03/12/2017,887,2,,H,-19.4,Aldana,20.1,Duro,34.0,Michael,-34.7,Miguel
+03/12/2017,888,2,,H,-12.5,Aldana,10.2,Duro,49.0,Michael,-46.7,Miguel
+03/12/2017,889,2,,T,-38.4,Aldana,36.2,Duro,18.4,Michael,-36.2,Miguel
+04/12/2017,890,2,,H,35.0,Jess,-13.3,Lucas Albor,12.4,Luli,-34.1,Pablo (2de6)
+04/12/2017,891,2,,H,15.5,Adrian,-8.8,Koki,-45.4,Lucas,38.7,Naoko
+04/12/2017,892,2,,H,64.2,Adrian,-30.9,Koki,-48.1,Lucio,14.8,Naoko
+04/12/2017,893,2,,H,7.2,Dario,-30.0,Enio,-16.3,Figo/Iori,39.1,Michael
+04/12/2017,894,2,,H,-33.5,Fer,8.1,Jess,-17.0,Lucas,42.4,Lucas Albor
+04/12/2017,895,2,,H,40.9,Koki,-46.3,Lucio,16.1,Luli,-10.7,Naoko
+04/12/2017,896,2,,H,-34.8,Enio,18.3,Figo/Iori,42.8,Michael,-46.3,Pablo (2de6)
+04/12/2017,897,2,,T,-28.9,Fer,39.1,Jess,-17.7,Lucas,7.5,Lucas Albor
+04/12/2017,898,2,,T,14.6,Koki,-12.4,Lucio,25.3,Luli,-27.5,Naoko
+05/12/2017,899,2,,H,-29.8,Alejandro,-9.9,Fer,11.7,Miguel,28.0,Pato
+05/12/2017,900,2,,H,-45.2,Figo/Iori,-3.5,Lucas,18.4,Lucio,29.3,Nico
+05/12/2017,901,2,,H,0.0,Figo/Iori,-46.3,Lucas,46.3,Lucio,0.0,Nico
+05/12/2017,902,2,,H,-22.2,Adrian,14.6,Alejandro,-50.0,Mauro,57.6,Pato
+05/12/2017,903,2,,H,11.3,Akito,-62.0,Fer,-31.3,Lucas Albor,62.0,Michael
+05/12/2017,904,2,,H,37.0,Chiwi,16.3,Koki,-31.8,Max D.,-21.5,Naoko
+05/12/2017,905,2,,H,-17.2,Alejandro,42.1,Figo/Iori,14.5,Jess,-39.4,Lucio
+05/12/2017,906,2,,H,-23.8,Duro,4.0,Fer,63.3,Lucas Albor,-43.5,Michael
+05/12/2017,907,2,,H,14.8,Chiwi,-17.9,Koki,-35.7,Max D.,18.8,Naoko
+05/12/2017,908,2,,T,-42.4,Alejandro,50.3,Lucio,13.2,Pablo (2de6),-21.1,Pato
+05/12/2017,909,2,,H,32.4,Adrian,15.4,Lucas,-26.8,Mauro,-41.0,Nico
+08/12/2017,910,2,19,H,61.1,Dario,-48.9,Kime,14.2,Lucas,-26.4,Nico
+08/12/2017,911,2,19,H,-62.4,Dario,23.4,Kime,-32.4,Lucas,71.4,Nico
+08/12/2017,912,2,,H,40.8,Adrian,11.9,Duro,-43.6,Lucio,-9.1,Michael
+08/12/2017,913,2,,H,-31.4,Duro,48.7,Lucio,-42.7,Michael,-14.6,Romo
+09/12/2017,914,2,,H,44.1,Adriel,-46.1,Dario,25.1,Lucas,-23.1,Lucio
+09/12/2017,915,2,,H,22.0,Jess,-12.7,Haku/Kozi,41.5,Michael,-50.8,Nahuel
+09/12/2017,916,2,,H,-32.2,Dario,8.8,Jess,34.2,Lucio,-12.8,Michael
+09/12/2017,917,2,,H,-16.8,Adriel,19.4,Lucas,-38.7,Mati G. (minimati),36.1,Naoko
+09/12/2017,918,2,,H,-45.6,Fer,-33.4,Jess,36.2,Luli,22.8,Michael
+09/12/2017,919,2,,H,-24.3,Duro,-37.4,Lucas,11.5,Lucio,50.2,Naoko
+09/12/2017,920,2,,H,36.7,Alejandro,-32.4,Koki,53.0,Haku/Kozi,-77.3,Nahuel
+09/12/2017,921,2,,H,-5.0,Jess,-56.0,Koki,17.6,Luli,43.4,Michael
+09/12/2017,922,2,,H,10.0,Duro,-12.6,Fer,-26.3,Lucio,28.9,Naoko
+10/12/2017,923,2,,H,47.0,Adrian,-34.9,Koki,-20.0,Michael,7.9,Naoko
+10/12/2017,924,2,,H,40.9,Adrian,10.1,Koki,-12.3,Michael,-38.7,Naoko
+10/12/2017,925,2,,H,38.2,Adrian,-39.4,Koki,18.1,Michael,-16.9,Naoko
+10/12/2017,926,2,,H,-56.3,Adrian,-15.6,Koki,62.3,Michael,9.6,Naoko
+10/12/2017,927,2,,H,34.5,Adrian,19.6,Koki,-36.6,Michael,-17.5,Naoko
+10/12/2017,928,2,,H,-49.8,Adrian,39.1,Koki,24.4,Michael,-13.7,Naoko
+10/12/2017,929,2,,H,-44.0,Adrian,-20.2,Koki,18.8,Michael,45.4,Naoko
+10/12/2017,930,2,,H,-33.1,Adrian,20.2,Koki,-18.7,Michael,31.6,Naoko
+11/12/2017,931,2,,H,-10.5,Duro,42.2,Koki,-45.3,Michael,13.6,Naoko
+11/12/2017,932,2,,H,31.6,Duro,-15.3,Koki,15.2,Michael,-33.5,Naoko
+11/12/2017,933,2,,H,-23.1,Koki,-60.3,Mati G. (minimati),58.6,Naoko,24.8,Tamara
+11/12/2017,934,2,,H,-13.1,Fer,-32.5,Koki,34.6,Lucas Albor,11.0,Naoko
+11/12/2017,935,2,,H,-42.5,Chiwi,41.6,Dario,-17.4,Facu (UY),18.3,JC
+12/12/2017,936,2,,H,-51.5,Alejandro,-17.5,Koki,15.7,Naoko,53.3,Pato
+12/12/2017,937,2,,H,-15.0,Lucas Albor,11.2,Mati G. (minimati),28.4,Max D.,-25.6,Miguel
+12/12/2017,938,2,,H,-16.8,Chiwi,12.6,Fer,35.5,Figo/Iori,-31.3,Lucio
+12/12/2017,939,2,,H,13.1,Duro,-9.9,Figo/Iori,31.2,Lucio,-34.4,Miguel
+12/12/2017,940,2,,H,50.4,Fer,-51.4,Lucas,-19.2,Lucas Albor,20.2,Mati G. (minimati)
+12/12/2017,941,2,,H,-34.2,Alejandro,41.2,Jess,13.0,Koki,-20.0,Luli
+12/12/2017,942,2,,H,12.4,Koki,-10.1,Lucas,-29.4,Luli,27.1,Naoko
+12/12/2017,943,2,,H,-45.3,Fer,43.0,Figo/Iori,-19.1,Lucas Albor,21.4,Michael
+12/12/2017,944,2,,H,-35.3,Chiwi,-24.9,Jess,17.0,Lucio,43.2,Mauro
+12/12/2017,945,2,,H,-12.5,Chiwi,-51.3,Mauro,42.4,Michael,21.4,Naoko
+13/12/2017,946,2,,H,-19.3,Duro,-32.0,Fer,16.0,Michael,35.3,Romo
+15/12/2017,947,2,,H,-34.8,Adrian,29.8,Duro,18.6,Michael,-33.6,Romo
+15/12/2017,948,2,,H,-8.4,Adrian,12.5,Duro,37.4,Michael,-41.5,Romo
+15/12/2017,949,2,,H,-37.2,Adrian,44.8,Duro,13.1,Michael,-40.7,Romo
+15/12/2017,950,2,,H,33.9,Adrian,-45.8,Duro,-9.4,Michael,21.3,Romo
+16/12/2017,951,2,2,H,-46.2,Juli F,37.5,Mati,-2.7,Mauro,11.4,Pato
+16/12/2017,952,2,2,H,-12.3,Adrian,8.3,Chiwi,-23.3,Lucio,27.3,Nico
+16/12/2017,953,2,2,H,22.4,Figo/Iori,-23.3,Guile,-6.9,Jess,7.8,Romo
+16/12/2017,954,2,2,H,-9.5,Facu (UY),11.9,Koki,22.5,Lucas,-24.9,Mati G. (minimati)
+16/12/2017,955,2,2,H,-12.0,Dario,-42.9,Davy,11.8,Fer,43.1,Naoko
+16/12/2017,956,2,2,H,21.1,Chiwi,-1.0,Juli F,-30.9,Koki,-9.2,Haku/Kozi
+16/12/2017,957,2,2,H,12.9,Enio,-31.3,Figo/Iori,28.3,Lucas,-9.9,Mauro
+16/12/2017,958,2,2,H,-44.4,Jess,39.1,Lucas Albor,-14.0,Mati G. (minimati),19.3,Nico
+16/12/2017,959,2,2,H,-25.2,Adrian,-15.7,Facu (UY),-9.6,Guile,30.5,Mati
+16/12/2017,960,2,2,H,3.4,Lucio,41.5,Pato,-12.1,Pedro,-32.8,Romo
+16/12/2017,961,2,2,H,3.3,Chiwi,-32.2,Dario,41.3,Enio,-12.4,Pato
+16/12/2017,962,2,2,H,-7.1,Adrian,25.8,Fer,13.4,Juli F,-32.1,Pedro
+16/12/2017,963,2,2,H,9.9,Lucas Albor,28.0,Lucio,-25.6,Mati,-12.3,Naoko
+16/12/2017,964,2,2,H,-27.2,Davy,-4.7,Haku/Kozi,-15.4,Mauro,47.3,Nico
+16/12/2017,965,2,2,H,5.6,Guile,-6.1,Mauro,18.3,Naoko,-17.8,Pedro
+16/12/2017,966,2,2,H,24.8,Haku/Kozi,7.4,Mati,-24.1,Mati G. (minimati),-8.1,Romo
+16/12/2017,967,2,2,H,-21.3,Davy,-7.9,Facu (UY),24.5,Figo/Iori,4.7,Pato
+16/12/2017,968,2,2,H,12.0,Dario,0.3,Juli F,37.6,Lucas,-49.9,Lucas Albor
+16/12/2017,969,2,2,H,-36.3,Enio,11.0,Fer,25.1,Jess,-19.8,Koki
+16/12/2017,970,2,2,H,5.9,Fer,-22.4,Guile,-9.5,Lucas,26.0,Nico
+16/12/2017,971,2,2,H,1.7,Chiwi,-29.4,Figo/Iori,-19.2,Mati G. (minimati),46.9,Naoko
+16/12/2017,972,2,2,H,9.5,Dario,25.6,Facu (UY),-10.8,Jess,-24.3,Lucio
+16/12/2017,973,2,2,H,6.1,Adrian,23.3,Davy,-25.2,Koki,-4.2,Romo
+16/12/2017,974,2,2,H,38.2,Enio,25.0,Haku/Kozi,-75.8,Lucas Albor,-7.4,Pedro
+17/12/2017,975,2,2,H,-7.5,Enio,21.5,Fer,-24.3,Haku/Kozi,10.3,Nico
+17/12/2017,976,2,2,H,8.8,Enio,15.2,Fer,-29.4,Haku/Kozi,-14.6,Nico
+17/12/2017,977,2,2,H,-28.1,Lucas,-15.9,Mati,14.9,Naoko,29.1,Pato
+17/12/2017,978,2,2,H,13.7,Lucas,-8.1,Mati,13.7,Naoko,-19.3,Pato
+17/12/2017,979,2,2,H,-4.3,Enio,-39.9,Fer,11.8,Naoko,32.4,Pato
+17/12/2017,980,2,2,H,7.3,Enio,34.7,Fer,-30.4,Naoko,-11.6,Pato
+01/01/2018,981,3,,H,-7.7,Adrian,12.7,Koki,37.6,Michael,-42.6,Naoko
+01/01/2018,982,3,,H,17.9,Adrian,-44.4,Koki,-15.2,Michael,41.7,Naoko
+01/01/2018,983,3,,H,-59.9,Adrian,15.3,Koki,-12.3,Michael,56.9,Naoko
+01/01/2018,984,3,,H,-57.2,Adrian,-24.2,Koki,12.6,Michael,68.8,Naoko
+01/01/2018,985,3,,H,45.5,Adrian,-16.7,Koki,-38.3,Michael,9.5,Naoko
+01/01/2018,986,3,,H,-37.1,Adrian,-14.1,Koki,38.5,Michael,12.7,Naoko
+01/01/2018,987,3,,H,20.8,Adrian,53.6,Koki,-59.3,Michael,-15.1,Naoko
+01/01/2018,988,3,,H,47.9,Adrian,-18.0,Koki,9.9,Michael,-39.8,Naoko
+01/01/2018,989,3,,H,-22.5,Adrian,7.3,Duro,-44.0,Koki,59.2,Naoko
+01/01/2018,990,3,,H,35.5,Duro,-32.5,Koki,-37.4,Michael,14.4,Naoko
+01/01/2018,991,3,,H,-21.4,Adrian,-46.6,Duro,46.1,Koki,21.9,Michael
+02/01/2018,992,3,,H,12.5,Chiwi,-8.1,Lucas,-39.1,Luli,34.7,Nico
+02/01/2018,993,3,,H,47.2,Figo/Iori,-49.1,Haku/Kozi,-14.8,Lucas Albor,16.7,Lucio
+02/01/2018,994,3,,H,-11.4,Chiwi,-47.1,Enio,47.2,Fer,11.3,Lucas
+02/01/2018,995,3,,H,-44.6,Dario,-17.1,Luli,20.5,Michael,41.2,Nico
+02/01/2018,996,3,,H,-21.4,Fer,12.3,Lucas,-47.1,Michael,55.2,Nico
+02/01/2018,997,3,,H,77.0,Chiwi,-49.4,Dario,0.4,Enio,-28.0,Luli
+03/01/2018,998,3,,H,-21.7,Jess,48.5,Lucas,-50.5,Luli,23.7,Mauro
+03/01/2018,999,3,,H,41.4,JC,20.1,Jess,-7.1,Luli,-54.4,Mauro
+03/01/2018,1000,3,,H,39.8,JC,11.0,Jess,-40.7,Lucas,-10.1,Luli
+04/01/2018,1001,3,,H,12.8,Facu (UY),-13.9,Haku/Kozi,-47.3,Lucas,48.4,Nico
+04/01/2018,1002,3,,H,-20.3,Enio,-50.4,JC,4.6,Lucas,66.1,Nico
+04/01/2018,1003,3,,H,-19.1,Enio,49.4,Lucas,-47.4,Mauro,17.1,Nico
+04/01/2018,1004,3,,H,-46.8,Enio,69.2,Lucas,-26.3,Mauro,3.9,Nico
+06/01/2018,1005,3,,H,22.1,Figo/Iori,-14.8,Koki,48.3,Mati,-55.6,Michael
+06/01/2018,1006,3,,H,-9.1,Figo/Iori,13.7,Koki,38.8,Mati,-44.4,Michael
+06/01/2018,1007,3,,H,40.9,Lucas Albor,-12.0,Lucio,9.7,Nahuel,-38.6,Naoko
+06/01/2018,1008,3,,H,-10.6,Fer,-44.9,Figo/Iori,41.9,Michael,13.6,Naoko
+06/01/2018,1009,3,,H,23.0,Koki,-20.5,Lucas Albor,-52.5,Lucio,50.0,Mati
+06/01/2018,1010,3,,H,44.7,Fer,15.4,Figo/Iori,-56.0,Michael,-5.1,Naoko
+08/01/2018,1011,3,,H,12.8,Adrian,-38.2,Chiwi,-14.6,Figo/Iori,40.0,Lucas
+08/01/2018,1012,3,,H,40.1,Adrian,-38.8,Fer,14.3,Figo/Iori,-15.6,Lucas Albor
+08/01/2018,1013,3,,H,44.1,Fer,19.2,Figo/Iori,-48.8,Lucas,-16.5,Michael
+09/01/2018,1014,3,,H,16.3,Adrian,-12.2,Lucas,-42.4,Mauro,38.3,Nico
+09/01/2018,1015,3,,H,36.9,Figo/Iori,16.6,Koki,-40.9,Lucio,-12.6,Naoko
+09/01/2018,1016,3,,H,-12.0,Adrian,-49.7,Chiwi,-9.7,Lucas,41.4,Luli
+09/01/2018,1017,3,,H,-26.8,Fer,-26.8,Lucas Albor,42.7,Mauro,10.9,Nico
+09/01/2018,1018,3,,H,-48.3,Figo/Iori,56.0,Lucas,-19.6,Lucio,11.9,Luli
+09/01/2018,1019,3,,H,43.4,Chiwi,20.3,Ini,-7.3,Koki,-56.4,Naoko
+09/01/2018,1020,3,,H,46.0,Chiwi,-37.6,Ini,-15.0,Koki,6.6,Naoko
+09/01/2018,1021,3,,H,36.2,Figo/Iori,12.0,Lucio,-11.5,Luli,-36.7,Nico
+09/01/2018,1022,3,,H,-35.4,Enio,34.7,Fer,12.0,Lucas,-12.3,Lucas Albor
+09/01/2018,1023,3,,H,-10.3,Ini,12.0,Koki,-38.3,Michael,36.6,Naoko
+11/01/2018,1024,3,,H,-25.7,Adrian,-47.8,JC,24.5,Lucas,49.0,Nico
+11/01/2018,1025,3,,H,-38.7,Adrian,28.5,JC,-18.3,Lucas,28.5,Nico
+13/01/2018,1026,3,,T,-13.4,Adrian,37.0,Lucas,16.4,Lucio,-40.0,Nico
+13/01/2018,1027,3,,H,68.6,Duro,-57.9,Koki,18.6,Michael,-29.3,Naoko
+13/01/2018,1028,3,,H,12.1,Adrian,44.6,Duro,-9.4,Koki,-47.3,Naoko
+13/01/2018,1029,3,,H,-13.2,Lucio,-34.2,Michael,34.1,Naoko,13.3,Nico
+13/01/2018,1030,3,,H,47.2,Koki,-26.3,Lucio,26.9,Michael,-47.8,Naoko
+13/01/2018,1031,3,,H,-8.4,Adrian,-47.2,Duro,38.6,Lucas,17.0,Nico
+13/01/2018,1032,3,,T,60.4,Koki,-46.3,Lucio,-23.8,Michael,9.7,Naoko
+13/01/2018,1033,3,,H,54.1,Koki,-51.2,Lucas,-20.2,Michael,17.3,Naoko
+13/01/2018,1034,3,,H,20.8,Adrian,-47.2,Duro,-14.8,Lucio,41.2,Nico
+13/01/2018,1035,3,,H,22.4,Lucas,-12.8,Lucio,-55.5,Michael,45.9,Nico
+13/01/2018,1036,3,,H,-39.9,Adrian,40.4,Duro,-14.8,Koki,14.3,Naoko
+14/01/2018,1037,3,,H,-17.8,Adrian,12.6,Lucas,-44.2,Lucio,48.4,Nico
+14/01/2018,1038,3,,H,11.1,Duro,34.6,Koki,-33.0,Michael,-12.7,Naoko
+14/01/2018,1039,3,,H,-54.6,Duro,17.8,Koki,-4.5,Lucas,41.3,Nico
+14/01/2018,1040,3,,H,11.6,Adrian,-8.6,Lucio,56.5,Michael,-59.5,Naoko
+14/01/2018,1041,3,,H,28.9,Lucas,28.9,Lucio,-15.1,Naoko,-42.7,Nico
+14/01/2018,1042,3,,H,9.8,Adrian,-34.3,Duro,36.7,Koki,-12.2,Michael
+14/01/2018,1043,3,,H,-11.3,Koki,16.5,Michael,45.4,Naoko,-50.6,Nico
+14/01/2018,1044,3,,H,42.3,Adrian,-10.5,Duro,-48.3,Lucas,16.5,Lucio
+14/01/2018,1045,3,,H,9.1,Koki,-59.9,Lucas,62.6,Lucio,-11.8,Naoko
+14/01/2018,1046,3,,H,46.7,Adrian,-7.9,Duro,-56.7,Michael,17.9,Nico
+14/01/2018,1047,3,,H,36.2,Koki,-10.1,Lucas,11.2,Michael,-37.3,Naoko
+14/01/2018,1048,3,,H,-34.4,Adrian,-13.3,Duro,36.9,Lucio,10.8,Nico
+14/01/2018,1049,3,,H,43.9,Adrian,-5.4,Koki,-57.5,Michael,19.0,Naoko
+14/01/2018,1050,3,,H,-59.4,Duro,-8.3,Lucas,44.4,Lucio,23.3,Nico
+14/01/2018,1051,3,,T,44.8,Chiwi,-49.0,Juli F,-20.9,Mati,24.1,Pedro
+14/01/2018,1052,3,,T,-42.4,Chiwi,44.4,Mati,-12.0,Mayra,10.0,Pedro
+14/01/2018,1053,3,,T,40.3,Juli F,10.9,Mati,-38.4,Mayra,-12.8,Pedro
+14/01/2018,1054,3,,T,-43.3,Chiwi,-13.5,Juli F,42.7,Mati,14.1,Mayra
+14/01/2018,1055,3,,T,-13.4,Chiwi,-34.2,Juli F,7.5,Mayra,40.1,Pedro
+15/01/2018,1056,3,,H,-78.2,Federico Albor,89.0,Franco Albor,0.8,Lucas Albor,-51.6,Santiago Albor
+16/01/2018,1057,3,,H,9.8,Chiwi,-39.8,Fer,39.3,Lucas Albor,-9.3,Romo
+16/01/2018,1058,3,,H,-55.1,Figo/Iori,14.5,Koki,-6.8,Luli,47.4,Naoko
+16/01/2018,1059,3,,H,-10.3,Fer,-37.8,Figo/Iori,37.8,Koki,10.3,Naoko
+16/01/2018,1060,3,,H,-20.4,Chiwi,19.7,Lucas,50.1,Lucas Albor,-49.4,Lucio
+16/01/2018,1061,3,,H,-4.1,Fer,-24.3,Figo/Iori,47.4,Koki,-49.0,Naoko
+17/01/2018,1062,3,,H,-51.5,Facu (UY),-27.3,Lucas,52.4,Mauro,24.4,Nico
+17/01/2018,1063,3,,H,34.2,Lucas,-36.9,Lucio,14.0,Mauro,-11.3,Nico
+17/01/2018,1064,3,,H,10.2,Lucas,-47.2,Lucio,50.0,Mati G. (minimati),-13.0,Nico
+17/01/2018,1065,3,,H,-11.9,Lucas,40.1,Lucio,-46.2,Mati G. (minimati),18.0,Nico
+17/01/2018,1066,3,,H,38.5,JC,15.1,Lucio,-45.9,Mauro,-7.7,Nico
+17/01/2018,1067,3,,H,41.7,JC,14.6,Lucio,-49.8,Mauro,-6.5,Nico
+17/01/2018,1068,3,,H,44.9,Federico Albor,-17.5,Franco Albor,20.9,Lucas Albor,-48.3,Santiago Albor
+18/01/2018,1069,3,,H,-45.0,Federico Albor,-19.5,Franco Albor,43.2,Lucas Albor,-18.7,Santiago Albor
+19/01/2018,1070,3,,H,60.5,Duro,-50.5,Koki,-20.6,Michael,10.6,Naoko
+19/01/2018,1071,3,,H,43.3,Koki,-43.8,Lucas,-18.6,Lucio,19.1,Naoko
+19/01/2018,1072,3,,H,46.2,Adrian,-40.2,Lucio,-14.7,Michael,8.7,Naoko
+19/01/2018,1073,3,,H,51.0,Duro,-18.7,Fer,-42.4,Koki,10.1,Lucas
+19/01/2018,1074,3,,H,44.9,Adrian,-50.0,Duro,-18.6,Fer,23.7,Naoko
+19/01/2018,1075,3,,H,11.4,Koki,-44.7,Lucas,51.8,Lucio,-18.5,Michael
+19/01/2018,1076,3,,H,17.1,Adrian,53.3,Duro,-56.1,Fer,-14.3,Lucio
+19/01/2018,1077,3,,H,54.7,Koki,14.9,Lucas,-49.1,Michael,-20.5,Naoko
+20/01/2018,1078,3,,H,-18.2,Koki,50.0,Lucio,-39.8,Luli,8.0,Pedro
+20/01/2018,1079,3,,H,-24.6,Figo/Iori,22.9,Marcelo,-48.8,Mati G. (minimati),50.5,Romo
+20/01/2018,1080,3,,H,-14.2,Chiwi,-44.3,Fer,17.1,Mati,41.4,Michael
+20/01/2018,1081,3,,H,-58.7,Juli F,14.8,Lucas,-53.6,Lucas Albor,67.5,Naoko
+20/01/2018,1082,3,,H,64.0,Chiwi,-64.0,Mati,-12.0,Michael,12.0,Romo
+20/01/2018,1083,3,,H,9.1,Figo/Iori,41.3,Koki,-38.4,Naoko,-12.0,Pedro
+20/01/2018,1084,3,,H,17.2,Chiwi,-47.5,Mati,39.4,Michael,-9.1,Romo
+20/01/2018,1085,3,,H,-13.6,Duro,43.6,Juli F,16.7,Lucio,-46.7,Luli
+21/01/2018,1086,3,,H,-47.5,Koki,43.0,Lucas Albor,-12.8,Luli,-12.7,Naoko
+21/01/2018,1087,3,,H,-60.7,Koki,-20.1,Luli,56.5,Mauro,24.3,Naoko
+21/01/2018,1088,3,,H,-16.2,Enio,44.7,Lucas,-39.8,Lucas Albor,11.3,Lucio
+21/01/2018,1089,3,,H,40.0,Enio,-39.7,Lucas Albor,-15.8,Luli,15.5,Naoko
+21/01/2018,1090,3,,H,-34.3,Koki,16.4,Lucas,-55.2,Lucio,73.1,Mauro
+21/01/2018,1091,3,,H,-13.3,Koki,57.5,Lucas,13.5,Lucio,-57.7,Naoko
+21/01/2018,1092,3,,H,-50.6,Enio,49.6,Lucas Albor,18.9,Luli,-17.9,Mauro
+21/01/2018,1093,3,,H,45.3,Koki,-49.3,Lucas Albor,-12.4,Mauro,16.4,Naoko
+21/01/2018,1094,3,,H,36.7,Koki,13.9,Lucas Albor,-15.0,Mauro,-35.6,Naoko
+21/01/2018,1095,3,,H,68.7,JC,-58.9,Lucas,13.6,Lucio,-23.4,Luli
+21/01/2018,1096,3,,H,16.8,JC,-58.9,Lucas,-6.3,Lucio,48.4,Luli
+22/01/2018,1097,3,,H,-9.4,Duro,-58.5,Ini,20.7,Lucas,47.2,Lucio
+22/01/2018,1098,3,,H,48.9,Fer,6.5,Koki,-38.1,Michael,-17.3,Naoko
+22/01/2018,1099,3,,H,74.0,Fer,-22.5,Koki,4.6,Michael,-56.1,Naoko
+22/01/2018,1100,3,,H,50.0,Adrian,-22.5,Ini,-42.7,Lucio,15.2,Max D.
+22/01/2018,1101,3,,H,-62.1,Adrian,-15.5,Duro,53.1,Fer,-15.5,Naoko
+22/01/2018,1102,3,,H,-18.2,Ini,-53.9,Koki,47.4,Lucio,24.7,Michael
+23/01/2018,1103,3,,H,-50.9,Chiwi,47.7,Lucio,16.5,Luli,-15.3,Romo
+23/01/2018,1104,3,,H,-16.8,Chiwi,-52.3,Lucas,49.3,Lucio,19.8,Romo
+23/01/2018,1105,3,,H,-7.2,Lucas,12.9,Lucio,35.7,Luli,-41.4,Romo
+23/01/2018,1106,3,,H,28.7,JC,-65.9,Jess,-24.9,Lucas,62.1,Lucio
+23/01/2018,1107,3,,H,40.5,JC,-47.2,Jess,14.5,Lucas,-7.8,Lucio
+23/01/2018,1108,3,,H,-54.1,JC,21.3,Jess,54.0,Lucas,-21.2,Lucio
+24/01/2018,1109,3,,H,11.9,Adrian,-11.2,Duro,33.0,Fer,-33.7,Romo
+25/01/2018,1110,3,,H,-38.8,Jess,37.9,Lucas,11.2,Lucio,-10.3,Luli
+25/01/2018,1111,3,,H,-20.4,Jess,-49.2,Lucas,47.7,Lucio,16.1,Luli
+25/01/2018,1112,3,,H,44.3,Jess,12.2,Lucas,-8.6,Lucio,-47.9,Luli
+25/01/2018,1113,3,,H,15.2,Jess,54.7,Lucas,-20.0,Lucio,-49.9,Luli
+27/01/2018,1114,3,,H,-55.6,Adrian,58.3,Lucas,30.3,Lucio,-33.0,Michael
+27/01/2018,1115,3,,H,-13.3,Duro,17.1,Lucas,53.4,Lucio,-57.2,Michael
+27/01/2018,1116,3,,H,9.9,Adrian,-40.1,Duro,-19.5,Lucas,49.7,Lucio
+27/01/2018,1117,3,,H,26.2,Adrian,50.3,Lucas,-20.6,Lucio,-55.9,Michael
+27/01/2018,1118,3,,H,-35.5,Adrian,33.3,Duro,-10.8,Lucio,13.0,Michael
+27/01/2018,1119,3,,H,19.4,Adrian,-49.4,Duro,-16.8,Lucas,46.8,Lucio
+27/01/2018,1120,3,,H,-9.7,Adrian,13.7,Lucas,44.1,Lucio,-48.1,Michael
+27/01/2018,1121,3,,H,15.5,Adrian,-55.9,Lucas,53.4,Lucio,-13.0,Michael
+27/01/2018,1122,3,,H,-0.8,Adrian,-0.8,Duro,45.9,Lucas,-44.3,Lucio
+28/01/2018,1123,3,,H,-11.6,JC,41.3,Lucas,20.0,Lucio,-49.7,Luli
+28/01/2018,1124,3,,H,68.6,JC,4.0,Lucas,-46.4,Lucio,-26.2,Luli
+28/01/2018,1125,3,,H,49.6,JC,-10.0,Lucas,-56.6,Lucio,17.0,Luli
+28/01/2018,1126,3,,H,19.9,JC,62.4,Lucas,-19.1,Lucio,-63.2,Luli
+29/01/2018,1127,3,,H,-23.3,Figo/Iori,12.2,Lucas,59.6,Michael,-48.5,Romo
+29/01/2018,1128,3,,H,62.5,Fer,13.2,Figo/Iori,-78.9,Jess,-28.8,Michael
+30/01/2018,1129,3,,H,11.5,Fer,42.3,Michael,-41.4,Pablo (2de6),10.6,Tamara
+30/01/2018,1130,3,,H,43.4,Adrian,-14.9,Chiwi,-44.8,Lucas,16.3,Lucio
+30/01/2018,1131,3,,H,-45.2,Angel,-14.6,Chiwi,18.5,Lucas,41.3,Lucio
+30/01/2018,1132,3,,H,11.4,Duro,-11.4,Jess,36.7,Miguel,-36.8,Romo
+30/01/2018,1133,3,,H,-14.3,Adrian,47.7,Fer,-56.4,Lucio,23.0,Michael
+31/01/2018,1134,3,,H,-56.8,Adrian,18.1,Duro,50.9,Fer,-12.2,Romo
+31/01/2018,1135,3,,H,55.0,Adrian,14.2,Duro,-13.1,Fer,-56.1,Romo
+03/02/2018,1136,3,,H,-44.4,Chiwi,36.4,Koki,-6.3,Max D.,14.3,Naoko
+03/02/2018,1137,3,,H,41.6,Mati,19.3,Max D.,-3.0,Naoko,-57.9,Pedro
+03/02/2018,1138,3,,H,67.1,Chiwi,-66.0,Juli F,25.9,Koki,-27.0,Mayra
+03/02/2018,1139,3,,T,9.4,Koki,-37.3,Mati,41.9,Naoko,-14.0,Pedro
+03/02/2018,1140,3,,T,-44.1,Chiwi,40.0,Juli F,13.2,Max D.,-9.1,Mayra
+03/02/2018,1141,3,,H,-25.1,Juli F,-25.1,Koki,37.1,Naoko,13.1,Pedro
+03/02/2018,1142,3,,H,49.5,Fran,-17.3,Koki,8.7,Mati,-40.9,Naoko
+03/02/2018,1143,3,,H,-44.7,Chiwi,14.9,Koki,-13.4,Max D.,43.2,Naoko
+03/02/2018,1144,3,,H,-11.6,Chiwi,35.8,Fran,-38.1,Koki,28.9,Max D.
+03/02/2018,1145,3,,H,-24.0,Fran,14.3,Juli F,-55.4,Naoko,65.1,Pedro
+03/02/2018,1146,3,,H,-12.5,Chiwi,8.4,Fran,-49.2,Juli F,53.3,Koki
+03/02/2018,1147,3,,H,35.5,Adrian,13.9,Alejandro,-13.1,Michael,-36.3,Nico
+03/02/2018,1148,3,,H,12.8,Fer,-15.3,Figo/Iori,-35.8,Jess,38.3,Mati G. (minimati)
+03/02/2018,1149,3,,H,-58.6,Adrian,-5.6,Michael,47.0,Nico,17.2,Romo
+03/02/2018,1150,3,,H,-37.5,Alejandro,18.7,Jess,-58.0,Luli,46.8,Michael
+03/02/2018,1151,3,,H,56.3,Lucas,-44.7,Mati G. (minimati),-18.3,Nico,6.7,Romo
+03/02/2018,1152,3,,H,47.7,Figo/Iori,12.5,Lucas,11.4,Lucio,-78.8,Luli
+03/02/2018,1153,3,,H,-6.6,Adrian,-46.6,Duro,13.8,Ini,39.4,Michael
+03/02/2018,1154,3,,H,43.8,Adrian,-40.0,Figo/Iori,15.3,Lucio,-19.1,Luli
+03/02/2018,1155,3,,H,36.3,Duro,-42.4,Ini,15.4,Lucas,-9.3,Michael
+03/02/2018,1156,3,,H,50.1,Ini,-41.0,Lucas,-16.6,Luli,7.5,Michael
+03/02/2018,1157,3,,H,42.0,Adrian,-11.3,Duro,21.9,Figo/Iori,-52.6,Lucio
+03/02/2018,1158,3,,H,17.8,Figo/Iori,-66.6,Ini,-12.6,Luli,61.4,Michael
+03/02/2018,1159,3,,H,-7.4,Adrian,-54.6,Duro,43.2,Lucas,19.6,Lucio
+04/02/2018,1160,3,,H,-9.3,JC,14.7,Lucas,-47.6,Luli,42.2,Nico
+04/02/2018,1161,3,,H,66.2,JC,-33.3,Lucas,-59.2,Luli,26.3,Nico
+04/02/2018,1162,3,,H,40.3,Facu (UY),-15.6,JC,-36.6,Luli,11.9,Nico
+04/02/2018,1163,3,,H,-19.5,Facu (UY),9.7,JC,51.6,Lucas,-41.8,Nico
+05/02/2018,1164,3,,H,-27.7,Adrian,-48.5,Figo/Iori,22.3,Lucas,53.9,Lucas Albor
+05/02/2018,1165,3,,H,11.2,Adrian,58.0,Fer,-13.4,Lucas,-55.8,Lucas Albor
+05/02/2018,1166,3,,H,-46.6,Fer,-10.7,Jess,46.7,Lucas,10.6,Luli
+06/02/2018,1167,3,,H,-51.2,Fer,10.0,Koki,-19.7,Lucas Albor,60.9,Mati
+06/02/2018,1168,3,,H,39.2,Figo/Iori,-37.1,Koki,-16.0,Lucas,13.9,Luli
+06/02/2018,1169,3,,H,62.3,Chiwi,4.7,Lucio,-16.7,Nico,-50.3,Romo
+06/02/2018,1170,3,,H,22.2,Adrian,-25.1,Fer,-50.7,Mati,53.6,Michael
+06/02/2018,1171,3,,H,-49.0,Chiwi,10.8,Lucio,-17.4,Nico,25.6,Romo
+06/02/2018,1172,3,,H,-39.2,Fer,14.0,Koki,44.0,Lucas,-18.8,Luli
+06/02/2018,1173,3,,H,-48.9,Adrian,17.5,Lucio,43.4,Michael,-15.0,Nico
+08/02/2018,1174,3,,H,13.0,Federico Albor,-10.2,Franco Albor,22.3,Lucas Albor,-55.1,Santiago Albor
+08/02/2018,1175,3,,H,14.0,Adrian,-40.3,Lucas,38.4,Lucio,-12.1,Nico
+08/02/2018,1176,3,,H,16.8,Adrian,-13.8,Lucas,-55.5,Lucio,52.5,Nico
+10/02/2018,1177,3,,H,47.6,Adrian,-57.9,Duro,-7.6,Michael,17.9,Nico
+10/02/2018,1178,3,,H,46.4,Figo/Iori,-10.9,Jess,16.8,Koki,-52.3,Mati G. (minimati)
+10/02/2018,1179,3,,H,48.6,Adrian,-21.2,Lucio,-44.7,Michael,15.3,Nico
+10/02/2018,1180,3,,H,45.3,Figo/Iori,-14.3,Jess,11.8,Koki,-42.8,Max D.
+10/02/2018,1181,3,,H,31.1,Fer,-10.0,Lucio,10.9,Mati G. (minimati),-32.0,Miguel
+12/02/2018,1182,3,,H,-91.3,Figo/Iori,-9.7,Koki,-3.5,Lucio,44.5,Naoko
+12/02/2018,1183,3,,H,-18.0,Adrian,17.2,Koki,48.8,Michael,-48.0,Miguel
+12/02/2018,1184,3,,H,17.0,Figo/Iori,-15.9,Lucio,41.3,Michael,-42.4,Naoko
+12/02/2018,1185,3,,H,18.4,Adrian,-3.2,Koki,-57.0,Miguel,41.8,Naoko
+12/02/2018,1186,3,,H,8.7,Adrian,60.0,Figo/Iori,-55.6,Lucio,-13.1,Michael
+12/02/2018,1187,3,,H,50.8,Figo/Iori,-10.8,Koki,-57.4,Miguel,17.4,Naoko
+12/02/2018,1188,3,,H,61.0,Adrian,-42.8,Koki,2.5,Lucio,-21.7,Michael
+12/02/2018,1189,3,,H,-13.4,Adrian,-58.5,Figo/Iori,19.3,Koki,52.6,Lucio
+12/02/2018,1190,3,,H,24.3,Adrian,-20.9,Koki,49.3,Michael,-52.7,Naoko
+12/02/2018,1191,3,,H,-13.0,Adrian,-55.5,Koki,53.3,Michael,15.2,Naoko
+13/02/2018,1192,3,,H,14.7,Chiwi,-15.7,Koki,-37.3,Max D.,38.3,Naoko
+13/02/2018,1193,3,,H,-52.7,Chiwi,19.4,Koki,43.7,Max D.,-10.4,Naoko
+13/02/2018,1194,3,,H,36.7,Chiwi,-40.0,Koki,-8.8,Max D.,12.1,Naoko
+13/02/2018,1195,3,,H,-54.9,Chiwi,11.9,Koki,-9.7,Max D.,51.7,Naoko
+13/02/2018,1196,3,,H,39.0,Adrian,-37.9,Lucas,-13.3,Luli,12.2,Nico
+13/02/2018,1197,3,,H,-20.6,Lucas,-41.1,Luli,3.1,Michael,58.6,Nico
+15/02/2018,1198,3,,H,-50.1,Facu (UY),-17.5,Haku/Kozi,8.5,Lucas,59.1,Luli
+15/02/2018,1199,3,,H,18.6,Facu (UY),-58.5,JC,57.2,Jess,-17.3,Nico
+16/02/2018,1200,3,,H,-56.6,Ini,16.1,Jess,-6.9,Lucas,47.4,Luli
+16/02/2018,1201,3,,H,-42.6,Ini,9.1,Jess,53.4,Lucas,-19.9,Luli
+16/02/2018,1202,3,,H,15.6,Ini,45.4,Jess,-53.9,Lucas,-7.1,Luli
+17/02/2018,1203,3,,H,-45.0,Jess,-9.9,Haku/Kozi,39.9,Lucas Albor,15.0,Mati
+17/02/2018,1204,3,,H,-37.3,Alejandro,12.1,Lucio,34.6,Mati G. (minimati),-9.4,Nico
+17/02/2018,1205,3,,H,37.0,Alejandro,-63.2,Fer,-10.8,Lucio,37.0,Nico
+17/02/2018,1206,3,,H,18.6,Jess,-55.4,Lucas Albor,43.2,Mati,-6.4,Mati G. (minimati)
+18/02/2018,1207,3,,H,-30.4,Adrian,-55.6,Koki,78.8,Michael,7.2,Naoko
+18/02/2018,1208,3,,H,-12.8,Adrian,-39.3,Koki,36.3,Michael,15.8,Naoko
+18/02/2018,1209,3,,H,15.4,Adrian,41.9,Koki,-8.1,Michael,-49.2,Naoko
+18/02/2018,1210,3,,H,42.8,Adrian,14.2,Koki,-11.8,Michael,-45.2,Naoko
+18/02/2018,1211,3,,H,43.2,Adrian,-45.1,Koki,-20.3,Michael,22.2,Naoko
+18/02/2018,1212,3,,H,43.3,Koki,17.3,Lucas,-48.7,Michael,-11.9,Naoko
+18/02/2018,1213,3,,H,-42.4,Adrian,14.3,Koki,35.1,Lucas,-7.0,Naoko
+18/02/2018,1214,3,,H,-4.9,Koki,-58.8,Lucas,46.1,Michael,17.6,Naoko
+18/02/2018,1215,3,,H,23.7,Adrian,-15.6,Koki,-55.2,Michael,47.1,Naoko
+20/02/2018,1216,3,,H,-36.6,Lucas Albor,35.9,Lucio,10.6,Mauro,-9.9,Romo
+20/02/2018,1217,3,,H,6.2,Fer,-39.0,Lucio,-44.7,Mauro,47.5,Michael
+20/02/2018,1218,3,,H,8.5,Lucas,-36.2,Lucas Albor,42.2,Lucio,-14.5,Mauro
+20/02/2018,1219,3,,H,-10.9,Fer,9.8,Lucas Albor,-40.9,Lucio,42.0,Michael
+21/02/2018,1220,3,,H,-18.9,Adrian,-39.2,Koki,41.9,Michael,-13.8,Naoko
+21/02/2018,1221,3,,H,54.4,Adrian,-60.3,Koki,-12.8,Michael,18.7,Naoko
+21/02/2018,1222,3,,H,-50.3,Adrian,18.8,Koki,-25.7,Michael,57.2,Naoko
+23/02/2018,1223,3,,H,41.3,JC,-57.4,Lucas,18.2,Lucio,-2.1,Nico
+23/02/2018,1224,3,,H,17.8,JC,52.2,Lucas,-51.0,Lucio,-19.0,Nico
+24/02/2018,1225,3,,H,-13.5,Enio,13.2,Lucas,-37.2,Luli,37.5,Mauro
+24/02/2018,1226,3,,H,39.7,Fer,-48.3,Lucas,-13.0,Lucio,-8.4,Mati
+24/02/2018,1227,3,,H,19.5,Fer,51.5,Lucas,-57.0,Lucio,-14.0,Mati G. (minimati)
+24/02/2018,1228,3,,H,14.0,Koki,-7.2,Lucas,-50.6,Lucio,43.8,Naoko
+25/02/2018,1229,3,4,H,-10.2,Guile,30.6,Luli,9.0,Mauro,-29.4,Romo
+25/02/2018,1230,3,4,H,-8.4,Guile,31.5,Luli,6.3,Mauro,-29.4,Romo
+27/02/2018,1231,3,,H,43.7,Alejandro,-16.1,Chiwi,-51.3,Lucas Albor,22.7,Luli
+27/02/2018,1232,3,,H,44.6,Alejandro,-15.0,Chiwi,-65.7,Fer,6.1,Lucio
+03/03/2018,1233,3,4,H,3.0,Lucio,24.6,Mati,-8.7,Mauro,-18.9,Nico
+03/03/2018,1234,3,4,H,9.7,Lucio,32.5,Mati,-8.8,Mauro,-33.4,Nico
+03/03/2018,1235,3,4,H,27.9,Adrian,-11.2,Jess,-25.3,Haku/Kozi,8.6,Lucas
+03/03/2018,1236,3,4,H,41.5,Adrian,5.6,Jess,-29.4,Haku/Kozi,-17.7,Lucas
+03/03/2018,1237,3,4,H,-59.0,Jess,7.6,Lucas,31.5,Mati,-0.1,Pato
+03/03/2018,1238,3,4,H,-11.1,Jess,28.8,Lucas,3.9,Mati,-21.6,Pato
+03/03/2018,1239,3,4,H,28.2,Adrian,-37.2,Luli,15.8,Nico,-6.8,Pato
+03/03/2018,1240,3,4,H,-24.9,Adrian,8.0,Luli,25.8,Nico,-8.9,Pato
+04/03/2018,1241,3,,H,54.6,Enio,-49.2,Lucas Albor,-16.4,Lucio,11.0,Mauro
+04/03/2018,1242,3,,H,-19.6,Adrian,18.0,Enio,-55.3,Lucio,56.9,Nico
+04/03/2018,1243,3,,H,17.5,Chiwi,-5.1,Lucas,-55.4,Lucas Albor,43.0,Mauro
+04/03/2018,1244,3,,H,50.8,Adrian,-46.2,Enio,10.8,Lucio,-15.4,Nico
+04/03/2018,1245,3,,H,9.7,Lucas Albor,-45.9,Lucio,-13.0,Mauro,49.2,Pato
+06/03/2018,1246,3,,H,36.0,Enio,-11.7,Jess,13.6,Lucas,-38.9,Marcelo
+06/03/2018,1247,3,,H,-16.8,Enio,55.0,Fer,-42.9,Jess,4.7,Lucio
+07/03/2018,1248,3,4,H,2.4,Lucas,32.1,Mauro,-11.3,Nico,-23.2,Romo
+07/03/2018,1249,3,4,H,34.3,Lucas,-6.8,Mauro,3.7,Nico,-31.2,Romo
+10/03/2018,1250,3,,H,-39.5,Enio,37.5,Lucas,0.5,Nico,0.5,Romo
+10/03/2018,1251,3,,H,12.6,Enio,-32.9,Lucas,35.7,Nico,-15.4,Romo
+10/03/2018,1252,3,,H,12.7,Enio,-13.3,Lucas,35.0,Nico,-34.4,Romo
+10/03/2018,1253,3,,T,38.3,Adrian,-41.2,Fer,-11.2,Mati,14.1,Wapuro
+10/03/2018,1254,3,4,H,-13.9,Adrian,36.5,Haku/Kozi,-26.2,Luli,3.6,Mati
+10/03/2018,1255,3,4,H,27.1,Adrian,-25.2,Haku/Kozi,-9.2,Luli,7.3,Mati
+13/03/2018,1256,3,4,H,-27.7,Guile,13.1,Jess,-16.2,Lucio,30.8,Pato
+13/03/2018,1257,3,4,H,47.2,Guile,-39.2,Jess,-17.3,Lucio,9.3,Pato
+13/03/2018,1258,3,,H,51.3,Fer,-2.3,Ini,-46.7,Lucas,-2.3,Lucio
+14/03/2018,1259,3,4,H,1.3,Chiwi,36.4,Jess,-25.5,Luli,-12.2,Nico
+14/03/2018,1260,3,4,H,-8.2,Chiwi,21.9,Jess,-25.3,Luli,11.6,Nico
+16/03/2018,1261,3,4,H,-22.2,Adrian,5.5,Guile,-9.8,Luli,26.5,Mauro
+16/03/2018,1262,3,4,H,-10.3,Adrian,-24.2,Guile,29.9,Luli,4.6,Mauro
+17/03/2018,1263,3,,H,9.8,Fer,-43.7,Jess,50.7,Lucio,-16.8,Mati G. (minimati)
+20/03/2018,1264,3,,H,53.3,Fer,13.4,Lucas,-56.3,Lucas Albor,-10.4,Nico
+20/03/2018,1265,3,,H,-20.9,Lucas,-72.3,Lucas Albor,10.3,Lucio,52.9,Nico
+20/03/2018,1266,3,,H,18.3,Fer,-45.5,Lucas,40.4,Lucas Albor,-13.2,Lucio
+24/03/2018,1267,3,,H,13.1,Adrian,-68.8,Ini,38.9,Michael,-13.2,Nico
+24/03/2018,1268,3,,H,-57.3,Adrian,-12.3,Ini,48.2,Haku/Kozi,21.4,Nico
+24/03/2018,1269,3,,H,42.1,Fer,-19.7,Jess,-72.1,Lucas,19.7,Lucas Albor
+24/03/2018,1270,3,,H,-8.3,Adrian,14.8,Ini,-55.6,Haku/Kozi,49.1,Nico
+24/03/2018,1271,3,,H,-54.8,Fer,-24.2,Ini,6.9,Jess,72.1,Lucas Albor
+25/03/2018,1272,3,4,H,1.2,Haku/Kozi,-13.7,Mati,-33.0,Mauro,45.5,Pato
+25/03/2018,1273,3,4,H,-45.4,Haku/Kozi,10.2,Mati,21.9,Mauro,-6.7,Pato
+25/03/2018,1274,3,4,H,-24.6,Guile,6.5,Lucas,22.2,Lucio,-4.1,Romo
+25/03/2018,1275,3,4,H,8.9,Guile,19.1,Lucas,-8.8,Lucio,-19.2,Romo
+27/03/2018,1276,3,,H,-60.8,Chiwi,28.5,Fer,63.5,Lucas,-31.2,Lucas Albor
+27/03/2018,1277,3,,H,-15.7,Chiwi,-42.3,Lucas,44.1,Lucas Albor,13.9,Lucio
+27/03/2018,1278,3,,H,12.6,Chiwi,-77.6,Fer,-25.0,Lucas,60.0,Lucio
+28/03/2018,1279,3,,H,14.3,Adrian,-8.8,Franco Albor,41.3,Lucas Albor,-46.8,Lucio
+28/03/2018,1280,3,,H,36.8,Ini,10.6,Lucas,-12.7,Nico,-34.7,Romo
+28/03/2018,1281,3,,H,51.3,Adrian,-116.4,Franco Albor,-24.8,Lucas Albor,29.9,Lucio
+28/03/2018,1282,3,,H,-6.9,Ini,16.1,Lucas,-48.1,Nico,37.9,Romo
+28/03/2018,1283,3,,H,37.3,Ini,-10.9,Lucas,-36.8,Lucas Albor,10.4,Lucio
+28/03/2018,1284,3,,H,9.1,Adrian,45.8,Franco Albor,-14.8,Nico,-40.1,Romo
+28/03/2018,1285,3,,H,35.5,Adrian,-12.5,Franco Albor,-34.9,Ini,11.9,Nico
+28/03/2018,1286,3,,H,-15.3,Lucas,19.5,Lucas Albor,-44.2,Lucio,40.0,Romo
+31/03/2018,1287,3,,H,-53.3,Adrian,-25.2,Mauro,59.4,Michael,19.1,Nico
+31/03/2018,1288,3,,H,9.9,Adrian,48.7,Mauro,-17.1,Michael,-43.5,Nico
+31/03/2018,1289,3,,H,-55.2,Adrian,19.4,Mauro,-10.0,Michael,45.8,Nico
+31/03/2018,1290,3,,H,14.6,Adrian,-42.8,Mauro,47.0,Michael,-18.8,Nico
+31/03/2018,1291,3,,H,17.0,Adrian,-27.1,Mauro,60.1,Michael,-50.0,Nico
+03/04/2018,1292,3,4,H,34.5,Haku/Kozi,-4.7,Lucio,21.3,Nico,-51.1,Romo
+03/04/2018,1293,3,4,H,31.0,Haku/Kozi,65.6,Lucio,-25.6,Nico,-71.0,Romo
+03/04/2018,1294,3,,H,40.1,Lucas,-38.1,Lucio,10.8,Luli,-12.8,Nico
+04/04/2018,1295,3,,H,-14.7,Chiwi,50.5,Fer,-55.7,Lucas,19.9,Lucas Albor
+04/04/2018,1296,3,,H,-13.4,Chiwi,-38.6,Lucas,41.8,Lucas Albor,10.2,Michael
+04/04/2018,1297,3,,H,12.4,Chiwi,-55.4,Fer,-10.2,Lucas,53.2,Lucas Albor
+07/04/2018,1298,3,,H,9.1,Lucio,59.5,Mati,-56.2,Nico,-12.4,Pato
+07/04/2018,1299,3,,H,-14.3,Lucas,7.5,Lucio,-44.7,Michael,51.5,Nico
+07/04/2018,1300,3,,H,15.0,Adrian,43.9,Fer,-46.4,Lucas,-12.5,Lucio
+09/04/2018,1301,3,,H,52.1,Fer,-41.7,Lucas Albor,8.1,Michael,-18.5,Miguel
+09/04/2018,1302,3,,H,51.1,Fer,-12.1,Lucas Albor,-47.0,Michael,-52.0,Miguel
+10/04/2018,1303,3,,H,45.0,Adrian,-13.8,Chiwi,-45.1,Fer,13.9,Lucio
+18/04/2018,1304,3,,H,39.0,Fer,17.1,Lucas,-49.1,Lucas Albor,-7.0,Lucio
+18/04/2018,1305,3,,H,23.0,Chiwi,-23.0,Fer,-61.3,Lucas Albor,61.3,Lucio
+18/04/2018,1306,3,,H,42.3,Alejandro,19.4,Chiwi,-14.3,Lucas,-47.4,Lucio
+18/04/2018,1307,3,,H,-62.6,Alejandro,74.3,Angel,5.5,Chiwi,-17.5,Lucas
+24/04/2018,1308,3,,H,43.3,Fer,-37.9,Jess,10.7,Lucas,-16.1,Lucio
+28/04/2018,1309,3,,H,16.5,Lucio,48.7,Mati,-57.6,Mayra,-7.6,Michael
+28/04/2018,1310,3,,H,-57.1,Adrian,-29.1,Ini,61.3,Mathias,24.9,Mauro
+28/04/2018,1311,3,,H,15.8,Lucas,-57.1,Lucio,-8.0,Mayra,49.3,Michael
+28/04/2018,1312,3,,H,58.8,Adrian,-57.9,Ini,-15.2,Mathias,14.3,Mauro
+28/04/2018,1313,3,,H,-45.2,Adrian,14.5,Ini,38.0,Lucas,-7.3,Mauro
+28/04/2018,1314,3,,H,41.6,Adrian,-41.9,Lucio,-13.0,Mauro,13.3,Michael
+05/05/2018,1315,3,,H,-46.5,Adrian,14.2,Duro,-6.1,Nico,38.4,Pato
+05/05/2018,1316,3,,H,17.1,Haku/Kozi,60.7,Lucas,-18.0,Lucio,-59.8,Michael
+05/05/2018,1317,3,,H,-11.1,Adrian,15.3,Haku/Kozi,-40.5,Michael,36.3,Romo
+05/05/2018,1318,3,,H,-29.9,Lucas,23.5,Lucio,68.1,Nico,-61.7,Pato
+05/05/2018,1319,3,,H,6.7,Adrian,51.4,Haku/Kozi,-17.8,Lucas,-39.3,Pato
+05/05/2018,1320,3,,H,-46.4,Lucio,-19.9,Michael,52.2,Nico,14.1,Romo
+05/05/2018,1321,3,,H,4.3,Duro,-17.8,Lucas,-39.1,Lucio,52.6,Nico
+05/05/2018,1322,3,,H,41.2,Adrian,17.1,Haku/Kozi,-17.7,Michael,-40.6,Romo
+12/05/2018,1323,3,,H,-12.1,Adrian,8.5,Duro,-37.5,Lucio,41.1,Michael
+12/05/2018,1324,3,,H,-8.1,Adrian,-57.4,Duro,46.9,Lucio,18.6,Michael
+12/05/2018,1325,3,,H,-50.8,Adrian,17.3,Duro,41.0,Lucio,-7.5,Michael
+12/05/2018,1326,3,,H,50.0,Adrian,-57.7,Duro,26.3,Lucio,-18.6,Michael
+12/05/2018,1327,3,,H,48.6,Adrian,-53.6,Duro,22.3,Lucio,-17.3,Michael
+12/05/2018,1328,3,,H,-37.9,Adrian,-17.3,Duro,41.8,Lucio,13.4,Michael
+19/05/2018,1329,3,,H,-44.7,Lucas,16.7,Lucio,-16.0,Mati,44.0,Mati G. (minimati)
+25/05/2018,1330,3,4,H,8.9,Ini,-26.4,Lucas,22.4,Mauro,-4.9,Nico
+25/05/2018,1331,3,4,H,-3.6,Ini,6.4,Lucas,24.1,Mauro,-26.9,Nico
+27/05/2018,1332,3,4,H,23.1,Guile,-9.4,Ini,-19.7,Lucas,6.0,Lucio
+27/05/2018,1333,3,4,H,-23.2,Guile,-11.3,Ini,6.4,Lucas,28.1,Lucio
+27/05/2018,1334,3,4,H,-21.1,Ini,26.4,Lucas,-10.7,Lucio,5.4,Mauro
+27/05/2018,1335,3,4,H,17.0,Ini,28.0,Lucas,-29.1,Lucio,-15.9,Mauro
+02/06/2018,1336,3,3,H,-37.5,Amauri (BR),9.6,Facu (UY),-16.7,Felipe (CL),14.6,Fran
+02/06/2018,1337,3,3,H,17.7,Guile,38.6,Lautaro (LP) DiG.,-45.0,Lucas,-11.3,Mauro
+02/06/2018,1338,3,3,H,35.9,Adriel,-5.2,Arthur (BR),15.1,Mati,-45.8,Nico
+02/06/2018,1339,3,3,H,38.1,Adrian,-10.7,Luli,12.5,Marcelo,-39.9,Mati G. (minimati)
+02/06/2018,1340,3,3,H,-11.7,Chiwi,-53.1,Jess,48.6,Michael,16.2,Pato
+02/06/2018,1341,3,3,H,-38.3,Fer,39.9,Ini,-14.2,Lucio,8.6,Romo
+02/06/2018,1342,3,3,H,-76.2,Felipe (CL),53.3,Lucas,25.0,Lucio,-3.1,Nico
+02/06/2018,1343,3,3,H,44.6,Arthur (BR),14.0,Facu (UY),-8.3,Marcelo,-50.3,Mauro
+02/06/2018,1344,3,3,H,66.6,Guile,-24.4,Mati,-48.5,Mati G. (minimati),6.3,Michael
+02/06/2018,1345,3,3,H,14.7,Adrian,-27.7,Adriel,-54.9,Ini,67.9,Jess
+02/06/2018,1346,3,3,H,20.9,Amauri (BR),-65.9,Luli,-5.2,Pato,50.2,Romo
+02/06/2018,1347,3,3,H,-32.3,Chiwi,27.3,Fer,-52.4,Fran,57.4,Lautaro (LP) DiG.
+02/06/2018,1348,3,3,H,-9.0,Adrian,36.9,Amauri (BR),15.0,Arthur (BR),-42.9,Chiwi
+02/06/2018,1349,3,3,H,25.6,Lautaro (LP) DiG.,-9.9,Lucio,-76.7,Mati G. (minimati),61.0,Pato
+02/06/2018,1350,3,3,H,46.9,Facu (UY),24.0,Fer,-18.7,Jess,-52.2,Nico
+02/06/2018,1351,3,3,H,-20.0,Felipe (CL),48.8,Guile,-73.8,Marcelo,15.0,Romo
+02/06/2018,1352,3,3,H,-38.0,Adriel,41.1,Fran,-16.8,Mauro,13.7,Michael
+02/06/2018,1353,3,3,H,42.4,Ini,-43.9,Lucas,-11.2,Luli,12.7,Mati
+02/06/2018,1354,3,3,H,50.5,Arthur (BR),-16.5,Fer,-39.9,Luli,5.9,Michael
+02/06/2018,1355,3,3,H,-19.3,Chiwi,6.3,Felipe (CL),53.8,Ini,-40.8,Mati G. (minimati)
+02/06/2018,1356,3,3,H,-51.5,Adriel,21.2,Lucas,41.8,Marcelo,-11.5,Pato
+02/06/2018,1357,3,3,H,48.8,Facu (UY),-47.6,Lautaro (LP) DiG.,26.1,Mati,-27.3,Romo
+02/06/2018,1358,3,3,H,-56.9,Adrian,-16.1,Fran,10.8,Guile,62.2,Nico
+02/06/2018,1359,3,3,H,-10.1,Amauri (BR),11.3,Jess,33.2,Lucio,-34.4,Mauro
+02/06/2018,1360,3,3,H,52.6,Fran,-41.2,Lucio,4.8,Marcelo,-16.2,Mati
+02/06/2018,1361,3,3,H,-18.6,Arthur (BR),61.1,Guile,-45.1,Ini,2.6,Pato
+02/06/2018,1362,3,3,H,40.0,Felipe (CL),-8.1,Jess,-47.8,Lautaro (LP) DiG.,15.9,Luli
+02/06/2018,1363,3,3,H,-38.9,Adriel,38.8,Amauri (BR),-11.4,Fer,10.5,Mati G. (minimati)
+02/06/2018,1364,3,3,H,14.5,Chiwi,53.2,Mauro,-51.7,Nico,-16.0,Romo
+02/06/2018,1365,3,3,H,22.6,Adrian,-46.6,Facu (UY),12.8,Lucas,-18.8,Michael
+03/06/2018,1366,3,3,H,9.8,Guile,-46.3,Ini,48.4,Michael,-41.9,Pato
+03/06/2018,1367,3,3,H,39.5,Amauri (BR),-40.8,Arthur (BR),-11.4,Facu (UY),12.7,Fran
+03/06/2018,1368,3,3,H,50.8,Guile,19.2,Ini,-24.4,Michael,-45.6,Pato
+03/06/2018,1369,3,3,H,35.0,Amauri (BR),-37.9,Arthur (BR),-11.8,Facu (UY),14.7,Fran
+03/06/2018,1370,3,3,H,57.0,Amauri (BR),19.3,Fran,-52.7,Guile,-23.6,Michael
+03/06/2018,1371,3,3,H,-20.1,Amauri (BR),11.5,Fran,57.7,Guile,-49.1,Michael
+02/09/2018,1372,3,4,H,-28.9,Lautaro (LP) DiG.,24.0,Lucio,-6.0,Mati,10.9,Nico
+02/09/2018,1373,3,4,H,26.3,Lautaro (LP) DiG.,-23.7,Lucio,-10.5,Mati,7.9,Nico
+02/09/2018,1374,3,4,H,15.1,Guile,-40.1,Lautaro (LP) DiG.,30.1,Mati,-5.1,Nico
+02/09/2018,1375,3,4,H,-27.6,Guile,-10.5,Lautaro (LP) DiG.,20.2,Mati,-2.1,Nico
+02/03/2019,1376,4,5,T,54.0,Guile,-16.8,Lucas,4.6,Luli,-41.8,Nico
+02/03/2019,1377,4,5,T,10.5,Agustina H,56.5,Facu (UY),-15.5,Jonathan,-51.5,Saulo
+02/03/2019,1378,4,5,T,-17.0,Agustina H,3.2,Jonathan,-38.5,Luli,52.3,Nico
+02/03/2019,1379,4,5,T,47.3,Facu (UY),6.6,Guile,-37.3,Lucas,-16.6,Saulo
+02/03/2019,1380,4,5,T,3.7,Guile,-18.6,Jonathan,59.2,Nico,-44.3,Saulo
+02/03/2019,1381,4,5,T,-19.7,Agustina H,-40.6,Facu (UY),53.8,Lucas,6.5,Luli
+02/03/2019,1382,4,5,T,-44.3,Agustina H,10.4,Guile,53.0,Jonathan,-19.1,Lucas
+02/03/2019,1383,4,5,T,-39.8,Facu (UY),4.1,Luli,51.7,Nico,-16.0,Saulo
+02/03/2019,1384,4,5,T,-45.3,Facu (UY),8.9,Guile,-15.0,Jonathan,51.4,Nico
+03/03/2019,1385,4,,H,-40.8,Agus I,-20.1,Guile,3.1,Javilo,57.8,Osqui
+03/03/2019,1386,4,,H,-57.4,Eze,16.9,Guile,-17.2,Javilo,57.7,Mati S.
+03/03/2019,1387,4,,H,7.4,Agus I,59.8,Guile,-19.5,Javilo,-47.7,Mati S.
+03/03/2019,1388,4,,H,-56.1,Eze,-22.7,Guile,9.9,Javilo,68.9,Mati S.
+10/03/2019,1389,4,,H,58.4,Alex,-19.7,Emma,8.1,Guile,-46.8,Ian
+10/03/2019,1390,4,,H,-28.7,Alex,17.0,Guile,-51.3,Ian,63.0,Mati S.
+13/03/2019,1391,4,,H,-61.8,Eze,-35.7,Mati S.,96.4,Oli,1.1,Osqui
+13/03/2019,1392,4,,H,11.5-30-10,Adrian,93.7,Koki,-2.3,Naoko,-62.9,Pato
+13/03/2019,1393,4,,H,15.4,Chiwi,-52.0,Lucas,-23.5,Mauro,60.1,Nico
+13/03/2019,1394,4,,H,73.5,Koki,-64.5,Lucio,-16.9,Naoko,7.9,Pato
+13/03/2019,1395,4,,T,10.3,Lucio,-56.7,Naoko,-15.0,Nico,61.4,Pato
+13/03/2019,1396,4,,T,-6.1,Chiwi,-48.1,Koki,-6.1,Lucas,60.3,Mauro
+13/03/2019,1397,4,,H,-16.0,Chiwi,78.0,Koki,6.0,Mauro,-68.0,Naoko
+13/03/2019,1398,4,,H,-19.3,Chiwi,-55.7,Koki,61.4,Mauro,13.6,Naoko
+13/03/2019,1399,4,,H,-58.7,Agus I,13.4,Guile,-17.7,Javilo,63.0,Mati S.
+13/03/2019,1400,4,,H,-17.3,Eze,56.5,Guile,-47.4,Mati S.,8.2,Osqui
+13/03/2019,1401,4,,H,49.1,Agus I,-40.7,Eze,6.5,Javilo,-14.9,Osqui
+13/03/2019,1402,4,,H,-17.2,Eze,51.2,Guile,9.8,Javilo,-43.8,Osqui
+17/03/2019,1403,4,6,T,10.2,Agus I,-13.3,Guile,52.3,Koki,-49.2,Martin O.
+17/03/2019,1404,4,6,T,-18.0,Javilo,8.1,Mati,53.2,Mati S.,-43.3,Naoko
+17/03/2019,1405,4,6,T,-14.9,Koki,-42.3,Martin O.,50.7,Mati S.,6.5,Naoko
+17/03/2019,1406,4,6,T,69.8,Agus I,-19.6,Guile,0.5,Javilo,-50.7,Mati
+17/03/2019,1407,4,6,T,26.0,Guile,26.0,Martin O.,-26.0,Mati,-26.0,Mati S.
+17/03/2019,1408,4,6,T,-40.2,Agus I,58.0,Javilo,-19.9,Koki,2.1,Naoko
+17/03/2019,1409,4,6,T,25.9,Agus I,-16.7,Guile,4.1,Mati S.,-43.3,Naoko
+17/03/2019,1410,4,6,T,56.4,Javilo,-18.4,Koki,-43.4,Martin O.,5.4,Mati
+17/03/2019,1411,4,6,T,57.8,Agus I,-17.5,Javilo,3.5,Koki,-43.8,Mati S.
+17/03/2019,1412,4,6,T,-45.1,Agus I,56.6,Javilo,11.2,Koki,-22.7,Mati S.
+24/03/2019,1413,4,,H,-48.0,Agus I,61.0,Javilo,10.3,Mati S.,-23.3,Osqui
+30/03/2019,1414,4,,H,-52.3,Koki,-17.4,Mati G. (minimati),11.9,Naoko,57.8,Nico
+30/03/2019,1415,4,,H,-57.3,Chiwi,-31.1,Ini,0.0,Koki,88.4,Mati G. (minimati)
+30/03/2019,1416,4,,H,-56.2,Fer,57.6,Max D.,-15.1,Naoko,13.7,Nico
+30/03/2019,1417,4,,H,-41.6,Chiwi,51.9,Ini,7.8,Koki,-18.1,Mati G. (minimati)
+02/04/2019,1418,4,,H,25.9-30+10,Eze,48.8,Javilo,-40.3,Kevin,-14.4,Osqui
+02/04/2019,1419,4,,H,-22.9,Guile,-50.4,Javilo,5.0,Kevin,68.3,Osqui
+07/04/2019,1420,4,20,T,-13.4,Fer,10.9,Guile,-56.3,Jonathan,58.8,Lucio
+07/04/2019,1421,4,20,T,-16.1,Jess,4.0,Mikami,-37.9,Nico,50.0,Pancho
+07/04/2019,1422,4,20,T,-27.7,Guile,3.1,Lucio,-50.3,Nico,74.9,Pancho
+07/04/2019,1423,4,20,T,3.3,Fer,55.2,Jess,-41.6,Jonathan,-16.9,Mikami
+07/04/2019,1424,4,20,T,-18.4,Fer,-36.2,Jess,5.6,Jonathan,53.6,Mikami
+07/04/2019,1425,4,20,T,11.3,Guile,46.5,Lucio,-15.9,Nico,-46.5,Pancho
+07/04/2019,1426,4,20,T,48.0,Guile,-16.1,Jess,-36.5,Lucio,4.6,Mikami
+07/04/2019,1427,4,20,T,5.3,Fer,-20.3,Jonathan,65.5,Nico,-50.5,Pancho
+07/04/2019,1428,4,20,T,53.0,Guile,-14.7,Lucio,-45.3,Mikami,7.0,Pancho
+07/04/2019,1429,4,20,T,-43.0,Guile,-17.0,Lucio,50.4,Mikami,9.6,Pancho
+07/04/2019,1430,4,,H,62.0,Adrian,-23.9,Koki,-48.4,Michael,10.3,Naoko
+07/04/2019,1431,4,,H,8.6,Adrian,-50.6,Koki,-17.3,Michael,59.3,Naoko
+07/04/2019,1432,4,,H,61.5,Guile,-25.5,Ian,-46.4,Kevin,10.4,Mati S.
+07/04/2019,1433,4,,H,68.8,Adrian,-54.6,Koki,7.2,Michael,-21.4,Naoko
+07/04/2019,1434,4,,H,8.0,Guile,60.2,Kevin,-47.3,Mati S.,-20.9,Osqui
+07/04/2019,1435,4,,H,-47.3,Adrian,0.2,Koki,-26.4,Michael,73.5,Naoko
+07/04/2019,1436,4,,H,10.2,Adrian,61.6,Koki,-14.3,Michael,-57.5,Naoko
+07/04/2019,1437,4,,H,-23.8,Adrian,-0.1,Koki,83.8,Michael,-59.9,Naoko
+07/04/2019,1438,4,,H,63.4,Eze,8.5,Guile,-47.9,Kevin,-24.0,Osqui
+07/04/2019,1439,4,,H,-54.4,Eze,63.9,Guile,-16.4,Kevin,6.9,Oli
+07/04/2019,1440,4,,H,5.4,Eze,72.3,Guile,-53.9,Kevin,-23.8,Osqui
+13/04/2019,1441,4,,H,-51.6,Ini,69.1,Koki,10.8,Naoko,-28.3,Nico
+13/04/2019,1442,4,,H,3.1,Ini,-23.4,Koki,64.3,Naoko,-44.0,Nico
+13/04/2019,1443,4,,H,-61.7,Ini,2.2,Koki,83.5,Naoko,-24.0,Nico
+13/04/2019,1444,4,,H,-46.4,Ini,59.3,Koki,-50.5,Naoko,7.6,Nico
+27/04/2019,1445,4,7,T,53.5,Lucio,-19.3,Nico,7.1,Pablo G.,-41.3,Pancho
+27/04/2019,1446,4,7,T,55.3,Lucio,-19.7,Nico,10.1,Pablo G.,-75.7,Pancho
+27/04/2019,1447,4,7,T,26.7,Lucio,-19.7,Nico,3.3,Pablo G.,-40.3,Pancho
+27/04/2019,1448,4,7,T,-15.1,Lucio,7.1,Nico,53.3,Pablo G.,-45.3,Pancho
+05/05/2019,1449,4,,H,50.2,Adrian,4.7,Koki,-37.9,Michael,-17.0,Naoko
+05/05/2019,1450,4,,H,18.7,Adrian,65.5,Koki,-23.4,Michael,-60.8,Naoko
+05/05/2019,1451,4,,H,57.2,Adrian,11.4,Koki,-19.5,Michael,-49.1,Naoko
+05/05/2019,1452,4,,H,-47.0,Adrian,-24.9,Koki,8.1,Michael,63.8,Naoko
+05/05/2019,1453,4,,H,-45.3,Adrian,-24.2,Koki,55.4,Michael,14.1,Naoko
+05/05/2019,1454,4,,H,69.3,Adrian,-21.8,Koki,-53.2,Michael,5.7,Naoko
+11/05/2019,1455,4,8,T,-43.4,Andres,55.0,Guile,5.5,Lucio,-17.1,Mati
+11/05/2019,1456,4,8,T,-18.9,Andres,-41.7,Guile,54.0,Lucio,6.6,Mati
+11/05/2019,1457,4,8,T,11.6,Andres,-44.3,Guile,-20.4,Lucio,53.1,Mati
+11/05/2019,1458,4,8,T,-16.9,Andres,-39.8,Guile,5.7,Lucio,51.0,Mati
+26/05/2019,1459,4,21,T,8.7,Chiwi,-14.1,Fran,-49.5,Marce,54.9,Mati
+26/05/2019,1460,4,21,T,58.5,Chiwi,-11.7,Fran,-62.3,Marce,15.5,Mati
+26/05/2019,1461,4,21,T,-44.4,Chiwi,56.5,Fran,-16.7,Marce,4.6,Mati
+26/05/2019,1462,4,21,T,-15.2,Chiwi,5.2,Fran,-36.5,Marce,46.5,Mati
+26/05/2019,1463,4,,H,-14.2,Adrian,69.9,Fer,6.8,Koki,-62.5,Naoko
+26/05/2019,1464,4,,H,-48.6,Adrian,59.6,Koki,11.4,Lucas,-52.4,Naoko
+26/05/2019,1465,4,,H,1.6,Adrian,-19.6,Duro,70.3,Fer,-52.3,Romo
+30/06/2019,1466,4,9,H,-51.2,Diego C.,61.8,Jess,-27.4,Manuel P.,16.8,Marce
+30/06/2019,1467,4,9,H,51.5,Felipe (CL),-42.1,Ini,11.0,Lucas,-20.4,Maria C.
+30/06/2019,1468,4,9,H,62.2,Gilberto K.,5.4,Guido (BR),-19.4,Mauro,-48.2,Nico
+30/06/2019,1469,4,9,H,64.3,Arthur M (MX),5.2,Mati,-16.9,Nicolas M.,-52.6,Nyamikki (DISCORD)
+30/06/2019,1470,4,9,H,-28.1,Guido (BR),19.7,Ini,-56.6,Manuel P.,65.0,Nyamikki (DISCORD)
+30/06/2019,1471,4,9,H,-64.9,Arthur M (MX),-33.2,Diego C.,74.1,Felipe (CL),24.0,Nico
+30/06/2019,1472,4,9,H,-96.8,Jess,24.4,Maria C.,90.5,Mati,-18.1,Mauro
+30/06/2019,1473,4,9,H,-42.4,Gilberto K.,51.4,Lucas,10.3,Marce,-19.3,Nicolas M.
+30/06/2019,1474,4,9,H,-25.1,Felipe (CL),19.0,Manuel P.,62.5,Mauro,-56.4,Nicolas M.
+30/06/2019,1475,4,9,H,58.2,Diego C.,7.5,Gilberto K.,-46.8,Ini,-18.9,Mati
+30/06/2019,1476,4,9,H,-4.1,Arthur M (MX),79.0,Guido (BR),-50.3,Jess,-24.6,Lucas
+30/06/2019,1477,4,9,H,-21.0,Marce,59.1,Maria C.,13.7,Nico,-51.8,Nyamikki (DISCORD)
+30/06/2019,1478,4,9,H,90.5,Lucas,-24.3,Manuel P.,-63.3,Mati,-2.9,Nico
+30/06/2019,1479,4,9,H,-22.9,Diego C.,0.9,Guido (BR),-67.7,Maria C.,89.7,Nicolas M.
+30/06/2019,1480,4,9,H,-20.4,Felipe (CL),11.9,Gilberto K.,77.3,Jess,-68.8,Nyamikki (DISCORD)
+30/06/2019,1481,4,9,H,81.5,Arthur M (MX),-35.1,Ini,-73.2,Marce,26.8,Mauro
+30/06/2019,1482,4,9,H,56.9,Guido (BR),16.3,Lucas,-8.1,Mauro,-65.1,Nicolas M.
+30/06/2019,1483,4,9,H,-13.0,Guido (BR),60.0,Lucas,11.2,Mauro,-58.2,Nicolas M.
+30/06/2019,1484,4,9,H,-49.5,Arthur M (MX),63.4,Felipe (CL),-29.3,Gilberto K.,15.4,Mati
+30/06/2019,1485,4,9,H,-49.5,Arthur M (MX),1.8,Felipe (CL),71.7,Gilberto K.,-24.0,Mati
+30/06/2019,1486,4,9,H,65.1,Felipe (CL),-21.9,Gilberto K.,-42.6,Guido (BR),-0.6,Lucas
+30/06/2019,1487,4,9,H,-14.4,Felipe (CL),15.3,Gilberto K.,83.2,Guido (BR),-84.1,Lucas
+30/06/2019,1488,4,,H,-11.0,Adrian,56.2,Koki,-56.3,Michael,11.1,Naoko
+30/06/2019,1489,4,,H,-48.0,Adrian,-1.9,Koki,-1.9,Michael,51.8,Naoko
+30/06/2019,1490,4,,H,-42.0,Adrian,5.6,Koki,55.7,Michael,-19.3,Naoko
+30/06/2019,1491,4,,H,-60.0,Adrian,66.7,Koki,-14.8,Michael,8.1,Naoko
+30/06/2019,1492,4,,H,-40.9,Adrian,3.6,Koki,56.3,Michael,-19.0,Naoko
+07/07/2019,1493,4,,H,9.5,Koki,-41.9,Naoko,-62.4,Nico,64.8,Pablo G.
+07/07/2019,1494,4,,H,-17.2,Adrian,65.4,Duro,-57.2,Lucas,-21.0,Michael
+07/07/2019,1495,4,,H,67.1,Koki,5.3,Michael,-53.5,Naoko,-18.9,Nico
+07/07/2019,1496,4,,H,8.4,Adrian,-15.4,Duro,48.7,Lucas,-41.7,Pablo G.
+07/07/2019,1497,4,,H,65.8,Koki,8.7,Michael,-61.9,Naoko,-12.6,Nico
+07/07/2019,1498,4,,H,53.9,Adrian,8.8,Duro,-19.3,Lucas,-43.4,Pablo G.
+07/07/2019,1499,4,,H,-24.0,Koki,15.5,Michael,67.8,Naoko,-59.3,Nico
+07/07/2019,1500,4,,H,-16.2,Adrian,-44.8,Duro,9.3,Michael,51.7,Nico
+07/07/2019,1501,4,,H,71.0,Koki,30.0,Lucas,-62.4,Naoko,-38.6,Pablo G.
+07/07/2019,1502,4,,H,61.5,Adrian,11.5,Duro,-17.5,Naoko,-55.5,Nico
+07/07/2019,1503,4,,H,-21.9,Koki,58.1,Lucas,-52.0,Michael,15.8,Pablo G.
+14/07/2019,1504,4,,H,69.0,Guile,4.6,Javilo,-17.3,Mati S.,-56.3,Osqui
+17/07/2019,1505,4,,H,-44.9,Koki,61.7,Naoko,-23.7,Nico,4.9,Pablo G.
+17/07/2019,1506,4,,H,8.9,Koki,-41.2,Naoko,-17.9,Nico,50.2,Pablo G.
+17/07/2019,1507,4,,H,-48.3,Adrian,61.3,Koki,-22.4,Mati,8.4,Naoko
+17/07/2019,1508,4,,H,1.5,Juli F,-20.3,Koki,60.7,Pablo G.,-42.9,Pedro
+17/07/2019,1509,4,,H,64.8,Adrian,21.7,Koki,-21.8,Mati,-64.7,Naoko
+17/07/2019,1510,4,,H,-58.0,Fer,13.2,Koki,61.8,Mati G. (minimati),-17.0,Naoko
+04/08/2019,1511,4,10,T,-13.8,Fran,-42.7,Javilo,49.3,Jess,7.2,Lautaro (LP) DiG.
+04/08/2019,1512,4,10,T,7.6,Haku/Kozi,-47.0,Lucas,54.3,Mati,-14.9,Naoko
+04/08/2019,1513,4,10,T,4.7,Chiwi,60.4,Lucio,-42.9,Mati G. (minimati),-22.2,Pedro
+04/08/2019,1514,4,10,T,0.0,Franco,-52.2,Koki,73.1,Mauro,-20.9,Pato
+04/08/2019,1515,4,10,T,-23.1,Fran,-74.1,Mati G. (minimati),9.0,Mauro,58.2,Naoko
+04/08/2019,1516,4,10,T,83.3,Koki,-64.3,Lautaro (LP) DiG.,19.2,Lucio,-38.2,Mati
+04/08/2019,1517,4,10,T,10.1,Franco,-45.6,Jess,-22.5,Haku/Kozi,58.0,Pedro
+04/08/2019,1518,4,10,T,-61.5,Chiwi,15.2,Javilo,-10.2,Lucas,56.5,Pato
+04/08/2019,1519,4,10,T,-45.9,Chiwi,8.5,Mati,56.0,Mauro,-18.6,Pedro
+04/08/2019,1520,4,10,T,9.1,Fran,-43.4,Franco,56.9,Lucio,-22.6,Pato
+04/08/2019,1521,4,10,T,-44.0,Haku/Kozi,-48.0,Lautaro (LP) DiG.,53.0,Lucas,9.0,Mati G. (minimati)
+04/08/2019,1522,4,10,T,-50.1,Javilo,-17.1,Jess,13.1,Koki,54.1,Naoko
+04/08/2019,1523,4,10,H,54.9,Koki,8.7,Lucio,-15.1,Mauro,-48.5,Pedro
+04/08/2019,1524,4,10,H,81.2,Lucas,-29.5,Mati,-62.0,Naoko,10.3,Pato
+04/08/2019,1525,4,10,H,59.3,Fran,-42.9,Franco,1.9,Koki,-18.3,Haku/Kozi
+04/08/2019,1526,4,10,H,67.0,Chiwi,1.8,Javilo,-46.7,Lautaro (LP) DiG.,-23.1,Mati G. (minimati)
+19/08/2019,1527,4,,H,-60.1,Eze,-28.4,Guile,13.8,Mati S.,74.7,Osqui
+25/08/2019,1528,4,,H,15.7,Adrian,-56.0,Koki,69.0,Michael,-28.7,Naoko
+25/08/2019,1529,4,,H,8.5,Adrian,49.9,Koki,-29.2,Michael,-29.2,Naoko
+25/08/2019,1530,4,,H,53.4,Adrian,-15.2,Koki,9.1,Michael,-47.3,Naoko
+25/08/2019,1531,4,,H,78.1,Adrian,8.2,Koki,-60.4,Michael,-25.9,Naoko
+28/08/2019,1532,4,,H,-42.6,Chiwi,49.6,Koki,-13.6,Lucio,6.6,Naoko
+28/08/2019,1533,4,,H,7.3,Chiwi,-12.8,Koki,-49.8,Lucio,50.3,Naoko
+01/09/2019,1534,4,,H,-23.4,Adrian,68.5,Koki,0.1,Michael,-45.2,Naoko
+01/09/2019,1535,4,,H,-45.8,Adrian,9.7,Koki,-19.6,Michael,55.7,Naoko
+01/09/2019,1536,4,,H,-41.4,Adrian,0.8,Koki,-19.9,Michael,60.5,Naoko
+01/09/2019,1537,4,,H,4.3,Adrian,-16.9,Koki,-47.4,Michael,60.0,Naoko
+01/09/2019,1538,4,,H,-19.1,Adrian,53.4,Koki,-40.4,Michael,6.1,Naoko
+15/09/2019,1539,4,,H,8.1,Ailén,-43.6,Koki,-13.9,Mati,49.4,Naoko
+15/09/2019,1540,4,,T,6.0,Ailén,-16.0,Koki,-43.2,Lucas,53.2,Pato
+15/09/2019,1541,4,,T,-21.3,Ailén,58.0,Lucas,-42.8,Mati,6.1,Naoko
+15/09/2019,1542,4,,H,60.7,Koki,10.3,Lucas,-10.5,Naoko,-60.5,Pato
+06/10/2019,1543,4,11,H,-45.8,Javilo,-17.8,Koki,9.6,Lucas,54.0,Lucio
+06/10/2019,1544,4,11,H,54.7,Ailén,12.8,Mati,-17.8,Romo,-49.7,Sofi
+06/10/2019,1545,4,11,H,-19.6,Federico,-44.0,Guile,5.3,Naoko,58.3,Pato
+06/10/2019,1546,4,11,H,-19.0,German,-41.5,Jess,52.7,Luli,7.8,Mauro
+06/10/2019,1547,4,11,H,-51.1,Mati G. (minimati),59.0,Mauro,-16.1,Naoko,8.2,Romo
+06/10/2019,1548,4,11,H,21.5,Guile,66.1,Javilo,-32.2,Jess,-55.4,Sofi
+06/10/2019,1549,4,11,H,-61.6,Lucio,-8.8,Luli,58.5,Nico,11.9,Pato
+06/10/2019,1550,4,11,H,-52.0,Federico,-18.3,Javilo,56.6,Luli,13.7,Romo
+06/10/2019,1551,4,11,H,-27.1,Koki,13.0,Mauro,63.6,Nico,-49.5,Sofi
+06/10/2019,1552,4,11,H,-18.5,Guile,75.4,Lucas,15.2,Mati,-72.1,Mati G. (minimati)
+06/10/2019,1553,4,11,H,-60.9,Ailén,-22.7,German,5.9,Lucio,77.7,Naoko
+06/10/2019,1554,4,11,H,-9.2,Jess,-60.5,Mati,57.6,Naoko,12.1,Nico
+06/10/2019,1555,4,11,H,-33.1,Ailén,90.1,Lucas,-58.5,Mauro,1.5,Pato
+06/10/2019,1556,4,11,H,-16.4,Federico,49.2,German,6.6,Koki,-39.4,Mati G. (minimati)
+06/10/2019,1557,4,11,H,-20.6,Federico,-40.8,Lucio,7.2,Nico,54.2,Sofi
+06/10/2019,1558,4,11,H,-42.3,German,-16.0,Javilo,50.5,Mati,7.8,Pato
+06/10/2019,1559,4,11,H,4.3,Ailén,-52.0,Guile,72.5,Koki,-24.8,Luli
+06/10/2019,1560,4,11,H,-18.7,Jess,78.9,Lucas,-70.0,Mati G. (minimati),9.8,Romo
+13/10/2019,1561,4,11,H,16.7,Lucas,-20.7,Luli,60.0,Mati,-56.0,Pato
+13/10/2019,1562,4,11,H,0.3,Lucas,-64.3,Luli,91.6,Mati,-27.6,Pato
+13/10/2019,1563,4,11,H,0.7,Koki,-21.6,Mauro,66.0,Naoko,-45.1,Nico
+13/10/2019,1564,4,11,H,-41.2,Koki,-74.1,Mauro,86.6,Naoko,28.7,Nico
+13/10/2019,1565,4,11,H,8.4,Lucas,-13.1,Mati,52.8,Naoko,-48.1,Nico
+13/10/2019,1566,4,11,H,-30.3,Lucas,-51.5,Mati,16.3,Naoko,65.5,Nico
+03/11/2019,1567,4,,H,9.2,Chiwi,65.1,Koki,-53.3,Mati,-21.0,Naoko
+03/11/2019,1568,4,,H,9.3,Chiwi,-11.8,Mati,57.3,Naoko,-84.8,Pablo G.
+03/11/2019,1569,4,,H,61.3,Adrian,-9.7,Ini,10.5,Koki,-62.1,Pablo G.
+10/11/2019,1570,4,,H,-18.9,Adrian,3.7,Koki,65.5,Michael,-50.3,Naoko
+10/11/2019,1571,4,,H,63.5,Adrian,20.2,Fer,-23.2,Koki,-60.5,Naoko
+13/11/2019,1572,4,,H,-13.3,Chiwi,7.3,Koki,-49.4,Naoko,55.4,Nico
+13/11/2019,1573,4,,H,-58.0,Chiwi,-15.0,Koki,59.8,Naoko,13.2,Nico
+01/12/2019,1574,4,12,T,-39.6,Guile,-17.0,Jess,49.7,Michael,6.9,Naoko
+01/12/2019,1575,4,12,T,5.5,German,49.2,Koki,-38.5,Mati S.,-16.2,Sofi
+01/12/2019,1576,4,12,T,51.7,Guile,-41.3,Koki,6.2,Michael,-16.6,Sofi
+01/12/2019,1577,4,12,T,5.3,German,-23.8,Jess,-48.6,Mati S.,67.1,Naoko
+01/12/2019,1578,4,12,T,-15.5,Guile,5.0,Jess,57.6,Mati S.,-47.1,Sofi
+01/12/2019,1579,4,12,T,-46.9,German,-11.8,Koki,49.6,Michael,9.1,Naoko
+01/12/2019,1580,4,12,T,52.3,German,6.9,Guile,-29.6,Mati S.,-29.6,Michael
+01/12/2019,1581,4,12,T,-30.2,Jess,-30.2,Koki,58.8,Naoko,1.6,Sofi
+01/12/2019,1582,4,12,T,-40.5,German,8.1,Guile,52.6,Michael,-20.2,Naoko
+01/12/2019,1583,4,12,T,13.5,German,54.0,Guile,-15.2,Michael,-52.3,Naoko
+21/12/2019,1584,4,13,H,-55.3,Facu (UY),-9.6,German,11.6,Marce,53.3,Mati
+21/12/2019,1585,4,13,H,4.1,Cecilia,-17.7,Koki,-45.0,Lucio,58.6,Nico
+21/12/2019,1586,4,13,H,-55.9,Andres,11.7,German,65.5,Marce,-21.3,Maria C.
+21/12/2019,1587,4,13,H,10.2,Facu (UY),63.4,Guile,-48.8,Lucio,-24.8,Mati
+21/12/2019,1588,4,13,H,7.0,Cecilia,58.8,Facu (UY),-45.8,Guile,-20.0,Maria C.
+21/12/2019,1589,4,13,H,5.5,Andres,-47.1,German,61.3,Koki,-19.7,Nico
+21/12/2019,1590,4,13,H,81.2,Andres,-64.5,Guile,20.3,Marce,-37.0,Nico
+21/12/2019,1591,4,13,H,-20.5,Cecilia,-40.8,Koki,5.3,Lucio,56.0,Mati
+21/12/2019,1592,4,13,H,8.3,Koki,-17.9,Marce,49.6,Maria C.,-40.0,Mati
+21/12/2019,1593,4,13,H,-45.1,Facu (UY),-18.2,German,3.1,Lucio,60.2,Nico
+21/12/2019,1594,4,13,H,-18.6,Andres,7.4,Cecilia,-39.9,Guile,51.1,Maria C.
+21/12/2019,1595,4,13,H,-14.1,Andres,12.5,Facu (UY),-65.1,Marce,66.7,Mati
+21/12/2019,1596,4,13,H,57.1,Andres,24.5,Facu (UY),-54.0,Marce,-27.6,Mati
+21/12/2019,1597,4,13,H,2.1,Cecilia,55.7,Koki,-39.8,Maria C.,-18.0,Nico
+21/12/2019,1598,4,13,H,-15.3,Cecilia,46.7,Koki,-37.7,Maria C.,6.3,Nico
+21/12/2019,1599,4,13,H,-21.6,Andres,0.8,Koki,-44.0,Mati,64.8,Nico
+21/12/2019,1600,4,13,H,11.8,Andres,-9.7,Koki,-57.1,Mati,55.0,Nico
+22/12/2019,1601,4,,H,8.8,Adrian,-46.0,Koki,51.1,Mati,-13.9,Naoko
+22/12/2019,1602,4,,H,-47.1,Chiwi,10.0,Mati,-13.4,Max D.,50.5,Naoko
+22/12/2019,1603,4,,H,-50.2,Adrian,-27.4,Chiwi,67.2,Koki,10.4,Max D.
+26/12/2019,1604,4,,H,10.5,Falconer,-49.6,Guile,57.5,Mati S.,-18.4,Osqui
+26/12/2019,1605,4,,H,61.3,Falconer,3.3,Guile,-18.3,Mati S.,-46.3,Osqui
+02/01/2020,1606,4,,H,-16.7,Eze,-52.3,Guile,8.6,Kelo,60.4,Osqui
+04/01/2020,1607,4,,H,-54.7,Ariel M.,7.8,Guile,61.8,Mati S.,-14.9,Osqui
+04/01/2020,1608,4,,H,18.6,Ariel M.,-25.8,Guile,-53.3,Mati S.,60.5,Osqui
+08/01/2020,1609,4,,H,-57.2,Koki,-27.2,Mati,11.6,Naoko,72.8,Nico
+08/01/2020,1610,4,,H,52.6,Koki,6.8,Marce,-45.5,Mati,-13.9,Naoko
+14/01/2020,1611,4,,H,17.1,Guile,-29.1,Javilo,-54.6,Mati S.,66.6,Osqui
+14/01/2020,1612,4,,H,55.9,Guile,7.1,Javilo,-19.7,Mati S.,-43.3,Osqui
+14/01/2020,1613,4,,H,-48.2,Guile,-26.6,Javilo,-5.0,Mati S.,79.8,Osqui
+22/01/2020,1614,4,,H,4.2,Agus I,-42.0,Falconer,-16.8,Kevin,54.6,Mati S.
+22/01/2020,1615,4,,H,-60.2,Falconer,-12.4,Guile,9.8,Mati S.,62.8,Osqui
+22/01/2020,1616,4,,H,-25.2,Eze,59.1,Guile,15.2,Kevin,-49.1,Mati S.
+22/01/2020,1617,4,,H,-62.0,Eze,-0.3,Guile,62.6,Kevin,-0.3,Mati S.
+23/01/2020,1618,4,,H,-45.1,Eze,-13.7,Javilo,7.9,Kevin,50.9,Osqui
+23/01/2020,1619,4,,H,17.4,Agus I,60.9,Javilo,-56.1,Kevin,-22.2,Osqui
+23/01/2020,1620,4,,H,-42.1,Agus I,54.3,Javilo,-6.1,Kevin,-6.1,Osqui
+23/01/2020,1621,4,,H,50.6,Eze,-19.0,Javilo,-40.3,Kevin,8.7,Osqui
+26/01/2020,1622,4,,H,-14.1,Adrian,9.4,Lucas,-47.9,Mati,52.6,Mauro
+26/01/2020,1623,4,,H,10.0,Koki,-11.2,Mauro,53.9,Naoko,-52.7,Romo
+26/01/2020,1624,4,,H,62.8,Adrian,-42.3,Koki,1.4,Mati,-21.9,Naoko
+26/01/2020,1625,4,,H,-41.2,Koki,50.5,Lucas,9.7,Mauro,-19.0,Romo
+03/02/2020,1626,4,,H,52.4,Eze,-27.5,Guile,-27.5,Kelo,2.6,Marian
+06/02/2020,1627,4,,H,18.1,Ariel M.,58.2,Eze,-7.8,Javilo,-68.5,Kevin
+09/02/2020,1628,4,,H,7.0,Ariel M.,-13.6,Guile,-40.8,Kelo,47.4,Marian
+09/02/2020,1629,4,,H,-53.4,Ariel M.,78.1,Guile,-23.0,Kelo,-1.7,Marian
+09/02/2020,1630,4,,H,-43.0,Ariel M.,53.3,Kelo,-51.1,Marian,10.8,Osqui
+13/02/2020,1631,4,,H,-1.8,Eze,81.7,Guile,-26.5,Kelo,-53.4,Kevin
+13/02/2020,1632,4,,H,9.0,Eze,-56.2,Guile,-15.7,Kelo,62.9,Kevin
+16/02/2020,1633,4,,H,-22.7,Ariel M.,1.8,Guile,-48.5,Javilo,38.4,Marian
+16/02/2020,1634,4,,H,-40.3,Guile,4.8,Javilo,50.8,Kevin,-15.3,Marian
+16/02/2020,1635,4,,H,-56.4,Ariel M.,17.3,Guile,58.9,Kevin,-19.8,Osqui
+20/02/2020,1636,4,,H,61.6,Guile,-20.5,Javilo,-0.1,Kelo,-71.0,Kevin
+20/02/2020,1637,4,,H,3.7,Guile,52.6,Javilo,-39.6,Kelo,-16.7,Kevin
+20/02/2020,1638,4,,H,-106.0,Eze,20.2,Guile,62.5,Javilo,-6.7,Kevin
+20/02/2020,1639,4,,H,55.4,Eze,11.0,Guile,-15.9,Javilo,-50.5,Kevin
+23/02/2020,1640,4,,H,61.3,Adrian,20.7,Koki,-62.7,Mati,-19.3,Naoko
+23/02/2020,1641,4,,H,-16.3,Adrian,5.6,Koki,48.6,Marce,-37.9,Naoko
+23/02/2020,1642,4,,H,63.4,Juan Mateo,5.4,Koki,-50.0,Mati,-18.8,Naoko
+23/02/2020,1643,4,,H,-51.9,Juan Mateo,11.2,Koki,-43.4,Mati,54.1,Naoko
+26/02/2020,1644,4,,H,5.4,Ariel M.,-46.1,Guile,-16.3,Javilo,57.0,Osqui
+26/02/2020,1645,4,,H,-27.3,Ariel M.,13.2,Eze,-48.4,Guile,62.5,Javilo
+27/02/2020,1646,4,,H,-17.3,Chiwi,58.1,Koki,-51.0,Marce,10.2,Mauro
+27/02/2020,1647,4,,H,-48.1,Chiwi,-25.5,Ini,61.8,Juan Mateo,11.8,Marce
+27/02/2020,1648,4,,H,-41.5,Ini,-17.5,Juan Mateo,50.4,Koki,-21.4,Mauro
+01/03/2020,1649,4,14,T,12.4,Fran,27.8,Javilo,-50.5,Juan Mateo,-19.6,Osqui
+01/03/2020,1650,4,14,T,52.1,Chiwi,-42.1,Davy,-15.5,Koki,5.5,Mauro
+01/03/2020,1651,4,14,T,-18.1,Davy,57.2,Fran,2.6,Koki,-41.7,Osqui
+01/03/2020,1652,4,14,T,8.7,Chiwi,-13.5,Javilo,-49.0,Juan Mateo,53.8,Mauro
+01/03/2020,1653,4,14,T,56.0,Javilo,6.6,Koki,-75.3,Mauro,-17.3,Osqui
+01/03/2020,1654,4,14,T,-43.7,Chiwi,56.5,Davy,5.5,Fran,-18.3,Juan Mateo
+01/03/2020,1655,4,14,T,59.7,Davy,-51.1,Javilo,-22.9,Juan Mateo,14.3,Koki
+01/03/2020,1656,4,14,T,-26.9,Chiwi,-78.5,Fran,75.4,Mauro,0.0,Osqui
+01/03/2020,1657,4,14,H,-59.2,Davy,68.4,Javilo,-27.7,Koki,18.5,Mauro
+02/03/2020,1658,4,,H,-20.1,Eze,56.0,Falconer,-42.3,Marian,6.4,Osqui
+04/03/2020,1659,4,,H,-55.3,Ariel M.,14.3,Guile,59.4,Ian,-48.4,Osqui
+04/03/2020,1660,4,,H,6.6,Ariel M.,56.1,Eze,-16.9,Guile,-75.8,Ian
+08/03/2020,1661,4,,H,-59.4,Ariel M.,82.4,Guile,-26.6,Marian,3.6,Osqui
+08/03/2020,1662,4,,H,-17.7,Eze,-43.6,Guile,50.9,Marian,10.4,Osqui
+08/03/2020,1663,4,,H,-23.3,Ariel M.,13.9,Guile,-46.4,Marian,55.8,Osqui
+08/03/2020,1664,4,,H,54.2,Eze,-76.9,Guile,-19.0,Marian,11.7,Osqui
+09/03/2020,1665,4,,H,-17.4,Eze,-45.2,Falconer,8.8,Ian,53.8,Mati S.
+09/03/2020,1666,4,,H,-20.3,Falconer,-47.3,Ian,55.6,Marian,12.0,Mati S.
+11/03/2020,1667,4,,H,50.0,Eze,-41.0,Ian,-20.4,Mati S.,-18.6,Osqui
+11/03/2020,1668,4,,H,77.7,Eze,12.9,Ian,-19.9,Mati S.,-70.7,Osqui
+12/03/2020,1669,4,,H,-57.9,Ariel M.,10.8,Eze,12.7,Guile,59.8,Kevin
+16/03/2020,1670,4,,H,-49.3,Ariel M.,56.2,Eze,-17.3,Falconer,10.4,Guile
+16/03/2020,1671,4,,H,-67.4,Eze,64.6,Guile,15.8,Mati S.,-14.0,Osqui
+16/03/2020,1672,4,,H,-21.9,Eze,-50.2,Guile,62.6,Mati S.,9.5,Osqui
+16/03/2020,1673,4,,H,-23.8,Ariel M.,62.1,Eze,-46.4,Mati S.,8.1,Osqui
+19/04/2020,1674,4,15,H,-20.1,Marian,54.8,Mati S.,7.0,Falconer,-41.7,Guile
+19/04/2020,1674,4,15,H,6.1,Mati,-21.0,Pato,-47.1,Juan Mateo,62.0,Kime
+19/04/2020,1675,4,15,H,-55.8,Andres,67.8,Lucas,19.3,Lucio,-31.3,Mauro
+19/04/2020,1676,4,15,H,70.7,Fran,-62.4,Kress,-18.4,Nico,10.1,Romo
+19/04/2020,1677,4,15,H,-0.4,Chiwi,-22.8,Dario,70.4,German,-47.2,Valeria
+19/04/2020,1678,4,15,H,-62.0,Andres,-28.5,Juan Mateo,79.4,Romo,11.1,Valeria
+19/04/2020,1679,4,15,H,9.8,Chiwi,56.2,Fran,-43.3,Lucio,-22.7,Mati
+19/04/2020,1680,4,15,H,-66.0,Dario,-20.7,Mauro,14.2,Nico,72.5,Pato
+19/04/2020,1681,4,15,H,-27.2,German,-48.3,Kime,77.5,Kress,-2.0,Lucas
+19/04/2020,1682,4,15,H,60.8,German,-44.5,Juan Mateo,2.4,Lucio,-18.7,Nico
+19/04/2020,1683,4,15,H,61.0,Andres,-47.1,Dario,11.8,Kress,-25.7,Mati
+19/04/2020,1684,4,15,H,9.2,Chiwi,56.8,Lucas,-47.0,Pato,-19.0,Romo
+19/04/2020,1685,4,15,H,-29.3,Fran,75.6,Kime,12.4,Mauro,-58.7,Valeria
+19/04/2020,1686,4,15,H,74.8,Dario,-17.7,Fran,-71.9,Juan Mateo,14.8,Lucas
+19/04/2020,1687,4,15,H,96.0,German,-69.2,Mati,74.8,Mauro,-33.4,Romo
+19/04/2020,1688,4,15,H,-18.5,Kress,74.4,Lucio,5.3,Pato,-61.2,Valeria
+19/04/2020,1689,4,15,H,51.0,Andres,-40.7,Chiwi,-20.2,Kime,9.9,Nico
+19/04/2020,1690,4,15,H,6.9,Andres,-15.5,German,69.4,Lucio,-60.8,Romo
+19/04/2020,1691,4,15,H,-16.4,Andres,14.7,German,55.6,Lucio,-53.9,Romo
+19/04/2020,1692,4,15,H,8.4,Fran,-52.9,Kress,61.3,Lucas,-16.8,Pato
+19/04/2020,1693,4,15,H,17.0,Fran,-58.3,Kress,64.0,Lucas,-22.7,Pato
+19/04/2020,1694,4,15,H,68.0,Fran,-25.2,German,4.8,Lucas,-47.6,Lucio
+19/04/2020,1695,4,15,H,14.6,Fran,-54.7,German,-18.7,Lucas,58.8,Lucio
+16/08/2020,1696,5,16,H,-14.2,Chiwi,10.5,Facu (UY),-38.1,Jess,41.8,Lucio
+16/08/2020,1697,5,16,H,0.9,Lucas,-13.9,Mauro,48.2,Nico,-35.2,Pato
+16/08/2020,1698,5,16,H,58.4,Dario,-14.2,FedeRama,-2.5,Luli,-41.7,Pedro
+16/08/2020,1699,5,16,H,47.7,Jrash,-19.3,Maria C.,-32.1,Mati,3.7,Romo
+16/08/2020,1700,5,16,H,-25.9,Andres,-3.5,Cecilia,-15.5,Mati G. (minimati),44.9,Wapuro
+16/08/2020,1701,5,16,H,35.5,Chiwi,-12.1,Luli,1.7,Maria C.,-25.1,Pato
+16/08/2020,1702,5,16,H,45.5,Jrash,5.9,Nico,-38.1,Pedro,-13.3,Wapuro
+16/08/2020,1703,5,16,H,8.4,Andres,-12.7,Dario,-39.1,Jess,43.4,Romo
+16/08/2020,1704,5,16,H,-26.5,Cecilia,-11.2,Facu (UY),37.9,Mati,-0.2,Mauro
+16/08/2020,1705,5,16,H,11.1,FedeRama,70.2,Lucas,-21.8,Lucio,-59.5,Mati G. (minimati)
+16/08/2020,1706,5,16,H,-33.4,Andres,-12.2,Chiwi,0.8,Mauro,44.8,Pedro
+16/08/2020,1707,5,16,H,43.0,Facu (UY),-0.9,FedeRama,-28.3,Nico,-13.8,Romo
+16/08/2020,1708,5,16,H,36.8,Cecilia,-10.0,Dario,4.8,Lucas,-31.6,Maria C.
+16/08/2020,1709,5,16,H,87.1,Lucio,-32.7,Luli,3.7,Mati,-58.1,Wapuro
+16/08/2020,1710,5,16,H,-15.5,Jess,7.6,Jrash,40.8,Mati G. (minimati),-32.9,Pato
+16/08/2020,1711,5,16,H,43.0,Chiwi,-26.1,Lucas,-15.2,Romo,-1.7,Wapuro
+16/08/2020,1712,5,16,H,-27.0,Cecilia,1.4,Jess,-13.5,Luli,39.1,Nico
+16/08/2020,1713,5,16,H,2.8,Dario,-10.3,Jrash,-29.6,Lucio,37.1,Mauro
+16/08/2020,1714,5,16,H,-54.1,Andres,-14.9,FedeRama,9.3,Mati,59.7,Pato
+16/08/2020,1715,5,16,H,51.5,Facu (UY),-16.9,Maria C.,-6.6,Mati G. (minimati),-28.0,Pedro
+17/08/2020,1716,5,16,H,6.6,Chiwi,38.5,Facu (UY),-34.9,Mauro,-10.2,Nico
+17/08/2020,1717,5,16,H,-38.7,Chiwi,45.6,Facu (UY),2.1,Mauro,-9.0,Nico
+17/08/2020,1718,5,16,H,1.6,Dario,-31.8,Jrash,-9.4,Lucas,39.6,Lucio
+17/08/2020,1719,5,16,H,-23.1,Dario,-41.2,Jrash,59.7,Lucas,4.6,Lucio
+17/08/2020,1720,5,16,H,-5.2,Facu (UY),37.6,Lucas,-38.4,Lucio,6.0,Nico
+17/08/2020,1721,5,16,H,7.8,Facu (UY),-36.9,Lucas,-17.8,Lucio,46.9,Nico
+21/08/2020,1722,5,,H,-27.6,Chiwi,-61.5,Fran,9.2,Mati,59.9-30+30+20,Pedro
+21/08/2020,1723,5,,H,19.2-30-10,Chiwi,36.5+20,Facu (UY),14.2-30-30,Fran,30.1-30+10,Pedro
+22/08/2020,1724,5,,H,55.7+20,Chiwi,16.3,Facu (UY),-84.9,Fran,-7.1,Pedro
+22/08/2020,1725,5,,H,100.8,Chiwi,5.5,Facu (UY),-85.5,Fran,-20.8,Pedro
+22/08/2020,1726,5,,H,-22.2,Chiwi,3.3,Fran,-48.3,Ini,67.2,Pedro
+22/08/2020,1727,5,,H,-49.0,Ini,-14.0,Marce,10.0,Maria C.,53.0,Pedro
+29/08/2020,1728,5,,H,-1.7-30-30,Facu (UY),65.5-30+30+20,Marce,34.9-30+10,Mati,1.3-30-10,Pedro
+26/09/2020,1729,5,17,H,-15.2,Andres,14.9,German,58.6,Lucio,-58.3,Pedro
+26/09/2020,1730,5,17,H,53.7,Jess,-21.3,Jrash,9.7,Marce,-42.1,Maria C.
+26/09/2020,1731,5,17,H,-26.5,Ailén,79.2,Lucas,-55.4,Mauro,2.7,Romo
+26/09/2020,1732,5,17,H,11.1,German,-21.5,Jess,-50.5,Lucas,60.9,Marce
+26/09/2020,1733,5,17,H,12.8,Ailén,-25.7,Jrash,58.9,Lucio,-46.0,Mauro
+26/09/2020,1734,5,17,H,-59.5,Andres,-17.0,Maria C.,9.9,Pedro,66.6,Romo
+26/09/2020,1735,5,17,H,-66.9,Ailén,73.4,German,13.8,Marce,-20.3,Maria C.
+26/09/2020,1736,5,17,H,9.2,Andres,-45.4,Jrash,-22.3,Lucas,58.5,Mauro
+26/09/2020,1737,5,17,H,4.9,Jess,-64.2,Lucio,-16.0,Pedro,75.3,Romo
+26/09/2020,1738,5,17,H,69.8,Andres,6.5,Lucio,-16.4,Marce,-59.9,Romo
+26/09/2020,1739,5,17,H,-39.6,German,8.0,Jess,49.2,Maria C.,-17.6,Mauro
+26/09/2020,1740,5,17,H,-49.2,Ailén,10.7,Jrash,54.8,Lucas,-16.3,Pedro
+27/09/2020,1741,5,17,H,-55.0,Andres,7.9,Jess,60.6,Lucas,-13.5,Marce
+27/09/2020,1742,5,17,H,54.8,Andres,4.1,Jess,-18.7,Lucas,-40.2,Marce
+27/09/2020,1743,5,17,H,-25.2,German,64.9,Jess,10.1,Lucas,-49.8,Lucio
+27/09/2020,1744,5,17,H,-19.8,German,14.6,Jess,57.0,Lucas,-51.8,Lucio
+10/10/2020,1745,5,18,H,75.6,Cecilia,0.5,Nico,0,Luli,-60,FedeRama
+10/10/2020,1746,5,18,H,-22.9,Davy,-46.5,Felipe (CL),3.0,Jrash,66.4,Pato
+10/10/2020,1747,5,18,H,-16.4,Ailén,53.3,Marce,12.5,Mauro,-49.4,Franco (CL) (furanchizuko)
+10/10/2020,1748,5,18,H,-20.6,Fran,59.2,Jess,-44.9,Lucio,6.3,Leonardo (CL) (caballo)
+10/10/2020,1749,5,18,H,-100.8,Cristian (CL),81.0,Lucas,-2.0,Romo,21.8,Sebastián (PE) (SethSeroly)
+10/10/2020,1750,5,18,H,-36.9,Cristian (CL),47.1,Davy,-15.2,Fran,5.0,Lucas R. (BR) (LagadoBR)
+10/10/2020,1751,5,18,H,-22.3,Andres,-46.5,Maria C.,11.7,Cristóbal (CL) (Kenzo),57.1,Lucila (Luuucilu
+10/10/2020,1752,5,18,H,-53.5,FedeRama,-13.6,Felipe (CL),11.1,Jess,56.0,Romo
+10/10/2020,1753,5,18,H,-13.4,Cecilia,-62.1,Lucas,68.8,Lucio,6.7,Pato
+10/10/2020,1754,5,18,H,-13.2,Jrash,66.0,Luli,-66.7,Leonardo (CL) (caballo),13.9,Sebastián (PE) (SethSeroly)
+10/10/2020,1755,5,18,H,-44.9,Andres,-19.0,Nico,4.9,Pato,59.0,Sebastián (PE) (SethSeroly)
+10/10/2020,1756,5,18,H,-31.8,Lucio,82.3,Maria C.,7.8,Romo,-58.3,Franco (CL) (furanchizuko)
+10/10/2020,1757,5,18,H,58.0,Cristian (CL),10.1,Jess,-21.6,Marce,-46.5,Lucila (Luuucilu
+10/10/2020,1758,5,18,H,54.7,Ailén,-61.4,Lucas,-6.7,Leonardo (CL) (caballo),13.4,Lucas R. (BR) (LagadoBR)
+10/10/2020,1759,5,18,H,20.4,Fran,67.3,Jrash,-81.7,Mauro,-6.0,Cristóbal (CL) (Kenzo)
+10/10/2020,1760,5,18,H,75.2,FedeRama,5.9,Cristóbal (CL) (Kenzo),-29.7,Sebastián (PE) (SethSeroly),-51.4,Franco (CL) (furanchizuko)
+10/10/2020,1761,5,18,H,17.4,Lucio,-51.1,Luli,59.9,Mauro,-26.2,Lucas R. (BR) (LagadoBR)
+10/10/2020,1762,5,18,H,56.1,Ailén,-20.5,Cecilia,-46.4,Fran,10.8,Lucila (Luuucilu
+10/10/2020,1763,5,18,H,-2.6,Davy,-23.6,Jess,-63.8,Maria C.,90.0,Nico
+10/10/2020,1764,5,18,H,-19.5,Andres,-56.1,Felipe (CL),3.5,Marce,72.1,Leonardo (CL) (caballo)
+10/10/2020,1765,5,18,H,52.9,Cecilia,-47.1,Marce,-14.5,Nico,8.7,Romo
+10/10/2020,1766,5,18,H,67.7,Cristian (CL),-32.5,Felipe (CL),18.6,Maria C.,-53.8,Mauro
+10/10/2020,1767,5,18,H,-55.4,FedeRama,-21.1,Jrash,7.5,Lucila (Luuucilu,69.0,Lucas R. (BR) (LagadoBR)
+10/10/2020,1768,5,18,H,11.6,Andres,56.4,Davy,-50.7,Lucas,-17.3,Franco (CL) (furanchizuko)
+10/10/2020,1769,5,18,H,9.2,Ailén,-57.0,Luli,-23.1,Pato,70.9,Cristóbal (CL) (Kenzo)
+11/10/2020,1770,5,18,H,7.4,Cecilia,57.2,Nico,-50.1,Cristóbal (CL) (Kenzo),-14.5,Lucas R. (BR) (LagadoBR)
+11/10/2020,1771,5,18,H,56.1,Ailén,-47.0,Davy,6.9,Jess,-16.0,Sebastián (PE) (SethSeroly)
+11/10/2020,1772,5,18,H,47.7,Cecilia,7.2,Nico,-41.1,Cristóbal (CL) (Kenzo),-13.8,Lucas R. (BR) (LagadoBR)
+11/10/2020,1773,5,18,H,76.5,Ailén,-21.9,Davy,-55.2,Jess,0.6,Sebastián (PE) (SethSeroly)
+11/10/2020,1774,5,18,H,26.8,Ailén,70.2,Cecilia,-30.4,Nico,-66.6,Sebastián (PE) (SethSeroly)
+11/10/2020,1775,5,18,H,2.0,Ailén,78.3,Cecilia,-22.5,Nico,-57.8,Sebastián (PE) (SethSeroly)
+18/03/2023,1776,5,22,H,49.6,Dario,5.2,Lucas,-40.6,Pol,-15.2,Walt
+18/03/2023,1777,5,22,H,-50.1,Gabriela,-28.8,Mauro,78.5,Nico,0.4,Paula
+18/03/2023,1778,5,22,H,-23.8,Andre,66.2,Guile,-53.7,Lloocky,11.3,Martin
+18/03/2023,1779,5,22,H,-27.1,Camilo,5.3,Guille,78.3,Jess,-56.5,Tomas
+18/03/2023,1780,5,22,H,-17.1,Chiwi,-40.0,German,49.8,Haku/Kozi,7.3,Lucio
+18/03/2023,1781,5,22,H,-42.1,Chiwi,94.8,Martin,10.4,Paula,-63.1,Tomas
+18/03/2023,1782,5,22,H,-13.0,Guille,-117.6,Lloocky,106.5,Lucas,24.1,Lucio
+18/03/2023,1783,5,22,H,-53.4,Camilo,65.7,German,-20.4,Nico,8.1,Walt
+18/03/2023,1784,5,22,H,5.7,Gabriela,56.4,Guile,-43.4,Haku/Kozi,-18.7,Pol
+18/03/2023,1785,5,22,H,53.4,Andre,6.7,Dario,-45.7,Jess,-14.4,Mauro
+18/03/2023,1786,5,22,H,-53.0,Gabriela,70.1,German,3.3,Jess,-20.4,Lloocky
+18/03/2023,1787,5,22,H,12.6,Andre,-60.1,Camilo,65.5,Chiwi,-18.0,Pol
+18/03/2023,1788,5,22,H,72.1,Haku/Kozi,1.2,Lucas,-47.3,Mauro,-26.0,Tomas
+18/03/2023,1789,5,22,H,17.6,Dario,57.3,Lucio,-56.8,Martin,-18.1,Nico
+18/03/2023,1790,5,22,H,-77.8,Guille,25.2,Guile,-27.4,Paula,80.0,Walt
+18/03/2023,1791,5,22,H,64.5,Camilo,23.2,Guile,-26.4,Lucio,-61.3,Mauro
+18/03/2023,1792,5,22,H,-47.3,Jess,57.6,Haku/Kozi,13.2,Martin,-23.5,Walt
+18/03/2023,1793,5,22,H,14.0,Chiwi,-21.9,Dario,-53.5,Gabriela,61.4,Guille
+18/03/2023,1794,5,22,H,-43.3,Andre,6.9,German,-14.1,Lucas,50.5,Paula
+18/03/2023,1795,5,22,H,-48.1,Lloocky,10.2,Nico,-19.3,Pol,57.2,Tomas
+19/03/2023,1796,5,22,H,11.1,Guile,-16.6,Lucas,52.7,Martin,-47.2,Paula
+19/03/2023,1797,5,22,H,-48.5,Guile,58.4,Lucas,6.8,Martin,-16.7,Paula
+19/03/2023,1798,5,22,H,-54.6,German,-17.9,Haku/Kozi,56.4,Lucio,16.1,Nico
+19/03/2023,1799,5,22,H,51.3,German,7.3,Haku/Kozi,-40.5,Lucio,-18.1,Nico
+19/03/2023,1800,5,22,H,54.1,Lucas,-15.5,Lucio,-45.4,Martin,6.8,Nico
+19/03/2023,1801,5,22,H,-17.2,Lucas,-58.4,Lucio,9.7,Martin,65.9,Nico
+12/11/2023,1804,5,23,T,52.8,Chiwi,6.5,Jess,-16.6,Lloocky,42.7,Paula
+12/11/2023,1805,5,23,T,-47.1,Guille,57.1,Lukas,8.7,Mauro,-18.7,Mel
+12/11/2023,1806,5,23,T,84.9,Marian,2.9,Mati,-30.7,Nicolas (Claudio friend),-57.1,Walt
+12/11/2023,1807,5,23,T,-20.0,Claudia,-42.8,German,6.9,Laura,55.9,Mati S.
+12/11/2023,1808,5,23,T,4.5,Laura,-46.9,Lloocky,63.1,Lukas,-20.7,Mati
+12/11/2023,1809,5,23,T,6.8,German,51.5,Guille,-44.2,Paula,-14.1,Walt
+12/11/2023,1810,5,23,T,49.9,Chiwi,8.0,Claudia,-41.9,Mel,-16.0,Nicolas (Claudio friend)
+12/11/2023,1811,5,23,T,-17.0,Jess,5.0,Marian,-40.1,Mati S.,52.1,Mauro
+12/11/2023,1812,5,23,T,49.5,Guille,-17.0,Lloocky,-37.0,Mati S.,4.5,Nicolas (Claudio friend)
+12/11/2023,1813,5,23,T,-15.3,Claudia,-44.9,Lukas,8.3,Marian,51.9,Paula
+12/11/2023,1814,5,23,T,-13.8,Chiwi,8.1,German,-47.6,Mati,53.3,Mel
+03/03/2024,1816,6,,H,-11.9,Mati,9.3,Nico,-92.4,Lukas,55.0,Chiwi
+03/03/2024,1817,6,,H,18.4,Nico,-24.9,Guile,-59.9,Chiwi,66.4,Adrian
+03/03/2024,1818,6,,H,-50.7,Lukas,-14.1,Mati G,8.0,Mauro,56.8,Fofo
+03/03/2024,1819,6,,H,-40.3,Chiwi,-16.4,Mauro,49.9,Fran,6.8,Guille
+03/03/2024,1820,6,,H,-47.2,Lukas,-22.3,Fofo,59.3,Laura,10.2,Daniel
+03/03/2024,1821,6,,H,64.7,Nico,-51.0,Guile,-62.2,Mati G,8.5,Leo
+03/03/2024,1822,6,,H,-19.6,Mati,6.5,Adrian,-41.6,Jess,54.7,Guille
+07/03/2024,1823,6,,H,50.6,Mati,-43.2,Pato,7.4,Marce,-14.8,Lucas
+07/03/2024,1824,6,,H,-27.0,Nico,59.5,Marce,-49.2,Lucas,16.7,German
+07/03/2024,1825,6,,H,62.0,Nico,9.4,Pato,-51.6,Lucas,-19.8,German
+07/03/2024,1826,6,,H,11.5,Pato,-21.0,Marce,94.3,German,-84.8,Ailén
+08/03/2024,1827,6,,H,50.4,Nico,9.9,Adrian,-16.6,Haku/Kozi,-43.7,Kime
+08/03/2024,1828,6,,H,-71.0,Pato,29.2,Lucas,-32.4,Mauro,74.2,Lucio
+16/03/2024,1829,6,,H,-47.5,Nico,6.3,Adrian,58.0,Claudia,-16.8,Haku/Kozi
+18/03/2024,1830,6,,H,3.2,Nico,72.2,Marce,-53.9,Claudia,-21.5,Haku/Kozi
+20/03/2024,1831,6,,H,61.3,Mati,4.7,Chiwi,-46.3,Pato,-19.7,Claudia
+21/03/2024,1832,6,,H,2.1,Gabriela,68.3,Haku/Kozi,-48.0,Andres,-22.4,Tomas
+22/03/2024,1833,6,,H,-20.0,Nico,55.9,Guile,6.2,Haku/Kozi,-42.1,Andres
+22/03/2024,1834,6,,H,56.6,Marce,-21.5,Adrian,14.7,Haku/Kozi,-49.8,Andres
+22/03/2024,1835,6,,H,82.1,Marce,-52.3,Adrian,-3.8,Haku/Kozi,-26.0,Andres
+23/03/2024,1836,6,,H,7.5,Marce,58.7,Andres,-46.2,MegaJL,-20.0,Guille
+23/03/2024,1837,6,,H,58.6,Marce,16.2,Andres,-25.1,Danbliz,-49.7,MegaJL
+27/03/2024,1838,6,,H,13.2,Mauro,-16.3,Andres,56.8,Danbliz,-53.7,MegaJL
+27/03/2024,1839,6,,H,-57.2,Marce,16.0,Haku/Kozi,66.0,Andres,-24.8,Paula
+28/03/2024,1840,6,24,H,-51.6,Marce,-20.8,Haku/Kozi,58.9,Paula,13.5,San
+28/03/2024,1841,6,24,H,-44.5,Mati,12.1,Adrian,54.4,Haku/Kozi,-22.0,Fran
+28/03/2024,1842,6,24,H,72.3,Mati,9.1,Haku/Kozi,-58.4,Jess,-23.0,Huan
+28/03/2024,1843,6,24,H,-48.6,Nico,-22.9,Chiwi,68.0,Mauro,3.5,Paula
+28/03/2024,1844,6,24,H,-21.0,Chiwi,8.8,Mauro,53.5,Jess,-41.3,San
+29/03/2024,1845,6,24,H,50.9,Marce,-16.4,Andres,-44.6,Paula,10.1,Fran
+29/03/2024,1846,6,24,H,6.1,Chiwi,-50.5,Mauro,63.4,Haku/Kozi,-19.0,Jess
+29/03/2024,1847,6,24,H,58.0,Chiwi,-49.5,Mauro,-17.2,Haku/Kozi,8.7,Jess
+29/03/2024,1848,6,24,H,56.9,Marce,-19.9,Claudia,12.8,Paula,-49.8,San
+29/03/2024,1849,6,24,H,62.6,Chiwi,-13.9,Mauro,8.1,Haku/Kozi,-56.8,Jess
+29/03/2024,1850,6,24,H,-61.0,Haku/Kozi,8.1,Jess,-16.6,Paula,69.5,Huan
+29/03/2024,1851,6,24,H,-58.7,Haku/Kozi,2.7,Jess,82.1,Paula,-26.1,San
+29/03/2024,1852,6,24,H,-47.5,Marce,-22.7,Adrian,14.2,Jess,56.0,Fran
+29/03/2024,1853,6,24,H,8.0,Mati,-55.6,Haku/Kozi,-14.1,Andres,61.7,Fran
+29/03/2024,1854,6,24,H,-71.5,Haku/Kozi,94.9,Andres,-31.0,San,7.6,Javilo
+29/03/2024,1855,6,24,H,-44.8,Nico,8.7,Jess,55.7,Paula,-19.6,Huan
+30/03/2024,1856,6,24,H,7.2,Marce,59.0,Jess,-20.7,Paula,-45.5,Javilo
+30/03/2024,1857,6,24,H,15.5,Marce,-51.7,Andres,-22.1,Jess,58.3,Fran
+30/03/2024,1858,6,24,H,11.1,Nico,-10.2,Marce,61.1,Haku/Kozi,-62.0,Javilo
+30/03/2024,1859,6,24,H,-22.1,Pato,59.0,Andres,-49.2,Danbliz,12.3,Jess
+31/03/2024,1860,6,24,H,72.7,Mati,-50.1,Nico,3.8,Haku/Kozi,-26.4,Huan
+31/03/2024,1861,6,24,H,16.4,Nico,-7.6,Haku/Kozi,67.8,Huan,-76.6,Javilo
+31/03/2024,1862,6,24,H,4.2,Chiwi,67.0,Marce,-48.9,Mauro,-22.3,Jess
+31/03/2024,1863,6,24,H,42.6,Chiwi,-21.2,Pato,64.9,Haku/Kozi,-1.1,San
+31/03/2024,1864,6,24,H,12.0,Chiwi,-27.5,Haku/Kozi,69.6,Andres,-54.1,San
+31/03/2024,1865,6,24,H,9.5,Mati,-52.5,Marce,-18.7,Haku/Kozi,61.7,Jess
+02/04/2024,1866,6,24,H,8.2,Marce,-43.0,Haku/Kozi,49.3,Jess,-14.5,Fofo
+02/04/2024,1867,6,24,H,3.6,Haku/Kozi,-23.8,Jess,74.4,Huan,-54.2,Fofo
+02/04/2024,1868,6,24,H,-55.8,Haku/Kozi,67.9,Jess,14.8,Paula,-26.9,Fofo
+02/04/2024,1869,6,24,H,8.2,Adrian,-18.2,Mauro,-38.7,Jess,48.7,Fofo
+02/04/2024,1870,6,24,H,2.1,Nico,67.1,Haku/Kozi,-49.7,Danbliz,-19.5,Paula
+02/04/2024,1871,6,24,H,7.3,Adrian,-17.3,Jess,-40.5,Paula,50.5,Fofo
+02/04/2024,1872,6,24,H,14.5,Marce,-53.7,Adrian,-32.0,Haku/Kozi,71.2,Fofo
+02/04/2024,1873,6,24,H,-20.6,Marce,-49.2,Adrian,57.2,Haku/Kozi,12.6,Jess
+04/04/2024,1874,6,,H,-17.1,Marce,-39.3,Adrian,4.2,Andres,52.2,Fofo
+05/04/2024,1875,6,,H,12.9,Nico,59.8,Marce,-23.5,Adrian,-49.2,Haku/Kozi
+05/04/2024,1876,6,,H,54.6,Nico,-18.4,Marce,-47.4,Andres,11.2,Fofo
+07/04/2024,1877,6,,H,8.3,Mati,-42.2,Lukas,53.1,Fofo,-19.2,Walt
+07/04/2024,1878,6,,H,12.2,Nico,-56.6,Guile,-16.4,Adrian,60.8,Mauro
+07/04/2024,1879,6,,H,6.4,Chiwi,61.7,Paula,-128.3,Juli,-19.8,Lloocky
+07/04/2024,1880,6,,H,57.8,Mati,-24.2,Nico,11.1,Chiwi,-45.7,Lloocky
+07/04/2024,1881,6,,H,64.9,Guile,-56.1,Fofo,17.6,Guille,-26.4,Walt
+07/04/2024,1882,6,,H,-50.0,Adrian,68.2,Mauro,-23.5,Tomas,5.3,Juli
+07/04/2024,1883,6,,H,-14.6,Mati,6.6,Nico,-44.6,Chiwi,50.6,Guille
+07/04/2024,1884,6,,H,-24.2,Paula,59.3,Laura,-45.4,Diego,10.3,Buli
+07/04/2024,1885,6,,H,60.2,Lukas,-20.2,Tomas,-50.9,Laura,10.9,Lloocky
+07/04/2024,1886,6,,H,6.2,Guile,61.1,Adrian,-16.0,Fofo,-51.3,Buli
+07/04/2024,1887,6,,H,54.9,Mauro,-19.4,Paula,-44.1,Diego,8.6,Juli
+07/04/2024,1888,6,,T,-50.6,Mati,60.0,Nico,10.8,Lukas,-20.2,Lloocky
+07/04/2024,1889,6,,T,11.5,Chiwi,-21.5,Adrian,-42.0,Tomas,52.0,Paula
+08/04/2024,1890,6,,H,67.1,Marce,-56.3,Adrian,-25.0,Haku/Kozi,14.2,Fofo
+14/04/2024,1891,6,,H,-54.5,Mati,-19.4,Guile,16.9,Adrian,57.0,Fofo
+14/04/2024,1892,6,,H,54.7,Guile,-18.9,Adrian,7.7,Andres,-43.5,Fofo
+14/04/2024,1893,6,,H,-51.0,Nico,-14.5,Andres,54.2,Huan,11.3,Fofo
+15/04/2024,1894,6,,H,-0.7,Mati,-47.5,Fofo,74.4,Guille,-26.2,Mel
+15/04/2024,1895,6,,H,-18.4,Chiwi,-48.1,Jess,61.4,Fofo,5.1,Mel
+29/04/2024,1896,6,,H,57.2,Nico,-15.9,Andres,12.2,Huan,-53.5,Guille
+05/05/2024,1897,6,,H,-15.4,Nico,53.4,Adrian,-45.9,Jess,6.9,Fofo
+05/05/2024,1898,6,,H,57.4,Guile,14.4,Lucas,-24.2,Daniel,-47.6,Diego
+05/05/2024,1899,6,,H,-47.8,Nico,-4.6,Guile,77.4,Claudia,-26.0,Diego
+05/05/2024,1900,6,,H,5.3,Adrian,55.3,Jess,-43.5,Fofo,-18.1,Daniel
+05/05/2024,1901,6,,H,68.1,Lucas,-25.5,Laura,5.7,Juli,-48.3,Buli
+05/05/2024,1902,6,,H,-3.6,Nico,-24.1,Guile,75.1,Jess,-47.4,Guille
+05/05/2024,1903,6,,H,4.8,Claudia,-16.3,Mauro,63.9,Fofo,-52.4,Diego
+05/05/2024,1904,6,,H,-12.7,Lucas,8.0,Laura,48.6,Juli,-43.9,Buli
+09/06/2024,1905,6,,H,56.2,Guile,6.7,Chiwi,-45.9,Adrian,-17.0,Fofo
+09/06/2024,1906,6,,H,5.9,Mati,-49.0,Nico,-20.4,Chiwi,63.5,Adrian
+09/06/2024,1907,6,,H,57.3,Mati,6.1,Nico,-42.6,Guile,-20.8,Fofo
+09/06/2024,1908,6,,H,-39.7,Mati,-16.5,Nico,50.1,Chiwi,-33.9,Adrian
+07/07/2024,1909,6,,H,-40.0,Mati,53.5,Chiwi,-19.3,Laura,5.8,Guille
+04/08/2024,1910,6,,H,23.0,Mati,88.8,Fofo,-104.8,Laura,-7.0,Guille
+04/08/2024,1911,6,,H,-42.3,Mati,-15.5,Jess,-8.1,Fofo,25.9,Guille
+04/08/2024,1912,6,,H,-0.9,Jess,-5.2,Paula,-47.1,Lloocky,53.2,Tami
+01/09/2024,1913,6,,H,66.1,Chiwi,17.3,Paula,-23.7,Fofo,-59.7,Lloocky
+01/09/2024,1914,6,,H,71.0,Mati,-34.3,Claudia,-34.3,Fofo,-2.4,Guille
+01/09/2024,1915,6,,H,-46.6,Mati,56.1,Chiwi,12.4,Paula,-21.9,Guille
+06/10/2024,1916,6,,H,-14.6,Mati,52.0,Lukas,9.8,Mauro,-47.2,Juli
+06/10/2024,1917,6,,H,35.4,Mati,-18.8,Lukas,35.4,Laura,-52.0,Guille
+06/10/2024,1918,6,,H,-19.3,Lucas,7.4,Juli,-50.5,Lloocky,62.4,Tami
+06/10/2024,1919,6,,H,73.2,Lukas,3.4,Mauro,-49.9,Laura,-26.7,Tami
+06/10/2024,1920,6,,H,-22.2,Mati,-46.2,Lucas,64.5,Guille,3.9,Szarps
+11/10/2024,1921,6,,H,-52.2,Haku/Kozi,-23.5,Maxi,72.5,Kime,3.2,Lloocky
+11/10/2024,1922,6,,H,95.1,Haku/Kozi,-71.3,Maxi,15.3,Kime,-39.1,Lloocky
+03/11/2024,1923,6,,H,-56.3,Nico,10.8,Chiwi,-19.1,Adrian,64.6,Fofo
+03/11/2024,1924,6,,H,7.2,Tomas,-21.9,Paula,-84.1,Szarps,58.8,Juli
+03/11/2024,1925,6,,H,7.6,Nico,-48.5,Lukas,60.4,Adrian,-19.5,Fofo
+03/11/2024,1926,6,,H,59.0,German,-46.9,Mauro,4.9,Szarps,-17.0,Juli
+03/11/2024,1927,6,,H,60.8,Nico,-14.8,Lukas,-53.7,Chiwi,6.7,Tomas
+03/11/2024,1928,6,,H,-21.2,Paula,68.7,Sofi,1.5,Szarps,-49.0,Juli
+01/12/2024,1929,6,,H,1.6,Guile,-43.8,Guille,64.2,Juli,-22.0,Lloocky
+01/12/2024,1930,6,,H,15.5,Nico,67.0,Lucas,-25.9,Jess,-56.6,Laura
+01/12/2024,1931,6,,H,12.1,Mauro,52.3,Fofo,-43.9,Szarps,-21.5,Juli
+01/12/2024,1932,6,,H,-21.0,Guile,13.1,Chiwi,53.3,Adrian,-45.4,Guille
+01/12/2024,1933,6,,H,-44.4,Nico,5.1,Guile,57.0,Mauro,-17.7,Tomas
+01/12/2024,1934,6,,H,5.9,Mati,-40.5,Lucas,51.5,Adrian,-16.9,Jess
+01/12/2024,1935,6,,H,13.5,Fofo,-25.5,Szarps,66.2,Lloocky,-54.2,Lautaro
+01/12/2024,1936,6,,H,68.5,Chiwi,2.8,Paula,-25.9,Guille,-46.4,Juli
+07/12/2024,1937,6,25,H,9.6,Lukas,-43.0,German,-20.5,Fofo,53.9,Dario
+07/12/2024,1938,6,25,H,-46.1,Lucas,53.9,Haku/Kozi,-13.9,Maxi,6.1,Szarps
+07/12/2024,1939,6,25,H,-18.0,Andres,57.6,Tomas,2.7,Paula,-42.3,Uma
+07/12/2024,1940,6,25,H,-25.7,Guile,-46.0,Danbliz,59.7,Kime,12.0,Lautaro
+07/12/2024,1941,6,25,H,-25.4,Mati,57.4,Nico,-48.3,Huan,16.3,Dario A
+07/12/2024,1942,6,25,H,14.3,Pato,61.9,Jess,-58.4,Somar,-17.8,Felicitas
+07/12/2024,1943,6,25,H,18.1,Lukas,-72.4,Guile,-7.8,Jess,62.1,Huan
+07/12/2024,1944,6,25,H,-40.2,Nico,8.4,Andres,49.3,Szarps,-17.5,Lautaro
+07/12/2024,1945,6,25,H,57.6,Tomas,-21.2,Kime,-51.0,Felicitas,14.6,Dario A
+07/12/2024,1946,6,25,H,-11.6,Lucas,11.3,German,57.9,Somar,-57.6,Uma
+07/12/2024,1947,6,25,H,57.9,Mati,-20.4,Haku/Kozi,-46.7,Paula,9.2,Dario
+07/12/2024,1948,6,25,H,-23.6,Pato,-2.2,Danbliz,84.1,Maxi,-58.3,Fofo
+07/12/2024,1949,6,25,H,-53.2,Haku/Kozi,60.5,Tomas,-26.3,Huan,19.0,Fofo
+07/12/2024,1950,6,25,H,7.3,Lukas,47.4,Danbliz,-39.1,Szarps,-15.6,Dario A
+07/12/2024,1951,6,25,H,10.8,Nico,-12.9,German,52.9,Paula,-50.8,Felicitas
+07/12/2024,1952,6,25,H,-18.1,Lucas,2.5,Andres,-42.3,Jess,57.9,Kime
+07/12/2024,1953,6,25,H,4.3,Guile,53.9,Pato,-18.8,Uma,-39.4,Dario
+07/12/2024,1954,6,25,H,58.2,Mati,-15.5,Maxi,10.1,Somar,-52.8,Lautaro
+07/12/2024,1955,6,25,H,-50.3,Huan,8.1,Uma,-12.0,Felicitas,54.2,Lautaro
+07/12/2024,1956,6,25,H,10.6,Mati,-50.9,Pato,62.8,Tomas,-22.5,Szarps
+07/12/2024,1957,6,25,H,-43.5,Andres,10.9,Maxi,-19.7,Dario,52.3,Dario A
+07/12/2024,1958,6,25,H,19.0,Guile,61.8,Lucas,-16.2,Paula,-64.6,Fofo
+07/12/2024,1959,6,25,H,-19.0,Nico,14.9,Lukas,-54.8,Somar,58.9,Kime
+07/12/2024,1960,6,25,H,56.5,German,7.5,Haku/Kozi,-15.1,Danbliz,-48.9,Jess
+07/12/2024,1961,6,25,H,-56.5,Lukas,9.2,Tomas,59.9,Maxi,-12.6,Dario
+07/12/2024,1962,6,25,H,-13.6,Mati,-51.5,Nico,58.1,German,7.0,Dario A
+07/12/2024,1963,6,25,H,9.9,Lukas,-20.2,Tomas,59.4,Maxi,-49.1,Dario
+07/12/2024,1964,6,25,H,9.6,Mati,62.2,Nico,-55.7,German,-16.1,Dario A
+07/12/2024,1965,6,25,H,-46.8,Nico,15.9,German,-26.1,Tomas,57.0,Maxi
+07/12/2024,1966,6,25,H,-67.9,Nico,59.8,German,-8.4,Tomas,16.5,Maxi
+09/03/2025,1961,6,,H,66.5,Chiwi,1.1,Fofo,-21.1,Guile,-46.5,Tami
+09/03/2025,1962,6,,H,72.3,Lucas,4.4,Adrian,-26.4,Jess,-50.3,Nico
+09/03/2025,1963,6,,H,81.5,Paula,6.8,Mati,-30.8,Lukas,-58.5,Szarps
+09/03/2025,1964,6,,H,55.7,Guile,14.5,Fofo,-22.7,Dario A,-47.5,Tami
+09/03/2025,1965,6,,H,63.1,Adrian,3.5,Walt,-18.3,Chiwi,-48.3,Lucas
+09/03/2025,1966,6,,H,64.5,Jess,20.3,Paula,-23.1,Laura,-62.7,Mati
+09/03/2025,1967,6,,H,61.3,Szarps,4.8,Guille,-19.1,Nico,-47,Lucas?
+09/03/2025,1968,6,,H,62.5,Guille,9,Chiwi,-15.2,Lucas,-56.3,Walt
+09/03/2025,1969,6,,H,65.6,Mati,17.3,Fofo,-29.2,Nico,-53.7,Paula
+09/03/2025,1970,6,,H,69.2,Guile,0.7,Jess,-23.6,Dario A,-46.3,Szarps
+06/04/2025,1971,6,,H,49.2,Fofo,6,Mati,-16.2,Lautaro,-39,Tami
+06/04/2025,1972,6,,H,72.1,Kime,27.3,Lukas,-30.8,Guile,-68.6,Nico
+06/04/2025,1973,6,,H,54.6,Paula,6.3,Daniel,-19.7,Dario A,-41.2,Szarps
+06/04/2025,1974,6,,H,53.1,Daniel,11.2,Nico,-9,Fofo,-55.3,Kime
+06/04/2025,1975,6,,H,63.4,Szarps,2.8,Tami,-17.4,Lukas,-48.8,Guile
+06/04/2025,1976,6,,H,50.3,Guile,6.6,Lautaro,-13.8,Paula,-43.1,Nico
+06/04/2025,1977,6,,H,56.5,Guille,9,Mati,-21.7,Kime,-43.8,Tami
+11/05/2025,1978,6,,H,55.4,Adrian,13.1,Nico,-16.7,Chiwi,-51.8,Mati
+11/05/2025,1979,6,,H,25.2,Dario A,-2.2,Tomas,-14.9,Paula,-49.1,Fofo
+11/05/2025,1980,6,,H,58,Guile,16.6,Chiwi,-25.6,Daniel,-49,Szarps
+11/05/2025,1981,6,,H,72,Felicitas,1,Mati,-19.8,Nico,-53.2,Adrian
+11/05/2025,1982,6,,H,61,Felicitas,5.4,Nico,-22.7,Szarps,-43.7,Guile
+11/05/2025,1983,6,,H,67.9,Dario A,6.4,Adrian,-13.8,Guille,-60.5,Daniel
+11/05/2025,1984,6,,H,71.5,Chiwi,1.3,Tomas,-21.5,Mati,-51.3,Laura
+06/07/2025,1985,6,,H,56.6,Guile,4.1,Mati,-20.3,Dario A,-40.4,Szarps
+06/07/2025,1986,6,,H,85.9,Paula,5.7,Lloocky,-28.6,Guille,-63,Lautaro
+06/07/2025,1987,6,,H,98.8,Chiwi,-7.1,Adrian,-34.2,Lautaro,-57.5,Felicitas
+06/07/2025,1988,6,,H,72.5,Szarps,-0.2,Mati,-25.5,Paula,-46.8,Lloocky
+06/07/2025,1989,6,,H,56.7,Dario A,2,Fofo,-18.2,Tami,-42.5,Feli
+06/07/2025,1990,6,,H,54.3,Guile,-20.2,Guille,-30.3,Lautaro,-43.8,Lloocky
+06/07/2025,1991,6,,H,52.2,Tami,8.8,Fofo,-18.2,Szarps,-42.8,Dario A
+06/07/2025,1992,6,,H,54.8,Paula,9.2,Felicitas,-45.5,Feli,-60.5,Chiwi
+03/08/2025,1993,6,,H,60.9,Nico,5.6,Mati,-18.2,Lukas,-48.3,Feli
+03/08/2025,1994,6,,H,58.1,Chiwi,1.5,Adrian,-18.6,Nico,-41,Feli
+03/08/2025,1995,6,,H,65.3,Szarps,4.8,Paula,-19,Fofo,-51.1,Guile
+03/08/2025,1996,6,,H,70.7,Guille,2.8,Szarps,-17.3,Paula,-56.2,Chiwi
+03/08/2025,1997,6,,H,30.8,Mati,-7.3,Laura,-19,Fofo,-44.5,Adrian
+03/08/2025,1998,6,,H,54,Fofo,7.6,Szarps,-19.2,Paula,-82.4,Guille
+07/09/2025,1999,6,,H,47.7,Guille,7.5,Mati,-14.7,Fofo,-40.5,Feli
+07/09/2025,2000,6,,H,89.8,Tomas,-28.2,Nico,-1.2,Juan Mateo,-60.4,Tami
+07/09/2025,2001,6,,H,80.1,Nico,-21.6,Tomas,0.1,Fofo,-58.6,Feli
+07/09/2025,2002,6,,H,-43.9,Tami,-20.2,Juan Mateo,8.5,Mati,55.6,Fofo

@@ -1,0 +1,153 @@
+/* Link Requests Management Styles */
+.container {
+    @apply space-y-6;
+}
+
+.header {
+    @apply flex justify-between items-center;
+}
+
+.title {
+    @apply text-2xl font-bold text-foreground;
+}
+
+.description {
+    @apply text-muted-foreground;
+}
+
+.filters {
+    @apply flex space-x-2;
+}
+
+.loadingContainer {
+    @apply flex items-center justify-center p-8;
+}
+
+.loadingContent {
+    @apply text-center;
+}
+
+.spinner {
+    @apply animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto;
+}
+
+.loadingText {
+    @apply mt-2 text-sm text-muted-foreground;
+}
+
+.requestsGrid {
+    @apply grid grid-cols-1 gap-4;
+}
+
+.requestCard {
+    @apply relative bg-card border-border;
+}
+
+.cardHeader {
+    @apply flex justify-between items-start;
+}
+
+.cardHeaderContent {
+    @apply flex items-center gap-3;
+}
+
+.iconContainer {
+    @apply p-2 bg-primary/10 rounded-lg;
+}
+
+.icon {
+    @apply h-5 w-5 text-primary;
+}
+
+.cardTitle {
+    @apply text-lg text-foreground;
+}
+
+.cardSubtitle {
+    @apply text-sm text-muted-foreground;
+}
+
+.statusContainer {
+    @apply flex items-center gap-2;
+}
+
+.cardContent {
+    @apply space-y-4;
+}
+
+.infoGrid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+}
+
+.infoSection {
+    @apply space-y-2;
+}
+
+.infoTitle {
+    @apply font-medium text-sm text-foreground;
+}
+
+.infoContent {
+    @apply space-y-1 text-sm text-muted-foreground;
+}
+
+.infoItem {
+    @apply flex items-center gap-2;
+}
+
+.infoLabel {
+    @apply font-medium text-foreground;
+}
+
+.infoValue {
+    @apply text-muted-foreground;
+}
+
+.datesSection {
+    @apply mt-4 pt-4 border-t border-border;
+}
+
+.datesGrid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-muted-foreground;
+}
+
+.dateItem {
+    @apply flex items-center gap-2;
+}
+
+.dateLabel {
+    @apply font-medium text-foreground;
+}
+
+.dateValue {
+    @apply text-muted-foreground;
+}
+
+.actionsContainer {
+    @apply mt-4 flex justify-end space-x-2;
+}
+
+.emptyState {
+    @apply text-center py-8 bg-card border-border;
+}
+
+.emptyIcon {
+    @apply h-12 w-12 text-muted-foreground mx-auto mb-4;
+}
+
+.emptyTitle {
+    @apply text-lg font-medium text-foreground mb-2;
+}
+
+.emptyDescription {
+    @apply text-muted-foreground;
+}
+
+/* Additional hardcoded classes */
+.noteContainer {
+    @apply mt-2 p-2 bg-card rounded border;
+}
+
+.processedContainer {
+    @apply mt-4 p-4 bg-card rounded border;
+}

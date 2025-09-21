@@ -1,0 +1,171 @@
+/* Página de Temporadas */
+.seasonsPage {
+    @apply pt-4;
+}
+
+.hero {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8;
+}
+
+.heroTitle {
+    @apply text-4xl font-bold text-gray-900 dark:text-white mb-2 flex items-center justify-center gap-3;
+}
+
+.heroIcon {
+    @apply h-8 w-8 text-blue-500;
+}
+
+.heroSubtitle {
+    @apply text-xl text-gray-600 dark:text-gray-400;
+}
+
+.content {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8;
+}
+
+.seasonsGrid {
+    @apply grid gap-6 md:grid-cols-2 lg:grid-cols-3;
+}
+
+.seasonCard {
+    @apply hover:shadow-lg transition-shadow;
+}
+
+.seasonHeader {
+    @apply flex items-center justify-between;
+}
+
+.seasonTitle {
+    @apply flex items-center gap-2;
+}
+
+.seasonIcon {
+    @apply h-5 w-5;
+}
+
+.seasonBadge {
+    @apply bg-green-500;
+}
+
+.seasonContent {
+    @apply space-y-3;
+}
+
+.seasonPeriod {
+    @apply text-sm text-muted-foreground;
+}
+
+.periodIcon {
+    @apply h-4 w-4 inline mr-2 text-muted-foreground;
+}
+
+.statsGrid {
+    @apply grid grid-cols-4 gap-3 pt-2;
+}
+
+.statItem {
+    @apply text-center;
+}
+
+.statIcon {
+    @apply h-4 w-4 mb-1;
+}
+
+.statIconTrophy {
+    @apply text-yellow-500;
+}
+
+.statIconUsers {
+    @apply text-blue-500;
+}
+
+.statIconChart {
+    @apply text-green-500;
+}
+
+.statIconSettings {
+    @apply text-purple-500;
+}
+
+.statValue {
+    @apply text-2xl font-bold;
+}
+
+.statLabel {
+    @apply text-xs text-foreground/70;
+}
+
+.rulesSection {
+    @apply pt-2 border-t border-gray-200 dark:border-gray-700;
+}
+
+.rulesText {
+    @apply text-sm text-muted-foreground;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+    .hero {
+        @apply px-3 py-6;
+    }
+
+    .heroTitle {
+        @apply text-2xl mb-2 gap-2;
+    }
+
+    .heroIcon {
+        @apply h-6 w-6;
+    }
+
+    .heroSubtitle {
+        @apply text-lg;
+    }
+
+    .content {
+        @apply px-3 pb-6;
+    }
+
+    .seasonsGrid {
+        @apply grid-cols-1 gap-4;
+    }
+
+    .seasonHeader {
+        @apply flex-col items-start gap-2;
+    }
+
+    .seasonTitle {
+        @apply text-base;
+    }
+
+    .statsGrid {
+        @apply grid-cols-2 gap-2 pt-2;
+    }
+
+    .statValue {
+        @apply text-xl;
+    }
+
+    .statLabel {
+        @apply text-xs;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+    .heroTitle {
+        @apply text-3xl;
+    }
+
+    .heroSubtitle {
+        @apply text-xl;
+    }
+
+    .seasonsGrid {
+        @apply grid-cols-2 gap-5;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .seasonsGrid {
+        @apply grid-cols-2 gap-6;
+    }
+}

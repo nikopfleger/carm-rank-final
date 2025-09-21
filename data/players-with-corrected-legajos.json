@@ -1,0 +1,847 @@
+[
+  {
+    "nickname": "Mati",
+    "legajo": 1,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Nico",
+    "legajo": 2,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Lukas",
+    "legajo": 3,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Guille",
+    "legajo": 4,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Chiwi",
+    "legajo": 5,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Pato",
+    "legajo": 6,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Marce",
+    "legajo": 7,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Mati G",
+    "legajo": 8,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Lucas",
+    "legajo": 9,
+    "tipo": "real"
+  },
+  {
+    "nickname": "German",
+    "legajo": 10,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Adrian",
+    "legajo": 11,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Ailen",
+    "legajo": 12,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Leo",
+    "legajo": 13,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Claudia",
+    "legajo": 14,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Mauro",
+    "legajo": 15,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Gabriela",
+    "legajo": 16,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Haku/Kozi",
+    "legajo": 17,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Fran",
+    "legajo": 18,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Tomas",
+    "legajo": 19,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Adriel",
+    "legajo": 20,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Jess",
+    "legajo": 21,
+    "tipo": "real"
+  },
+  {
+    "nickname": "MegaJL",
+    "legajo": 22,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Paula",
+    "legajo": 23,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Agus",
+    "legajo": 24,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "San",
+    "legajo": 25,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Huan",
+    "legajo": 26,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Agus I",
+    "legajo": 27,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Maxi",
+    "legajo": 28,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Sofi",
+    "legajo": 29,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Agustina H",
+    "legajo": 30,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Ailén",
+    "legajo": 31,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Akito",
+    "legajo": 32,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Alan",
+    "legajo": 33,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Alberto",
+    "legajo": 34,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Aldana",
+    "legajo": 35,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Alejandro",
+    "legajo": 36,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Alex",
+    "legajo": 37,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Laura",
+    "legajo": 38,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Amauri (BR)",
+    "legajo": 39,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Andre",
+    "legajo": 40,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Andres",
+    "legajo": 41,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Angel",
+    "legajo": 42,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Angie",
+    "legajo": 43,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Ariel M.",
+    "legajo": 44,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Arthur (BR)",
+    "legajo": 45,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Arthur M (MX)",
+    "legajo": 46,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Auca",
+    "legajo": 47,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Azul",
+    "legajo": 48,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Buli",
+    "legajo": 49,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Camilo",
+    "legajo": 50,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Carlos",
+    "legajo": 51,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Cecilia",
+    "legajo": 52,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Cristian (CL)",
+    "legajo": 53,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Cristóbal (CL) (Kenzo)",
+    "legajo": 54,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Danbliz",
+    "legajo": 55,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Daniel",
+    "legajo": 56,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Daniel (old)",
+    "legajo": 57,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Daniela",
+    "legajo": 58,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Dario A",
+    "legajo": 59,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Davy",
+    "legajo": 60,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Diego (old)",
+    "legajo": 61,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Diego C.",
+    "legajo": 62,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Duro",
+    "legajo": 63,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Emi",
+    "legajo": 64,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Emma",
+    "legajo": 65,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Emo",
+    "legajo": 66,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Enio",
+    "legajo": 67,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Ernesto",
+    "legajo": 68,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Kime",
+    "legajo": 69,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Eze",
+    "legajo": 70,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Ezequiel",
+    "legajo": 71,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Facu (UY)",
+    "legajo": 72,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Diego",
+    "legajo": 73,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Falconer",
+    "legajo": 74,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Uma",
+    "legajo": 75,
+    "tipo": "real"
+  },
+  {
+    "nickname": "FedeRama",
+    "legajo": 76,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Federico",
+    "legajo": 77,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Federico Albor",
+    "legajo": 78,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Felipe (CL)",
+    "legajo": 79,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Fer",
+    "legajo": 80,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Fernando A",
+    "legajo": 81,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Figo/Iori",
+    "legajo": 82,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Fofo",
+    "legajo": 83,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Franco",
+    "legajo": 84,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Franco (CL) (furanchizuko)",
+    "legajo": 85,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Franco Albor",
+    "legajo": 86,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Gilberto K.",
+    "legajo": 87,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Guido (BR)",
+    "legajo": 88,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Guile",
+    "legajo": 89,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Ian",
+    "legajo": 90,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Ini",
+    "legajo": 91,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "JC",
+    "legajo": 92,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Dario",
+    "legajo": 93,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Juli F",
+    "legajo": 94,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Javilo",
+    "legajo": 95,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Jhony",
+    "legajo": 96,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Jonathan",
+    "legajo": 97,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Jorge",
+    "legajo": 98,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Jrash",
+    "legajo": 99,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Juan",
+    "legajo": 100,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Juan M.",
+    "legajo": 101,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Juan Mateo",
+    "legajo": 102,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Kelo",
+    "legajo": 103,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Kevin",
+    "legajo": 104,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Koki",
+    "legajo": 105,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Kress",
+    "legajo": 106,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Lautaro",
+    "legajo": 107,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Lautaro (LP) DiG.",
+    "legajo": 108,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Leonardo (CL) (caballo)",
+    "legajo": 109,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Lloocky",
+    "legajo": 110,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Lucas Albor",
+    "legajo": 111,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Lucas R. (BR) (LagadoBR)",
+    "legajo": 112,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Lucila (Luuucilu",
+    "legajo": 113,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Lui",
+    "legajo": 114,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Luli",
+    "legajo": 115,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Manuel P.",
+    "legajo": 116,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Marcelo",
+    "legajo": 117,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Marcos O",
+    "legajo": 118,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Maria C.",
+    "legajo": 119,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Marian",
+    "legajo": 120,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Martin",
+    "legajo": 121,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Martin O.",
+    "legajo": 122,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Lucio",
+    "legajo": 123,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Mathias",
+    "legajo": 124,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Mati G. (minimati)",
+    "legajo": 125,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Mati S.",
+    "legajo": 126,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Max D.",
+    "legajo": 127,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Mayra",
+    "legajo": 128,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Mel",
+    "legajo": 129,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Michael",
+    "legajo": 130,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Miguel",
+    "legajo": 131,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Mikami",
+    "legajo": 132,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Nadia",
+    "legajo": 133,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Nahuel",
+    "legajo": 134,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Nakanaki",
+    "legajo": 135,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Juli",
+    "legajo": 136,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Naoko",
+    "legajo": 137,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Nicolas (Claudio friend)",
+    "legajo": 138,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Nicolas (old)",
+    "legajo": 139,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Nicolas M.",
+    "legajo": 140,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Nyamikki (DISCORD)",
+    "legajo": 141,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Octavio",
+    "legajo": 142,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Oli",
+    "legajo": 143,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Osqui",
+    "legajo": 144,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Pablo (2de6)",
+    "legajo": 145,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Pablo G.",
+    "legajo": 146,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Pancho",
+    "legajo": 147,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Pedro",
+    "legajo": 148,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Pol",
+    "legajo": 149,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Quimei",
+    "legajo": 150,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Romo",
+    "legajo": 151,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Roy",
+    "legajo": 152,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Samanta",
+    "legajo": 153,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Santiago",
+    "legajo": 154,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Santiago Albor",
+    "legajo": 155,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Saulo",
+    "legajo": 156,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Sebas (CO)",
+    "legajo": 157,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Sebastián (PE) (SethSeroly)",
+    "legajo": 158,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Somar",
+    "legajo": 159,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Szarps",
+    "legajo": 160,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Tamara",
+    "legajo": 161,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Tami",
+    "legajo": 162,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Taro",
+    "legajo": 163,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Valeria",
+    "legajo": 164,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Virginia",
+    "legajo": 165,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Wapuro",
+    "legajo": 166,
+    "tipo": "automatico"
+  },
+  {
+    "nickname": "Felicitas",
+    "legajo": 210,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Bata",
+    "legajo": 303,
+    "tipo": "real"
+  },
+  {
+    "nickname": "Walt",
+    "legajo": 5000,
+    "tipo": "real"
+  }
+]

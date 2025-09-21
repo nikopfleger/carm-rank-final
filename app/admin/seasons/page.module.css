@@ -1,0 +1,28 @@
+/* Página de Gestión de Temporadas */
+.seasonsPage {
+  @apply min-h-screen bg-gray-100 dark:bg-gray-900 py-8;
+}
+
+.seasonsContainer {
+  @apply max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.seasonsCard {
+  @apply bg-white dark:bg-gray-800 shadow-lg rounded-lg;
+}
+
+.seasonsHeader {
+  @apply px-6 py-4 border-b border-gray-200 dark:border-gray-700;
+}
+
+.seasonsTitle {
+  @apply text-2xl font-bold text-gray-900 dark:text-white;
+}
+
+.seasonsDescription {
+  @apply text-gray-600 dark:text-gray-400 mt-2;
+}
+
+.seasonsContent {
+  @apply p-6;
+}

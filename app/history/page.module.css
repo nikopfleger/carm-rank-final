@@ -1,0 +1,233 @@
+/* Página de Historial */
+.historyPage {
+  @apply pt-4;
+}
+
+.hero {
+  @apply py-8;
+}
+
+.heroTitle {
+  @apply text-4xl font-bold text-gray-900 dark:text-white mb-2 flex items-center justify-center gap-3;
+}
+
+.heroSubtitle {
+  @apply text-xl text-gray-600 dark:text-gray-400;
+}
+
+.content {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8;
+}
+
+.contentSpace {
+  @apply space-y-6;
+}
+
+/* Filtros Sticky */
+.filtersSticky {
+  @apply sticky top-16 z-30;
+}
+
+.filtersCard {
+  @apply backdrop-blur bg-white/80 dark:bg-gray-900/80 supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-gray-900/60;
+}
+
+.filtersHeader {
+  @apply flex items-center gap-2;
+}
+
+.clearFiltersButton {
+  @apply ml-auto flex items-center gap-2;
+}
+
+.filtersContent {
+  @apply space-y-4;
+}
+
+.filtersGrid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4;
+}
+
+.filterGroup {
+  @apply space-y-2;
+}
+
+.filterLabel {
+  @apply text-sm font-medium text-gray-700 dark:text-gray-300;
+}
+
+.filterSelect {
+  @apply w-full;
+}
+
+/* Juegos Grid */
+.gamesGrid {
+  @apply grid gap-6;
+}
+
+.gameCard {
+  @apply bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300;
+}
+
+.gameHeader {
+  @apply p-4 border-b border-gray-200 dark:border-gray-700;
+}
+
+.gameTitle {
+  @apply text-lg font-semibold text-gray-900 dark:text-white mb-2;
+}
+
+.gameMeta {
+  @apply flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400;
+}
+
+.gameMetaItem {
+  @apply flex items-center gap-1;
+}
+
+.gameStatus {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.statusApproved {
+  @apply bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400;
+}
+
+.statusPending {
+  @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400;
+}
+
+.statusRejected {
+  @apply bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400;
+}
+
+.gameContent {
+  @apply p-4;
+}
+
+.playersList {
+  @apply space-y-2;
+}
+
+.playerItem {
+  @apply flex items-center justify-between py-2 px-3 bg-gray-50 dark:bg-gray-700 rounded;
+}
+
+.playerName {
+  @apply font-medium text-gray-900 dark:text-white;
+}
+
+.playerScore {
+  @apply text-sm text-gray-600 dark:text-gray-400;
+}
+
+.gameActions {
+  @apply p-4 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-2;
+}
+
+/* Loading y Error States */
+.loadingContainer {
+  @apply flex items-center justify-center py-12;
+}
+
+.loadingSpinner {
+  @apply w-8 h-8 animate-spin rounded-full border-4 border-gray-300 border-t-purple-600;
+}
+
+.errorContainer {
+  @apply text-center py-12;
+}
+
+.errorMessage {
+  @apply text-red-600 dark:text-red-400 mb-2;
+}
+
+.errorDetails {
+  @apply text-gray-600 dark:text-gray-400;
+}
+
+.retryButton {
+  @apply mt-4;
+}
+
+/* Paginación */
+.pagination {
+  @apply flex items-center justify-center gap-2 mt-8;
+}
+
+.paginationButton {
+  @apply px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-gray-900 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-white;
+}
+
+.paginationButtonActive {
+  @apply px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-md hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700;
+}
+
+.paginationButtonDisabled {
+  @apply px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-md cursor-not-allowed dark:bg-gray-800 dark:text-gray-600 dark:border-gray-700;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .hero {
+    @apply px-3 py-6;
+  }
+
+  .heroTitle {
+    @apply text-2xl mb-2 gap-2;
+  }
+
+  .heroSubtitle {
+    @apply text-lg;
+  }
+
+  .content {
+    @apply px-3 pb-6;
+  }
+
+  .filtersGrid {
+    @apply grid-cols-1 gap-3;
+  }
+
+  .gameMeta {
+    @apply flex-col items-start gap-2;
+  }
+
+  .gameActions {
+    @apply flex-col gap-2;
+  }
+
+  .pagination {
+    @apply flex-wrap gap-1 mt-6;
+  }
+
+  .paginationButton,
+  .paginationButtonActive,
+  .paginationButtonDisabled {
+    @apply px-2 py-1 text-xs;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .heroTitle {
+    @apply text-3xl;
+  }
+
+  .heroSubtitle {
+    @apply text-xl;
+  }
+
+  .filtersGrid {
+    @apply grid-cols-2 gap-4;
+  }
+
+  .gameMeta {
+    @apply flex-wrap gap-3;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .filtersGrid {
+    @apply grid-cols-3 gap-4;
+  }
+}

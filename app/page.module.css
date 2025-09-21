@@ -1,0 +1,124 @@
+/* ===== HERO CARD (bordes como el verde, colores originales) ===== */
+.hero {
+  position: relative;
+  margin: 0 auto;
+  max-width: 72rem;
+  /* ~max-w-6xl */
+  overflow: hidden;
+  border-radius: 2rem;
+  /* pill-like */
+  padding: 2rem;
+  /* p-8 */
+  padding-inline: clamp(1rem, 4vw, 3rem);
+  /* Radiales muy sutiles arriba, y tu gradiente ORIGINAL de base */
+  background:
+    radial-gradient(900px 320px at -10% -20%, rgba(255, 255, 255, 0.06), transparent),
+    radial-gradient(700px 280px at 110% -10%, rgba(255, 255, 255, 0.05), transparent),
+    linear-gradient(135deg, #1e3a8a 0%, #7c3aed 100%);
+  /* <-- tus colores */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+  outline: 1px solid rgba(255, 255, 255, 0.10);
+  /* ring-1 ring-white/10 */
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  -webkit-mask-image: radial-gradient(90% 70% at 50% 0%, black, transparent);
+  mask-image: radial-gradient(90% 70% at 50% 0%, black, transparent);
+  pointer-events: none;
+}
+
+/* ===== LAYOUT INTERNO ===== */
+.heroContent {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  margin-inline: auto;
+  max-width: 56rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .75rem;
+}
+
+.logoTitleGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .6rem;
+}
+
+/* ===== LOGO TILE (80x80) ===== */
+.logoContainer {
+  height: 80px;
+  width: 80px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.06);
+  outline: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(1px);
+}
+
+/* Logo 56px con anti-aliasing */
+.logoImage {
+  height: 56px;
+  width: 56px;
+  object-fit: contain;
+  image-rendering: auto;
+  -ms-interpolation-mode: bicubic;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25));
+}
+
+/* ===== TITULAR ===== */
+.title {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.1;
+  margin: 0;
+}
+
+.titleMain {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.titleSub {
+  background: linear-gradient(90deg, #dbe4ff, #e9d5ff);
+  /* indigo-200 → violet-200 */
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ===== SUBTÍTULO y DIVISOR ===== */
+.subtitle {
+  margin: 0.25rem 0 0 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: clamp(1rem, 2.2vw, 1.125rem);
+  max-width: 42rem;
+}
+
+.decorativeLine {
+  display: flex;
+  justify-content: center;
+  margin-top: .6rem;
+}
+
+.lineCenter {
+  width: 3.5rem;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 768px) {
+  .hero {
+    padding-block: 3rem;
+  }
+}

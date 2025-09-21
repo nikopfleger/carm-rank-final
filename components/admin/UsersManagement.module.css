@@ -1,0 +1,156 @@
+/* Users Management Styles */
+.container {
+    @apply space-y-6;
+}
+
+.header {
+    @apply flex justify-between items-center;
+}
+
+.title {
+    @apply text-2xl font-bold text-foreground;
+}
+
+.description {
+    @apply text-muted-foreground;
+}
+
+.filters {
+    @apply flex space-x-2;
+}
+
+.loadingContainer {
+    @apply flex items-center justify-center p-8;
+}
+
+.loadingContent {
+    @apply text-center;
+}
+
+.spinner {
+    @apply animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto;
+}
+
+.loadingText {
+    @apply mt-2 text-sm text-muted-foreground;
+}
+
+.tableContainer {
+    @apply space-y-4;
+}
+
+.table {
+    @apply w-full;
+}
+
+.tableHeader {
+    @apply bg-muted;
+}
+
+.tableHeaderCell {
+    @apply text-left font-medium text-foreground;
+}
+
+.tableBody {
+    @apply divide-y divide-border;
+}
+
+.tableRow {
+    @apply hover:bg-muted/50;
+}
+
+.tableCell {
+    @apply text-sm text-foreground;
+}
+
+.tableCellMuted {
+    @apply text-sm text-muted-foreground;
+}
+
+.actionsContainer {
+    @apply flex items-center gap-2;
+}
+
+.statusBadge {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+}
+
+.statusBadgeActive {
+    @apply bg-accent text-accent-foreground;
+}
+
+.statusBadgeInactive {
+    @apply bg-muted text-muted-foreground;
+}
+
+.roleBadge {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+}
+
+.roleBadgeSuperAdmin {
+    @apply bg-destructive text-destructive-foreground;
+}
+
+.roleBadgeAdmin {
+    @apply bg-primary text-primary-foreground;
+}
+
+.roleBadgeUser {
+    @apply bg-secondary text-secondary-foreground;
+}
+
+.authoritiesContainer {
+    @apply flex flex-wrap gap-1;
+}
+
+.authorityBadge {
+    @apply inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-muted text-muted-foreground;
+}
+
+.editForm {
+    @apply space-y-4;
+}
+
+.formGroup {
+    @apply space-y-2;
+}
+
+.formLabel {
+    @apply text-sm font-medium text-foreground;
+}
+
+.formInput {
+    @apply w-full;
+}
+
+.formSelect {
+    @apply w-full;
+}
+
+.formSwitch {
+    @apply flex items-center space-x-2;
+}
+
+.formSwitchLabel {
+    @apply text-sm text-foreground;
+}
+
+.formActions {
+    @apply flex justify-end space-x-2;
+}
+
+.emptyState {
+    @apply text-center py-8;
+}
+
+.emptyIcon {
+    @apply h-12 w-12 text-muted-foreground mx-auto mb-4;
+}
+
+.emptyTitle {
+    @apply text-lg font-medium text-foreground mb-2;
+}
+
+.emptyDescription {
+    @apply text-muted-foreground;
+}

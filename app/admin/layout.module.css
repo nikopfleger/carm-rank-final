@@ -1,0 +1,8 @@
+/* Layout de Admin */
+.adminLayout {
+  @apply min-h-screen bg-background;
+}
+
+.adminContent {
+  @apply pt-16;
+}

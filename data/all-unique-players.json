@@ -1,0 +1,678 @@
+[
+  {
+    "nickname": "Adrian",
+    "tempId": 1
+  },
+  {
+    "nickname": "Adriel",
+    "tempId": 2
+  },
+  {
+    "nickname": "Agus",
+    "tempId": 3
+  },
+  {
+    "nickname": "Agus I",
+    "tempId": 4
+  },
+  {
+    "nickname": "Agustina H",
+    "tempId": 5
+  },
+  {
+    "nickname": "Ailen",
+    "tempId": 6
+  },
+  {
+    "nickname": "Ailén",
+    "tempId": 7
+  },
+  {
+    "nickname": "Akito",
+    "tempId": 8
+  },
+  {
+    "nickname": "Alan",
+    "tempId": 9
+  },
+  {
+    "nickname": "Alberto",
+    "tempId": 10
+  },
+  {
+    "nickname": "Aldana",
+    "tempId": 11
+  },
+  {
+    "nickname": "Alejandro",
+    "tempId": 12
+  },
+  {
+    "nickname": "Alex",
+    "tempId": 13
+  },
+  {
+    "nickname": "Amauri (BR)",
+    "tempId": 14
+  },
+  {
+    "nickname": "Andre",
+    "tempId": 15
+  },
+  {
+    "nickname": "Andres",
+    "tempId": 16
+  },
+  {
+    "nickname": "Angel",
+    "tempId": 17
+  },
+  {
+    "nickname": "Angie",
+    "tempId": 18
+  },
+  {
+    "nickname": "Ariel M.",
+    "tempId": 19
+  },
+  {
+    "nickname": "Arthur (BR)",
+    "tempId": 20
+  },
+  {
+    "nickname": "Arthur M (MX)",
+    "tempId": 21
+  },
+  {
+    "nickname": "Auca",
+    "tempId": 22
+  },
+  {
+    "nickname": "Azul",
+    "tempId": 23
+  },
+  {
+    "nickname": "Bata",
+    "tempId": 24
+  },
+  {
+    "nickname": "Buli",
+    "tempId": 25
+  },
+  {
+    "nickname": "Camilo",
+    "tempId": 26
+  },
+  {
+    "nickname": "Carlos",
+    "tempId": 27
+  },
+  {
+    "nickname": "Cecilia",
+    "tempId": 28
+  },
+  {
+    "nickname": "Chiwi",
+    "tempId": 29
+  },
+  {
+    "nickname": "Claudia",
+    "tempId": 30
+  },
+  {
+    "nickname": "Cristian (CL)",
+    "tempId": 31
+  },
+  {
+    "nickname": "Cristóbal (CL) (Kenzo)",
+    "tempId": 32
+  },
+  {
+    "nickname": "Danbliz",
+    "tempId": 33
+  },
+  {
+    "nickname": "Daniel",
+    "tempId": 34
+  },
+  {
+    "nickname": "Daniel (old)",
+    "tempId": 35
+  },
+  {
+    "nickname": "Daniela",
+    "tempId": 36
+  },
+  {
+    "nickname": "Dario",
+    "tempId": 37
+  },
+  {
+    "nickname": "Dario A",
+    "tempId": 38
+  },
+  {
+    "nickname": "Davy",
+    "tempId": 39
+  },
+  {
+    "nickname": "Diego",
+    "tempId": 40
+  },
+  {
+    "nickname": "Diego (old)",
+    "tempId": 41
+  },
+  {
+    "nickname": "Diego C.",
+    "tempId": 42
+  },
+  {
+    "nickname": "Duro",
+    "tempId": 43
+  },
+  {
+    "nickname": "Emi",
+    "tempId": 44
+  },
+  {
+    "nickname": "Emma",
+    "tempId": 45
+  },
+  {
+    "nickname": "Emo",
+    "tempId": 46
+  },
+  {
+    "nickname": "Enio",
+    "tempId": 47
+  },
+  {
+    "nickname": "Ernesto",
+    "tempId": 48
+  },
+  {
+    "nickname": "Eze",
+    "tempId": 49
+  },
+  {
+    "nickname": "Ezequiel",
+    "tempId": 50
+  },
+  {
+    "nickname": "Facu (UY)",
+    "tempId": 51
+  },
+  {
+    "nickname": "Falconer",
+    "tempId": 52
+  },
+  {
+    "nickname": "FedeRama",
+    "tempId": 53
+  },
+  {
+    "nickname": "Federico",
+    "tempId": 54
+  },
+  {
+    "nickname": "Federico Albor",
+    "tempId": 55
+  },
+  {
+    "nickname": "Felicitas",
+    "tempId": 56
+  },
+  {
+    "nickname": "Felipe (CL)",
+    "tempId": 57
+  },
+  {
+    "nickname": "Fer",
+    "tempId": 58
+  },
+  {
+    "nickname": "Fernando A",
+    "tempId": 59
+  },
+  {
+    "nickname": "Figo/Iori",
+    "tempId": 60
+  },
+  {
+    "nickname": "Fofo",
+    "tempId": 61
+  },
+  {
+    "nickname": "Fran",
+    "tempId": 62
+  },
+  {
+    "nickname": "Franco",
+    "tempId": 63
+  },
+  {
+    "nickname": "Franco (CL) (furanchizuko)",
+    "tempId": 64
+  },
+  {
+    "nickname": "Franco Albor",
+    "tempId": 65
+  },
+  {
+    "nickname": "Gabriela",
+    "tempId": 66
+  },
+  {
+    "nickname": "German",
+    "tempId": 67
+  },
+  {
+    "nickname": "Gilberto K.",
+    "tempId": 68
+  },
+  {
+    "nickname": "Guido (BR)",
+    "tempId": 69
+  },
+  {
+    "nickname": "Guile",
+    "tempId": 70
+  },
+  {
+    "nickname": "Guille",
+    "tempId": 71
+  },
+  {
+    "nickname": "Haku/Kozi",
+    "tempId": 72
+  },
+  {
+    "nickname": "Huan",
+    "tempId": 73
+  },
+  {
+    "nickname": "Ian",
+    "tempId": 74
+  },
+  {
+    "nickname": "Ini",
+    "tempId": 75
+  },
+  {
+    "nickname": "JC",
+    "tempId": 76
+  },
+  {
+    "nickname": "Javilo",
+    "tempId": 77
+  },
+  {
+    "nickname": "Jess",
+    "tempId": 78
+  },
+  {
+    "nickname": "Jhony",
+    "tempId": 79
+  },
+  {
+    "nickname": "Jonathan",
+    "tempId": 80
+  },
+  {
+    "nickname": "Jorge",
+    "tempId": 81
+  },
+  {
+    "nickname": "Jrash",
+    "tempId": 82
+  },
+  {
+    "nickname": "Juan",
+    "tempId": 83
+  },
+  {
+    "nickname": "Juan M.",
+    "tempId": 84
+  },
+  {
+    "nickname": "Juan Mateo",
+    "tempId": 85
+  },
+  {
+    "nickname": "Juli",
+    "tempId": 86
+  },
+  {
+    "nickname": "Juli F",
+    "tempId": 87
+  },
+  {
+    "nickname": "Kelo",
+    "tempId": 88
+  },
+  {
+    "nickname": "Kevin",
+    "tempId": 89
+  },
+  {
+    "nickname": "Kime",
+    "tempId": 90
+  },
+  {
+    "nickname": "Koki",
+    "tempId": 91
+  },
+  {
+    "nickname": "Kress",
+    "tempId": 92
+  },
+  {
+    "nickname": "Laura",
+    "tempId": 93
+  },
+  {
+    "nickname": "Lautaro",
+    "tempId": 94
+  },
+  {
+    "nickname": "Lautaro (LP) DiG.",
+    "tempId": 95
+  },
+  {
+    "nickname": "Leo",
+    "tempId": 96
+  },
+  {
+    "nickname": "Leonardo (CL) (caballo)",
+    "tempId": 97
+  },
+  {
+    "nickname": "Lloocky",
+    "tempId": 98
+  },
+  {
+    "nickname": "Lucas",
+    "tempId": 99
+  },
+  {
+    "nickname": "Lucas Albor",
+    "tempId": 100
+  },
+  {
+    "nickname": "Lucas R. (BR) (LagadoBR)",
+    "tempId": 101
+  },
+  {
+    "nickname": "Lucila (Luuucilu",
+    "tempId": 102
+  },
+  {
+    "nickname": "Lucio",
+    "tempId": 103
+  },
+  {
+    "nickname": "Lui",
+    "tempId": 104
+  },
+  {
+    "nickname": "Lukas",
+    "tempId": 105
+  },
+  {
+    "nickname": "Luli",
+    "tempId": 106
+  },
+  {
+    "nickname": "Manuel P.",
+    "tempId": 107
+  },
+  {
+    "nickname": "Marce",
+    "tempId": 108
+  },
+  {
+    "nickname": "Marcelo",
+    "tempId": 109
+  },
+  {
+    "nickname": "Marcos O",
+    "tempId": 110
+  },
+  {
+    "nickname": "Maria C.",
+    "tempId": 111
+  },
+  {
+    "nickname": "Marian",
+    "tempId": 112
+  },
+  {
+    "nickname": "Martin",
+    "tempId": 113
+  },
+  {
+    "nickname": "Martin O.",
+    "tempId": 114
+  },
+  {
+    "nickname": "Mathias",
+    "tempId": 115
+  },
+  {
+    "nickname": "Mati",
+    "tempId": 116
+  },
+  {
+    "nickname": "Mati G",
+    "tempId": 117
+  },
+  {
+    "nickname": "Mati G. (minimati)",
+    "tempId": 118
+  },
+  {
+    "nickname": "Mati S.",
+    "tempId": 119
+  },
+  {
+    "nickname": "Mauro",
+    "tempId": 120
+  },
+  {
+    "nickname": "Max D.",
+    "tempId": 121
+  },
+  {
+    "nickname": "Maxi",
+    "tempId": 122
+  },
+  {
+    "nickname": "Mayra",
+    "tempId": 123
+  },
+  {
+    "nickname": "MegaJL",
+    "tempId": 124
+  },
+  {
+    "nickname": "Mel",
+    "tempId": 125
+  },
+  {
+    "nickname": "Michael",
+    "tempId": 126
+  },
+  {
+    "nickname": "Miguel",
+    "tempId": 127
+  },
+  {
+    "nickname": "Mikami",
+    "tempId": 128
+  },
+  {
+    "nickname": "Nadia",
+    "tempId": 129
+  },
+  {
+    "nickname": "Nahuel",
+    "tempId": 130
+  },
+  {
+    "nickname": "Nakanaki",
+    "tempId": 131
+  },
+  {
+    "nickname": "Naoko",
+    "tempId": 132
+  },
+  {
+    "nickname": "Nico",
+    "tempId": 133
+  },
+  {
+    "nickname": "Nicolas (Claudio friend)",
+    "tempId": 134
+  },
+  {
+    "nickname": "Nicolas (old)",
+    "tempId": 135
+  },
+  {
+    "nickname": "Nicolas M.",
+    "tempId": 136
+  },
+  {
+    "nickname": "Nyamikki (DISCORD)",
+    "tempId": 137
+  },
+  {
+    "nickname": "Octavio",
+    "tempId": 138
+  },
+  {
+    "nickname": "Oli",
+    "tempId": 139
+  },
+  {
+    "nickname": "Osqui",
+    "tempId": 140
+  },
+  {
+    "nickname": "Pablo (2de6)",
+    "tempId": 141
+  },
+  {
+    "nickname": "Pablo G.",
+    "tempId": 142
+  },
+  {
+    "nickname": "Pancho",
+    "tempId": 143
+  },
+  {
+    "nickname": "Pato",
+    "tempId": 144
+  },
+  {
+    "nickname": "Paula",
+    "tempId": 145
+  },
+  {
+    "nickname": "Pedro",
+    "tempId": 146
+  },
+  {
+    "nickname": "Pol",
+    "tempId": 147
+  },
+  {
+    "nickname": "Quimei",
+    "tempId": 148
+  },
+  {
+    "nickname": "Romo",
+    "tempId": 149
+  },
+  {
+    "nickname": "Roy",
+    "tempId": 150
+  },
+  {
+    "nickname": "Samanta",
+    "tempId": 151
+  },
+  {
+    "nickname": "San",
+    "tempId": 152
+  },
+  {
+    "nickname": "Santiago",
+    "tempId": 153
+  },
+  {
+    "nickname": "Santiago Albor",
+    "tempId": 154
+  },
+  {
+    "nickname": "Saulo",
+    "tempId": 155
+  },
+  {
+    "nickname": "Sebas (CO)",
+    "tempId": 156
+  },
+  {
+    "nickname": "Sebastián (PE) (SethSeroly)",
+    "tempId": 157
+  },
+  {
+    "nickname": "Sofi",
+    "tempId": 158
+  },
+  {
+    "nickname": "Somar",
+    "tempId": 159
+  },
+  {
+    "nickname": "Szarps",
+    "tempId": 160
+  },
+  {
+    "nickname": "Tamara",
+    "tempId": 161
+  },
+  {
+    "nickname": "Tami",
+    "tempId": 162
+  },
+  {
+    "nickname": "Taro",
+    "tempId": 163
+  },
+  {
+    "nickname": "Tomas",
+    "tempId": 164
+  },
+  {
+    "nickname": "Uma",
+    "tempId": 165
+  },
+  {
+    "nickname": "Valeria",
+    "tempId": 166
+  },
+  {
+    "nickname": "Virginia",
+    "tempId": 167
+  },
+  {
+    "nickname": "Walt",
+    "tempId": 168
+  },
+  {
+    "nickname": "Wapuro",
+    "tempId": 169
+  }
+]

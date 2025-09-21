@@ -1,0 +1,24 @@
+/* Card Component Styles */
+.card {
+    @apply rounded-lg border bg-card text-card-foreground shadow-sm;
+}
+
+.cardHeader {
+    @apply flex flex-col space-y-1.5 p-6;
+}
+
+.cardTitle {
+    @apply text-2xl font-semibold leading-none tracking-tight;
+}
+
+.cardDescription {
+    @apply text-sm text-muted-foreground;
+}
+
+.cardContent {
+    @apply p-6 pt-0;
+}
+
+.cardFooter {
+    @apply flex items-center p-6 pt-0;
+}

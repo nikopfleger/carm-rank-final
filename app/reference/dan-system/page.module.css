@@ -1,0 +1,233 @@
+/* Página de Referencia - Sistema Dan */
+.danSystemPage {
+  @apply py-8;
+}
+
+/* Header */
+.header {
+  @apply text-center mb-8;
+}
+
+.headerTitle {
+  @apply flex items-center justify-center gap-3 mb-4;
+}
+
+.headerIcon {
+  @apply w-8 h-8 text-yellow-500;
+}
+
+.title {
+  @apply text-4xl font-bold text-gray-900 dark:text-white;
+}
+
+.description {
+  @apply text-lg text-gray-600 dark:text-gray-300 max-w-4xl mx-auto;
+}
+
+.badges {
+  @apply flex justify-center items-center gap-2 mt-4;
+}
+
+.badge {
+  @apply px-3 py-1;
+}
+
+.badgeGreen {
+  @apply bg-green-50 text-green-700 border-green-300;
+}
+
+.badgeBlue {
+  @apply bg-blue-50 text-blue-700 border-blue-300;
+}
+
+/* Explicación del sistema */
+.explanation {
+  @apply grid md:grid-cols-2 gap-6 mb-8;
+}
+
+.explanationCard {
+  @apply p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700;
+}
+
+.explanationTitle {
+  @apply text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2;
+}
+
+.explanationIcon {
+  @apply w-5 h-5;
+}
+
+.explanationList {
+  @apply space-y-3;
+}
+
+.explanationItem {
+  @apply flex items-start gap-3;
+}
+
+.explanationBullet {
+  @apply w-2 h-2 bg-red-600 rounded-full mt-2 flex-shrink-0;
+}
+
+.explanationText {
+  @apply text-gray-700 dark:text-gray-300;
+}
+
+/* Tabla de rangos */
+.tableContainer {
+  @apply bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700;
+}
+
+.table {
+  @apply w-full border-collapse;
+}
+
+.tableHeader {
+  @apply bg-gray-50 dark:bg-gray-700;
+}
+
+.tableHeaderCell {
+  @apply px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600;
+}
+
+.tableHeaderCellCenter {
+  @apply text-center;
+}
+
+.tableRow {
+  @apply hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors;
+}
+
+.tableCell {
+  @apply px-4 py-3 text-sm text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-600;
+}
+
+.tableCellCenter {
+  @apply text-center;
+}
+
+.tableCellFont {
+  @apply font-medium;
+}
+
+.tableCellMono {
+  @apply font-mono;
+}
+
+/* Badges de rango */
+.rankBadge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border;
+}
+
+.rankBadgeKyuu {
+  @apply bg-gray-100 text-gray-800 border-gray-300;
+}
+
+.rankBadgeDan {
+  @apply bg-blue-100 text-blue-800 border-blue-300;
+}
+
+.rankBadgeHighDan {
+  @apply bg-purple-100 text-purple-800 border-purple-300;
+}
+
+.rankBadgeMaster {
+  @apply bg-yellow-100 text-yellow-800 border-yellow-300;
+}
+
+.rankBadgeLegend {
+  @apply bg-red-100 text-red-800 border-red-300;
+}
+
+/* Colores de estado */
+.textGreen {
+  @apply text-green-600;
+}
+
+.textRed {
+  @apply text-red-600;
+}
+
+.textGray {
+  @apply text-gray-500;
+}
+
+.fontSemibold {
+  @apply font-semibold;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .danSystemPage {
+    @apply px-3 py-6;
+  }
+
+  .title {
+    @apply text-2xl;
+  }
+
+  .description {
+    @apply text-base;
+  }
+
+  .headerTitle {
+    @apply gap-2 mb-3;
+  }
+
+  .headerIcon {
+    @apply w-6 h-6;
+  }
+
+  .badges {
+    @apply flex-col gap-2 mt-3;
+  }
+
+  .explanation {
+    @apply grid-cols-1 gap-4 mb-6;
+  }
+
+  .explanationCard {
+    @apply p-4;
+  }
+
+  .explanationTitle {
+    @apply text-lg mb-3;
+  }
+
+  .tableContainer {
+    @apply overflow-x-auto -mx-3;
+  }
+
+  .table {
+    @apply min-w-[800px];
+  }
+
+  .tableHeaderCell,
+  .tableCell {
+    @apply px-2 py-2 text-xs;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .title {
+    @apply text-3xl;
+  }
+
+  .description {
+    @apply text-lg;
+  }
+
+  .explanation {
+    @apply grid-cols-1 gap-4;
+  }
+
+  .tableContainer {
+    @apply overflow-x-auto;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .tableContainer {
+    @apply overflow-x-auto;
+  }
+}

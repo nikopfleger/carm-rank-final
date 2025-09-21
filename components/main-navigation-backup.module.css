@@ -1,0 +1,168 @@
+/* Navegación Principal */
+.navigation {
+  @apply bg-slate-900 border-b border-slate-800 shadow-lg;
+}
+
+.navContainer {
+  @apply w-full px-4 sm:px-6 lg:px-8;
+}
+
+.navContent {
+  @apply relative flex items-center justify-between h-16;
+}
+
+/* Logo y Brand - Lado Izquierdo */
+.logoSection {
+  @apply flex items-center flex-shrink-0;
+}
+
+.logoLink {
+  @apply flex items-center space-x-3;
+}
+
+.logoIcon {
+  @apply w-6 h-6 bg-white rounded-lg flex items-center justify-center;
+}
+
+.logoText {
+  @apply text-white font-bold text-sm;
+}
+
+.brandText {
+  @apply font-bold text-white text-sm leading-tight;
+}
+
+/* Enlaces de Navegación - Centro */
+.navLinks {
+  @apply hidden md:flex items-center absolute left-1/2 transform -translate-x-1/2 space-x-6;
+}
+
+.navLink {
+  @apply flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors;
+}
+
+.navLinkActive {
+  background-color: rgb(var(--common-primary));
+  color: white;
+}
+
+.navLinkInactive {
+  @apply text-slate-300 hover:text-white hover:bg-slate-800;
+}
+
+.navLinkIcon {
+  @apply w-4 h-4 mr-2;
+}
+
+/* Acciones del Lado Derecho */
+.rightActions {
+  @apply flex items-center space-x-4 flex-shrink-0;
+}
+
+.userInfo {
+  @apply flex items-center space-x-3 text-slate-300;
+}
+
+.userIcon {
+  @apply w-4 h-4;
+}
+
+.userName {
+  @apply text-sm font-medium;
+}
+
+.adminIcon {
+  @apply w-4 h-4;
+  color: rgb(var(--common-primary-light));
+}
+
+.adminButton {
+  @apply text-slate-300 border-slate-600 hover:bg-slate-800 hover:text-white;
+}
+
+.logoutButton {
+  @apply text-slate-300 border-slate-600 hover:bg-slate-800 hover:text-white;
+}
+
+/* Navegación Móvil */
+.mobileMenuButton {
+  @apply md:hidden flex items-center px-3 py-2 border rounded text-slate-300 border-slate-600 hover:text-white hover:border-white;
+}
+
+.mobileMenuIcon {
+  @apply w-5 h-5;
+}
+
+.mobileMenu {
+  @apply md:hidden;
+}
+
+.mobileMenuContent {
+  @apply px-2 pt-2 pb-3 space-y-1 sm:px-3;
+}
+
+.mobileNavLink {
+  @apply block px-3 py-2 rounded-md text-base font-medium;
+}
+
+.mobileNavLinkActive {
+  @apply text-white bg-slate-800;
+}
+
+.mobileNavLinkInactive {
+  @apply text-slate-300 hover:text-white hover:bg-slate-800;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .navContainer {
+    @apply px-3;
+  }
+
+  .navContent {
+    @apply h-14;
+  }
+
+  .logoIcon {
+    @apply w-5 h-5;
+  }
+
+  .logoText {
+    @apply text-xs;
+  }
+
+  .brandText {
+    @apply text-xs leading-tight;
+  }
+
+  .rightActions {
+    @apply space-x-2;
+  }
+
+  .userInfo {
+    @apply space-x-2;
+  }
+
+  .userName {
+    @apply text-xs;
+  }
+
+  .adminButton,
+  .logoutButton {
+    @apply text-xs px-2 py-1;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .navLinks {
+    @apply space-x-4;
+  }
+
+  .navLink {
+    @apply px-3 py-2 text-xs;
+  }
+
+  .brandText {
+    @apply text-sm leading-tight;
+  }
+}

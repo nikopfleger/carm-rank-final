@@ -1,0 +1,81 @@
+{
+  // ===== CSS / Preprocesadores =====
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
+  // ===== CSS Modules (extensión) =====
+  "cssModules.autoComplete": true,
+  "cssModules.camelCase": true,
+  "cssModules.showNotifications": true,
+  // ===== Tailwind CSS =====
+  "tailwindCSS.includeLanguages": {
+    "typescript": "typescript",
+    "typescriptreact": "typescriptreact"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    [
+      "cva\\(([^)]*)\\)",
+      "[\"'`]([^\"'`]*).*?[\"'`]"
+    ],
+    [
+      "cx\\(([^)]*)\\)",
+      "(?:'|\"|`)([^']*)(?:'|\"|`)"
+    ],
+    [
+      "cn\\(([^)]*)\\)",
+      "(?:'|\"|`)([^']*)(?:'|\"|`)"
+    ]
+  ],
+  "tailwindCSS.emmetCompletions": true,
+  // ===== Emmet =====
+  "emmet.includeLanguages": {
+    "typescript": "html",
+    "typescriptreact": "html"
+  },
+  // ===== TypeScript (editor) =====
+  "typescript.tsdk": "node_modules\\typescript\\lib", // Usa TS de la workspace
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+  "typescript.validate.enable": true,
+  "typescript.preferences.includePackageJsonAutoImports": "on",
+  "typescript.suggest.autoImports": true,
+  // ===== ESLint =====
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.run": "onSave",
+  "eslint.experimental.useFlatConfig": true,
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+  "eslint.probe": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  // ===== Formato / Fixes al guardar =====
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  // ===== Reglas por lenguaje =====
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features",
+    "editor.formatOnSave": true
+  },
+  // ===== Snippets =====
+  "editor.snippetSuggestions": "top",
+  "editor.tabCompletion": "on",
+  // ===== Extensión Next.js (WillLuke) =====
+  "WillLuke.nextjs.addTypesOnSave": true,
+  "WillLuke.nextjs.hasPrompted": true,
+  // ===== Problems panel =====
+  "problems.showCurrentInStatus": true,
+  "problems.sortOrder": "severity"
+}

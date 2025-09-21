@@ -1,0 +1,24 @@
+/* Página ABM de Torneos */
+.tournamentsPage {
+  @apply py-8;
+}
+
+.tournamentsHeader {
+  @apply flex justify-between items-center mb-6;
+}
+
+.tournamentsTitleSection {
+  @apply flex-1;
+}
+
+.tournamentsTitle {
+  @apply text-3xl font-bold text-gray-900 dark:text-white;
+}
+
+.tournamentsDescription {
+  @apply text-gray-600 dark:text-gray-400 mt-2;
+}
+
+.tournamentsCreateButton {
+  @apply flex items-center gap-2;
+}
