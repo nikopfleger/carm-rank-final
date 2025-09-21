@@ -30,11 +30,9 @@ NEXTAUTH_URL=https://tu-app.vercel.app
 # Owner del sistema
 OWNER_EMAIL=tu_email@ejemplo.com
 
-# Database Pool Configuration (opcional)
-DB_POOL_MAX=20
-DB_POOL_MIN=2
-DB_POOL_TIMEOUT=60000
-DB_CONNECT_TIMEOUT=60000
+# Database Configuration (opcional)
+# Neon PostgreSQL maneja pooling automáticamente con PgBouncer
+# Solo configurar keep-alive para mantener conexiones activas
 DB_KEEP_ALIVE_INTERVAL=30000
 ```
 

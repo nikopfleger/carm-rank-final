@@ -8,28 +8,12 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 // Crear cliente base de Prisma con DATABASE_URL estándar
-// Prisma toma automáticamente DATABASE_URL del environment
-// Agregamos parámetros de pool si no están en la URL base
-const getDatabaseUrlWithPool = () => {
-  const baseUrl = process.env.DATABASE_URL;
-  if (!baseUrl) {
-    throw new Error('DATABASE_URL no está configurada');
-  }
-
-  // Si la URL ya tiene parámetros, agregarlos con &, sino con ?
-  const separator = baseUrl.includes('?') ? '&' : '?';
-  const poolParams = `connection_limit=${process.env.DB_POOL_MAX || '50'}&pool_timeout=${process.env.DB_POOL_TIMEOUT || '30000'}`;
-
-  return `${baseUrl}${separator}${poolParams}`;
-};
-
+// Neon PostgreSQL maneja el pooling automáticamente con PgBouncer
+// No necesitamos agregar parámetros de pool adicionales
 const basePrisma = new PrismaClient({
   log: ['error'],
-  datasources: {
-    db: {
-      url: getDatabaseUrlWithPool(),
-    },
-  },
+  // Prisma usa automáticamente DATABASE_URL del environment
+  // Neon ya maneja el pooling con hasta 10,000 conexiones concurrentes
 });
 
 // Aplicar extensión de versionado y soft delete
