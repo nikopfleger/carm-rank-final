@@ -37,7 +37,7 @@
     "db:studio:prod": "prisma studio --port 5556",
     "reset": "tsx scripts/reset-db.ts",
     "reset-and-load": "tsx scripts/reset-db.ts && tsx scripts/load-data.ts --csv",
-    "run:load-data": "tsx scripts/load-data.ts --seed --csv",
+    "run:load-data": "tsx scripts/load-data.ts --csv",
     "check-auth": "node scripts/check-auth-config.js",
     "postinstall": "prisma generate",
     "migrate:deploy": "prisma migrate deploy"

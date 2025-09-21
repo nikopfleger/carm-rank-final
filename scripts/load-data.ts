@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import { execSync } from 'child_process';
 import csv from 'csv-parser';
 import { config } from 'dotenv';
 import * as fs from 'fs';
@@ -84,60 +83,9 @@ async function getLegajoForMigration(nick: string): Promise<number> {
     return candidato;
 }
 
-async function clearDatabase() {
-    console.log('🧹 Limpiando base de datos...');
+// clearDatabase() removida - se maneja en el build script
 
-    try {
-        // Limpiar todas las tablas en orden correcto (respetando foreign keys)
-        const tables = [
-            'GameResult',
-            'Points',
-            'PlayerRanking',
-            'Game',
-            'Player',
-            'Tournament',
-            'Season',
-            'Uma',
-            'Location',
-            'Country',
-            'DanConfig',
-            'RateConfig',
-            'SeasonConfig'
-        ];
-
-        for (const table of tables) {
-            console.log(`🗑️  Limpiando tabla ${table}...`);
-            await (prisma as any)[table].deleteMany({});
-        }
-
-        console.log('✅ Base de datos limpiada');
-    } catch (error) {
-        console.error('❌ Error limpiando base de datos:', error);
-        throw error;
-    }
-}
-
-async function runSeed() {
-    console.log('🌱 Ejecutando seed...');
-    try {
-        execSync('npm run db:seed', { stdio: 'inherit' });
-        console.log('✅ Seed completado');
-    } catch (error) {
-        console.error('❌ Error ejecutando seed:', error);
-        throw error;
-    }
-}
-
-async function runReset() {
-    console.log('🔄 Ejecutando reset de Prisma...');
-    try {
-        execSync('npx prisma db push --force-reset', { stdio: 'inherit' });
-        console.log('✅ Reset completado');
-    } catch (error) {
-        console.error('❌ Error ejecutando reset:', error);
-        throw error;
-    }
-}
+// Funciones de Prisma removidas - ahora se manejan en el build script
 
 async function loadCSV() {
     console.log('📊 Cargando datos del CSV...');
@@ -924,38 +872,19 @@ async function closeActiveSeason() {
 
 async function main() {
     const args = process.argv.slice(2);
-    const shouldClear = args.includes('--clear') || args.includes('-c');
-    const shouldReset = args.includes('--reset') || args.includes('-r');
-    const shouldSeed = args.includes('--seed') || args.includes('-s');
     const shouldLoadCSV = args.includes('--csv') || args.includes('-l') || args.length === 0;
     const shouldRecalculate = args.includes('--recalculate') || args.includes('-rc');
 
     console.log('🚀 Iniciando carga de datos...');
-    console.log(`📋 Parámetros: clear=${shouldClear}, reset=${shouldReset}, seed=${shouldSeed}, csv=${shouldLoadCSV}, recalculate=${shouldRecalculate}`);
+    console.log(`📋 Parámetros: csv=${shouldLoadCSV}, recalculate=${shouldRecalculate}`);
 
     try {
-        // 1. Reset de Prisma si se solicita (recomendado)
-        if (shouldReset) {
-            await runReset();
-            // Después del reset, siempre ejecutar seed
-            await runSeed();
-        }
-        // 1b. Limpiar base de datos manualmente si se solicita
-        else if (shouldClear) {
-            await clearDatabase();
-        }
-
-        // 2. Ejecutar seed si se solicita (solo si no se hizo reset)
-        if (shouldSeed && !shouldReset) {
-            await runSeed();
-        }
-
-        // 3. Recalcular puntos si se solicita
+        // 1. Recalcular puntos si se solicita
         if (shouldRecalculate) {
             await recalculateAllPoints();
         }
 
-        // 4. Cargar CSV si se solicita (por defecto)
+        // 2. Cargar CSV si se solicita (por defecto)
         if (shouldLoadCSV) {
             await loadCSV();
         }
