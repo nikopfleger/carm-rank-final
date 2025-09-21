@@ -1,12 +1,6 @@
 {
     "version": 2,
     "name": "camr-rank",
-    "builds": [
-        {
-            "src": "package.json",
-            "use": "@vercel/next"
-        }
-    ],
     "env": {
         "NODE_ENV": "production"
     },
