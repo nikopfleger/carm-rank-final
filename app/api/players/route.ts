@@ -11,11 +11,11 @@ export async function GET(request: NextRequest) {
   let timeoutId: NodeJS.Timeout | undefined;
 
   try {
-    // Timeout para evitar colgarse en producción
-    const timeoutPromise = new Promise((_, reject) => {
-      timeoutId = setTimeout(() => {
-        reject(new Error('Request timeout after 25 seconds'));
-      }, 25000); // 25 segundos - menos que los 30 de Vercel
+    // Timeout suave: si tarda >5s y no hay cache, devolvemos 202 con payload vacío
+    const TIMEOUT_MS = 5000;
+    const TIMEOUT_SENTINEL = Symbol('TIMEOUT');
+    const timeoutPromise = new Promise<symbol>((resolve) => {
+      timeoutId = setTimeout(() => resolve(TIMEOUT_SENTINEL), TIMEOUT_MS);
     });
 
     await connectToDatabase();
@@ -48,8 +48,13 @@ export async function GET(request: NextRequest) {
     );
 
     // Correr con timeout
-    const players = await Promise.race([playersPromise, timeoutPromise]) as any;
+    const raced = await Promise.race([playersPromise, timeoutPromise]);
     if (timeoutId) clearTimeout(timeoutId);
+
+    if (raced === TIMEOUT_SENTINEL) {
+      return NextResponse.json({ success: true, data: [], total: 0, message: 'warming_up' }, { status: 202 });
+    }
+    const players = raced as any;
 
     const duration = Date.now() - startTime;
     console.log(`✅ [${new Date().toISOString()}] Completado en ${duration}ms. Jugadores: ${players.length}`);
