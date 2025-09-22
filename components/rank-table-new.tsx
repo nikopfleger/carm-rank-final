@@ -49,7 +49,6 @@ interface PlayerData {
     max_rate: number;
     win_rate: number;
     rank: string;
-    rank_spanish?: string;
     rank_color?: string;
     rank_min_points?: number;
     rank_max_points?: number;
@@ -574,7 +573,7 @@ export function RankTableNew({
                                                     </TooltipTrigger>
                                                     <TooltipContent side="top" align="center" className="space-y-2">
                                                         <div className="text-sm font-medium">
-                                                            {p.rank_spanish || p.rank}
+                                                            {t(`ranks.${p.rank}`, p.rank)}
                                                         </div>
                                                         {(p.rank_min_points != null && p.rank_max_points != null && p.rank_color) && (
                                                             <div className="w-[220px]">

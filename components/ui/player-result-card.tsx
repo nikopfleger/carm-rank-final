@@ -7,6 +7,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { unifiedStyles } from "@/components/ui/unified-styles";
 import { Award, Eye, TrendingDown, TrendingUp } from "lucide-react";
 import Link from "next/link";
+import { useI18nContext } from "../providers/i18n-provider";
 
 interface PlayerResultCardProps {
     position: number;
@@ -52,6 +53,7 @@ export function PlayerResultCard({
     showCountry = true,
     href
 }: PlayerResultCardProps) {
+    const { t } = useI18nContext();
     const getPositionIcon = (position: number) => {
         switch (position) {
             case 1:
@@ -192,7 +194,7 @@ export function PlayerResultCard({
                                         </TooltipTrigger>
                                         <TooltipContent side="top" align="center" className="space-y-2">
                                             <div className="text-sm font-medium">
-                                                {stats.rank_spanish || stats.rank}
+                                                {t(`ranks.${stats.rank}`, stats.rank)}
                                             </div>
                                             {(stats.rank_min_points != null && stats.rank_max_points != null && stats.rank_color) && (
                                                 <div className="w-[220px]">

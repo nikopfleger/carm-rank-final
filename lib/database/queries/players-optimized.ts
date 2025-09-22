@@ -4,120 +4,70 @@ import { prisma } from '../client';
 import { PlayerWithRanking } from './types';
 
 // Función optimizada para verificar actividad de múltiples jugadores de una vez
-async function batchCheckPlayersActivity(playerNumbers: number[]): Promise<Set<number>> {
+type PlayerActivity = {
+  player_number: number;
+  active_general: boolean;
+  active_seasonal: boolean;
+};
+
+async function batchCheckPlayersActivity(playerNumbers: number[]): Promise<PlayerActivity[]> {
   try {
-    if (playerNumbers.length === 0) return new Set();
+    if (playerNumbers.length === 0) return [];
 
     console.log(`🔍 Verificando actividad para ${playerNumbers.length} jugadores`);
 
-    // Obtener todos los players de una vez
-    const players = await prisma.player.findMany({
-      where: { playerNumber: { in: playerNumbers } },
-      select: { id: true, playerNumber: true }
-    });
+    // Query única con EXISTS para temporada activa o actividad en el último año
+    const rows = await prisma.$queryRaw<PlayerActivity[]>`
+      WITH active_season AS (
+        SELECT s.id
+        FROM season s
+        WHERE s.is_active = true AND s.deleted = false
+        LIMIT 1
+      )
+      SELECT
+        tp.player_number,
+        (
+          EXISTS (
+            SELECT 1
+            FROM game_result gr
+            JOIN game g ON g.id = gr.game_id
+            JOIN active_season a ON a.id = g.season_id
+            WHERE gr.player_id = tp.id
+            LIMIT 1
+          )
+          OR EXISTS (
+            SELECT 1
+            FROM game_result gr
+            JOIN game g ON g.id = gr.game_id
+            WHERE gr.player_id = tp.id
+              AND g.game_date >= (now() AT TIME ZONE 'utc' - INTERVAL '1 year')
+            LIMIT 1
+          )
+        ) AS active_general,
+        (
+          EXISTS (
+            SELECT 1
+            FROM game_result gr
+            JOIN game g ON g.id = gr.game_id
+            JOIN active_season a ON a.id = g.season_id
+            WHERE gr.player_id = tp.id
+              AND g.tournament_id IS NOT NULL
+            LIMIT 1
+          )
+        ) AS active_seasonal
+      FROM player tp
+      WHERE tp.player_number = ANY(${playerNumbers})
+    `;
 
-    const playerIdMap = new Map(players.map(p => [p.playerNumber, p.id]));
-    const playerIds = Array.from(playerIdMap.values());
-
-    if (playerIds.length === 0) return new Set();
-
-    // Obtener la temporada activa actual
-    const activeSeason = await prisma.season.findFirst({
-      where: { isActive: true },
-      select: { id: true }
-    });
-
-    const activePlayerNumbers = new Set<number>();
-
-    // Verificar jugadores activos en temporada actual
-    if (activeSeason) {
-      const activeInSeason = await prisma.gameResult.groupBy({
-        by: ['playerId'],
-        where: {
-          playerId: { in: playerIds },
-          game: {
-            tournament: {
-              seasonId: activeSeason.id
-            }
-          }
-        }
-      });
-
-      // Agregar jugadores activos en temporada
-      for (const result of activeInSeason) {
-        const playerNumber = [...playerIdMap.entries()].find(([, id]) => id === result.playerId)?.[0];
-        if (playerNumber) {
-          activePlayerNumbers.add(playerNumber);
-        }
-      }
-    }
-
-    // Para los que no están activos en temporada, verificar último año
-    const remainingPlayerIds = playerIds.filter(id => {
-      const playerNumber = [...playerIdMap.entries()].find(([, pid]) => pid === id)?.[0];
-      return playerNumber && !activePlayerNumbers.has(playerNumber);
-    });
-
-    if (remainingPlayerIds.length > 0) {
-      const oneYearAgo = new Date();
-      oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-
-      const activeInLastYear = await prisma.gameResult.groupBy({
-        by: ['playerId'],
-        where: {
-          playerId: { in: remainingPlayerIds },
-          game: {
-            gameDate: { gte: oneYearAgo }
-          }
-        }
-      });
-
-      // Agregar jugadores activos en último año
-      for (const result of activeInLastYear) {
-        const playerNumber = [...playerIdMap.entries()].find(([, id]) => id === result.playerId)?.[0];
-        if (playerNumber) {
-          activePlayerNumbers.add(playerNumber);
-        }
-      }
-    }
-
-    console.log(`✅ Jugadores activos encontrados: ${activePlayerNumbers.size}/${playerNumbers.length}`);
-    return activePlayerNumbers;
+    return rows;
 
   } catch (error) {
     console.error('Error checking players activity in batch:', error);
-    return new Set();
+    return [];
   }
 }
 
-// Tabla de conversión hardcodeada según la especificación del usuario
-function convertirDanAEspanol(danJapon: string): string {
-  const conversionMap: { [key: string]: string } = {
-    "新人": "Principiante",
-    "9級": "9no kyu",
-    "8級": "8vo kyu",
-    "7級": "7mo kyu",
-    "6級": "6to kyu",
-    "5級": "5to kyu",
-    "4級": "4to kyu",
-    "3級": "3er kyu",
-    "2級": "2do kyu",
-    "1級": "1er kyu",
-    "初段": "1er dan",
-    "二段": "2do dan",
-    "三段": "3er dan",
-    "四段": "4to dan",
-    "五段": "5to dan",
-    "六段": "6to dan",
-    "七段": "7mo dan",
-    "八段": "8vo dan",
-    "九段": "9no dan",
-    "十段": "10mo dan",
-    "神室王": "Rey Dios"
-  };
-
-  return conversionMap[danJapon] || danJapon;
-}
+// i18n se resuelve en el frontend; el backend devuelve la key original
 
 export async function getPlayersWithRanking(
   seasonId?: number,
@@ -131,10 +81,9 @@ export async function getPlayersWithRanking(
     const oneYearAgo = new Date();
     oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
 
-    // Obtener la temporada actual (más reciente por fecha)
-    // Usar la temporada real "2024-25" como temporada actual
+    // Obtener la temporada actual (activa y no eliminada)
     const currentSeason = await prisma.season.findFirst({
-      where: { name: '2024-25' },
+      where: { isActive: true, deleted: false },
       orderBy: { startDate: 'desc' }
     });
 
@@ -172,7 +121,7 @@ export async function getPlayersWithRanking(
     // Si no se incluyen inactivos, filtrar por actividad usando el endpoint
 
     // Obtener temporada activa una sola vez
-    const activeSeason = await prisma.season.findFirst({ where: { isActive: true } });
+    const activeSeason = await prisma.season.findFirst({ where: { isActive: true, deleted: false } });
     const sanmaMode: boolean = sanma !== undefined ? Boolean(sanma) : false;
 
     // Precargar todas las tendencias de una vez
@@ -186,7 +135,7 @@ export async function getPlayersWithRanking(
         isSanma: sanmaMode
       },
       orderBy: [{ playerId: 'asc' }, { id: 'desc' }, { createdAt: 'desc' }],
-      take: playerIds.length * 10 // máximo 10 por jugador
+      take: playerIds.length * 5 // máximo 5 por jugador
     });
 
     // Obtener todas las tendencias SEASON de una vez
@@ -198,7 +147,7 @@ export async function getPlayersWithRanking(
         seasonId: activeSeason.id
       },
       orderBy: [{ playerId: 'asc' }, { id: 'desc' }, { createdAt: 'desc' }],
-      take: playerIds.length * 10 // máximo 10 por jugador
+      take: playerIds.length * 5 // máximo 5 por jugador
     }) : [];
 
     // Agrupar por jugador
@@ -243,7 +192,6 @@ export async function getPlayersWithRanking(
 
       // Obtener ranking Dan y su color
       const danRankJapon = await getDanRank(ranking.danPoints);
-      const danRankEspanol = convertirDanAEspanol(danRankJapon);
 
       // Obtener color del rango desde la base de datos
       const danConfig = await configCache.getDanConfigByPoints(ranking.danPoints, rankingSanmaMode);
@@ -289,7 +237,6 @@ export async function getPlayersWithRanking(
         max_rate: Math.round(ranking.maxRate),
         win_rate: Math.round(winRate * 100) / 100, // 2 decimales
         rank: danRankJapon, // Usar japonés como principal
-        rank_spanish: danRankEspanol, // Añadir español para tooltip
         rank_color: rankColor, // Color del rango desde la base de datos
 
         // Datos para progreso de rango
@@ -313,10 +260,17 @@ export async function getPlayersWithRanking(
       };
     }));
 
-    // Ordenamiento adicional para temporada: agregar win rate como tercer criterio
+    // Ordenamiento adicional para temporada: mover 0 juegos al final y agregar win rate como tercer criterio
     if (type === 'TEMPORADA') {
       console.log(`🔄 Aplicando ordenamiento JavaScript para TEMPORADA`);
       playersWithRanking.sort((a, b) => {
+        // 0) Mover jugadores sin juegos de temporada al final cuando se muestran TODOS
+        const aHasGames = (a.total_games || 0) > 0 ? 1 : 0;
+        const bHasGames = (b.total_games || 0) > 0 ? 1 : 0;
+        if (aHasGames !== bHasGames) {
+          return bHasGames - aHasGames; // primero los que tienen juegos
+        }
+
         // 1. Puntos de temporada (descendente)
         const aSeasonPoints = a.season_points || 0;
         const bSeasonPoints = b.season_points || 0;
@@ -342,12 +296,13 @@ export async function getPlayersWithRanking(
 
       // Verificar actividad de todos los jugadores de una vez (batch)
       const playerNumbers = playersWithRanking.map(p => p.player_id);
-      const activePlayerNumbers = await batchCheckPlayersActivity(playerNumbers);
-
-      // Filtrar solo jugadores activos
-      const activePlayersWithRanking = playersWithRanking.filter(player =>
-        activePlayerNumbers.has(player.player_id)
-      );
+      const activityRows = await batchCheckPlayersActivity(playerNumbers);
+      const activityByPlayer = new Map(activityRows.map(r => [r.player_number, r]));
+      const activePlayersWithRanking = playersWithRanking.filter(player => {
+        const flags = activityByPlayer.get(player.player_id);
+        if (!flags) return false;
+        return type === 'TEMPORADA' ? flags.active_seasonal : flags.active_general;
+      });
 
       console.log(`✅ Jugadores activos encontrados: ${activePlayersWithRanking.length}`);
 
@@ -395,7 +350,6 @@ export async function getPlayerById(playerId: number, sanma: boolean = false): P
     const totalWins = ranking.firstPlaceH + ranking.firstPlaceT;
     const winRate = ranking.totalGames > 0 ? ((totalWins / ranking.totalGames) * 100) : 0;
     const danRankJapon = await getDanRank(ranking.danPoints);
-    const danRankEspanol = convertirDanAEspanol(danRankJapon);
 
     // Obtener color del rango desde la base de datos
     const danConfig = await configCache.getDanConfigByPoints(ranking.danPoints, sanma);
@@ -426,7 +380,6 @@ export async function getPlayerById(playerId: number, sanma: boolean = false): P
       max_rate: Math.round(ranking.maxRate),
       win_rate: Math.round(winRate * 100) / 100,
       rank: danRankJapon, // Usar japonés como principal
-      rank_spanish: danRankEspanol, // Añadir español para tooltip
       rank_color: rankColor, // Color del rango desde la base de datos
 
       // Datos para progreso de rango

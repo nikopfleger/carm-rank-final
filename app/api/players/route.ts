@@ -1,5 +1,6 @@
 import { connectToDatabase } from '@/lib/database/connection';
 import { createPlayer, getPlayersWithRanking } from '@/lib/database/queries/players';
+// i18n se resuelve en el frontend; este endpoint no maneja idioma
 import { NextRequest, NextResponse } from 'next/server';
 
 // GET /api/players - Get all players with ranking
@@ -22,6 +23,7 @@ export async function GET(request: NextRequest) {
     const includeInactive = searchParams.get('includeInactive') === 'true';
     const type = searchParams.get('type') as 'GENERAL' | 'TEMPORADA' || 'GENERAL';
     const sanma = searchParams.get('sanma'); // 'true' o 'false' para filtrar por cantidad de jugadores
+    // Idioma: manejado en frontend
 
     console.log(`📊 [${new Date().toISOString()}] Parámetros: includeInactive=${includeInactive}, type=${type}${seasonId ? `, seasonId=${seasonId}` : ''}${sanma ? `, sanma=${sanma}` : ''}`);
 
