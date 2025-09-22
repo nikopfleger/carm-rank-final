@@ -12,7 +12,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "npm run prisma:generate && npm run migrate:deploy && npm run seed && node scripts/run-load-data-if-needed.mjs && next build",
+    "build": "npm run prisma:generate && npm run migrate:deploy && next build",
     "start": "next start",
     "prisma:generate": "prisma generate",
     "migrate:deploy": "prisma migrate deploy",
