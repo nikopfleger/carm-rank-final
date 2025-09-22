@@ -3,16 +3,23 @@ import { getDanRank } from '../../game-helpers';
 import { prisma } from '../client';
 import { PlayerWithRanking } from './types';
 
-// Función helper para verificar si un jugador está activo
-async function checkPlayerActivity(playerNumber: number): Promise<boolean> {
+// Función optimizada para verificar actividad de múltiples jugadores de una vez
+async function batchCheckPlayersActivity(playerNumbers: number[]): Promise<Set<number>> {
   try {
-    // Simular la lógica del endpoint /api/players/[legajo]/is-active
-    const player = await prisma.player.findUnique({
-      where: { playerNumber },
-      select: { id: true }
+    if (playerNumbers.length === 0) return new Set();
+
+    console.log(`🔍 Verificando actividad para ${playerNumbers.length} jugadores`);
+
+    // Obtener todos los players de una vez
+    const players = await prisma.player.findMany({
+      where: { playerNumber: { in: playerNumbers } },
+      select: { id: true, playerNumber: true }
     });
 
-    if (!player) return false;
+    const playerIdMap = new Map(players.map(p => [p.playerNumber, p.id]));
+    const playerIds = Array.from(playerIdMap.values());
+
+    if (playerIds.length === 0) return new Set();
 
     // Obtener la temporada activa actual
     const activeSeason = await prisma.season.findFirst({
@@ -20,11 +27,14 @@ async function checkPlayerActivity(playerNumber: number): Promise<boolean> {
       select: { id: true }
     });
 
+    const activePlayerNumbers = new Set<number>();
+
+    // Verificar jugadores activos en temporada actual
     if (activeSeason) {
-      // Verificar si el jugador tiene juegos en la temporada activa
-      const gamesInActiveSeason = await prisma.gameResult.count({
+      const activeInSeason = await prisma.gameResult.groupBy({
+        by: ['playerId'],
         where: {
-          playerId: player.id,
+          playerId: { in: playerIds },
           game: {
             tournament: {
               seasonId: activeSeason.id
@@ -33,30 +43,50 @@ async function checkPlayerActivity(playerNumber: number): Promise<boolean> {
         }
       });
 
-      if (gamesInActiveSeason > 0) {
-        return true;
+      // Agregar jugadores activos en temporada
+      for (const result of activeInSeason) {
+        const playerNumber = [...playerIdMap.entries()].find(([, id]) => id === result.playerId)?.[0];
+        if (playerNumber) {
+          activePlayerNumbers.add(playerNumber);
+        }
       }
     }
 
-    // Si no está activo en la temporada actual, verificar último año
-    const oneYearAgo = new Date();
-    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-
-    const gamesInLastYear = await prisma.gameResult.count({
-      where: {
-        playerId: player.id,
-        game: {
-          gameDate: {
-            gte: oneYearAgo
-          }
-        }
-      }
+    // Para los que no están activos en temporada, verificar último año
+    const remainingPlayerIds = playerIds.filter(id => {
+      const playerNumber = [...playerIdMap.entries()].find(([, pid]) => pid === id)?.[0];
+      return playerNumber && !activePlayerNumbers.has(playerNumber);
     });
 
-    return gamesInLastYear > 0;
+    if (remainingPlayerIds.length > 0) {
+      const oneYearAgo = new Date();
+      oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+
+      const activeInLastYear = await prisma.gameResult.groupBy({
+        by: ['playerId'],
+        where: {
+          playerId: { in: remainingPlayerIds },
+          game: {
+            gameDate: { gte: oneYearAgo }
+          }
+        }
+      });
+
+      // Agregar jugadores activos en último año
+      for (const result of activeInLastYear) {
+        const playerNumber = [...playerIdMap.entries()].find(([, id]) => id === result.playerId)?.[0];
+        if (playerNumber) {
+          activePlayerNumbers.add(playerNumber);
+        }
+      }
+    }
+
+    console.log(`✅ Jugadores activos encontrados: ${activePlayerNumbers.size}/${playerNumbers.length}`);
+    return activePlayerNumbers;
+
   } catch (error) {
-    console.error('Error checking player activity:', error);
-    return false;
+    console.error('Error checking players activity in batch:', error);
+    return new Set();
   }
 }
 
@@ -141,7 +171,59 @@ export async function getPlayersWithRanking(
 
     // Si no se incluyen inactivos, filtrar por actividad usando el endpoint
 
-    // Convertir a formato esperado
+    // Obtener temporada activa una sola vez
+    const activeSeason = await prisma.season.findFirst({ where: { isActive: true } });
+    const sanmaMode: boolean = sanma !== undefined ? Boolean(sanma) : false;
+
+    // Precargar todas las tendencias de una vez
+    const playerIds = rankings.map(r => r.player.id);
+
+    // Obtener todas las tendencias DAN de una vez
+    const allDanPointsHistory = await prisma.points.findMany({
+      where: {
+        playerId: { in: playerIds },
+        pointsType: 'DAN',
+        isSanma: sanmaMode
+      },
+      orderBy: [{ playerId: 'asc' }, { id: 'desc' }, { createdAt: 'desc' }],
+      take: playerIds.length * 10 // máximo 10 por jugador
+    });
+
+    // Obtener todas las tendencias SEASON de una vez
+    const allSeasonPointsHistory = activeSeason ? await prisma.points.findMany({
+      where: {
+        playerId: { in: playerIds },
+        pointsType: 'SEASON',
+        isSanma: sanmaMode,
+        seasonId: activeSeason.id
+      },
+      orderBy: [{ playerId: 'asc' }, { id: 'desc' }, { createdAt: 'desc' }],
+      take: playerIds.length * 10 // máximo 10 por jugador
+    }) : [];
+
+    // Agrupar por jugador
+    const danHistoryByPlayer = new Map<number, any[]>();
+    const seasonHistoryByPlayer = new Map<number, any[]>();
+
+    allDanPointsHistory.forEach(point => {
+      if (!danHistoryByPlayer.has(point.playerId)) {
+        danHistoryByPlayer.set(point.playerId, []);
+      }
+      if (danHistoryByPlayer.get(point.playerId)!.length < 10) {
+        danHistoryByPlayer.get(point.playerId)!.push(point);
+      }
+    });
+
+    allSeasonPointsHistory.forEach(point => {
+      if (!seasonHistoryByPlayer.has(point.playerId)) {
+        seasonHistoryByPlayer.set(point.playerId, []);
+      }
+      if (seasonHistoryByPlayer.get(point.playerId)!.length < 10) {
+        seasonHistoryByPlayer.get(point.playerId)!.push(point);
+      }
+    });
+
+    // Convertir a formato esperado (ahora sin async en el map)
     const playersWithRanking: PlayerWithRanking[] = await Promise.all(rankings.map(async (ranking: any, index: number) => {
       const totalGamesForMode = type === 'TEMPORADA' ? ranking.seasonTotalGames : ranking.totalGames;
       const firstPlaceHForMode = type === 'TEMPORADA' ? ranking.seasonFirstPlaceH : ranking.firstPlaceH;
@@ -156,48 +238,30 @@ export async function getPlayersWithRanking(
       const totalWins = firstPlaceHForMode + firstPlaceTForMode;
       const winRate = totalGamesForMode > 0 ? ((totalWins / totalGamesForMode) * 100) : 0;
 
-      // Tendencia: delta últimos 10 points
-      const sanmaMode: boolean = sanma !== undefined ? Boolean(sanma) : Boolean(ranking.isSanma);
+      // Usar sanmaMode precalculado
+      const rankingSanmaMode: boolean = sanma !== undefined ? Boolean(sanma) : Boolean(ranking.isSanma);
 
       // Obtener ranking Dan y su color
       const danRankJapon = await getDanRank(ranking.danPoints);
       const danRankEspanol = convertirDanAEspanol(danRankJapon);
 
       // Obtener color del rango desde la base de datos
-      const danConfig = await configCache.getDanConfigByPoints(ranking.danPoints, sanmaMode);
+      const danConfig = await configCache.getDanConfigByPoints(ranking.danPoints, rankingSanmaMode);
       const rankColor = danConfig?.color || '#3b82f6'; // fallback al azul por defecto
 
       // Obtener datos para progreso de rango
       const currentRankConfig = danConfig;
       const nextRankConfig = currentRankConfig ?
-        await configCache.getDanConfigByPoints(currentRankConfig.maxPoints + 1, sanmaMode) :
+        await configCache.getDanConfigByPoints(currentRankConfig.maxPoints + 1, rankingSanmaMode) :
         null;
-      // DAN (general)
-      const danPointsHistory = await prisma.points.findMany({
-        where: {
-          playerId: ranking.player.id,
-          pointsType: 'DAN',
-          isSanma: sanmaMode
-        },
-        orderBy: [{ id: 'desc' }, { createdAt: 'desc' }],
-        take: 10
-      });
+
+      // Usar datos precargados para tendencias
+      const danPointsHistory = danHistoryByPlayer.get(ranking.player.id) || [];
       const trendDanDelta10 = danPointsHistory.length >= 2
         ? Number(danPointsHistory[0].pointsValue) - Number(danPointsHistory[danPointsHistory.length - 1].pointsValue)
         : 0;
 
-      // SEASON (temporada activa)
-      const activeSeason = await prisma.season.findFirst({ where: { isActive: true } });
-      const seasonPointsHistory = activeSeason ? await prisma.points.findMany({
-        where: {
-          playerId: ranking.player.id,
-          pointsType: 'SEASON',
-          isSanma: sanmaMode,
-          seasonId: activeSeason.id
-        },
-        orderBy: [{ id: 'desc' }, { createdAt: 'desc' }],
-        take: 10
-      }) : [];
+      const seasonPointsHistory = seasonHistoryByPlayer.get(ranking.player.id) || [];
       const trendSeasonDelta10 = seasonPointsHistory.length >= 2
         ? Number(seasonPointsHistory[0].pointsValue) - Number(seasonPointsHistory[seasonPointsHistory.length - 1].pointsValue)
         : 0;
@@ -276,14 +340,14 @@ export async function getPlayersWithRanking(
     if (!includeInactive) {
       console.log(`🔍 Filtrando jugadores inactivos. Total antes del filtro: ${playersWithRanking.length}`);
 
-      const activePlayersWithRanking = [];
+      // Verificar actividad de todos los jugadores de una vez (batch)
+      const playerNumbers = playersWithRanking.map(p => p.player_id);
+      const activePlayerNumbers = await batchCheckPlayersActivity(playerNumbers);
 
-      for (const player of playersWithRanking) {
-        const isActive = await checkPlayerActivity(player.player_id);
-        if (isActive) {
-          activePlayersWithRanking.push(player);
-        }
-      }
+      // Filtrar solo jugadores activos
+      const activePlayersWithRanking = playersWithRanking.filter(player =>
+        activePlayerNumbers.has(player.player_id)
+      );
 
       console.log(`✅ Jugadores activos encontrados: ${activePlayersWithRanking.length}`);
 
