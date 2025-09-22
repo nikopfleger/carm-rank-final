@@ -13,6 +13,7 @@ function buildKey({ seasonId, type, includeInactive, sanma }: RankingQueryKey): 
 
 class RankingCache<TValue = any> {
     private store = new Map<RankingCacheKey, TValue>();
+    private storeJson = new Map<RankingCacheKey, string>();
 
     get(params: RankingQueryKey): TValue | null {
         const key = buildKey(params);
@@ -26,19 +27,31 @@ class RankingCache<TValue = any> {
         this.store.set(key, value);
     }
 
+    getJson(params: RankingQueryKey): string | null {
+        const key = buildKey(params);
+        return this.storeJson.get(key) ?? null;
+    }
+
+    setJson(params: RankingQueryKey, value: string): void {
+        const key = buildKey(params);
+        this.storeJson.set(key, value);
+    }
+
     invalidate(params?: Partial<RankingQueryKey>): void {
         if (!params || Object.keys(params).length === 0) {
             this.store.clear();
+            this.storeJson.clear();
             return;
         }
-        const entries = Array.from(this.store.keys());
-        for (const key of entries) {
+        const keys = new Set<string>([...this.store.keys(), ...this.storeJson.keys()]);
+        for (const key of keys) {
             const [kSeasonId, kType, kActive, kSanma] = key.split('|');
             if (params.seasonId !== undefined && String(params.seasonId ?? 'none') !== kSeasonId) continue;
             if (params.type !== undefined && params.type !== (kType as any)) continue;
             if (params.includeInactive !== undefined && (params.includeInactive ? 'all' : 'active') !== kActive) continue;
             if (params.sanma !== undefined && (params.sanma ? '3p' : '4p') !== kSanma && !(kSanma === 'both')) continue;
             this.store.delete(key);
+            this.storeJson.delete(key);
         }
     }
 

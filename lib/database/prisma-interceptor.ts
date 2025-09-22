@@ -69,7 +69,7 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
             };
             const result = await query(args);
             if (model === 'PlayerRanking') {
-              rankingCache.invalidate();
+              try { rankingCache.invalidate(); } catch { }
             }
             return result;
           },
@@ -87,7 +87,7 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
             };
             const result = await query(args);
             if (model === 'PlayerRanking') {
-              rankingCache.invalidate();
+              try { rankingCache.invalidate(); } catch { }
             }
             return result;
           },
@@ -121,7 +121,7 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
 
             const result = await query(args);
             if (model === 'PlayerRanking') {
-              rankingCache.invalidate();
+              try { rankingCache.invalidate(); } catch { }
             }
             return result;
           },
@@ -145,7 +145,7 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
               },
             });
             if (model === 'PlayerRanking') {
-              rankingCache.invalidate();
+              try { rankingCache.invalidate(); } catch { }
             }
             return result;
           },

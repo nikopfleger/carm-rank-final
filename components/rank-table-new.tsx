@@ -239,10 +239,7 @@ export function RankTableNew({
         try {
             opts.firstLoad ? setInitializing(true) : setIsFetching(true);
 
-            const [playersResponse, gamesResponse] = await Promise.all([
-                playersApi.getAll({ includeInactive: opts.includeInactive, sanma: opts.sanma, type: opts.type }),
-                playersApi.countGames({ includeInactive: opts.includeInactive, sanma: opts.sanma, type: opts.type })
-            ]);
+            const playersResponse = await playersApi.getAll({ includeInactive: opts.includeInactive, sanma: opts.sanma, type: opts.type });
 
             if (playersResponse.success && playersResponse.data) {
                 const list = playersResponse.data as any[];
@@ -252,14 +249,10 @@ export function RankTableNew({
                 setError(playersResponse.error || "Error cargando el ranking");
             }
 
-            if (gamesResponse.success && typeof gamesResponse.data?.totalUniqueGames === 'number') {
-                setUniqueGames(gamesResponse.data.totalUniqueGames);
-            } else {
-                const seats = opts.sanma ? 3 : 4;
-                const list = playersResponse.data as any[];
-                const approx = Math.round((Array.isArray(list) ? list.reduce((s, p: any) => s + (p.total_games || 0), 0) : 0) / seats);
-                setUniqueGames(approx);
-            }
+            const seats = opts.sanma ? 3 : 4;
+            const list = playersResponse.data as any[];
+            const approx = Math.round((Array.isArray(list) ? list.reduce((s, p: any) => s + (p.total_games || 0), 0) : 0) / seats);
+            setUniqueGames(approx);
         } catch (e: any) {
             if (e?.name !== "AbortError") setError("Error de conexión");
         } finally {

@@ -1,7 +1,9 @@
 import { connectToDatabase } from '@/lib/database/connection';
 import { createPlayer, getPlayersWithRanking } from '@/lib/database/queries/players';
 // i18n se resuelve en el frontend; este endpoint no maneja idioma
+import { rankingCache } from '@/lib/ranking-cache';
 import { NextRequest, NextResponse } from 'next/server';
+import crypto from 'node:crypto';
 
 // GET /api/players - Get all players with ranking
 export async function GET(request: NextRequest) {
@@ -27,6 +29,17 @@ export async function GET(request: NextRequest) {
 
     console.log(`📊 [${new Date().toISOString()}] Parámetros: includeInactive=${includeInactive}, type=${type}${seasonId ? `, seasonId=${seasonId}` : ''}${sanma ? `, sanma=${sanma}` : ''}`);
 
+    const cacheKey = { seasonId: seasonId ? parseInt(seasonId) : undefined, type, includeInactive, sanma: sanma ? sanma === 'true' : undefined } as const;
+    const cachedJson = rankingCache.getJson(cacheKey);
+    if (cachedJson) {
+      const etag = 'W/"' + crypto.createHash('sha1').update(cachedJson).digest('hex') + '"';
+      const ifNoneMatch = request.headers.get('if-none-match');
+      if (ifNoneMatch && ifNoneMatch === etag) {
+        return new NextResponse(null, { status: 304, headers: { ETag: etag } });
+      }
+      return new NextResponse(cachedJson, { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300', ETag: etag } });
+    }
+
     const playersPromise = getPlayersWithRanking(
       seasonId ? parseInt(seasonId) : undefined,
       type,
@@ -41,12 +54,17 @@ export async function GET(request: NextRequest) {
     const duration = Date.now() - startTime;
     console.log(`✅ [${new Date().toISOString()}] Completado en ${duration}ms. Jugadores: ${players.length}`);
 
-    return NextResponse.json({
+    const body = {
       success: true,
       data: players,
       total: players.length,
       message: `Retrieved ${players.length} players ${includeInactive ? '(including inactive)' : '(active only)'} in ${duration}ms`
-    });
+    };
+    const json = JSON.stringify(body);
+    rankingCache.set(cacheKey, players);
+    rankingCache.setJson(cacheKey, json);
+    const etag = 'W/"' + crypto.createHash('sha1').update(json).digest('hex') + '"';
+    return new NextResponse(json, { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300', ETag: etag } });
   } catch (error) {
     if (timeoutId) clearTimeout(timeoutId);
     const duration = Date.now() - startTime;
