@@ -1,29 +1,26 @@
--- CreateSchema
-CREATE SCHEMA IF NOT EXISTS "carm";
+-- CreateEnum
+CREATE TYPE "game_type" AS ENUM ('HANCHAN', 'TONPUUSEN');
 
 -- CreateEnum
-CREATE TYPE "carm"."game_type" AS ENUM ('HANCHAN', 'TONPUUSEN');
+CREATE TYPE "tournament_type" AS ENUM ('INDIVIDUAL', 'TEAM', 'LEAGUE');
 
 -- CreateEnum
-CREATE TYPE "carm"."tournament_type" AS ENUM ('INDIVIDUAL', 'TEAM', 'LEAGUE');
+CREATE TYPE "online_platform" AS ENUM ('TENHOU', 'MAHJONG_SOUL');
 
 -- CreateEnum
-CREATE TYPE "carm"."online_platform" AS ENUM ('TENHOU', 'MAHJONG_SOUL');
+CREATE TYPE "points_type" AS ENUM ('DAN', 'RATE', 'SEASON');
 
 -- CreateEnum
-CREATE TYPE "carm"."points_type" AS ENUM ('DAN', 'RATE', 'SEASON');
+CREATE TYPE "link_request_status" AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
 
 -- CreateEnum
-CREATE TYPE "carm"."link_request_status" AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
+CREATE TYPE "pending_game_status" AS ENUM ('PENDING', 'VALIDATED', 'REJECTED');
 
 -- CreateEnum
-CREATE TYPE "carm"."pending_game_status" AS ENUM ('PENDING', 'VALIDATED', 'REJECTED');
-
--- CreateEnum
-CREATE TYPE "carm"."user_role" AS ENUM ('OWNER', 'SUPER_ADMIN', 'ADMIN', 'MODERATOR', 'USER');
+CREATE TYPE "user_role" AS ENUM ('OWNER', 'SUPER_ADMIN', 'ADMIN', 'MODERATOR', 'USER');
 
 -- CreateTable
-CREATE TABLE "carm"."country" (
+CREATE TABLE "country" (
     "id" SERIAL NOT NULL,
     "iso_code" VARCHAR(3) NOT NULL,
     "full_name" VARCHAR(255) NOT NULL,
@@ -41,7 +38,7 @@ CREATE TABLE "carm"."country" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."player" (
+CREATE TABLE "player" (
     "id" SERIAL NOT NULL,
     "nickname" VARCHAR(255) NOT NULL,
     "fullname" VARCHAR(255),
@@ -61,7 +58,7 @@ CREATE TABLE "carm"."player" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."uma" (
+CREATE TABLE "uma" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(255) NOT NULL,
     "first_place" INTEGER NOT NULL,
@@ -81,7 +78,7 @@ CREATE TABLE "carm"."uma" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."ruleset" (
+CREATE TABLE "ruleset" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(255) NOT NULL,
     "uma_id" INTEGER NOT NULL,
@@ -105,7 +102,7 @@ CREATE TABLE "carm"."ruleset" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."season" (
+CREATE TABLE "season" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(255) NOT NULL,
     "start_date" DATE NOT NULL,
@@ -126,7 +123,7 @@ CREATE TABLE "carm"."season" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."location" (
+CREATE TABLE "location" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(255) NOT NULL,
     "address" TEXT,
@@ -146,12 +143,12 @@ CREATE TABLE "carm"."location" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."pending_game" (
+CREATE TABLE "pending_game" (
     "id" SERIAL NOT NULL,
     "game_date" DATE NOT NULL,
     "nro_juego_dia" INTEGER,
     "location_id" INTEGER,
-    "duration" "carm"."game_type" NOT NULL,
+    "duration" "game_type" NOT NULL,
     "sanma" BOOLEAN NOT NULL DEFAULT false,
     "season_id" INTEGER,
     "tournament_id" INTEGER,
@@ -183,7 +180,7 @@ CREATE TABLE "carm"."pending_game" (
     "player4_game_score" INTEGER,
     "player4_chonbos" INTEGER DEFAULT 0,
     "player4_final_score" DECIMAL(10,1),
-    "status" "carm"."pending_game_status" NOT NULL DEFAULT 'PENDING',
+    "status" "pending_game_status" NOT NULL DEFAULT 'PENDING',
     "submitted_by" TEXT,
     "validated_by" TEXT,
     "validated_at" TIMESTAMP(3),
@@ -202,13 +199,13 @@ CREATE TABLE "carm"."pending_game" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."game" (
+CREATE TABLE "game" (
     "id" SERIAL NOT NULL,
     "season_id" INTEGER,
     "ruleset_id" INTEGER NOT NULL,
     "location_id" INTEGER,
     "tournament_id" INTEGER,
-    "game_type" "carm"."game_type" NOT NULL,
+    "game_type" "game_type" NOT NULL,
     "game_date" DATE NOT NULL,
     "is_validated" BOOLEAN NOT NULL DEFAULT false,
     "image_url" TEXT,
@@ -226,7 +223,7 @@ CREATE TABLE "carm"."game" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."game_result" (
+CREATE TABLE "game_result" (
     "id" SERIAL NOT NULL,
     "game_id" INTEGER NOT NULL,
     "player_id" INTEGER NOT NULL,
@@ -249,13 +246,13 @@ CREATE TABLE "carm"."game_result" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."tournament" (
+CREATE TABLE "tournament" (
     "id" SERIAL NOT NULL,
     "season_id" INTEGER,
     "location_id" INTEGER,
     "name" VARCHAR(255) NOT NULL,
     "description" TEXT,
-    "type" "carm"."tournament_type" NOT NULL,
+    "type" "tournament_type" NOT NULL,
     "start_date" DATE NOT NULL,
     "end_date" DATE NOT NULL,
     "max_players" INTEGER,
@@ -277,7 +274,7 @@ CREATE TABLE "carm"."tournament" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."tournament_result" (
+CREATE TABLE "tournament_result" (
     "id" SERIAL NOT NULL,
     "tournament_id" INTEGER NOT NULL,
     "player_id" INTEGER NOT NULL,
@@ -298,7 +295,7 @@ CREATE TABLE "carm"."tournament_result" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."points" (
+CREATE TABLE "points" (
     "id" SERIAL NOT NULL,
     "player_id" INTEGER NOT NULL,
     "season_id" INTEGER NOT NULL,
@@ -313,7 +310,7 @@ CREATE TABLE "carm"."points" (
     "updated_at" TIMESTAMP(3) NOT NULL,
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
-    "points_type" "carm"."points_type" NOT NULL DEFAULT 'DAN',
+    "points_type" "points_type" NOT NULL DEFAULT 'DAN',
     "game_id" INTEGER,
     "tournament_id" INTEGER,
     "is_sanma" BOOLEAN NOT NULL DEFAULT false,
@@ -322,7 +319,7 @@ CREATE TABLE "carm"."points" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."player_ranking" (
+CREATE TABLE "player_ranking" (
     "id" SERIAL NOT NULL,
     "player_id" INTEGER NOT NULL,
     "is_sanma" BOOLEAN NOT NULL DEFAULT false,
@@ -363,7 +360,7 @@ CREATE TABLE "carm"."player_ranking" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."account" (
+CREATE TABLE "account" (
     "id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
     "type" TEXT NOT NULL,
@@ -381,7 +378,7 @@ CREATE TABLE "carm"."account" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."session" (
+CREATE TABLE "session" (
     "id" TEXT NOT NULL,
     "session_token" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
@@ -391,13 +388,13 @@ CREATE TABLE "carm"."session" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."user" (
+CREATE TABLE "user" (
     "id" TEXT NOT NULL,
     "name" TEXT,
     "email" TEXT NOT NULL,
     "email_verified" TIMESTAMP(3),
     "image" TEXT,
-    "role" "carm"."user_role" NOT NULL DEFAULT 'USER',
+    "role" "user_role" NOT NULL DEFAULT 'USER',
     "authorities" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "is_active" BOOLEAN NOT NULL DEFAULT true,
     "session_invalidated_at" TIMESTAMP(3),
@@ -416,14 +413,14 @@ CREATE TABLE "carm"."user" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."verification_token" (
+CREATE TABLE "verification_token" (
     "identifier" TEXT NOT NULL,
     "token" TEXT NOT NULL,
     "expires" TIMESTAMP(3) NOT NULL
 );
 
 -- CreateTable
-CREATE TABLE "carm"."online_user" (
+CREATE TABLE "online_user" (
     "id" SERIAL NOT NULL,
     "player_id" INTEGER NOT NULL,
     "platform" VARCHAR(50) NOT NULL,
@@ -444,7 +441,7 @@ CREATE TABLE "carm"."online_user" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."user_player_link" (
+CREATE TABLE "user_player_link" (
     "id" SERIAL NOT NULL,
     "user_id" VARCHAR(255) NOT NULL,
     "player_id" INTEGER NOT NULL,
@@ -461,11 +458,11 @@ CREATE TABLE "carm"."user_player_link" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."user_player_link_request" (
+CREATE TABLE "user_player_link_request" (
     "id" SERIAL NOT NULL,
     "user_id" VARCHAR(255) NOT NULL,
     "player_id" INTEGER NOT NULL,
-    "status" "carm"."link_request_status" NOT NULL DEFAULT 'PENDING',
+    "status" "link_request_status" NOT NULL DEFAULT 'PENDING',
     "note" TEXT,
     "approved_by" VARCHAR(255),
     "approved_at" TIMESTAMP(3),
@@ -482,7 +479,7 @@ CREATE TABLE "carm"."user_player_link_request" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."email_account" (
+CREATE TABLE "email_account" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(255) NOT NULL,
     "is_primary" BOOLEAN NOT NULL DEFAULT false,
@@ -509,7 +506,7 @@ CREATE TABLE "carm"."email_account" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."dan_config" (
+CREATE TABLE "dan_config" (
     "id" SERIAL NOT NULL,
     "rank" VARCHAR(50) NOT NULL,
     "sanma" BOOLEAN NOT NULL DEFAULT false,
@@ -536,7 +533,7 @@ CREATE TABLE "carm"."dan_config" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."rate_config" (
+CREATE TABLE "rate_config" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(255) NOT NULL,
     "sanma" BOOLEAN NOT NULL DEFAULT false,
@@ -560,7 +557,7 @@ CREATE TABLE "carm"."rate_config" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."season_config" (
+CREATE TABLE "season_config" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(255) NOT NULL,
     "sanma" BOOLEAN NOT NULL DEFAULT false,
@@ -583,7 +580,7 @@ CREATE TABLE "carm"."season_config" (
 );
 
 -- CreateTable
-CREATE TABLE "carm"."season_result" (
+CREATE TABLE "season_result" (
     "id" SERIAL NOT NULL,
     "season_id" INTEGER NOT NULL,
     "player_id" INTEGER NOT NULL,
@@ -613,166 +610,166 @@ CREATE TABLE "carm"."season_result" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "country_iso_code_key" ON "carm"."country"("iso_code");
+CREATE UNIQUE INDEX "country_iso_code_key" ON "country"("iso_code");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "player_nickname_key" ON "carm"."player"("nickname");
+CREATE UNIQUE INDEX "player_nickname_key" ON "player"("nickname");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "player_player_number_key" ON "carm"."player"("player_number");
+CREATE UNIQUE INDEX "player_player_number_key" ON "player"("player_number");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "game_result_game_id_player_id_key" ON "carm"."game_result"("game_id", "player_id");
+CREATE UNIQUE INDEX "game_result_game_id_player_id_key" ON "game_result"("game_id", "player_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "tournament_result_tournament_id_player_id_key" ON "carm"."tournament_result"("tournament_id", "player_id");
+CREATE UNIQUE INDEX "tournament_result_tournament_id_player_id_key" ON "tournament_result"("tournament_id", "player_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "player_ranking_player_id_is_sanma_key" ON "carm"."player_ranking"("player_id", "is_sanma");
+CREATE UNIQUE INDEX "player_ranking_player_id_is_sanma_key" ON "player_ranking"("player_id", "is_sanma");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "account_provider_provider_account_id_key" ON "carm"."account"("provider", "provider_account_id");
+CREATE UNIQUE INDEX "account_provider_provider_account_id_key" ON "account"("provider", "provider_account_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "session_session_token_key" ON "carm"."session"("session_token");
+CREATE UNIQUE INDEX "session_session_token_key" ON "session"("session_token");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "user_email_key" ON "carm"."user"("email");
+CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "verification_token_token_key" ON "carm"."verification_token"("token");
+CREATE UNIQUE INDEX "verification_token_token_key" ON "verification_token"("token");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "verification_token_identifier_token_key" ON "carm"."verification_token"("identifier", "token");
+CREATE UNIQUE INDEX "verification_token_identifier_token_key" ON "verification_token"("identifier", "token");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "user_player_link_user_id_key" ON "carm"."user_player_link"("user_id");
+CREATE UNIQUE INDEX "user_player_link_user_id_key" ON "user_player_link"("user_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "user_player_link_player_id_key" ON "carm"."user_player_link"("player_id");
+CREATE UNIQUE INDEX "user_player_link_player_id_key" ON "user_player_link"("player_id");
 
 -- CreateIndex
-CREATE INDEX "user_player_link_request_player_id_idx" ON "carm"."user_player_link_request"("player_id");
+CREATE INDEX "user_player_link_request_player_id_idx" ON "user_player_link_request"("player_id");
 
 -- CreateIndex
-CREATE INDEX "user_player_link_request_user_id_idx" ON "carm"."user_player_link_request"("user_id");
+CREATE INDEX "user_player_link_request_user_id_idx" ON "user_player_link_request"("user_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "dan_config_rank_sanma_key" ON "carm"."dan_config"("rank", "sanma");
+CREATE UNIQUE INDEX "dan_config_rank_sanma_key" ON "dan_config"("rank", "sanma");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "rate_config_name_sanma_key" ON "carm"."rate_config"("name", "sanma");
+CREATE UNIQUE INDEX "rate_config_name_sanma_key" ON "rate_config"("name", "sanma");
 
 -- CreateIndex
-CREATE INDEX "season_config_name_sanma_season_id_idx" ON "carm"."season_config"("name", "sanma", "season_id");
+CREATE INDEX "season_config_name_sanma_season_id_idx" ON "season_config"("name", "sanma", "season_id");
 
 -- CreateIndex
-CREATE INDEX "season_config_name_sanma_is_default_idx" ON "carm"."season_config"("name", "sanma", "is_default");
+CREATE INDEX "season_config_name_sanma_is_default_idx" ON "season_config"("name", "sanma", "is_default");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "season_result_season_id_player_id_is_sanma_key" ON "carm"."season_result"("season_id", "player_id", "is_sanma");
+CREATE UNIQUE INDEX "season_result_season_id_player_id_is_sanma_key" ON "season_result"("season_id", "player_id", "is_sanma");
 
 -- AddForeignKey
-ALTER TABLE "carm"."player" ADD CONSTRAINT "player_country_id_fkey" FOREIGN KEY ("country_id") REFERENCES "carm"."country"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "player" ADD CONSTRAINT "player_country_id_fkey" FOREIGN KEY ("country_id") REFERENCES "country"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."ruleset" ADD CONSTRAINT "ruleset_uma_id_fkey" FOREIGN KEY ("uma_id") REFERENCES "carm"."uma"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ruleset" ADD CONSTRAINT "ruleset_uma_id_fkey" FOREIGN KEY ("uma_id") REFERENCES "uma"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."pending_game" ADD CONSTRAINT "pending_game_game_id_fkey" FOREIGN KEY ("game_id") REFERENCES "carm"."game"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "pending_game" ADD CONSTRAINT "pending_game_game_id_fkey" FOREIGN KEY ("game_id") REFERENCES "game"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."pending_game" ADD CONSTRAINT "pending_game_player1_id_fkey" FOREIGN KEY ("player1_id") REFERENCES "carm"."player"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "pending_game" ADD CONSTRAINT "pending_game_player1_id_fkey" FOREIGN KEY ("player1_id") REFERENCES "player"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."pending_game" ADD CONSTRAINT "pending_game_player2_id_fkey" FOREIGN KEY ("player2_id") REFERENCES "carm"."player"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "pending_game" ADD CONSTRAINT "pending_game_player2_id_fkey" FOREIGN KEY ("player2_id") REFERENCES "player"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."pending_game" ADD CONSTRAINT "pending_game_player3_id_fkey" FOREIGN KEY ("player3_id") REFERENCES "carm"."player"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "pending_game" ADD CONSTRAINT "pending_game_player3_id_fkey" FOREIGN KEY ("player3_id") REFERENCES "player"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."pending_game" ADD CONSTRAINT "pending_game_player4_id_fkey" FOREIGN KEY ("player4_id") REFERENCES "carm"."player"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "pending_game" ADD CONSTRAINT "pending_game_player4_id_fkey" FOREIGN KEY ("player4_id") REFERENCES "player"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."pending_game" ADD CONSTRAINT "pending_game_ruleset_id_fkey" FOREIGN KEY ("ruleset_id") REFERENCES "carm"."ruleset"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "pending_game" ADD CONSTRAINT "pending_game_ruleset_id_fkey" FOREIGN KEY ("ruleset_id") REFERENCES "ruleset"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."pending_game" ADD CONSTRAINT "pending_game_season_id_fkey" FOREIGN KEY ("season_id") REFERENCES "carm"."season"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "pending_game" ADD CONSTRAINT "pending_game_season_id_fkey" FOREIGN KEY ("season_id") REFERENCES "season"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."pending_game" ADD CONSTRAINT "pending_game_tournament_id_fkey" FOREIGN KEY ("tournament_id") REFERENCES "carm"."tournament"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "pending_game" ADD CONSTRAINT "pending_game_tournament_id_fkey" FOREIGN KEY ("tournament_id") REFERENCES "tournament"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."pending_game" ADD CONSTRAINT "pending_game_location_id_fkey" FOREIGN KEY ("location_id") REFERENCES "carm"."location"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "pending_game" ADD CONSTRAINT "pending_game_location_id_fkey" FOREIGN KEY ("location_id") REFERENCES "location"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."game" ADD CONSTRAINT "game_location_id_fkey" FOREIGN KEY ("location_id") REFERENCES "carm"."location"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "game" ADD CONSTRAINT "game_location_id_fkey" FOREIGN KEY ("location_id") REFERENCES "location"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."game" ADD CONSTRAINT "game_ruleset_id_fkey" FOREIGN KEY ("ruleset_id") REFERENCES "carm"."ruleset"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "game" ADD CONSTRAINT "game_ruleset_id_fkey" FOREIGN KEY ("ruleset_id") REFERENCES "ruleset"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."game" ADD CONSTRAINT "game_season_id_fkey" FOREIGN KEY ("season_id") REFERENCES "carm"."season"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "game" ADD CONSTRAINT "game_season_id_fkey" FOREIGN KEY ("season_id") REFERENCES "season"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."game" ADD CONSTRAINT "game_tournament_id_fkey" FOREIGN KEY ("tournament_id") REFERENCES "carm"."tournament"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "game" ADD CONSTRAINT "game_tournament_id_fkey" FOREIGN KEY ("tournament_id") REFERENCES "tournament"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."game_result" ADD CONSTRAINT "game_result_game_id_fkey" FOREIGN KEY ("game_id") REFERENCES "carm"."game"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "game_result" ADD CONSTRAINT "game_result_game_id_fkey" FOREIGN KEY ("game_id") REFERENCES "game"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."game_result" ADD CONSTRAINT "game_result_player_id_fkey" FOREIGN KEY ("player_id") REFERENCES "carm"."player"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "game_result" ADD CONSTRAINT "game_result_player_id_fkey" FOREIGN KEY ("player_id") REFERENCES "player"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."tournament" ADD CONSTRAINT "tournament_location_id_fkey" FOREIGN KEY ("location_id") REFERENCES "carm"."location"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "tournament" ADD CONSTRAINT "tournament_location_id_fkey" FOREIGN KEY ("location_id") REFERENCES "location"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."tournament" ADD CONSTRAINT "tournament_season_id_fkey" FOREIGN KEY ("season_id") REFERENCES "carm"."season"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "tournament" ADD CONSTRAINT "tournament_season_id_fkey" FOREIGN KEY ("season_id") REFERENCES "season"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."tournament_result" ADD CONSTRAINT "tournament_result_player_id_fkey" FOREIGN KEY ("player_id") REFERENCES "carm"."player"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "tournament_result" ADD CONSTRAINT "tournament_result_player_id_fkey" FOREIGN KEY ("player_id") REFERENCES "player"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."tournament_result" ADD CONSTRAINT "tournament_result_tournament_id_fkey" FOREIGN KEY ("tournament_id") REFERENCES "carm"."tournament"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "tournament_result" ADD CONSTRAINT "tournament_result_tournament_id_fkey" FOREIGN KEY ("tournament_id") REFERENCES "tournament"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."points" ADD CONSTRAINT "fk_points_player_id" FOREIGN KEY ("player_id") REFERENCES "carm"."player"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "points" ADD CONSTRAINT "fk_points_player_id" FOREIGN KEY ("player_id") REFERENCES "player"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "carm"."points" ADD CONSTRAINT "fk_points_game_id" FOREIGN KEY ("game_id") REFERENCES "carm"."game"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "points" ADD CONSTRAINT "fk_points_game_id" FOREIGN KEY ("game_id") REFERENCES "game"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "carm"."points" ADD CONSTRAINT "fk_points_tournament_id" FOREIGN KEY ("tournament_id") REFERENCES "carm"."tournament"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "points" ADD CONSTRAINT "fk_points_tournament_id" FOREIGN KEY ("tournament_id") REFERENCES "tournament"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "carm"."player_ranking" ADD CONSTRAINT "player_ranking_player_id_fkey" FOREIGN KEY ("player_id") REFERENCES "carm"."player"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "player_ranking" ADD CONSTRAINT "player_ranking_player_id_fkey" FOREIGN KEY ("player_id") REFERENCES "player"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."account" ADD CONSTRAINT "account_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "carm"."user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "account" ADD CONSTRAINT "account_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."session" ADD CONSTRAINT "session_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "carm"."user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "session" ADD CONSTRAINT "session_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."online_user" ADD CONSTRAINT "online_user_player_id_fkey" FOREIGN KEY ("player_id") REFERENCES "carm"."player"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "online_user" ADD CONSTRAINT "online_user_player_id_fkey" FOREIGN KEY ("player_id") REFERENCES "player"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."user_player_link" ADD CONSTRAINT "user_player_link_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "carm"."user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "user_player_link" ADD CONSTRAINT "user_player_link_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."user_player_link" ADD CONSTRAINT "user_player_link_player_id_fkey" FOREIGN KEY ("player_id") REFERENCES "carm"."player"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "user_player_link" ADD CONSTRAINT "user_player_link_player_id_fkey" FOREIGN KEY ("player_id") REFERENCES "player"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."user_player_link_request" ADD CONSTRAINT "user_player_link_request_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "carm"."user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "user_player_link_request" ADD CONSTRAINT "user_player_link_request_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."user_player_link_request" ADD CONSTRAINT "user_player_link_request_player_id_fkey" FOREIGN KEY ("player_id") REFERENCES "carm"."player"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "user_player_link_request" ADD CONSTRAINT "user_player_link_request_player_id_fkey" FOREIGN KEY ("player_id") REFERENCES "player"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."season_config" ADD CONSTRAINT "season_config_season_id_fkey" FOREIGN KEY ("season_id") REFERENCES "carm"."season"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "season_config" ADD CONSTRAINT "season_config_season_id_fkey" FOREIGN KEY ("season_id") REFERENCES "season"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."season_result" ADD CONSTRAINT "season_result_season_id_fkey" FOREIGN KEY ("season_id") REFERENCES "carm"."season"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "season_result" ADD CONSTRAINT "season_result_season_id_fkey" FOREIGN KEY ("season_id") REFERENCES "season"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carm"."season_result" ADD CONSTRAINT "season_result_player_id_fkey" FOREIGN KEY ("player_id") REFERENCES "carm"."player"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "season_result" ADD CONSTRAINT "season_result_player_id_fkey" FOREIGN KEY ("player_id") REFERENCES "player"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
