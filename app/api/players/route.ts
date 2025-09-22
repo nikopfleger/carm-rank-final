@@ -2,6 +2,7 @@ import { connectToDatabase } from '@/lib/database/connection';
 import { createPlayer, getPlayersWithRanking } from '@/lib/database/queries/players';
 // i18n se resuelve en el frontend; este endpoint no maneja idioma
 import { rankingCache } from '@/lib/ranking-cache';
+import { getRankingRefreshSchedule } from '@/lib/ranking-prewarm';
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'node:crypto';
 
@@ -37,7 +38,8 @@ export async function GET(request: NextRequest) {
       if (ifNoneMatch && ifNoneMatch === etag) {
         return new NextResponse(null, { status: 304, headers: { ETag: etag } });
       }
-      return new NextResponse(cachedJson, { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300', ETag: etag } });
+      const schedule = getRankingRefreshSchedule();
+      return new NextResponse(cachedJson, { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300', 'X-Refreshed-At': schedule.refreshedAt, 'X-Next-Refresh-At': schedule.nextRefreshAt, ETag: etag } });
     }
 
     const playersPromise = getPlayersWithRanking(
@@ -69,7 +71,8 @@ export async function GET(request: NextRequest) {
     rankingCache.set(cacheKey, players);
     rankingCache.setJson(cacheKey, json);
     const etag = 'W/"' + crypto.createHash('sha1').update(json).digest('hex') + '"';
-    return new NextResponse(json, { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300', ETag: etag } });
+    const schedule = getRankingRefreshSchedule();
+    return new NextResponse(json, { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300', 'X-Refreshed-At': schedule.refreshedAt, 'X-Next-Refresh-At': schedule.nextRefreshAt, ETag: etag } });
   } catch (error) {
     if (timeoutId) clearTimeout(timeoutId);
     const duration = Date.now() - startTime;

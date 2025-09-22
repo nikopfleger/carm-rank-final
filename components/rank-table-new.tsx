@@ -96,6 +96,7 @@ export function RankTableNew({
     const [initializing, setInitializing] = useState(true);
     const [isFetching, setIsFetching] = useState(false);
     const [lastupdatedAt, setLastupdatedAt] = useState<Date | null>(null);
+    const [nextRefreshAt, setNextRefreshAt] = useState<Date | null>(null);
     const [urlParamsLoaded, setUrlParamsLoaded] = useState(false);
 
     const fetchAbortRef = useRef<AbortController | null>(null);
@@ -245,6 +246,8 @@ export function RankTableNew({
                 const list = playersResponse.data as any[];
                 setPlayerData(Array.isArray(list) ? list : []);
                 setError(null);
+                if (playersResponse.refreshedAt) setLastupdatedAt(new Date(playersResponse.refreshedAt));
+                if (playersResponse.nextRefreshAt) setNextRefreshAt(new Date(playersResponse.nextRefreshAt));
             } else {
                 setError(playersResponse.error || "Error cargando el ranking");
             }
@@ -331,7 +334,10 @@ export function RankTableNew({
         <div className={`w-full space-y-6 px-3 sm:px-4 mx-auto max-w-6xl pb-24 lg:pb-0 ${fullBleed ? 'w-screen ml-[50%] -translate-x-[50%]' : ''}`}>
             {lastupdatedAt && (
                 <div className="text-xs text-muted-foreground text-center py-2 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 rounded-lg">
-                    ✨ Última actualización: {lastupdatedAt.toLocaleTimeString('es-AR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })} • Próxima actualización automática en 5 minutos
+                    ✨ Última actualización: {lastupdatedAt.toLocaleTimeString('es-AR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                    {nextRefreshAt && (
+                        <> • Próxima actualización: {nextRefreshAt.toLocaleTimeString('es-AR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}</>
+                    )}
                 </div>
             )}
 

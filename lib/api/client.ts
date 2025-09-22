@@ -9,6 +9,8 @@ export interface ApiResponse<T> {
   message?: string;
   total?: number;
   totalUniqueGames?: number;
+  refreshedAt?: string;
+  nextRefreshAt?: string;
 }
 
 // Generic API call function

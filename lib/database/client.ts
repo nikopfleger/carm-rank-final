@@ -1,4 +1,4 @@
-import { prewarmRankingCache } from '@/lib/ranking-prewarm';
+import { prewarmRankingCache, startRankingAutoRefresh } from '@/lib/ranking-prewarm';
 import { PrismaClient } from '@prisma/client';
 import { initializeConfigurations } from '../config-initializer';
 import { createVersionedPrismaClient } from './prisma-interceptor';
@@ -81,8 +81,8 @@ export async function connectToDatabase() {
     // Initialize configuration cache after database connection
     await initializeConfigurations();
 
-    // Prewarm ranking cache (no bloquea)
-    prewarmRankingCache().catch(() => { });
+    // Prewarm y auto-refresh cada 5 minutos (no bloquea)
+    prewarmRankingCache().then(() => startRankingAutoRefresh()).catch(() => { });
 
     // Start keep-alive (solo en producción)
     if (process.env.NODE_ENV === 'production') {

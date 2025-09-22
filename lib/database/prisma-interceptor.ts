@@ -35,10 +35,14 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
       // Aplicar a todos los modelos con versionado
       ...MODELS_WITH_VERSIONING.reduce((acc, model) => {
         const modelName = model.toLowerCase() as keyof typeof prisma;
+        const isAuthModel = ['Account', 'Session', 'VerificationToken'].includes(model);
 
         acc[modelName] = {
           // CREATE - Agregar version, deleted, timestamps y auditoría
           async create({ args, query }: any) {
+            if (isAuthModel) {
+              return query(args);
+            }
             const now = new Date();
             const auditInfo = await getAuditInfo();
             args.data = {
@@ -57,6 +61,9 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
 
           // UPDATE - Incrementar versión y actualizar timestamp y auditoría
           async update({ args, query }: any) {
+            if (isAuthModel) {
+              return query(args);
+            }
             const now = new Date();
             const auditInfo = await getAuditInfo();
             args.data = {
@@ -76,6 +83,9 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
 
           // UPDATE MANY - Incrementar versión y actualizar timestamp y auditoría
           async updateMany({ args, query }: any) {
+            if (isAuthModel) {
+              return query(args);
+            }
             const now = new Date();
             const auditInfo = await getAuditInfo();
             args.data = {
@@ -94,6 +104,9 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
 
           // UPSERT - Manejar create y update con auditoría
           async upsert({ args, query }: any) {
+            if (isAuthModel) {
+              return query(args);
+            }
             const now = new Date();
             const auditInfo = await getAuditInfo();
 
@@ -128,6 +141,9 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
 
           // DELETE - Convertir a soft delete con auditoría
           async delete({ args, query }: any) {
+            if (isAuthModel) {
+              return query(args);
+            }
             const now = new Date();
             const auditInfo = await getAuditInfo();
             const result = await query({
@@ -152,6 +168,9 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
 
           // DELETE MANY - Convertir a soft delete con auditoría
           async deleteMany({ args, query }: any) {
+            if (isAuthModel) {
+              return query(args);
+            }
             const now = new Date();
             const auditInfo = await getAuditInfo();
             const result = await query({
@@ -176,6 +195,9 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
 
           // FIND MANY - Filtrar eliminados
           async findMany({ args, query }: any) {
+            if (isAuthModel) {
+              return query(args);
+            }
             if (!args.where) {
               args.where = { deleted: false };
             } else {
@@ -189,6 +211,9 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
 
           // FIND FIRST - Filtrar eliminados
           async findFirst({ args, query }: any) {
+            if (isAuthModel) {
+              return query(args);
+            }
             if (!args.where) {
               args.where = { deleted: false };
             } else {
@@ -202,6 +227,9 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
 
           // FIND UNIQUE - Filtrar eliminados
           async findUnique({ args, query }: any) {
+            if (isAuthModel) {
+              return query(args);
+            }
             if (!args.where) {
               args.where = { deleted: false };
             } else {
@@ -215,6 +243,9 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
 
           // COUNT - Filtrar eliminados
           async count({ args, query }: any) {
+            if (isAuthModel) {
+              return query(args);
+            }
             if (!args.where) {
               args.where = { deleted: false };
             } else {
