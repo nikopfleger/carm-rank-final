@@ -1,22 +1,16 @@
-import { PrismaClient } from '@prisma/client';
+import { rankingCache } from '@/lib/ranking-cache';
+import { getRequestContext } from '@/lib/request-context';
+import { Prisma, PrismaClient } from '@prisma/client';
 
-// Función para obtener información de auditoría del contexto
-function getAuditInfo() {
-  // En un contexto real, esto vendría del request/context
-  // Por ahora, usamos valores por defecto
-  return {
-    userId: 'system', // TODO: Obtener del contexto de autenticación
-    userIp: '127.0.0.1', // TODO: Obtener del request
-  };
+async function getAuditInfo() {
+  const ctx = getRequestContext();
+  const userId = ctx?.userId || 'system';
+  const userIp = ctx?.userIp || '127.0.0.1';
+  return { userId, userIp };
 }
 
-// Lista de modelos que tienen versionado y soft delete
-const MODELS_WITH_VERSIONING = [
-  'Country', 'Player', 'Uma', 'Ruleset', 'Season', 'Location',
-  'Tournament', 'TournamentResult', 'OnlineUser', 'Game', 'GameResult',
-  'Points', 'PlayerRanking', 'UserPlayerLink', 'UserPlayerLinkRequest',
-  'PendingGame', 'DanConfig', 'RateConfig', 'SeasonConfig', 'SeasonResult'
-] as const;
+// Tomar TODOS los modelos definidos en el schema de Prisma
+const MODELS_WITH_VERSIONING: readonly string[] = ((Prisma as any)?.dmmf?.datamodel?.models || []).map((m: any) => m.name);
 
 // Función para incluir registros eliminados (para admin)
 export function includeDeleted(where: any = {}) {
@@ -46,7 +40,7 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
           // CREATE - Agregar version, deleted, timestamps y auditoría
           async create({ args, query }: any) {
             const now = new Date();
-            const auditInfo = getAuditInfo();
+            const auditInfo = await getAuditInfo();
             args.data = {
               ...args.data,
               version: 0,
@@ -64,7 +58,7 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
           // UPDATE - Incrementar versión y actualizar timestamp y auditoría
           async update({ args, query }: any) {
             const now = new Date();
-            const auditInfo = getAuditInfo();
+            const auditInfo = await getAuditInfo();
             args.data = {
               ...args.data,
               updatedAt: now,
@@ -73,13 +67,17 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
               // Incrementar versión solo si no es un soft delete
               ...(args.data.deleted !== true && { version: { increment: 1 } }),
             };
-            return query(args);
+            const result = await query(args);
+            if (model === 'PlayerRanking') {
+              rankingCache.invalidate();
+            }
+            return result;
           },
 
           // UPDATE MANY - Incrementar versión y actualizar timestamp y auditoría
           async updateMany({ args, query }: any) {
             const now = new Date();
-            const auditInfo = getAuditInfo();
+            const auditInfo = await getAuditInfo();
             args.data = {
               ...args.data,
               updatedAt: now,
@@ -87,13 +85,17 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
               updatedIp: auditInfo.userIp,
               ...(args.data.deleted !== true && { version: { increment: 1 } }),
             };
-            return query(args);
+            const result = await query(args);
+            if (model === 'PlayerRanking') {
+              rankingCache.invalidate();
+            }
+            return result;
           },
 
           // UPSERT - Manejar create y update con auditoría
           async upsert({ args, query }: any) {
             const now = new Date();
-            const auditInfo = getAuditInfo();
+            const auditInfo = await getAuditInfo();
 
             // Para create
             args.create = {
@@ -117,14 +119,18 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
               ...(args.update.deleted !== true && { version: { increment: 1 } }),
             };
 
-            return query(args);
+            const result = await query(args);
+            if (model === 'PlayerRanking') {
+              rankingCache.invalidate();
+            }
+            return result;
           },
 
           // DELETE - Convertir a soft delete con auditoría
           async delete({ args, query }: any) {
             const now = new Date();
-            const auditInfo = getAuditInfo();
-            return query({
+            const auditInfo = await getAuditInfo();
+            const result = await query({
               ...args,
               action: 'update',
               args: {
@@ -138,13 +144,17 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
                 },
               },
             });
+            if (model === 'PlayerRanking') {
+              rankingCache.invalidate();
+            }
+            return result;
           },
 
           // DELETE MANY - Convertir a soft delete con auditoría
           async deleteMany({ args, query }: any) {
             const now = new Date();
-            const auditInfo = getAuditInfo();
-            return query({
+            const auditInfo = await getAuditInfo();
+            const result = await query({
               ...args,
               action: 'updateMany',
               args: {
@@ -158,6 +168,10 @@ export function createVersionedPrismaClient(prisma: PrismaClient) {
                 },
               },
             });
+            if (model === 'PlayerRanking') {
+              rankingCache.invalidate();
+            }
+            return result;
           },
 
           // FIND MANY - Filtrar eliminados

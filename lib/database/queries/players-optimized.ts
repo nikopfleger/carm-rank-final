@@ -1,3 +1,4 @@
+import { rankingCache } from '@/lib/ranking-cache';
 import { configCache } from '../../config-cache';
 import { getDanRank } from '../../game-helpers';
 import { prisma } from '../client';
@@ -76,6 +77,8 @@ export async function getPlayersWithRanking(
   sanma?: boolean // true = 3 jugadores, false = 4 jugadores, undefined = todos
 ): Promise<PlayerWithRanking[]> {
   try {
+    const cached = rankingCache.get({ seasonId, type, includeInactive, sanma });
+    if (cached) return cached as PlayerWithRanking[];
 
     // Obtener la fecha límite para jugadores activos (1 año atrás)
     const oneYearAgo = new Date();
@@ -315,6 +318,7 @@ export async function getPlayersWithRanking(
       return activePlayersWithConsecutivePositions;
     }
 
+    rankingCache.set({ seasonId, type, includeInactive, sanma }, playersWithRanking);
     return playersWithRanking;
 
   } catch (error) {
