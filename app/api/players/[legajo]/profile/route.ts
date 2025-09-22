@@ -462,12 +462,12 @@ export async function GET(
                 ruleset.sanma as game_sanma,
                 gr.final_position,
                 gr.final_score
-            FROM carm.points po 
-            JOIN carm.player pl ON pl.id = po.player_id
-            LEFT JOIN carm.game game ON game.id = po.game_id
-            LEFT JOIN carm.ruleset ruleset ON ruleset.id = game.ruleset_id
-            LEFT JOIN carm.game_result gr ON gr.player_id = po.player_id AND gr.game_id = po.game_id
-            LEFT JOIN carm.tournament tr ON tr.id = po.tournament_id
+            FROM points po 
+            JOIN player pl ON pl.id = po.player_id
+            LEFT JOIN game game ON game.id = po.game_id
+            LEFT JOIN ruleset ruleset ON ruleset.id = game.ruleset_id
+            LEFT JOIN game_result gr ON gr.player_id = po.player_id AND gr.game_id = po.game_id
+            LEFT JOIN tournament tr ON tr.id = po.tournament_id
             WHERE pl.id = ${player.id} 
             AND po.points_type = 'SEASON'
             ORDER BY COALESCE(game.game_date, tr.end_date), po.game_id ASC NULLS LAST, po.id

@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
       const pattern = `%${term}%`;
       const rows = await prisma.$queryRaw<Array<{ id: number }>>`
         SELECT id
-        FROM carm.player
+        FROM player
         WHERE ${includeDeleted ? '1=1' : 'deleted = false'}
           AND CAST(player_number AS TEXT) ILIKE ${pattern} ESCAPE '\\'
       `;
@@ -49,8 +49,8 @@ export async function GET(request: NextRequest) {
           p.updatedAt as "updatedAt",
           c.id as "country_id",
           c.full_name as "country_fullName"
-        FROM carm.player p
-        LEFT JOIN carm.country c ON p.country_id = c.id
+        FROM player p
+        LEFT JOIN country c ON p.country_id = c.id
         ORDER BY p.player_number ASC
       `;
 

@@ -63,12 +63,12 @@ export async function GET(request: NextRequest) {
 
         // Filtrar por jugadores si es necesario
         if (!includeInactive && playerIds.length > 0) {
-            clauses.push(Prisma.sql`EXISTS (SELECT 1 FROM carm.game_result gr WHERE gr.game_id = g.id AND gr.player_id IN (${Prisma.join(playerIds)}))`);
+            clauses.push(Prisma.sql`EXISTS (SELECT 1 FROM game_result gr WHERE gr.game_id = g.id AND gr.player_id IN (${Prisma.join(playerIds)}))`);
         }
 
         // Filtrar por sanma
         if (sanma !== null && sanma !== undefined) {
-            clauses.push(Prisma.sql`EXISTS (SELECT 1 FROM carm.ruleset r WHERE r.id = g.ruleset_id AND r.sanma = ${sanma === 'true'})`);
+            clauses.push(Prisma.sql`EXISTS (SELECT 1 FROM ruleset r WHERE r.id = g.ruleset_id AND r.sanma = ${sanma === 'true'})`);
         }
 
         // Filtrar por temporada si es necesario
@@ -80,7 +80,7 @@ export async function GET(request: NextRequest) {
         const whereSql = clauses.length ? Prisma.sql`WHERE ${Prisma.join(clauses, ' AND ')}` : Prisma.empty;
 
         const rows = await prismaClient.$queryRaw<{ count: bigint }[]>(
-            Prisma.sql`SELECT COUNT(DISTINCT g.id) AS count FROM carm.game g ${whereSql}`
+            Prisma.sql`SELECT COUNT(DISTINCT g.id) AS count FROM game g ${whereSql}`
         );
 
         const totalUniqueGames = rows.length ? Number(rows[0].count) : 0;
