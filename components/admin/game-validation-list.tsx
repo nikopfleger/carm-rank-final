@@ -495,6 +495,11 @@ export function GameValidationList() {
                                 width={800}
                                 height={600}
                                 className="w-full h-auto rounded"
+                                unoptimized
+                                onError={(e) => {
+                                  const img = e.currentTarget as HTMLImageElement;
+                                  img.src = '/images/image-not-available.svg';
+                                }}
                               />
                             </div>
                             <p className="mt-2 text-xs text-muted-foreground">

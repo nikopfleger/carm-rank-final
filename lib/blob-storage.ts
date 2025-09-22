@@ -1,61 +1,49 @@
 import { del, head, put } from '@vercel/blob';
 
-/**
- * Servicio para manejo de imágenes usando Vercel Blob Storage
- * Con fallback graceful si no está configurado
- */
 class BlobStorageService {
+    /** Usa tu env personalizada pasando el token explícito al SDK */
+    private get token(): string | undefined {
+        return process.env.CARM_BLOB_READ_WRITE_TOKEN;
+    }
     private isConfigured(): boolean {
-        return !!process.env.CARM_BLOB_READ_WRITE_TOKEN;
+        return !!this.token;
     }
 
-    /**
-     * Sube una imagen a Vercel Blob
-     */
     async uploadImage(
         buffer: Buffer,
         filename: string,
-        subfolder: string = 'games'
-    ): Promise<{ url: string; filename: string } | null> {
+        subfolder = 'games'
+    ): Promise<{ url: string; filename: string; path: string } | null> {
         try {
             if (!this.isConfigured()) {
-                console.warn('⚠️ Vercel Blob no configurado. CARM_BLOB_READ_WRITE_TOKEN faltante.');
+                console.warn('⚠️ Vercel Blob no configurado (CARM_BLOB_READ_WRITE_TOKEN faltante).');
                 return null;
             }
 
-            // Generar nombre único con timestamp
             const uniqueFilename = this.generateUniqueFilename(filename);
             const blobPath = `${subfolder}/${uniqueFilename}`;
 
-            // Subir a Vercel Blob
             const blob = await put(blobPath, buffer, {
                 access: 'public',
                 contentType: this.getMimeType(filename),
+                token: this.token,               // <- clave: pasamos tu token
             });
 
             console.log(`✅ Imagen subida a Blob: ${blob.url}`);
-
-            return {
-                url: blob.url,
-                filename: uniqueFilename
-            };
+            return { url: blob.url, filename: uniqueFilename, path: blobPath };
         } catch (error) {
             console.warn('⚠️ Error subiendo imagen a Blob:', error);
             return null;
         }
     }
 
-    /**
-     * Elimina una imagen de Vercel Blob
-     */
     async deleteImage(url: string): Promise<boolean> {
         try {
             if (!this.isConfigured()) {
                 console.warn('⚠️ Vercel Blob no configurado. No se puede eliminar:', url);
                 return false;
             }
-
-            await del(url);
+            await del(url, { token: this.token });
             console.log(`✅ Imagen eliminada de Blob: ${url}`);
             return true;
         } catch (error) {
@@ -64,53 +52,43 @@ class BlobStorageService {
         }
     }
 
-    /**
-     * Verifica si una imagen existe en Blob
-     */
     async imageExists(url: string): Promise<boolean> {
         try {
-            if (!this.isConfigured()) {
-                return false;
+            // Si es público debería responder sin token; si falla, reintenta con token (por si acaso)
+            try {
+                await head(url);
+                return true;
+            } catch {
+                if (!this.isConfigured()) return false;
+                await head(url, { token: this.token });
+                return true;
             }
-
-            await head(url);
-            return true;
-        } catch (error) {
-            console.warn('⚠️ Error verificando imagen en Blob:', error);
+        } catch {
             return false;
         }
     }
 
-    /**
-     * Genera un nombre único para el archivo
-     */
     private generateUniqueFilename(originalFilename: string): string {
         const timestamp = Date.now();
-        const random = Math.random().toString(36).substring(2, 8);
-        const extension = originalFilename.split('.').pop() || 'jpg';
-        const baseName = originalFilename.split('.')[0]?.slice(0, 20) || 'image';
-
-        return `${baseName}_${timestamp}_${random}.${extension}`;
+        const random = Math.random().toString(36).slice(2, 8);
+        const ext = (originalFilename.split('.').pop() || 'jpg').toLowerCase();
+        const rawBase = originalFilename.replace(/\.[^/.]+$/, '');
+        const base = rawBase.replace(/[^a-z0-9_-]/gi, '').slice(0, 32) || 'image';
+        return `${base}_${timestamp}_${random}.${ext}`;
     }
 
-    /**
-     * Obtiene el MIME type basado en la extensión
-     */
     private getMimeType(filename: string): string {
-        const extension = filename.split('.').pop()?.toLowerCase();
-
-        switch (extension) {
+        const ext = (filename.split('.').pop() || '').toLowerCase();
+        switch (ext) {
             case 'jpg':
-            case 'jpeg':
-                return 'image/jpeg';
-            case 'png':
-                return 'image/png';
-            case 'webp':
-                return 'image/webp';
-            case 'gif':
-                return 'image/gif';
-            default:
-                return 'image/jpeg';
+            case 'jpeg': return 'image/jpeg';
+            case 'png': return 'image/png';
+            case 'webp': return 'image/webp';
+            case 'gif': return 'image/gif';
+            case 'svg': return 'image/svg+xml';
+            case 'avif': return 'image/avif';
+            case 'heic': return 'image/heic';
+            default: return 'application/octet-stream';
         }
     }
 }

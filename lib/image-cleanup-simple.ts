@@ -1,14 +1,12 @@
-import { imageStorage } from './image-storage';
-import { hybridImageStorage } from './image-storage-hybrid';
+import { hybridImageStorage } from './simplified-image-storage';
 
 // ============================================================================
-// LIMPIEZA SIMPLE DE IMÁGENES - SOLO INMEDIATA
+// LIMPIEZA SIMPLE DE IMÁGENES - SOLO BLOB
 // ============================================================================
 
 /**
- * Limpia la imagen temporal de un juego (tanto al aprobar como al rechazar)
- * Las imágenes son solo para validación, se eliminan en ambos casos
- * Usa storage híbrido (Blob + Local)
+ * Elimina la imagen (si es default, no hace nada).
+ * No setea fallback ni toca FS porque la imagen no se usará más.
  */
 export async function cleanupImage(imageFileName: string, imageUrl?: string): Promise<void> {
     try {
@@ -19,42 +17,24 @@ export async function cleanupImage(imageFileName: string, imageUrl?: string): Pr
 
         console.log(`🗑️ Eliminando imagen: ${imageFileName} ${imageUrl ? `(URL: ${imageUrl})` : ''}`);
 
-        // Eliminar imagen usando storage híbrido (intenta Blob + Local)
-        const deleted = await hybridImageStorage.deleteImage(imageFileName, imageUrl, 'games');
+        const deleted = await hybridImageStorage.deleteImage(imageFileName, imageUrl);
 
         if (deleted) {
             console.log(`✅ Imagen eliminada exitosamente: ${imageFileName}`);
         } else {
-            console.warn(`⚠️ Imagen no encontrada para eliminar: ${imageFileName}`);
+            console.warn(`⚠️ Imagen no encontrada o no eliminable (posible default): ${imageFileName}`);
         }
-
     } catch (error) {
         console.warn(`⚠️ Error eliminando imagen ${imageFileName}:`, error);
-        // No lanzar error para no interrumpir el proceso
+        // No propagamos error para no cortar el flujo
     }
 }
 
 /**
- * Limpia todas las imágenes temporales (función de emergencia)
- * Solo usar en casos extremos
+ * Limpieza de emergencia — no-op (no hay storage local).
+ * Dejar por compatibilidad o envolver en feature flag si querés.
  */
 export async function emergencyCleanupAllTemp(): Promise<number> {
-    try {
-        console.log('🚨 LIMPIEZA DE EMERGENCIA - Eliminando todas las imágenes temporales');
-
-        // Obtener configuración del storage
-        const config = imageStorage.getConfig();
-
-        // Eliminar directorio temporal y recrearlo
-        const { rm, mkdir } = await import('fs/promises');
-        await rm(config.tempPath, { recursive: true, force: true });
-        await mkdir(config.tempPath, { recursive: true });
-
-        console.log('✅ Limpieza de emergencia completada');
-        return 1; // Indicar que se ejecutó
-
-    } catch (error) {
-        console.error('❌ Error en limpieza de emergencia:', error);
-        return 0;
-    }
+    console.log('🚨 LIMPIEZA DE EMERGENCIA - No hay storage local. No-op.');
+    return 1;
 }
