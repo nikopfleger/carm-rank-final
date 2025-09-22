@@ -263,8 +263,9 @@ model Game {
   pendingGames PendingGame[] @relation("PendingGameGame")
   points       Points[]
 
-  @@map("game")
-  
+  @@index([seasonId], name: "idx_game_season_id")
+  @@index([gameDate], name: "idx_game_game_date")
+  @@map("game")  
 }
 
 model GameResult {
@@ -287,6 +288,10 @@ model GameResult {
   updatedIp       String?  @map("updated_ip") @db.VarChar(45)
   game            Game     @relation(fields: [gameId], references: [id])
   player          Player   @relation(fields: [playerId], references: [id])
+
+  @@index([gameId], name: "idx_game_result_game_id")
+  @@index([playerId], name: "idx_game_result_player_id")
+  @@index([gameId, playerId], name: "idx_game_result_game_id_player_id")
 
   @@unique([gameId, playerId])
   @@map("game_result")

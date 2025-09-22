@@ -1,104 +1,85 @@
+import { prisma } from '@/lib/database/client';
 import { connectToDatabase } from '@/lib/database/connection';
+import { Prisma } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 
-// GET /api/players/count-games - Count unique games with filters
 export async function GET(request: NextRequest) {
     try {
         await connectToDatabase();
 
         const { searchParams } = new URL(request.url);
         const includeInactive = searchParams.get('includeInactive') === 'true';
-        const type = searchParams.get('type') as 'GENERAL' | 'TEMPORADA' || 'GENERAL';
-        const sanma = searchParams.get('sanma'); // 'true' o 'false' para filtrar por cantidad de jugadores
+        const type = (searchParams.get('type') as 'GENERAL' | 'TEMPORADA') || 'GENERAL';
+        const sanmaStr = searchParams.get('sanma'); // 'true' | 'false' | null
+        const sanmaVal = sanmaStr === 'true' ? true : sanmaStr === 'false' ? false : null;
 
-        const prismaClient = (await import('@/lib/database/client')).prisma;
-        const { Prisma } = await import('@prisma/client');
-
-        // Obtener jugadores activos si es necesario
-        let playerIds: number[] = [];
-        if (!includeInactive) {
-            const oneYearAgo = new Date();
-            oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-
-            const activeSeason = await prismaClient.season.findFirst({
-                where: { isActive: true }
-            });
-
-            // Buscar jugadores activos (temporada actual O último año)
-            const currentSeasonPlayers = activeSeason && activeSeason.startDate
-                ? await prismaClient.gameResult.groupBy({
-                    by: ['playerId'],
-                    where: {
-                        game: {
-                            gameDate: {
-                                gte: activeSeason.startDate,
-                                lte: activeSeason.endDate || new Date()
-                            }
-                        }
-                    }
-                })
-                : [];
-
-            const lastYearPlayers = await prismaClient.gameResult.groupBy({
-                by: ['playerId'],
-                where: {
-                    game: {
-                        gameDate: { gte: oneYearAgo }
-                    }
-                }
-            });
-
-            const currentSeasonPlayerIds = new Set(currentSeasonPlayers.map(g => g.playerId));
-            const lastYearPlayerIds = new Set(lastYearPlayers.map(g => g.playerId));
-            const activePlayerIds = new Set([...currentSeasonPlayerIds, ...lastYearPlayerIds]);
-
-            playerIds = Array.from(activePlayerIds);
-        }
-
-        // Construir filtros para la consulta
-        const clauses: any[] = [
+        // 1) construimos TODAS las cláusulas en un solo array
+        const clauses: Prisma.Sql[] = [
             Prisma.sql`g.is_validated = true`,
-            Prisma.sql`g.deleted = false`
+            Prisma.sql`g.deleted = false`,
         ];
 
-        // Filtrar por jugadores si es necesario
-        if (!includeInactive && playerIds.length > 0) {
-            clauses.push(Prisma.sql`EXISTS (SELECT 1 FROM game_result gr WHERE gr.game_id = g.id AND gr.player_id IN (${Prisma.join(playerIds)}))`);
+        if (sanmaVal !== null) {
+            clauses.push(Prisma.sql`r.sanma = ${sanmaVal}`);
         }
 
-        // Filtrar por sanma
-        if (sanma !== null && sanma !== undefined) {
-            clauses.push(Prisma.sql`EXISTS (SELECT 1 FROM ruleset r WHERE r.id = g.ruleset_id AND r.sanma = ${sanma === 'true'})`);
-        }
-
-        // Filtrar por temporada si es necesario
         if (type === 'TEMPORADA') {
             clauses.push(Prisma.sql`g.season_id IS NOT NULL`);
             clauses.push(Prisma.sql`g.tournament_id IS NOT NULL`);
         }
 
-        const whereSql = clauses.length ? Prisma.sql`WHERE ${Prisma.join(clauses, ' AND ')}` : Prisma.empty;
+        // Jugadores activos (solo si no se incluyen inactivos)
+        if (!includeInactive) {
+            clauses.push(Prisma.sql`
+        EXISTS (
+          SELECT 1
+          FROM active_players ap
+          JOIN game_result gr2
+            ON gr2.game_id = g.id
+           AND gr2.player_id = ap.player_id
+        )
+      `);
+        }
 
-        const rows = await prismaClient.$queryRaw<{ count: bigint }[]>(
-            Prisma.sql`SELECT COUNT(DISTINCT g.id) AS count FROM game g ${whereSql}`
-        );
+        // 2) WHERE final
+        const whereSql: Prisma.Sql =
+            clauses.length ? Prisma.sql`WHERE ${Prisma.join(clauses, ' AND ')}` : Prisma.empty;
+
+        // 3) Query única con CTEs
+        const rows = await prisma.$queryRaw<{ count: bigint }[]>(Prisma.sql`
+      WITH s AS (
+        SELECT start_date, COALESCE(end_date, NOW()) AS end_date
+        FROM season
+        WHERE is_active = true
+        ORDER BY start_date DESC
+        LIMIT 1
+      ),
+      active_players AS (
+        SELECT DISTINCT gr.player_id
+        FROM game_result gr
+        JOIN game g2 ON g2.id = gr.game_id
+        WHERE
+          (EXISTS (SELECT 1 FROM s)
+            AND g2.game_date BETWEEN (SELECT start_date FROM s) AND (SELECT end_date FROM s))
+          OR g2.game_date >= NOW() - INTERVAL '1 year'
+      )
+      SELECT COUNT(DISTINCT g.id) AS count
+      FROM game g
+      LEFT JOIN ruleset r ON r.id = g.ruleset_id
+      ${whereSql}
+    `);
 
         const totalUniqueGames = rows.length ? Number(rows[0].count) : 0;
 
         return NextResponse.json({
             success: true,
             totalUniqueGames,
-            message: `Found ${totalUniqueGames} unique games`
+            message: `Found ${totalUniqueGames} unique games`,
         });
-
     } catch (error) {
         console.error('Error in GET /api/players/count-games:', error);
         return NextResponse.json(
-            {
-                success: false,
-                error: 'Failed to count games',
-                message: error instanceof Error ? error.message : 'Unknown error'
-            },
+            { success: false, error: 'Failed to count games', message: (error as Error).message },
             { status: 500 }
         );
     }
