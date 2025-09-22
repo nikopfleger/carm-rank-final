@@ -1,4 +1,6 @@
-# Sistema de Badges de Rango
+# Sistema de Badges de Rango (referencia UI)
+
+> Especificación de badges Dan. Para consumo de componentes ver `components/ui/rank-badge.tsx`.
 
 ## 🎯 **Descripción**
 

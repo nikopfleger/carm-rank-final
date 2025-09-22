@@ -1,4 +1,4 @@
-# 🚀 OAuth en Serverless - Guía Completa
+# 🚀 OAuth en Serverless - Guía Completa (canónico)
 
 ## 🔍 **¿Funciona `process.env.NEXTAUTH_URL` en Serverless?**
 
@@ -6,9 +6,9 @@
 
 `process.env.NEXTAUTH_URL` **SÍ funciona** en serverless, pero hay consideraciones importantes:
 
-## 🏗️ **Proveedores Serverless**
+## 🏗️ **Proveedor Serverless**
 
-### **1. 🔷 Vercel**
+### **🔷 Vercel**
 ```bash
 # Variables disponibles automáticamente:
 VERCEL_URL=tu-app.vercel.app          # Auto-detectada
@@ -19,19 +19,7 @@ NEXTAUTH_URL=https://tu-app.vercel.app # Manual (recomendado)
 # - Headers x-forwarded-* para protocolo/host
 ```
 
-### **2. 🟦 Netlify**
-```bash
-# Variables disponibles:
-DEPLOY_PRIME_URL=https://tu-app.netlify.app
-NEXTAUTH_URL=https://tu-app.netlify.app  # Manual
-```
-
-### **3. 🟪 Railway**
-```bash
-# Variables disponibles:
-RAILWAY_STATIC_URL=https://tu-app.railway.app
-NEXTAUTH_URL=https://tu-app.railway.app  # Manual
-```
+> Otros proveedores (Netlify/Railway) no son usados en este proyecto y se omiten para simplicidad.
 
 ## ⚡ **Optimizaciones Implementadas**
 
@@ -48,8 +36,7 @@ export function getBaseUrl(): string {
   // Serverless: Múltiples fuentes
   if (process.env.NEXTAUTH_URL) return process.env.NEXTAUTH_URL;
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  if (process.env.DEPLOY_PRIME_URL) return process.env.DEPLOY_PRIME_URL;
-  if (process.env.RAILWAY_STATIC_URL) return process.env.RAILWAY_STATIC_URL;
+  // Otros proveedores omitidos
   
   return 'http://localhost:3000'; // Desarrollo
 }

@@ -1,4 +1,6 @@
-# 🔐 Configuración OAuth para UAT (User Acceptance Testing)
+# 🔐 Configuración OAuth para UAT (User Acceptance Testing) (referencia)
+
+> Guía específica para pruebas en red local/IP. Para serverless/producción ver `docs/SERVERLESS_OAUTH.md`.
 
 ## 🎯 Problema
 

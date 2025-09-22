@@ -1,4 +1,4 @@
-# ⚠️ REGENERACIÓN DE TIPOS PRISMA REQUERIDA
+# ⚠️ REGENERACIÓN DE TIPOS PRISMA REQUERIDA (temporal)
 
 ## 🔧 Problema
 Se agregó el campo `sessionInvalidatedAt` al modelo `User` en `prisma/schema.prisma`, pero los tipos de TypeScript no se han regenerado debido al error conocido de Windows con `npx prisma generate`.

@@ -1,4 +1,6 @@
-# 🔄 Guía de Unificación de ABM
+# 🔄 Guía de Unificación de ABM (canónico)
+
+> Este documento es la referencia canónica para migrar ABM al patrón unificado. Para el estado y prioridades ver `docs/ABM_UNIFICATION_PROGRESS.md`.
 
 ## 🎯 **Objetivo Completado**
 

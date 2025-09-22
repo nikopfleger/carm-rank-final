@@ -1,4 +1,6 @@
-# Vercel Blob Storage Setup
+# Vercel Blob Storage Setup (referencia)
+
+> Guía específica de imágenes. Para variables generales y deploy ver `VERCEL_SETUP.md`.
 
 ## 📝 Configuración para Imágenes de Pending Games
 

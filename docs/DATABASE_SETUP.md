@@ -1,4 +1,6 @@
-# Setup de Base de Datos PostgreSQL con Prisma - CAMR Ranking
+# Setup de Base de Datos PostgreSQL con Prisma - CAMR Ranking (canónico local)
+
+> Configuración local. Para producción y variables en Vercel ver `VERCEL_SETUP.md` y `docs/NEON_POOLING_OPTIMIZATION.md`.
 
 > **📋 Guía Relacionada**: Para instalación completa del proyecto ver [`README.md`](README.md)
 

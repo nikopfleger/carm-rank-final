@@ -1,4 +1,6 @@
-# 🚀 Guía de Despliegue en Vercel Serverless
+# 🚀 Guía de Despliegue en Vercel Serverless (canónico)
+
+> Documento canónico de deploy. Para pooling Neon ver `docs/NEON_POOLING_OPTIMIZATION.md`. Para OAuth ver `docs/SERVERLESS_OAUTH.md`.
 
 ## ✅ Estado de Compatibilidad
 

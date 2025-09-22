@@ -1,4 +1,6 @@
-# Patrón BaseModel en Prisma
+# Patrón BaseModel en Prisma (referencia)
+
+> Patrón recomendado. Recordatorio: Según regla del repo, todos los modelos deben incluir campos de auditoría y `version Int @default(0)`.
 
 ## Problema
 En Java, podemos crear una clase base con campos comunes y hacer que todas las entidades hereden de ella. En Prisma, no existe herencia directa como en Java, pero podemos usar un patrón similar.

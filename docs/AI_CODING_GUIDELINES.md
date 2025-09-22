@@ -1,4 +1,6 @@
-# 🤖 Guía de Código para IA - Proyecto CARM
+# 🤖 Guía de Código para IA - Proyecto CARM (canónico)
+
+> Este documento consolida patrones de arquitectura/React/Next. Para detalles de arquitectura del proyecto, ver `docs/CARM_ARCHITECTURE.md`. Para patrones de UI y diseño, ver `docs/REACT_NEXTJS_PATTERNS.md`.
 
 ## 📋 Patrones y Convenciones a Seguir
 

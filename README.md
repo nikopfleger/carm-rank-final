@@ -1,33 +1,33 @@
 # 🀄 CAMR Ranking System
 
-Sistema de ranking oficial para la **Comunidad Argentina de Riichi Mahjong** (CAMR).
+Sistema de ranking oficial para la **Comunidad Argentina de Riichi Mahjong** (CARM).
+ 
+## 📚 Documentación canónica
+
+- Deploy en Vercel (producción): `VERCEL_SETUP.md`
+- Base de datos local/Prisma: `DATABASE_SETUP.md`
+- OAuth en producción (serverless): `docs/SERVERLESS_OAUTH.md`
+- OAuth en UAT/red local: `docs/OAUTH_UAT_SETUP.md`
+- Pooling y performance (Neon/Prisma): `docs/NEON_POOLING_OPTIMIZATION.md`
+- Endpoints API (overview): `API_ENDPOINTS.md`
+
+> Importante: Toda la gestión de esquema se hace con Prisma Migrate. No crees tablas/esquemas/manual SQL. Flujo base: configurar `.env.local` → `npm install` → `npm run db:migrate` → `npm run db:seed` → `npm run dev`.
 
 ## 🧰 Comandos disponibles (npm scripts)
 
 ```bash
 # Desarrollo / build
 npm run dev                 # Iniciar en modo desarrollo
-npm run build               # Generar build (incluye prisma generate)
+npm run build               # Generar build (prisma generate antes de build)
 npm run start               # Levantar build
-npm run lint                # Lint de Next/ESLint
-npm run lint:css-modules    # Validar CSS Modules
 
 # Base de datos (Prisma)
-npm run db:generate         # Generar cliente Prisma
-npm run db:push             # Sin migraciones, sincroniza schema con la DB
-npm run db:migrate          # Crear/aplicar migraciones en dev
-npm run db:migrate:prod     # Aplicar migraciones en prod
-npm run db:reset            # Reset de esquema (borra datos) y aplica schema
-npm run db:seed             # Seed de datos base
-npm run db:studio           # Prisma Studio
+npm run prisma:generate     # Generar cliente Prisma
+npm run migrate:deploy      # Aplicar migraciones pendientes
+npm run seed                # Ejecutar seed (prisma/seed.ts)
 
-# Carga de datos
-npm run reset               # Reset + seed (configuraciones base)
-npm run reset-and-load      # Reset + seed + carga CSV completa
-npm run contingency         # Reset + seed + primeros 50 juegos (contingencia rápida)
-npm run recalculate         # Solo recalcular puntos (sin resetear)
-
-# Nota: Sistema simplificado - ahora usamos DATABASE_URL estándar sin cifrado custom
+# Post-install
+npm run postinstall         # Ejecuta prisma generate tras instalar dependencias
 ```
 
 ## 🛠️ Requisitos
@@ -44,7 +44,7 @@ Antes de comenzar, asegúrate de tener instalado:
 
 #### **🗄️ Instalación y Configuración de PostgreSQL:**
 
-### **📥 Instalación de PostgreSQL:**
+### **📥 Instalación de PostgreSQL (solo instalación):**
 
 1. **Windows:**
    - Ir a [postgresql.org/download/windows/](https://www.postgresql.org/download/windows/)
@@ -65,74 +65,37 @@ Antes de comenzar, asegúrate de tener instalado:
    sudo apt install postgresql postgresql-contrib
    ```
 
-### **🔧 Configuración Inicial (GUI):**
+### **🔧 Configuración Inicial**
 
-1. **Abrir pgAdmin** (Windows/macOS) o **psql** (Linux)
-
-2. **Crear usuario específico:**
-   - **Con pgAdmin**: Click derecho en "Login/Group Roles" → "Create" → "Login/Group Role"
-     - General tab: Name: `carm_admin`
-     - Definition tab: Password: `tu_password_aqui`
-     - Privileges tab: Marcar "Can login?" y "Superuser?"
-   - **Con psql**: 
-     ```sql
-     CREATE USER carm_admin WITH PASSWORD 'tu_password_aqui';
-     ```
-
-3. **Crear la base de datos con el usuario como owner:**
-   - **Con pgAdmin**: Click derecho en "Databases" → "Create" → "Database"
-     - Name: `carm_ranking`
-     - Owner: `carm_admin` (seleccionar del dropdown)
-     - **Definition tab**: 
-       - Encoding: `UTF8`
-       - Collation: `C`
-       - Character type: `C`
-   - **Con psql**: 
-     ```sql
-     CREATE DATABASE carm_ranking 
-     OWNER carm_admin 
-     ENCODING 'UTF8' 
-     LC_COLLATE 'C' 
-     LC_CTYPE 'C';
-     ```
-
-4. **Crear el schema:**
-   - **Con pgAdmin**: Expandir `carm_ranking` → Click derecho en "Schemas" → "Create" → "Schema"
-     - Name: `carm`
-     - Owner: `carm_admin`
-   - **Con psql**:
-     ```sql
-     \c carm_ranking
-     CREATE SCHEMA carm;
-     ```
+No se requiere crear usuarios, bases ni schemas manualmente. Solo:
+- Tener PostgreSQL corriendo localmente
+- Configurar `DATABASE_URL` en `.env.local`
+- Ejecutar migraciones con Prisma
 
 ## 🚶 Guía paso a paso (primera vez)
 
 ```bash
-# 1) Clonar y preparar dependencias
+# 1) Clonar e instalar
 git clone https://github.com/nicolas-webdev/camr-rank.git
 cd camr-rank
 npm install
 
-# 2) Configurar base de datos (si no la creaste manualmente)
-createuser carm_admin --pwprompt      # contraseña sugerida: carm_admin
-createdAtb carm_ranking --owner=carm_admin
-
-# 3) Variables de entorno
+# 2) Variables de entorno
 cp env.example .env.local
-# Editar .env.local con credenciales de DB, OAuth, email, etc.
+# Editar .env.local con DATABASE_URL, NEXTAUTH_SECRET, GOOGLE_* etc.
 
-# 4) Inicializar base de datos
-npm run db:migrate
-npm run db:seed
+# 3) Generar cliente y aplicar migraciones
+npm run prisma:generate
+npm run migrate:deploy
 
-# 5) (Opcional) Cargar datos desde CSV
-# Esto resetea, aplica seed y luego carga CSV (rápido para dejar todo listo)
-npm run reset-and-load
+# 4) Seed de datos base (opcional pero recomendado)
+npm run seed
 
-# 6) Levantar la app
+# 5) Levantar la app
 npm run dev
 ```
+
+En Windows, si `DATABASE_URL` no se carga, ver `WINDOWS_SETUP_GUIDE.md` (scripts `:win` con dotenv-cli).
 
 Aplicación: http://localhost:3000  
 Admin: http://localhost:3000/admin
@@ -252,7 +215,7 @@ npx prisma generate
 ### ✅ **Compatibilidad Vercel Serverless:**
 Todos los scripts son completamente compatibles con Vercel serverless. No requieren modificaciones adicionales.
 
-Para comandos directos y combinaciones (flags), ver `scripts/README.md`.
+
 
 ## 🚀 **Despliegue en Vercel**
 
@@ -278,9 +241,6 @@ NEXTAUTH_URL=https://tu-app.vercel.app
 OWNER_EMAIL=tu_email@ejemplo.com
 OWNER_NAME=Tu Nombre
 
-# Opcional: Configuración de pool
-DB_POOL_MAX=10
-DB_POOL_TIMEOUT=60000
 ```
 
 ### **🎯 Primer Deploy:**

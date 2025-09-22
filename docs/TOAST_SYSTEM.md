@@ -1,4 +1,6 @@
-# 🍞 Sistema de Notificaciones Toast
+# 🍞 Sistema de Notificaciones Toast (referencia UI)
+
+> Parte del sistema de UI. Para patrones globales y guía de código ver `docs/AI_CODING_GUIDELINES.md` y `docs/REACT_NEXTJS_PATTERNS.md`.
 
 ## 📋 Descripción General
 

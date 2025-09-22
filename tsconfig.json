@@ -40,8 +40,16 @@
   },
   "include": [
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "components/**/*.ts",
+    "components/**/*.tsx",
+    "hooks/**/*.ts",
+    "hooks/**/*.tsx",
+    "lib/**/*.ts",
+    "lib/**/*.tsx",
+    "utils/**/*.ts",
+    "utils/**/*.tsx",
     ".next/types/**/*.ts",
     "types/**/*.d.ts"
   ],

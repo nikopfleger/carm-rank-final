@@ -1,4 +1,6 @@
-# 🚀 Progreso de Unificación de ABM
+# 🚀 Progreso de Unificación de ABM (estado)
+
+> Documento de estado. La guía de cómo migrar vive en `docs/ABM_UNIFICATION_GUIDE.md`.
 
 ## ✅ **Logros Completados**
 

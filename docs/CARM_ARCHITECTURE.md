@@ -1,4 +1,6 @@
-# 🏗️ Arquitectura del Proyecto CARM
+# 🏗️ Arquitectura del Proyecto CARM (referencia)
+
+> Documento de referencia de arquitectura. Para guías prácticas de implementación por patrones, ver `docs/AI_CODING_GUIDELINES.md` y `docs/REACT_NEXTJS_PATTERNS.md`.
 
 ## 📋 Índice
 

@@ -1,4 +1,6 @@
-# 🏗️ Patrones de Diseño y Arquitectura - React & Next.js
+# 🏗️ Patrones de Diseño y Arquitectura - React & Next.js (referencia)
+
+> Este documento complementa `docs/AI_CODING_GUIDELINES.md`. Para arquitectura del proyecto ver `docs/CARM_ARCHITECTURE.md`.
 
 ## 📋 Índice
 

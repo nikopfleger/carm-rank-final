@@ -1,6 +1,6 @@
 {
-  "name": "camr-rank",
-  "version": "1.1.0-SNAPSHOT",
+  "name": "carm-rank",
+  "version": "1.1.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -17,8 +17,7 @@
     "prisma:generate": "prisma generate",
     "migrate:deploy": "prisma migrate deploy",
     "seed": "prisma db seed",
-    "postinstall": "prisma generate",
-    "run:load-data": "tsx scripts/load-data.ts --seed --csv"
+    "postinstall": "prisma generate"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

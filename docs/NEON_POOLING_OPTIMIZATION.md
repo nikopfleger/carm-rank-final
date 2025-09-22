@@ -1,4 +1,6 @@
-# 🔄 Optimización de Pooling con Neon PostgreSQL
+# 🔄 Optimización de Pooling con Neon PostgreSQL (referencia)
+
+> Referencia de performance. Para variables y deploy en producción ver `VERCEL_SETUP.md`. Para configuración local de DB ver `DATABASE_SETUP.md`.
 
 ## 📋 Resumen
 

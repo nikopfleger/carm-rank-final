@@ -1,4 +1,6 @@
-# 🪟 Guía Específica para Windows - CAMR Ranking
+# 🪟 Guía Específica para Windows - CAMR Ranking (referencia)
+
+> Optimizada para entorno local Windows. Para deploy ver `VERCEL_SETUP.md`.
 
 ## 🚨 **Problema Principal: Variables de Entorno**
 

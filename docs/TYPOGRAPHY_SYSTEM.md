@@ -1,4 +1,6 @@
-# Sistema de Tipografía Global
+# Sistema de Tipografía Global (referencia UI)
+
+> Parte del sistema de UI. Complementa colores (`docs/COLOR_SYSTEM.md`) y componentes base.
 
 ## 🎯 **Objetivo**
 
