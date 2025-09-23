@@ -7,6 +7,7 @@ import { NotificationProvider } from '@/components/providers/notification-provid
 import { ServicesProvider } from '@/components/providers/services-provider';
 import AuthSessionProvider from '@/components/providers/session-provider';
 import { PageContainer } from '@/components/shared/page-container';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
@@ -20,8 +21,8 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
-  title: "CAMR Rank",
-  description: "Rank del CAMR - Club Argentino de Riichi Mahjong",
+  title: "CARM Rank",
+  description: "Rank del CARM - Club Argentino de Riichi Mahjong",
   keywords: ["mahjong", "riichi", "rank", "argentina", "carm", "club", "torneo"],
   authors: [{ name: "CARM" }],
   creator: "Club Argentino de Riichi Mahjong",
@@ -36,17 +37,17 @@ export const metadata: Metadata = {
     other: { rel: 'apple-touch-icon-precomposed', url: '/carm-logo.png' },
   },
   openGraph: {
-    title: "CAMR Rank",
+    title: "CARM Rank",
     description: "Sistema de ranking del Club Argentino de Riichi Mahjong",
     url: process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000',
-    siteName: "CAMR Rank",
+    siteName: "CARM Rank",
     images: [{ url: '/carm-logo.png', width: 800, height: 600, alt: 'CARM Logo' }],
     locale: 'es_AR',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: "CAMR Rank",
+    title: "CARM Rank",
     description: "Sistema de ranking del Club Argentino de Riichi Mahjong",
     images: ['/carm-logo.png'],
   },
@@ -80,6 +81,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </AuthSessionProvider>
           </I18nProvider>
         </CacheGate>
+        <SpeedInsights />
       </body>
     </html>
   );

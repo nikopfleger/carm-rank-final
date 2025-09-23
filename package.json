@@ -36,6 +36,7 @@
     "@types/nodemailer": "^7.0.1",
     "@types/uuid": "^10.0.0",
     "@vercel/blob": "^1.1.1",
+    "@vercel/speed-insights": "^1.2.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cmdk": "^1.1.1",
