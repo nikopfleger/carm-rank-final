@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { useErrorHandler } from "@/hooks/use-error-handler";
 import { CheckCircle, Clock, Link as LinkIcon, Trash2, XCircle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "./LinkRequestsManagement.module.css";
 
 interface LinkRequest {
@@ -50,7 +50,7 @@ export default function LinkRequestsManagement() {
     const { handleError, handleSuccess } = useErrorHandler();
     const abmService = useAbmService();
 
-    const loadLinkRequests = async () => {
+    const loadLinkRequests = useCallback(async () => {
         try {
             setLoading(true);
             console.log('🔍 Cargando solicitudes de vinculación...');
@@ -65,11 +65,11 @@ export default function LinkRequestsManagement() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError]);
 
     useEffect(() => {
         loadLinkRequests();
-    }, []);
+    }, [loadLinkRequests]);
 
     const handleApprove = async (id: number) => {
         try {

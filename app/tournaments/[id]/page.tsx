@@ -3,13 +3,13 @@
 import { usePublicService } from "@/components/providers/services-provider";
 import { PageHeader } from "@/components/shared/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowLeft, Award, Calendar, Trophy, Users } from "@/components/ui/icons";
 import { PageSkeleton } from "@/components/ui/loading-skeleton";
 import { PlayerResultCard } from "@/components/ui/player-result-card";
 import { unifiedStyles } from "@/components/ui/unified-styles";
 import { useErrorHandler } from "@/hooks/use-error-handler";
-import { ArrowLeft, Award, Calendar, Trophy, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { use, useEffect, useState } from "react";
+import { Suspense, use, useEffect, useState } from "react";
 import styles from "./page.module.css";
 
 interface Tournament {
@@ -85,7 +85,7 @@ export default function TournamentDetailPage({ params }: { params: Promise<{ id:
         };
 
         loadTournamentData();
-    }, [id]);
+    }, [id, publicService, handleError]);
 
     if (loading) {
         return (
@@ -191,28 +191,30 @@ export default function TournamentDetailPage({ params }: { params: Promise<{ id:
                             <p>No hay resultados disponibles para este torneo</p>
                         </div>
                     ) : (
-                        <div className="space-y-3">
-                            {results
-                                .sort((a, b) => a.position - b.position)
-                                .map((result) => (
-                                    <PlayerResultCard
-                                        key={result.id}
-                                        position={result.position}
-                                        player={{
-                                            id: result.player.id,
-                                            nickname: result.player.nickname,
-                                            fullname: result.player.fullname
-                                        }}
-                                        stats={{
-                                            seasonPoints: result.points
-                                        }}
-                                        variant="tournament"
-                                        showTrend={false}
-                                        showRank={false}
-                                        showCountry={false}
-                                    />
-                                ))}
-                        </div>
+                        <Suspense fallback={<PageSkeleton />}>
+                            <div className="space-y-3">
+                                {results
+                                    .sort((a, b) => a.position - b.position)
+                                    .map((result) => (
+                                        <PlayerResultCard
+                                            key={result.id}
+                                            position={result.position}
+                                            player={{
+                                                id: result.player.id,
+                                                nickname: result.player.nickname,
+                                                fullname: result.player.fullname
+                                            }}
+                                            stats={{
+                                                seasonPoints: result.points
+                                            }}
+                                            variant="tournament"
+                                            showTrend={false}
+                                            showRank={false}
+                                            showCountry={false}
+                                        />
+                                    ))}
+                            </div>
+                        </Suspense>
                     )}
                 </CardContent>
             </Card>

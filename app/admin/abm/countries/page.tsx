@@ -2,12 +2,13 @@
 
 import { FormField } from "@/components/admin/abm/generic-form";
 import { GridAction, GridColumn } from "@/components/admin/abm/generic-grid-responsive";
-import { UnifiedABMLayout } from "@/components/admin/abm/unified-abm-layout";
 import { Badge } from "@/components/ui/badge";
+import { Edit, Eye, Trash2 } from "@/components/ui/icons";
 import { useCountriesOperations } from "@/hooks/use-abm-operations";
 import { useUnifiedABM } from "@/hooks/use-unified-abm";
-import { Edit, Eye, Trash2 } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useEffect } from "react";
+const UnifiedABMLayout = dynamic(() => import("@/components/admin/abm/unified-abm-layout").then(m => m.UnifiedABMLayout));
 
 interface Country {
   id: number;
@@ -38,7 +39,7 @@ export default function CountriesABMPage() {
 
   useEffect(() => {
     abm.loadData();
-  }, [abm.showDeleted]);
+  }, [abm, abm.showDeleted]);
 
   // Configuración de columnas del grid
   const columns: GridColumn[] = [
@@ -149,7 +150,7 @@ export default function CountriesABMPage() {
   ];
 
   return (
-    <UnifiedABMLayout<Country>
+    <UnifiedABMLayout
       title="Administración de Países"
       description="Gestiona los países y nacionalidades del sistema"
 

@@ -60,7 +60,7 @@ export const I18nProvider = ({ children }: I18nProviderProps) => {
     }
 
     // Debug removido para compatibilidad serverless
-  }, []);
+  }, [language]);
 
   // Actualizar traducciones cuando cambia el idioma (usando traducciones estáticas)
   useEffect(() => {
@@ -103,7 +103,7 @@ export const I18nProvider = ({ children }: I18nProviderProps) => {
       translations,
       isClient
     };
-  }, [language, translations, isLoading, isReady, hasError, isClient]);
+  }, [language, setLanguage, t, translations, isLoading, isReady, hasError, isClient]);
 
   return (
     <I18nContext.Provider value={contextValue}>

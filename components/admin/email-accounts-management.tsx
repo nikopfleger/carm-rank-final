@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useErrorHandler } from "@/hooks/use-error-handler";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface EmailAccount {
     id: number;
@@ -53,7 +53,7 @@ export function EmailAccountsManagement() {
     });
 
     // Cargar cuentas de email
-    const loadAccounts = async () => {
+    const loadAccounts = useCallback(async () => {
         try {
             const response = await fetch('/api/admin/email-accounts');
             if (response.ok) {
@@ -67,11 +67,11 @@ export function EmailAccountsManagement() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [handleError]);
 
     useEffect(() => {
         loadAccounts();
-    }, []); // handleError no debe afectar la carga de cuentas de email
+    }, [loadAccounts]);
 
     // Manejar envío del formulario
     const handleSubmit = async (e: React.FormEvent) => {

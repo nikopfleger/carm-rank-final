@@ -3,7 +3,7 @@
 import { useI18nContext } from "@/components/providers/i18n-provider";
 import { Badge } from "@/components/ui/badge";
 import { CountryFlag } from "@/components/ui/country-flag";
-import { Separator } from "@/components/ui/separator";
+import { SeparatorServer as Separator } from "@/components/ui/separator-server";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { unifiedStyles } from "@/components/ui/unified-styles";
 

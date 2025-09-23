@@ -147,7 +147,7 @@ export default function PlayersABMPage() {
     return () => {
       ignore = true;
     };
-  }, [showInactive]);
+  }, [showInactive, load]);
 
   useEffect(() => {
     let ignore = false;
@@ -166,7 +166,7 @@ export default function PlayersABMPage() {
     return () => {
       ignore = true;
     };
-  }, []);
+  }, [handleError]);
 
   useEffect(() => {
     let ignore = false;
@@ -186,7 +186,7 @@ export default function PlayersABMPage() {
     return () => {
       ignore = true;
     };
-  }, [editingPlayer, canApprove]); // handleError no debe afectar la carga de solicitudes pendientes
+  }, [editingPlayer, canApprove, abmService, handleError]);
 
 
   const handleCreate = () => {

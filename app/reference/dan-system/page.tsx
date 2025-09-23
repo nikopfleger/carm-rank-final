@@ -9,7 +9,7 @@ import { RankBadge } from '@/components/ui/rank-badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { unifiedStyles } from '@/components/ui/unified-styles';
 import { Trophy } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export default function DanSystemReference() {
   const { t, language } = useI18nContext();
@@ -19,7 +19,7 @@ export default function DanSystemReference() {
   const [error, setError] = useState<string | null>(null);
   const { addNotification } = useNotifications();
 
-  const fetchRows = async (isSanma: boolean) => {
+  const fetchRows = useCallback(async (isSanma: boolean) => {
     setLoading(true);
     setError(null);
     try {
@@ -68,9 +68,9 @@ export default function DanSystemReference() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [addNotification, t]);
 
-  useEffect(() => { fetchRows(sanma); }, [sanma]);
+  useEffect(() => { fetchRows(sanma); }, [sanma, fetchRows]);
 
   const danSystemData = rows;
 

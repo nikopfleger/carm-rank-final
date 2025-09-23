@@ -15,7 +15,7 @@ import { canAssignAuthority, canAssignRole, canModifyUser, getAvailableAuthoriti
 import { UserRole } from "@prisma/client";
 import { ChevronDown, LogOut } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 interface UserRow {
 	id: string;
@@ -60,39 +60,36 @@ export function UsersManagement() {
 	const availableRoles = useMemo(() => getAvailableRoles(currentUserRole), [currentUserRole]);
 	const availableAuthorities = useMemo(() => getAvailableAuthorities(currentUserRole), [currentUserRole]);
 
-	useEffect(() => {
-		let ignore = false;
-		async function fetchUsers() {
+	const fetchUsers = useCallback(async () => {
+		try {
 			if (!canManageUsers) return;
 			setLoading(true);
-			try {
-				const params = new URLSearchParams();
-				if (query) params.set("q", query);
-				if (activeFilter !== "all") params.set("active", String(activeFilter === "active"));
-				const res = await fetch(`/api/admin/users?${params.toString()}`, { cache: "no-store" });
-				if (res.ok) {
-					const data = await res.json();
-					if (!ignore) setUsers(data.users as UserRow[]);
-				} else {
-					let errorData;
-					try {
-						errorData = await res.json();
-					} catch {
-						errorData = { message: `Error ${res.status}: ${res.statusText}` };
-					}
-					handleError(errorData, 'Cargar usuarios');
+			const params = new URLSearchParams();
+			if (query) params.set("q", query);
+			if (activeFilter !== "all") params.set("active", String(activeFilter === "active"));
+			const res = await fetch(`/api/admin/users?${params.toString()}`, { cache: "no-store" });
+			if (res.ok) {
+				const data = await res.json();
+				setUsers(data.users as UserRow[]);
+			} else {
+				let errorData;
+				try {
+					errorData = await res.json();
+				} catch {
+					errorData = { message: `Error ${res.status}: ${res.statusText}` };
 				}
-			} catch (error) {
-				handleError(error, 'Cargar usuarios');
-			} finally {
-				setLoading(false);
+				handleError(errorData, 'Cargar usuarios');
 			}
+		} catch (error) {
+			handleError(error, 'Cargar usuarios');
+		} finally {
+			setLoading(false);
 		}
-		fetchUsers();
-		return () => {
-			ignore = true;
-		};
-	}, [query, activeFilter, canManageUsers]); // Removido handleError de las dependencias
+	}, [query, activeFilter, canManageUsers, handleError]);
+
+	useEffect(() => {
+		void fetchUsers();
+	}, [fetchUsers]);
 
 	async function invalidateUserSession(id: string) {
 		setSavingId(id);

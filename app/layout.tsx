@@ -1,6 +1,6 @@
-import { FloatingNav } from '@/components/floating-nav';
 import { Footer } from '@/components/footer';
 import CacheGate from '@/components/providers/cache-gate';
+import { ClientShell } from '@/components/providers/client-shell';
 import { ErrorBoundaryWrapper } from '@/components/providers/error-boundary-wrapper';
 import { I18nProvider } from '@/components/providers/i18n-provider';
 import { NotificationProvider } from '@/components/providers/notification-provider';
@@ -10,14 +10,13 @@ import { PageContainer } from '@/components/shared/page-container';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Link from "next/link";
 import React from "react";
 import "./globals.css";
+// Mover FloatingNav/NotificationProvider a ClientShell (Client Component)
 
 const inter = Inter({ subsets: ["latin"] });
 
-// Forzar renderizado dinámico para que CacheGate se ejecute en servidor
-export const dynamic = 'force-dynamic';
+// Nota: evitamos forzar dynamic global; los segmentos que lo requieran lo declararán localmente
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
@@ -63,18 +62,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <ServicesProvider>
                 <NotificationProvider>
                   <ErrorBoundaryWrapper>
-                    <FloatingNav />
-                    <main className="min-h-screen pb-20 relative z-10">
-                      <PageContainer>{children}</PageContainer>
-                    </main>
-
-                    {/* Preload de rutas críticas para mejor performance */}
-                    <div style={{ display: 'none' }}>
-                      <Link href="/admin/abm/players" prefetch />
-                      <Link href="/admin/abm/games" prefetch />
-                      <Link href="/admin/games" prefetch />
-                    </div>
-                    <Footer />
+                    <ClientShell>
+                      <main className="min-h-screen pb-20 relative z-10">
+                        <PageContainer>{children}</PageContainer>
+                      </main>
+                      <Footer />
+                    </ClientShell>
                   </ErrorBoundaryWrapper>
                 </NotificationProvider>
               </ServicesProvider>

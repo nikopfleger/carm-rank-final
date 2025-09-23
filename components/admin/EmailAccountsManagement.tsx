@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { useErrorHandler } from "@/hooks/use-error-handler";
 import { AlertTriangle, Edit, Mail, Plus, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface EmailAccount {
     id: number;
@@ -56,7 +56,7 @@ export default function EmailAccountsManagement() {
     const { handleError, handleSuccess } = useErrorHandler();
     const abmService = useAbmService();
 
-    const loadEmailAccounts = async () => {
+    const loadEmailAccounts = useCallback(async () => {
         try {
             setLoading(true);
             const data = await abmService.getEmailAccounts() as any;
@@ -66,11 +66,11 @@ export default function EmailAccountsManagement() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError]);
 
     useEffect(() => {
         loadEmailAccounts();
-    }, []);
+    }, [loadEmailAccounts]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

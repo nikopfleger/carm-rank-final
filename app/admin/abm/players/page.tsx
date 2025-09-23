@@ -2,13 +2,14 @@
 
 import { FormField } from "@/components/admin/abm/generic-form";
 import { GridAction, GridColumn } from "@/components/admin/abm/generic-grid-responsive";
-import { UnifiedABMLayout } from "@/components/admin/abm/unified-abm-layout";
 import { Badge } from "@/components/ui/badge";
+import { Edit, Eye, Trash2, Users } from "@/components/ui/icons";
 import { usePlayersOperationsUnified } from "@/hooks/use-players-operations-unified";
 import { useUnifiedABM } from "@/hooks/use-unified-abm";
-import { Edit, Eye, Trash2, User } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+const UnifiedABMLayout = dynamic(() => import("@/components/admin/abm/unified-abm-layout").then(m => m.UnifiedABMLayout));
 
 interface Player {
     id: number;
@@ -64,7 +65,7 @@ export default function PlayersABMPageUnified() {
             }
         };
         loadInitialData();
-    }, [abm.showDeleted]);
+    }, [abm, loadCountries, abm.showDeleted]);
 
     // Configuración de columnas del grid
     const columns: GridColumn[] = [
@@ -138,7 +139,7 @@ export default function PlayersABMPageUnified() {
         {
             key: "view",
             label: "Ver Perfil",
-            icon: User,
+            icon: Users,
             variant: "outline",
             onClick: (row: Player) => {
                 router.push(`/player/${row.playerNumber}`);
@@ -176,7 +177,7 @@ export default function PlayersABMPageUnified() {
     ];
 
     return (
-        <UnifiedABMLayout<Player>
+        <UnifiedABMLayout
             title="Gestión de Jugadores"
             description="Administra los jugadores registrados en el sistema"
 

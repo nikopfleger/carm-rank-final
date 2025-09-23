@@ -2,12 +2,13 @@
 
 import { FormField } from "@/components/admin/abm/generic-form";
 import { GridAction, GridColumn } from "@/components/admin/abm/generic-grid-responsive";
-import { UnifiedABMLayout } from "@/components/admin/abm/unified-abm-layout";
 import { Badge } from "@/components/ui/badge";
+import { Edit, Eye, Trash2 } from "@/components/ui/icons";
 import { useRulesetsOperations } from "@/hooks/use-rulesets-operations";
 import { useUnifiedABM } from "@/hooks/use-unified-abm";
-import { Edit, Eye, Trash2 } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useEffect } from "react";
+const UnifiedABMLayout = dynamic(() => import("@/components/admin/abm/unified-abm-layout").then(m => m.UnifiedABMLayout));
 
 interface Ruleset {
   id: number;
@@ -38,7 +39,7 @@ export default function RulesetsABMPage() {
 
   useEffect(() => {
     abm.loadData();
-  }, [abm.showDeleted]);
+  }, [abm]);
 
   // Configuración de columnas del grid
   const columns: GridColumn[] = [
@@ -141,7 +142,7 @@ export default function RulesetsABMPage() {
   ];
 
   return (
-    <UnifiedABMLayout<Ruleset>
+    <UnifiedABMLayout
       title="Reglas de Juego"
       description="Gestiona las reglas y configuraciones del sistema de juego"
 

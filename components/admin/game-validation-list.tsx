@@ -20,7 +20,7 @@ import {
   XCircle,
 } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 // ✅ Planilla/cálculos reutilizados
 import GameResultsSheet from "@/components/admin/games/game-results-sheet";
@@ -85,7 +85,7 @@ export function GameValidationList() {
   const [stats, setStats] = useState({ PENDING: 0, VALIDATED: 0, REJECTED: 0 });
 
   // Cargar pendientes y estadísticas
-  const loadPendingGames = async () => {
+  const loadPendingGames = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -113,11 +113,11 @@ export function GameValidationList() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [gameService, handleError]);
 
   useEffect(() => {
     void loadPendingGames();
-  }, []); // handleError no debe afectar la carga de juegos pendientes
+  }, [loadPendingGames]);
 
   // Orden: fecha, nroJuegoDia (null al final), id
   const sortedPending = useMemo(() => {

@@ -2,13 +2,14 @@
 
 import { FormField } from '@/components/admin/abm/generic-form';
 import { GridAction, GridColumn } from '@/components/admin/abm/generic-grid-responsive';
-import { UnifiedABMLayout } from '@/components/admin/abm/unified-abm-layout';
 import { useI18nContext } from '@/components/providers/i18n-provider';
 import { Badge } from '@/components/ui/badge';
+import { Edit, Eye, Trash2 } from '@/components/ui/icons';
 import { useSeasonConfigsOperations } from '@/hooks/use-season-configs-operations';
 import { useUnifiedABM } from '@/hooks/use-unified-abm';
-import { Edit, Eye, Trash2 } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { useEffect } from 'react';
+const UnifiedABMLayout = dynamic(() => import('@/components/admin/abm/unified-abm-layout').then(m => m.UnifiedABMLayout));
 
 interface SeasonConfig {
     id: number;
@@ -46,7 +47,7 @@ export default function SeasonConfigsPage() {
 
     useEffect(() => {
         abm.loadData();
-    }, [abm.showDeleted]);
+    }, [abm, abm.showDeleted]);
 
     // Configuración de columnas del grid
     const columns: GridColumn[] = [
@@ -183,7 +184,7 @@ export default function SeasonConfigsPage() {
     ];
 
     return (
-        <UnifiedABMLayout<SeasonConfig>
+        <UnifiedABMLayout
             title="Configuraciones de Temporada"
             description="Gestiona las configuraciones de puntuación por temporada"
 

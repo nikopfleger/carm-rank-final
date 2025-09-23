@@ -29,7 +29,7 @@ export default function SeasonsABMPage() {
 
   useEffect(() => {
     abm.loadData();
-  }, [abm.showDeleted]);
+  }, [abm, abm.showDeleted]);
 
   // Configuración de columnas del grid
   const columns: GridColumn[] = [

@@ -1,12 +1,13 @@
 "use client";
 
 import { GridColumn } from "@/components/admin/abm/generic-grid-responsive";
-import { UnifiedABMLayout } from "@/components/admin/abm/unified-abm-layout";
 import { SeasonResultsEditor } from "@/components/admin/season-results-editor";
 import { Badge } from "@/components/ui/badge";
+import { Edit, Trophy, Users } from "@/components/ui/icons";
 import { useErrorHandler } from "@/hooks/use-error-handler";
-import { Edit, Trophy, Users } from "lucide-react";
-import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { useCallback, useEffect, useState } from "react";
+const UnifiedABMLayout = dynamic(() => import("@/components/admin/abm/unified-abm-layout").then(m => m.UnifiedABMLayout));
 
 interface Season {
     id: number;
@@ -52,7 +53,7 @@ export default function SeasonResultsSpecialPage() {
     const [showEditor, setShowEditor] = useState(false);
 
     // Cargar temporadas
-    const loadSeasons = async () => {
+    const loadSeasons = useCallback(async () => {
         setLoading(true);
         try {
             const response = await fetch('/api/abm/seasons?includeResults=true');
@@ -67,11 +68,11 @@ export default function SeasonResultsSpecialPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [handleError]);
 
     useEffect(() => {
         loadSeasons();
-    }, []);
+    }, [loadSeasons]);
 
     // Configuración de columnas del grid
     const columns: GridColumn[] = [
@@ -194,7 +195,7 @@ export default function SeasonResultsSpecialPage() {
 
     return (
         <>
-            <UnifiedABMLayout<Season>
+            <UnifiedABMLayout
                 title="Resultados de Temporadas"
                 description="Gestiona los resultados finales de las temporadas - los resultados se generan automáticamente al cerrar una temporada"
 

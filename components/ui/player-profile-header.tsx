@@ -2,7 +2,7 @@
 
 import { useI18nContext } from '@/components/providers/i18n-provider';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+import { SeparatorServer as Separator } from '@/components/ui/separator-server';
 import { unifiedStyles } from '@/components/ui/unified-styles';
 import { cn } from '@/lib/utils';
 

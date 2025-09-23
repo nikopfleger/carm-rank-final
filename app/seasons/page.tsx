@@ -5,11 +5,11 @@ import { usePublicService } from "@/components/providers/services-provider";
 import { PageHeader } from "@/components/shared/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { BarChart3, Calendar, Eye, Settings, Trophy, Users } from "@/components/ui/icons";
 import { PageSkeleton } from "@/components/ui/loading-skeleton";
 import { SectionTitle } from "@/components/ui/section-title";
 import { unifiedStyles } from "@/components/ui/unified-styles";
 import { useErrorHandler } from "@/hooks/use-error-handler";
-import { BarChart3, Calendar, Eye, Settings, Trophy, Users } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
@@ -103,7 +103,7 @@ export default function SeasonsPage() {
       }
     };
     loadSeasons();
-  }, []); // handleError no debe afectar la carga de temporadas
+  }, [publicService, handleError, t]);
 
   if (loading) {
     return (

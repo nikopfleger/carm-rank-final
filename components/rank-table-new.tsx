@@ -138,7 +138,7 @@ export function RankTableNew({
         if (viewAllParam) setViewAll(viewAllParam === 'true');
 
         setUrlParamsLoaded(true);
-    }, []);
+    }, [searchParams, rankingType]);
 
     const updateURL = (updates: Record<string, string | number | boolean | null>) => {
         const currentParams = new URLSearchParams(searchParams.toString());
@@ -273,7 +273,7 @@ export function RankTableNew({
         }
         console.log(`🚀 Fetch useEffect triggered with rankingType: ${rankingType}`);
         fetchPlayers({ includeInactive: showInactive, sanma: playerCount === "3players", type: rankingType, firstLoad: true });
-    }, [rankingType, urlParamsLoaded]);
+    }, [rankingType, urlParamsLoaded, showInactive, playerCount]);
 
     // auto-refresh
     useEffect(() => {

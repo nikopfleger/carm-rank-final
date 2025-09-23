@@ -93,7 +93,7 @@ export function SeasonResultsEditor({
         };
 
         loadPlayers();
-    }, []);
+    }, [handleError]);
 
     // Separar resultados por modo de juego
     useEffect(() => {

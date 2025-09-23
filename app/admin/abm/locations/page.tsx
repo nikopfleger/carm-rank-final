@@ -1,12 +1,13 @@
 "use client";
 
 import { GridColumn } from "@/components/admin/abm/generic-grid-responsive";
-import { UnifiedABMLayout } from "@/components/admin/abm/unified-abm-layout";
 import { useI18nContext } from "@/components/providers/i18n-provider";
 import { Badge } from "@/components/ui/badge";
+import { Archive, Building2, Edit, Globe, MapPin, RotateCcw, Trash2 } from "@/components/ui/icons";
 import { useErrorHandler } from "@/hooks/use-error-handler";
-import { Archive, Building2, Edit, Globe, MapPin, RotateCcw, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { useCallback, useEffect, useState } from "react";
+const UnifiedABMLayout = dynamic(() => import("@/components/admin/abm/unified-abm-layout").then(m => m.UnifiedABMLayout));
 
 interface Location {
     id: number;
@@ -55,7 +56,7 @@ export default function LocationsUnifiedPage() {
     const [showDeleted, setShowDeleted] = useState(false);
 
     // Cargar datos
-    const loadData = async () => {
+    const loadData = useCallback(async () => {
         setLoading(true);
         try {
             const params = new URLSearchParams();
@@ -74,11 +75,11 @@ export default function LocationsUnifiedPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [showDeleted, handleError]);
 
     useEffect(() => {
         loadData();
-    }, [showDeleted]);
+    }, [loadData]);
 
     // Funciones de manejo
     const handleAdd = () => {
@@ -282,7 +283,7 @@ export default function LocationsUnifiedPage() {
         : 'Nueva Ubicación';
 
     return (
-        <UnifiedABMLayout<Location>
+        <UnifiedABMLayout
             title="Gestión de Ubicaciones"
             description="Administra las ubicaciones donde se realizan torneos y juegos de mahjong"
 

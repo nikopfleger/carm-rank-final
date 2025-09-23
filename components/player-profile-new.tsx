@@ -499,7 +499,7 @@ export function PlayerProfileNew({ legajo }: PlayerProfileProps) {
     return () => {
       ac.abort();
     };
-  }, [legajo, isReady, t, status]); // ✅ Incluir status para recargar al cambiar autenticación
+  }, [legajo, isReady, t, status, handleError]);
 
   // Cargar configuraciones DAN para ambos modos una sola vez (evita flicker al cambiar)
   useEffect(() => {
@@ -553,7 +553,7 @@ export function PlayerProfileNew({ legajo }: PlayerProfileProps) {
     return () => {
       ac.abort();
     };
-  }, [status, playerData?.id]); // Dependencias necesarias
+  }, [status, playerData?.id, handleError]);
 
 
 

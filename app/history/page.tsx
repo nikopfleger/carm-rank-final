@@ -147,7 +147,7 @@ export default function HistoryPage() {
             }
         };
         loadInitialData();
-    }, []);
+    }, [publicService, handleError, t]);
 
     // Setear fechas por defecto (últimos 7 días para evitar cargar demasiados juegos)
     useEffect(() => {

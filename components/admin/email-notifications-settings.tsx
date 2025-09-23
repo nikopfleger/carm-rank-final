@@ -8,7 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { useErrorHandler } from "@/hooks/use-error-handler";
 import { AlertCircle, CheckCircle, Mail, Settings, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface NotificationUser {
     id: string;
@@ -47,7 +47,7 @@ export function EmailNotificationsSettings() {
     const [updating, setUpdating] = useState<string | null>(null);
 
     // Cargar configuración
-    const loadSettings = async () => {
+    const loadSettings = useCallback(async () => {
         try {
             setLoading(true);
             const response = await fetch('/api/admin/email-notifications/settings');
@@ -62,11 +62,11 @@ export function EmailNotificationsSettings() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [handleError]);
 
     useEffect(() => {
         loadSettings();
-    }, []);
+    }, [loadSettings]);
 
     // Actualizar preferencias de usuario
     const updateUserPreferences = async (

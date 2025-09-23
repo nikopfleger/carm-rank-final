@@ -6,7 +6,7 @@ import { TournamentResultsEditor } from "@/components/admin/tournament-results-e
 import { Badge } from "@/components/ui/badge";
 import { useErrorHandler } from "@/hooks/use-error-handler";
 import { Edit, Trophy, Users } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface Tournament {
   id: number;
@@ -49,7 +49,7 @@ export default function TournamentResultsSpecialPage() {
   const [showEditor, setShowEditor] = useState(false);
 
   // Cargar torneos
-  const loadTournaments = async () => {
+  const loadTournaments = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch('/api/abm/tournaments?includeResults=true');
@@ -64,11 +64,11 @@ export default function TournamentResultsSpecialPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [handleError]);
 
   useEffect(() => {
     loadTournaments();
-  }, []);
+  }, [loadTournaments]);
 
   // Configuración de columnas del grid
   const columns: GridColumn[] = [

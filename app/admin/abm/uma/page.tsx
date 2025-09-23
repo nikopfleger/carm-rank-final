@@ -141,7 +141,7 @@ export default function UmaABMPage() {
 
   useEffect(() => {
     abm.loadData();
-  }, []);
+  }, [abm]);
 
   // Configuración de acciones del grid
   const actions: GridAction[] = [

@@ -70,7 +70,7 @@ export function TournamentResultsEditor({
         };
 
         loadPlayers();
-    }, []);
+    }, [handleError]);
 
     // Inicializar resultados existentes
     useEffect(() => {

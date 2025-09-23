@@ -5,12 +5,12 @@ import { usePublicService } from "@/components/providers/services-provider";
 import { PageHeader } from "@/components/shared/page-header";
 import { TournamentStatusBadge } from "@/components/tournaments/tournament-status-badge";
 import { Button } from "@/components/ui/button";
+import { Award, Calendar, Clock, Trophy, Users } from "@/components/ui/icons";
 import { PageSkeleton } from "@/components/ui/loading-skeleton";
 import { SectionTitle } from "@/components/ui/section-title";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 import { unifiedStyles } from "@/components/ui/unified-styles";
 import { useErrorHandler } from "@/hooks/use-error-handler";
-import { Award, Calendar, Clock, Trophy, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
@@ -76,7 +76,7 @@ export default function TournamentsPage() {
       }
     };
     loadData();
-  }, []); // no dependas de handleError
+  }, [publicService, t, handleError]);
 
   // Filtrar torneos por temporada
   const filteredTournaments = tournaments.filter((t) => {

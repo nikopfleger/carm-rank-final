@@ -2,13 +2,14 @@
 
 import { FormField } from '@/components/admin/abm/generic-form';
 import { GridAction, GridColumn } from '@/components/admin/abm/generic-grid-responsive';
-import { UnifiedABMLayout } from '@/components/admin/abm/unified-abm-layout';
 import { useI18nContext } from '@/components/providers/i18n-provider';
 import { Badge } from '@/components/ui/badge';
+import { Edit, Eye, Trash2 } from '@/components/ui/icons';
 import { useDanConfigsOperations } from '@/hooks/use-dan-configs-operations';
 import { useUnifiedABM } from '@/hooks/use-unified-abm';
-import { Edit, Eye, Trash2 } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { useEffect } from 'react';
+const UnifiedABMLayout = dynamic(() => import('@/components/admin/abm/unified-abm-layout').then(m => m.UnifiedABMLayout));
 
 interface DanConfig {
     id: number;
@@ -50,7 +51,7 @@ export default function DanConfigsPage() {
 
     useEffect(() => {
         abm.loadData();
-    }, [abm.showDeleted]);
+    }, [abm, abm.showDeleted]);
 
     // Configuración de columnas del grid
     const columns: GridColumn[] = [
@@ -226,7 +227,7 @@ export default function DanConfigsPage() {
     ];
 
     return (
-        <UnifiedABMLayout<DanConfig>
+        <UnifiedABMLayout
             title="Configuraciones DAN"
             description="Gestiona las configuraciones de rangos DAN del sistema"
 

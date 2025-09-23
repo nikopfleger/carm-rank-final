@@ -1,4 +1,6 @@
 import { PlayerProfileNew } from "@/components/player-profile-new";
+import { PageSkeleton } from "@/components/ui/loading-skeleton";
+import { Suspense } from "react";
 
 export default async function ProfilePage({
   params,
@@ -18,7 +20,10 @@ export default async function ProfilePage({
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <PlayerProfileNew legajo={legajoNumber} />
+      <Suspense fallback={<div className="p-6"><PageSkeleton /></div>}>
+        {/* PlayerProfileNew hace fetch de datos; mostramos skeleton mientras */}
+        <PlayerProfileNew legajo={legajoNumber} />
+      </Suspense>
     </main>
   );
 }

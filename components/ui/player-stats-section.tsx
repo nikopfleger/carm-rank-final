@@ -5,11 +5,12 @@ import { SectionWithContext } from '@/components/ui/contextual-info';
 import { DanProgressCard } from '@/components/ui/dan-progress-card';
 import { HeroStatCard } from '@/components/ui/hero-stat-card';
 import { InfoTooltip } from '@/components/ui/info-tooltip';
-import { PositionDistributionChart } from '@/components/ui/position-distribution-chart';
 import { SeasonStatCard } from '@/components/ui/season-stat-card';
 import { StatCard } from '@/components/ui/stat-card';
 import { fmtInt } from '@/lib/format-utils';
 import { DanConfig } from '@/lib/game-helpers-client';
+import dynamic from 'next/dynamic';
+const PositionDistributionChart = dynamic(() => import('@/components/ui/position-distribution-chart').then(m => m.PositionDistributionChart), { ssr: false });
 
 interface PlayerStatsSectionProps {
     // Dan progress

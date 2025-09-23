@@ -4,7 +4,7 @@ import { GenericForm } from "@/components/admin/abm/generic-form";
 import { InlineSubABM } from "@/components/admin/abm/InlineSubABM";
 import { ONLINE_PLATFORM_LABELS, ONLINE_PLATFORM_OPTIONS, OnlinePlatform } from "@/lib/enum/online-platform";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 interface OnlineUserRow { id: number; platform: string; username: string; idOnline?: string; deleted: boolean; pending?: boolean; toDelete?: boolean; }
 
@@ -29,7 +29,7 @@ export function PlayerEditForm({ initialData }: { initialData: any }) {
     })();
   }, []);
 
-  const loadOnlineUsers = async () => {
+  const loadOnlineUsers = useCallback(async () => {
     const res = await fetch(`/api/abm/online-users?search=${encodeURIComponent(initialData.nickname || "")}`);
     if (res.ok) {
       const rows = await res.json();
@@ -38,9 +38,9 @@ export function PlayerEditForm({ initialData }: { initialData: any }) {
       setPendingAdds([]);
       setPendingDeletes([]);
     }
-  };
+  }, [initialData.nickname, initialData.id]);
 
-  useEffect(() => { loadOnlineUsers(); }, []);
+  useEffect(() => { loadOnlineUsers(); }, [loadOnlineUsers]);
 
   const formFields = useMemo(
     () => [

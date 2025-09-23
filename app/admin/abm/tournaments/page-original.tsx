@@ -135,10 +135,7 @@ export default function TournamentsABMPage() {
           value: loc.id,
           label: loc.name
         })));
-        fieldConfig.locationId.options = locationsData.map((loc: any) => ({
-          value: loc.id,
-          label: loc.name
-        }));
+        // evitar mutar fuera de estado; se rellena en render usando locations
 
         // Cargar temporadas
         const seasonsResponse = await fetch("/api/abm/seasons");
@@ -148,10 +145,7 @@ export default function TournamentsABMPage() {
           value: season.id,
           label: season.name
         })));
-        fieldConfig.seasonId.options = seasonsData.map((season: any) => ({
-          value: season.id,
-          label: season.name
-        }));
+        // evitar mutar fuera de estado; se rellena en render usando seasons
 
         // Cargar jugadores
         const playersResponse = await fetch("/api/abm/players");
@@ -162,7 +156,7 @@ export default function TournamentsABMPage() {
           label: `${player.nickname}${player.fullname ? ` (${player.fullname})` : ''}`
         }));
         setPlayers(playersOptions);
-        tournamentResultAddFields[0].options = playersOptions;
+        // evitar mutación directa; se pasa como prop en render
       } catch (error) {
         console.error("Error cargando datos relacionados:", error);
       }
@@ -557,7 +551,7 @@ export default function TournamentsABMPage() {
                   label: config.label,
                   type: config.type as any,
                   required: (config as any).required,
-                  options: (config as any).options,
+                  options: key === 'locationId' ? locations : key === 'seasonId' ? seasons : (config as any).options,
                   validation: (config as any).min !== undefined || (config as any).max !== undefined ? {
                     min: (config as any).min,
                     max: (config as any).max,
@@ -592,7 +586,12 @@ export default function TournamentsABMPage() {
                   pendingAdds={pendingAdds}
                   pendingDeletes={pendingDeletes}
                   pendingUpdates={pendingUpdates}
-                  addFields={tournamentResultAddFields}
+                  addFields={[
+                    { ...tournamentResultAddFields[0], options: players },
+                    tournamentResultAddFields[1],
+                    tournamentResultAddFields[2],
+                    tournamentResultAddFields[3],
+                  ]}
                   customChangeCounter={
                     (pendingAdds.length > 0 || Object.keys(pendingUpdates).length > 0 || pendingDeletes.length > 0) && (
                       <div className="mt-2 text-xs text-gray-500">

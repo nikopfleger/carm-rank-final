@@ -264,7 +264,7 @@ export async function initializeCache(): Promise<void> {
             lastInitAt = Date.now();
             const duration = Date.now() - startTime;
             console.log(
-                `🎉 CACHE READY! Inicializada en ${duration}ms - ${ranking.length} jugadores, ${dan.length} dan, ${rate.length} rate, ${seasons.length} seasons`,
+                `🎉 CACHE READY! Inicializada en ${duration}ms`,
             );
         } catch (error) {
             console.error('❌ Error inicializando cache:', error);

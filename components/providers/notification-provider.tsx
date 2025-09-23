@@ -39,6 +39,14 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const notificationsRef = useRef<Notification[]>([]);
 
+    const removeNotification = useCallback((id: string) => {
+        setNotifications(prev => {
+            const updatedAt = prev.filter(notification => notification.id !== id);
+            notificationsRef.current = updatedAt;
+            return updatedAt;
+        });
+    }, []);
+
     // Función estable que no cambia entre renders
     const addNotification = useCallback((notification: Omit<Notification, 'id'>) => {
         // Crear una clave única para deduplicación
@@ -74,15 +82,7 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
                 removeNotification(id);
             }, newNotification.duration);
         }
-    }, []);
-
-    const removeNotification = useCallback((id: string) => {
-        setNotifications(prev => {
-            const updatedAt = prev.filter(notification => notification.id !== id);
-            notificationsRef.current = updatedAt;
-            return updatedAt;
-        });
-    }, []);
+    }, [removeNotification]);
 
     const clearAll = useCallback(() => {
         setNotifications([]);

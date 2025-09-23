@@ -3,13 +3,13 @@
 import { usePublicService } from "@/components/providers/services-provider";
 import { PageHeader } from "@/components/shared/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowLeft, Award, Calendar, Trophy, Users } from "@/components/ui/icons";
 import { PageSkeleton } from "@/components/ui/loading-skeleton";
 import { PlayerResultCard } from "@/components/ui/player-result-card";
 import { unifiedStyles } from "@/components/ui/unified-styles";
 import { useErrorHandler } from "@/hooks/use-error-handler";
-import { ArrowLeft, Award, Calendar, Trophy, Users } from "lucide-react";
 import Link from "next/link";
-import { use, useEffect, useState } from "react";
+import { Suspense, use, useEffect, useState } from "react";
 import styles from "./page.module.css";
 
 interface Season {
@@ -114,7 +114,7 @@ export default function SeasonDetailPage({ params }: { params: Promise<{ id: str
         };
 
         loadSeasonData();
-    }, [id]);
+    }, [id, publicService, handleError]);
 
     if (loading) {
         return (
@@ -220,28 +220,30 @@ export default function SeasonDetailPage({ params }: { params: Promise<{ id: str
                             <p>No hay resultados disponibles para esta temporada</p>
                         </div>
                     ) : (
-                        <div className="space-y-3">
-                            {results.map((result) => (
-                                <PlayerResultCard
-                                    key={result.id}
-                                    position={(result as any).position}
-                                    player={{
-                                        id: result.player.id,
-                                        nickname: result.player.nickname,
-                                        fullname: result.player.fullname
-                                    }}
-                                    stats={{
-                                        positionAverage: result.seasonAveragePosition,
-                                        seasonPoints: result.seasonPoints,
-                                        totalGames: result.seasonTotalGames
-                                    }}
-                                    variant="season"
-                                    showTrend={false}
-                                    showRank={false}
-                                    showCountry={false}
-                                />
-                            ))}
-                        </div>
+                        <Suspense fallback={<PageSkeleton />}>
+                            <div className="space-y-3">
+                                {results.map((result) => (
+                                    <PlayerResultCard
+                                        key={result.id}
+                                        position={(result as any).position}
+                                        player={{
+                                            id: result.player.id,
+                                            nickname: result.player.nickname,
+                                            fullname: result.player.fullname
+                                        }}
+                                        stats={{
+                                            positionAverage: result.seasonAveragePosition,
+                                            seasonPoints: result.seasonPoints,
+                                            totalGames: result.seasonTotalGames
+                                        }}
+                                        variant="season"
+                                        showTrend={false}
+                                        showRank={false}
+                                        showCountry={false}
+                                    />
+                                ))}
+                            </div>
+                        </Suspense>
                     )}
                 </CardContent>
             </Card>
