@@ -4,7 +4,7 @@ import { useI18nContext } from "@/components/providers/i18n-provider";
 import { Card } from "@/components/ui/card";
 import { EditPlayerModal } from "@/components/ui/edit-player-modal";
 import { HistoricalChart } from "@/components/ui/historical-chart";
-import { PageSkeleton } from "@/components/ui/loading-skeleton";
+import { PlayerProfileSkeleton } from "@/components/ui/loading-skeleton";
 import { StickyPlayerHeader } from "@/components/ui/sticky-player-header";
 import { UnifiedPlayerCard } from "@/components/ui/unified-player-card";
 import { unifiedStyles } from "@/components/ui/unified-styles";
@@ -572,11 +572,7 @@ export function PlayerProfileNew({ legajo }: PlayerProfileProps) {
   // UI states de carga/error
   // ===============================
   if (!isReady || loading || !playerData) {
-    return (
-      <div className="max-w-6xl mx-auto">
-        <PageSkeleton />
-      </div>
-    );
+    return <PlayerProfileSkeleton />;
   }
 
   if (error && !playerData) {

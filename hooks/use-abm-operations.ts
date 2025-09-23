@@ -1,5 +1,5 @@
 import { useAbmService } from '@/components/providers/services-provider';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useErrorHandler } from './use-error-handler';
 
 // Hook personalizado para operaciones ABM de Countries
@@ -8,7 +8,7 @@ export function useCountriesOperations() {
     const { handleError, handleSuccess } = useErrorHandler();
     const [loading, setLoading] = useState(false);
 
-    const load = async (deleted = false) => {
+    const load = useCallback(async (deleted = false) => {
         setLoading(true);
         try {
             const data = await abmService.getCountries(deleted);
@@ -19,9 +19,9 @@ export function useCountriesOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError]);
 
-    const create = async (data: any) => {
+    const create = useCallback(async (data: any) => {
         setLoading(true);
         try {
             const result = await abmService.createCountry(data);
@@ -33,9 +33,9 @@ export function useCountriesOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError, handleSuccess]);
 
-    const update = async (id: number, data: any) => {
+    const update = useCallback(async (id: number, data: any) => {
         setLoading(true);
         try {
             const result = await abmService.updateCountry(id, data);
@@ -47,9 +47,9 @@ export function useCountriesOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError, handleSuccess]);
 
-    const remove = async (id: number) => {
+    const remove = useCallback(async (id: number) => {
         setLoading(true);
         try {
             const result = await abmService.deleteCountry(id);
@@ -61,9 +61,9 @@ export function useCountriesOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError, handleSuccess]);
 
-    const restore = async (id: number) => {
+    const restore = useCallback(async (id: number) => {
         setLoading(true);
         try {
             const result = await abmService.restoreCountry(id);
@@ -75,7 +75,7 @@ export function useCountriesOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError, handleSuccess]);
 
     return {
         loading,
@@ -93,7 +93,7 @@ export function usePlayersOperations() {
     const { handleError, handleSuccess } = useErrorHandler();
     const [loading, setLoading] = useState(false);
 
-    const load = async () => {
+    const load = useCallback(async () => {
         setLoading(true);
         try {
             const data = await abmService.getPlayers();
@@ -104,9 +104,9 @@ export function usePlayersOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError]);
 
-    const create = async (data: any) => {
+    const create = useCallback(async (data: any) => {
         setLoading(true);
         try {
             const result = await abmService.createPlayer(data);
@@ -118,9 +118,9 @@ export function usePlayersOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError, handleSuccess]);
 
-    const update = async (id: number, data: any) => {
+    const update = useCallback(async (id: number, data: any) => {
         setLoading(true);
         try {
             const result = await abmService.updatePlayer(id, data);
@@ -132,9 +132,9 @@ export function usePlayersOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError, handleSuccess]);
 
-    const remove = async (id: number) => {
+    const remove = useCallback(async (id: number) => {
         setLoading(true);
         try {
             const result = await abmService.deletePlayer(id);
@@ -146,9 +146,9 @@ export function usePlayersOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError, handleSuccess]);
 
-    const restore = async (id: number) => {
+    const restore = useCallback(async (id: number) => {
         setLoading(true);
         try {
             const result = await abmService.restorePlayer(id);
@@ -160,7 +160,7 @@ export function usePlayersOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError, handleSuccess]);
 
     return {
         loading,
@@ -178,7 +178,7 @@ export function useUmaOperations() {
     const { handleError, handleSuccess } = useErrorHandler();
     const [loading, setLoading] = useState(false);
 
-    const load = async () => {
+    const load = useCallback(async () => {
         setLoading(true);
         try {
             const data = await abmService.getUmas();
@@ -189,9 +189,9 @@ export function useUmaOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError]);
 
-    const create = async (data: any) => {
+    const create = useCallback(async (data: any) => {
         setLoading(true);
         try {
             const result = await abmService.createUma(data);
@@ -203,9 +203,9 @@ export function useUmaOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError, handleSuccess]);
 
-    const update = async (id: number, data: any) => {
+    const update = useCallback(async (id: number, data: any) => {
         setLoading(true);
         try {
             const result = await abmService.updateUma(id, data);
@@ -217,9 +217,9 @@ export function useUmaOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError, handleSuccess]);
 
-    const remove = async (id: number) => {
+    const remove = useCallback(async (id: number) => {
         setLoading(true);
         try {
             const result = await abmService.deleteUma(id);
@@ -231,9 +231,9 @@ export function useUmaOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError, handleSuccess]);
 
-    const restore = async (id: number) => {
+    const restore = useCallback(async (id: number) => {
         setLoading(true);
         try {
             const result = await abmService.restoreUma(id);
@@ -245,7 +245,7 @@ export function useUmaOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError, handleSuccess]);
 
     return {
         loading,

@@ -65,7 +65,7 @@ export default function PlayersABMPageUnified() {
             }
         };
         loadInitialData();
-    }, [abm, loadCountries, abm.showDeleted]);
+    }, [loadCountries, abm]);
 
     // Configuración de columnas del grid
     const columns: GridColumn[] = [

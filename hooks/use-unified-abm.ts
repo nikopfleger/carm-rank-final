@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface UseUnifiedABMProps<T> {
     initialData?: T[];
@@ -58,8 +58,8 @@ export function useUnifiedABM<T extends { id: number | string }>({
     const [formErrors, setFormErrors] = useState<Record<string, string>>({});
     const [formSuccess, setFormSuccess] = useState(false);
 
-    // Cargar datos
-    const loadData = async () => {
+    // Cargar datos - función estable que no se recrea innecesariamente
+    const loadData = useCallback(async () => {
         try {
             setLoading(true);
             const result = await loadFunction(showDeleted);
@@ -69,7 +69,7 @@ export function useUnifiedABM<T extends { id: number | string }>({
         } finally {
             setLoading(false);
         }
-    };
+    }, [loadFunction, showDeleted]);
 
     // Resetear formulario
     const resetForm = () => {
@@ -80,21 +80,21 @@ export function useUnifiedABM<T extends { id: number | string }>({
     };
 
     // Handlers
-    const handleAdd = () => {
+    const handleAdd = useCallback(() => {
         setEditingItem(null);
         setFormErrors({});
         setFormSuccess(false);
         setShowForm(true);
-    };
+    }, []);
 
-    const handleEdit = (item: T) => {
+    const handleEdit = useCallback((item: T) => {
         setEditingItem(item);
         setFormErrors({});
         setFormSuccess(false);
         setShowForm(true);
-    };
+    }, []);
 
-    const handleDelete = async (item: T) => {
+    const handleDelete = useCallback(async (item: T) => {
         if (!deleteFunction) return;
 
         try {
@@ -106,9 +106,9 @@ export function useUnifiedABM<T extends { id: number | string }>({
         } finally {
             setLoading(false);
         }
-    };
+    }, [deleteFunction, loadData]);
 
-    const handleRestore = async (item: T) => {
+    const handleRestore = useCallback(async (item: T) => {
         if (!restoreFunction) return;
 
         try {
@@ -120,9 +120,9 @@ export function useUnifiedABM<T extends { id: number | string }>({
         } finally {
             setLoading(false);
         }
-    };
+    }, [restoreFunction, loadData]);
 
-    const handleFormSubmit = async (formData: any) => {
+    const handleFormSubmit = useCallback(async (formData: any) => {
         try {
             setFormErrors({});
             setLoading(true);
@@ -157,19 +157,25 @@ export function useUnifiedABM<T extends { id: number | string }>({
         } finally {
             setLoading(false);
         }
-    };
+    }, [editingItem, updateFunction, createFunction, loadData]);
 
-    const handleFormCancel = () => {
+    const handleFormCancel = useCallback(() => {
         resetForm();
-    };
+    }, []);
 
-    const handleRefresh = async () => {
+    const handleRefresh = useCallback(async () => {
         await loadData();
-    };
+    }, [loadData]);
 
-    const handleToggleShowDeleted = () => {
+    const handleToggleShowDeleted = useCallback(() => {
         setShowDeleted(!showDeleted);
-    };
+    }, [showDeleted]);
+
+    // Cargar datos inicialmente y cuando cambie showDeleted
+    // Usar dependencias específicas en lugar de loadData para evitar loops
+    useEffect(() => {
+        loadData();
+    }, [loadFunction, showDeleted]);
 
     return {
         // Estado

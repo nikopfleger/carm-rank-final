@@ -8,7 +8,7 @@ import { Edit, Eye, Trash2 } from '@/components/ui/icons';
 import { useRateConfigsOperations } from '@/hooks/use-rate-configs-operations';
 import { useUnifiedABM } from '@/hooks/use-unified-abm';
 import dynamic from 'next/dynamic';
-import { useEffect } from 'react';
+import { useCallback, useMemo } from 'react';
 const UnifiedABMLayout = dynamic(() => import('@/components/admin/abm/unified-abm-layout').then(m => m.UnifiedABMLayout));
 
 interface RateConfig {
@@ -34,24 +34,29 @@ export default function RateConfigsPage() {
     // Usar el hook personalizado para operaciones ABM
     const { loading, load, create, update, remove, restore } = useRateConfigsOperations();
 
+    // ⚓️ funciones estables
+    const loadFn = useCallback(async (showDeleted?: boolean) => {
+        const result = await load(showDeleted);
+        return result;
+    }, [load]);
+
+    const createFn = useCallback((data: Partial<RateConfig>) => create(data), [create]);
+    const updateFn = useCallback((id: number | string, data: Partial<RateConfig>) => update(Number(id), data), [update]);
+    const deleteFn = useCallback((id: number | string) => remove(Number(id)), [remove]);
+    const restoreFn = useCallback((id: number | string) => restore(Number(id)), [restore]);
+
     // Usar el hook unificado de ABM
     const abm = useUnifiedABM<RateConfig>({
-        loadFunction: async (showDeleted?: boolean) => {
-            const result = await load(showDeleted);
-            return result;
-        },
-        createFunction: create,
-        updateFunction: (id: number | string, data: Partial<RateConfig>) => update(Number(id), data),
-        deleteFunction: (id: number | string) => remove(Number(id)),
-        restoreFunction: (id: number | string) => restore(Number(id))
+        loadFunction: loadFn,
+        createFunction: createFn,
+        updateFunction: updateFn,
+        deleteFunction: deleteFn,
+        restoreFunction: restoreFn,
     });
 
-    useEffect(() => {
-        abm.loadData();
-    }, [abm, abm.showDeleted]);
 
     // Configuración de columnas del grid
-    const columns: GridColumn[] = [
+    const columns: GridColumn[] = useMemo(() => [
         {
             key: 'id',
             label: t('admin.configFields.id'),
@@ -140,10 +145,10 @@ export default function RateConfigsPage() {
                 </Badge>
             )
         }
-    ];
+    ], [t]);
 
     // Configuración de campos del formulario
-    const formFields: FormField[] = [
+    const formFields: FormField[] = useMemo(() => [
         { key: 'id', label: t('admin.configFields.id'), type: 'hidden', required: false },
         { key: 'name', label: t('admin.configFields.name'), type: 'text', required: true },
         { key: 'sanma', label: t('admin.configFields.sanma'), type: 'boolean', required: true },
@@ -154,10 +159,10 @@ export default function RateConfigsPage() {
         { key: 'adjustmentRate', label: t('admin.configFields.adjustmentRate'), type: 'number', required: true },
         { key: 'adjustmentLimit', label: t('admin.configFields.adjustmentLimit'), type: 'number', required: true },
         { key: 'minAdjustment', label: t('admin.configFields.minAdjustment'), type: 'number', required: true },
-    ];
+    ], [t]);
 
     // Configuración de acciones del grid
-    const actions: GridAction[] = [
+    const actions: GridAction[] = useMemo(() => [
         {
             key: 'edit',
             label: 'Editar',
@@ -186,7 +191,7 @@ export default function RateConfigsPage() {
             onClick: (row: RateConfig) => abm.handleRestore(row),
             show: (row: RateConfig) => row.deleted
         }
-    ];
+    ], [abm, t]);
 
     return (
         <UnifiedABMLayout

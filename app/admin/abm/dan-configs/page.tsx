@@ -8,7 +8,7 @@ import { Edit, Eye, Trash2 } from '@/components/ui/icons';
 import { useDanConfigsOperations } from '@/hooks/use-dan-configs-operations';
 import { useUnifiedABM } from '@/hooks/use-unified-abm';
 import dynamic from 'next/dynamic';
-import { useEffect } from 'react';
+import { useCallback, useMemo } from 'react';
 const UnifiedABMLayout = dynamic(() => import('@/components/admin/abm/unified-abm-layout').then(m => m.UnifiedABMLayout));
 
 interface DanConfig {
@@ -37,24 +37,29 @@ export default function DanConfigsPage() {
     // Usar el hook personalizado para operaciones ABM
     const { loading, load, create, update, remove, restore } = useDanConfigsOperations();
 
+    // ⚓️ funciones estables
+    const loadFn = useCallback(async (showDeleted?: boolean) => {
+        const result = await load(showDeleted);
+        return result;
+    }, [load]);
+
+    const createFn = useCallback((data: Partial<DanConfig>) => create(data), [create]);
+    const updateFn = useCallback((id: number | string, data: Partial<DanConfig>) => update(Number(id), data), [update]);
+    const deleteFn = useCallback((id: number | string) => remove(Number(id)), [remove]);
+    const restoreFn = useCallback((id: number | string) => restore(Number(id)), [restore]);
+
     // Usar el hook unificado de ABM
     const abm = useUnifiedABM<DanConfig>({
-        loadFunction: async (showDeleted?: boolean) => {
-            const result = await load(showDeleted);
-            return result;
-        },
-        createFunction: create,
-        updateFunction: (id: number | string, data: Partial<DanConfig>) => update(Number(id), data),
-        deleteFunction: (id: number | string) => remove(Number(id)),
-        restoreFunction: (id: number | string) => restore(Number(id))
+        loadFunction: loadFn,
+        createFunction: createFn,
+        updateFunction: updateFn,
+        deleteFunction: deleteFn,
+        restoreFunction: restoreFn
     });
 
-    useEffect(() => {
-        abm.loadData();
-    }, [abm, abm.showDeleted]);
 
     // Configuración de columnas del grid
-    const columns: GridColumn[] = [
+    const columns: GridColumn[] = useMemo(() => [
         {
             key: 'id',
             label: t('admin.configFields.id'),
@@ -175,10 +180,10 @@ export default function DanConfigsPage() {
                 </Badge>
             )
         }
-    ];
+    ], [t]);
 
     // Configuración de campos del formulario
-    const formFields: FormField[] = [
+    const formFields: FormField[] = useMemo(() => [
         { key: 'id', label: 'ID', type: 'hidden', required: false },
         { key: 'rank', label: 'Rango', type: 'text', required: true },
         { key: 'sanma', label: 'Sanma (3 jugadores)', type: 'boolean', required: true },
@@ -192,10 +197,10 @@ export default function DanConfigsPage() {
         { key: 'color', label: 'Color (hex)', type: 'text', required: true },
         { key: 'cssClass', label: 'Clase CSS', type: 'text', required: true },
         { key: 'isLastRank', label: 'Último Rango', type: 'boolean', required: true },
-    ];
+    ], []);
 
     // Configuración de acciones del grid
-    const actions: GridAction[] = [
+    const actions: GridAction[] = useMemo(() => [
         {
             key: 'edit',
             label: 'Editar',
@@ -224,7 +229,7 @@ export default function DanConfigsPage() {
             onClick: (row: DanConfig) => abm.handleRestore(row),
             show: (row: DanConfig) => row.deleted
         }
-    ];
+    ], [abm]);
 
     return (
         <UnifiedABMLayout

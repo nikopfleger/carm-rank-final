@@ -1,5 +1,5 @@
 import { useAbmService } from '@/components/providers/services-provider';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useErrorHandler } from './use-error-handler';
 
 // Hook personalizado para operaciones ABM de Seasons
@@ -8,7 +8,7 @@ export function useSeasonsOperations() {
     const { handleError, handleSuccess } = useErrorHandler();
     const [loading, setLoading] = useState(false);
 
-    const load = async (showDeleted = false) => {
+    const load = useCallback(async (showDeleted = false) => {
         setLoading(true);
         try {
             const url = showDeleted ? "/api/abm/seasons?includeDeleted=true" : "/api/abm/seasons";
@@ -21,9 +21,9 @@ export function useSeasonsOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [handleError]);
 
-    const create = async (data: any) => {
+    const create = useCallback(async (data: any) => {
         setLoading(true);
         try {
             const response = await fetch("/api/abm/seasons", {
@@ -41,9 +41,9 @@ export function useSeasonsOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [handleError, handleSuccess]);
 
-    const update = async (id: number, data: any) => {
+    const update = useCallback(async (id: number, data: any) => {
         setLoading(true);
         try {
             const response = await fetch(`/api/abm/seasons/${id}`, {
@@ -61,9 +61,9 @@ export function useSeasonsOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [handleError, handleSuccess]);
 
-    const remove = async (id: number) => {
+    const remove = useCallback(async (id: number) => {
         setLoading(true);
         try {
             const response = await fetch(`/api/abm/seasons/${id}`, {
@@ -78,9 +78,9 @@ export function useSeasonsOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [handleError, handleSuccess]);
 
-    const restore = async (id: number) => {
+    const restore = useCallback(async (id: number) => {
         setLoading(true);
         try {
             const response = await fetch(`/api/abm/seasons/${id}/restore`, {
@@ -95,10 +95,10 @@ export function useSeasonsOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [handleError, handleSuccess]);
 
     // Funciones especiales para Seasons
-    const activateSeason = async (seasonId: number) => {
+    const activateSeason = useCallback(async (seasonId: number) => {
         setLoading(true);
         try {
             const response = await fetch(`/api/seasons/${seasonId}?action=activate`, {
@@ -113,9 +113,9 @@ export function useSeasonsOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [handleError, handleSuccess]);
 
-    const getSeasonStats = async (seasonId: number) => {
+    const getSeasonStats = useCallback(async (seasonId: number) => {
         try {
             const response = await fetch(`/api/seasons/${seasonId}/close`);
             if (response.ok) {
@@ -127,9 +127,9 @@ export function useSeasonsOperations() {
             console.error('Error loading season stats', error);
             return null;
         }
-    };
+    }, []);
 
-    const closeSeason = async (currentSeasonId: number, newSeasonId?: number) => {
+    const closeSeason = useCallback(async (currentSeasonId: number, newSeasonId?: number) => {
         setLoading(true);
         try {
             const response = await fetch(`/api/seasons/${currentSeasonId}/close`, {
@@ -157,7 +157,7 @@ export function useSeasonsOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [handleError, handleSuccess]);
 
     return {
         loading,

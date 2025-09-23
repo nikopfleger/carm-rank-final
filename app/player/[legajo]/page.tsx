@@ -1,5 +1,5 @@
 import { PlayerProfileNew } from "@/components/player-profile-new";
-import { PageSkeleton } from "@/components/ui/loading-skeleton";
+import { PlayerProfileSkeleton } from "@/components/ui/loading-skeleton";
 import { Suspense } from "react";
 
 export default async function ProfilePage({
@@ -20,7 +20,7 @@ export default async function ProfilePage({
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <Suspense fallback={<div className="p-6"><PageSkeleton /></div>}>
+      <Suspense fallback={<PlayerProfileSkeleton />}>
         {/* PlayerProfileNew hace fetch de datos; mostramos skeleton mientras */}
         <PlayerProfileNew legajo={legajoNumber} />
       </Suspense>

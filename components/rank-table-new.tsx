@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import { PageSkeleton } from "@/components/ui/loading-skeleton";
+import { RankTableSkeleton } from "@/components/ui/loading-skeleton";
 import { Pagination } from "@/components/ui/pagination";
 import { RankBadgeAuto } from "@/components/ui/rank-badge-auto";
 import { SearchInput } from "@/components/ui/search-input";
@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Award, Crown, Eye, Medal, Star, Target, TrendingUp, Trophy, Users } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { startTransition, useEffect, useMemo, useRef, useState } from "react";
 
 import { CountryFlag } from "@/components/ui/country-flag";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -109,12 +109,10 @@ export function RankTableNew({
 
     // Notificar a la página contenedora cuando el primer load terminó
     useEffect(() => {
-        if (!initializing) {
-            onReady?.();
-        }
+        if (!initializing) onReady?.();
     }, [initializing, onReady]);
 
-    // init from URL
+    // init from URL (solo setea estado desde la URL, no hace fetch)
     useEffect(() => {
         const page = searchParams.get('page');
         const search = searchParams.get('search');
@@ -124,21 +122,16 @@ export function RankTableNew({
         const perPage = searchParams.get('perPage');
         const viewAllParam = searchParams.get('viewAll');
 
-        console.log(`🌐 URL params: type=${type}, mode=${mode}, inactive=${inactive}`);
-
         if (page) setCurrentPage(parseInt(page, 10));
         if (search) setSearchQuery(search);
         if (mode) setPlayerCount(mode as '3players' | '4players');
-        if (type) {
-            console.log(`🔄 Setting rankingType from ${rankingType} to ${type}`);
-            setRankingType(type as 'GENERAL' | 'TEMPORADA');
-        }
+        if (type) setRankingType(type as 'GENERAL' | 'TEMPORADA');
         if (inactive) setShowInactive(inactive === 'true');
         if (perPage) setItemsPerPage(parseInt(perPage, 10));
         if (viewAllParam) setViewAll(viewAllParam === 'true');
 
         setUrlParamsLoaded(true);
-    }, [searchParams, rankingType]);
+    }, [searchParams]);
 
     const updateURL = (updates: Record<string, string | number | boolean | null>) => {
         const currentParams = new URLSearchParams(searchParams.toString());
@@ -154,6 +147,7 @@ export function RankTableNew({
             }
         });
 
+        // si cambió algo distinto de page, reseteamos page a 1
         if (updates.page === undefined && Object.keys(updates).some(k => k !== 'page')) {
             const p = currentParams.get('page');
             if (p !== '1') {
@@ -164,11 +158,13 @@ export function RankTableNew({
 
         if (hasChanges) {
             const newURL = `${window.location.pathname}?${currentParams.toString()}`;
-            router.replace(newURL, { scroll: false });
+            startTransition(() => {
+                router.replace(newURL, { scroll: false });
+            });
         }
     };
 
-    // filter by search
+    // filter by search (en memoria)
     useEffect(() => {
         const list = maxRows ? playerData.slice(0, maxRows) : playerData;
         if (!list.length) {
@@ -199,7 +195,6 @@ export function RankTableNew({
     const totalPages = Math.ceil(filteredPlayers.length / itemsPerPage);
 
     const handleSearch = (q: string) => {
-        // Solo filtrar, sin navegación automática
         setSearchQuery(q);
         updateURL({ search: q || null, page: 1 });
     };
@@ -207,7 +202,6 @@ export function RankTableNew({
         setSearchQuery('');
         updateURL({ search: null, page: 1 });
     };
-
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -248,14 +242,14 @@ export function RankTableNew({
                 setError(null);
                 if (playersResponse.refreshedAt) setLastupdatedAt(new Date(playersResponse.refreshedAt));
                 if (playersResponse.nextRefreshAt) setNextRefreshAt(new Date(playersResponse.nextRefreshAt));
+
+                // calcular juegos únicos aproximados
+                const seats = opts.sanma ? 3 : 4;
+                const approx = Math.round((Array.isArray(list) ? list.reduce((s, p: any) => s + (p.total_games || 0), 0) : 0) / seats);
+                setUniqueGames(approx);
             } else {
                 setError(playersResponse.error || "Error cargando el ranking");
             }
-
-            const seats = opts.sanma ? 3 : 4;
-            const list = playersResponse.data as any[];
-            const approx = Math.round((Array.isArray(list) ? list.reduce((s, p: any) => s + (p.total_games || 0), 0) : 0) / seats);
-            setUniqueGames(approx);
         } catch (e: any) {
             if (e?.name !== "AbortError") setError("Error de conexión");
         } finally {
@@ -265,17 +259,14 @@ export function RankTableNew({
         }
     }
 
-    // initial load
+    // initial load: SOLO una vez cuando ya leímos la URL
     useEffect(() => {
-        if (!urlParamsLoaded) {
-            console.log(`⏳ Waiting for URL params to load...`);
-            return;
-        }
-        console.log(`🚀 Fetch useEffect triggered with rankingType: ${rankingType}`);
+        if (!urlParamsLoaded) return;
         fetchPlayers({ includeInactive: showInactive, sanma: playerCount === "3players", type: rankingType, firstLoad: true });
-    }, [rankingType, urlParamsLoaded, showInactive, playerCount]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [urlParamsLoaded]);
 
-    // auto-refresh
+    // auto-refresh cada 5 min (si no hay búsqueda, en page 1 y sin "ver todo")
     useEffect(() => {
         const id = setInterval(() => {
             if (!searchQuery && currentPage === 1 && !viewAll) {
@@ -309,11 +300,7 @@ export function RankTableNew({
     };
 
     if (initializing) {
-        return (
-            <div className={`w-full space-y-4 px-3 sm:px-4 mx-auto xl:max-w-[1400px] 2xl:max-w-[1600px] ${fullBleed ? 'w-screen ml-[50%] -translate-x-[50%]' : ''}`}>
-                <PageSkeleton />
-            </div>
-        );
+        return <RankTableSkeleton />;
     }
 
     if (error) {
@@ -338,6 +325,7 @@ export function RankTableNew({
                     {nextRefreshAt && (
                         <> • Próxima actualización: {nextRefreshAt.toLocaleTimeString('es-AR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}</>
                     )}
+                    {isFetching && <> • Actualizando…</>}
                 </div>
             )}
 
@@ -374,16 +362,10 @@ export function RankTableNew({
                                     onValueChange={(v) => v && handlePlayerCountChange(v === "4p" ? "4players" : "3players")}
                                     className={`${unifiedStyles.toggleGroup} shrink-0`}
                                 >
-                                    <ToggleGroupItem
-                                        value="4p"
-                                        className={unifiedStyles.toggleGroupItem}
-                                    >
+                                    <ToggleGroupItem value="4p" className={unifiedStyles.toggleGroupItem}>
                                         {t('player.profilePage.fourPlayerMode', '4p')}
                                     </ToggleGroupItem>
-                                    <ToggleGroupItem
-                                        value="3p"
-                                        className={unifiedStyles.toggleGroupItem}
-                                    >
+                                    <ToggleGroupItem value="3p" className={unifiedStyles.toggleGroupItem}>
                                         {t('player.profilePage.threePlayerMode', '3p')}
                                     </ToggleGroupItem>
                                 </ToggleGroup>
@@ -401,16 +383,10 @@ export function RankTableNew({
                                     }}
                                     className={`${unifiedStyles.toggleGroup} shrink-0`}
                                 >
-                                    <ToggleGroupItem
-                                        value="general"
-                                        className={unifiedStyles.toggleGroupItem}
-                                    >
+                                    <ToggleGroupItem value="general" className={unifiedStyles.toggleGroupItem}>
                                         General
                                     </ToggleGroupItem>
-                                    <ToggleGroupItem
-                                        value="temporada"
-                                        className={unifiedStyles.toggleGroupItem}
-                                    >
+                                    <ToggleGroupItem value="temporada" className={unifiedStyles.toggleGroupItem}>
                                         Temporada
                                     </ToggleGroupItem>
                                 </ToggleGroup>
@@ -480,7 +456,7 @@ export function RankTableNew({
             <div className="space-y-3">
                 {paginatedPlayers.map((p, i) => (
                     <div
-                        key={p.player_id || p.id || `player-${i}`}
+                        key={p.player_id ?? p.id ?? `player-${i}`}
                         id={`player-${p.position}`}
                         className={`group relative ${unifiedStyles.card} hover:border-blue-300 dark:hover:border-blue-600 overflow-hidden`}
                     >

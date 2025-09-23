@@ -6,7 +6,7 @@ import { PageHeader } from "@/components/shared/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BarChart3, Calendar, Eye, Settings, Trophy, Users } from "@/components/ui/icons";
-import { PageSkeleton } from "@/components/ui/loading-skeleton";
+import { SeasonsPageSkeleton } from "@/components/ui/loading-skeleton";
 import { SectionTitle } from "@/components/ui/section-title";
 import { unifiedStyles } from "@/components/ui/unified-styles";
 import { useErrorHandler } from "@/hooks/use-error-handler";
@@ -108,7 +108,7 @@ export default function SeasonsPage() {
   if (loading) {
     return (
       <div className={styles.seasonsPage}>
-        <PageSkeleton />
+        <SeasonsPageSkeleton />
       </div>
     );
   }

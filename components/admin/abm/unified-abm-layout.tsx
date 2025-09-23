@@ -88,7 +88,7 @@ export function UnifiedABMLayout<T = any>({
                 </p>
             </div>
 
-            {/* Contenido principal: Form O Grid (nunca ambos) */}
+            {/* Contenido principal: Form O Grid */}
             {showForm ? (
                 <div className={`${styles.formContainer} space-y-6`}>
                     <GenericForm

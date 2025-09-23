@@ -7,7 +7,7 @@ import { Edit, Eye, Trash2 } from "@/components/ui/icons";
 import { useRulesetsOperations } from "@/hooks/use-rulesets-operations";
 import { useUnifiedABM } from "@/hooks/use-unified-abm";
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
+import { useCallback, useMemo } from "react";
 const UnifiedABMLayout = dynamic(() => import("@/components/admin/abm/unified-abm-layout").then(m => m.UnifiedABMLayout));
 
 interface Ruleset {
@@ -25,24 +25,29 @@ export default function RulesetsABMPage() {
   // Usar el hook personalizado para operaciones ABM
   const { loading, load, create, update, remove, restore } = useRulesetsOperations();
 
+  // ⚓️ funciones estables
+  const loadFn = useCallback(async (showDeleted?: boolean) => {
+    const result = await load(showDeleted);
+    return result;
+  }, [load]);
+
+  const createFn = useCallback((data: Partial<Ruleset>) => create(data), [create]);
+  const updateFn = useCallback((id: number | string, data: Partial<Ruleset>) => update(Number(id), data), [update]);
+  const deleteFn = useCallback((id: number | string) => remove(Number(id)), [remove]);
+  const restoreFn = useCallback((id: number | string) => restore(Number(id)), [restore]);
+
   // Usar el hook unificado de ABM
   const abm = useUnifiedABM<Ruleset>({
-    loadFunction: async (showDeleted?: boolean) => {
-      const result = await load(showDeleted);
-      return result;
-    },
-    createFunction: create,
-    updateFunction: (id: number | string, data: Partial<Ruleset>) => update(Number(id), data),
-    deleteFunction: (id: number | string) => remove(Number(id)),
-    restoreFunction: (id: number | string) => restore(Number(id))
+    loadFunction: loadFn,
+    createFunction: createFn,
+    updateFunction: updateFn,
+    deleteFunction: deleteFn,
+    restoreFunction: restoreFn
   });
 
-  useEffect(() => {
-    abm.loadData();
-  }, [abm]);
 
   // Configuración de columnas del grid
-  const columns: GridColumn[] = [
+  const columns: GridColumn[] = useMemo(() => [
     {
       key: "id",
       label: "ID",
@@ -100,17 +105,17 @@ export default function RulesetsABMPage() {
       type: "date",
       width: "150px"
     }
-  ];
+  ], []);
 
   // Configuración de campos del formulario
-  const formFields: FormField[] = [
+  const formFields: FormField[] = useMemo(() => [
     { key: "name", label: "Nombre", type: "text", required: true },
     { key: "description", label: "Descripción", type: "textarea", required: false },
     { key: "isActive", label: "Activo", type: "boolean", required: false }
-  ];
+  ], []);
 
   // Configuración de acciones del grid
-  const actions: GridAction[] = [
+  const actions: GridAction[] = useMemo(() => [
     {
       key: "edit",
       label: "Editar",
@@ -139,7 +144,7 @@ export default function RulesetsABMPage() {
       onClick: (row: Ruleset) => abm.handleRestore(row),
       show: (row: Ruleset) => row.deleted
     }
-  ];
+  ], [abm]);
 
   return (
     <UnifiedABMLayout

@@ -3,15 +3,13 @@
 import { useI18nContext } from "@/components/providers/i18n-provider";
 import { RankTableNew } from "@/components/rank-table-new";
 import { Card, CardContent } from "@/components/ui/card";
-import { PageSkeleton } from "@/components/ui/loading-skeleton";
 import { unifiedStyles } from "@/components/ui/unified-styles";
 import Image from "next/image";
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import styles from "./page.module.css";
 
 export default function Home() {
   const { t } = useI18nContext();
-  const [isReady, setIsReady] = useState(false);
 
   return (
     <div className="relative">
@@ -63,13 +61,8 @@ export default function Home() {
         </div>
 
         {/* Ranking Table */}
-        {!isReady && (
-          <div className="w-full">
-            <PageSkeleton />
-          </div>
-        )}
-        <Suspense fallback={<PageSkeleton />}>
-          <RankTableNew onReady={() => setIsReady(true)} />
+        <Suspense fallback={<div>Cargando ranking...</div>}>
+          <RankTableNew />
         </Suspense>
       </div>
     </div>

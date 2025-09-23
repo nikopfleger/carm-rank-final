@@ -17,7 +17,7 @@ import {
     Trash2
 } from "lucide-react";
 import React, { useState } from "react";
-import { GenericGridProps, GridAction, GridColumn } from "./generic-grid";
+import { GenericGridProps, GridAction, GridColumn } from "./generic-grid-responsive";
 
 export function GenericGridMobile({
     title,

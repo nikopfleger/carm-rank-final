@@ -2,13 +2,12 @@
 
 import { FormField } from "@/components/admin/abm/generic-form";
 import { GridAction, GridColumn } from "@/components/admin/abm/generic-grid-responsive";
+import UnifiedABMLayout from "@/components/admin/abm/unified-abm-layout";
 import { Badge } from "@/components/ui/badge";
 import { Edit, Eye, Trash2 } from "@/components/ui/icons";
 import { useCountriesOperations } from "@/hooks/use-abm-operations";
 import { useUnifiedABM } from "@/hooks/use-unified-abm";
-import dynamic from "next/dynamic";
-import { useEffect } from "react";
-const UnifiedABMLayout = dynamic(() => import("@/components/admin/abm/unified-abm-layout").then(m => m.UnifiedABMLayout));
+import { useCallback, useMemo } from "react";
 
 interface Country {
   id: number;
@@ -22,27 +21,32 @@ interface Country {
 }
 
 export default function CountriesABMPage() {
-  // Usar el hook personalizado para operaciones ABM
+  // Hook de operaciones (asegurate de que dentro use callbacks memorizados)
   const { loading, load, create, update, remove, restore } = useCountriesOperations();
 
-  // Usar el hook unificado de ABM
+  // ✅ funciones estables que le pasamos al hook unificado
+  const loadFn = useCallback(async (showDeleted?: boolean) => {
+    const result = await load(showDeleted);
+    // Normalizamos el shape que espera el hook unificado
+    return { data: (result as any)?.data ?? [] };
+  }, [load]);
+
+  const createFn = useCallback((data: Partial<Country>) => create(data), [create]);
+  const updateFn = useCallback((id: number | string, data: Partial<Country>) => update(Number(id), data), [update]);
+  const deleteFn = useCallback((id: number | string) => remove(Number(id)), [remove]);
+  const restoreFn = useCallback((id: number | string) => restore(Number(id)), [restore]);
+
+  // Hook unificado de ABM
   const abm = useUnifiedABM<Country>({
-    loadFunction: async (showDeleted?: boolean) => {
-      const result = await load(showDeleted);
-      return { data: (result as any).data || [] };
-    },
-    createFunction: create,
-    updateFunction: (id: number | string, data: Partial<Country>) => update(Number(id), data),
-    deleteFunction: (id: number | string) => remove(Number(id)),
-    restoreFunction: (id: number | string) => restore(Number(id))
+    loadFunction: loadFn,
+    createFunction: createFn,
+    updateFunction: updateFn,
+    deleteFunction: deleteFn,
+    restoreFunction: restoreFn
   });
 
-  useEffect(() => {
-    abm.loadData();
-  }, [abm, abm.showDeleted]);
-
-  // Configuración de columnas del grid
-  const columns: GridColumn[] = [
+  // ===== Config del grid =====
+  const columns: GridColumn[] = useMemo(() => [
     {
       key: 'isoCode',
       label: 'Código ISO',
@@ -85,16 +89,24 @@ export default function CountriesABMPage() {
       width: '150px',
       sortable: true
     }
-  ];
+  ], []);
 
-  // Configuración de acciones del grid
-  const actions: GridAction[] = [
+  // Handlers estables para acciones (no dependas del objeto `abm` entero)
+  const onEdit = useCallback((row: Country) => abm.handleEdit(row), [abm]);
+  const onDelete = useCallback((row: Country) => {
+    if (confirm(`¿Estás seguro de que quieres eliminar el país "${row.fullName}"?`)) {
+      abm.handleDelete(row);
+    }
+  }, [abm]);
+  const onRestore = useCallback((row: Country) => abm.handleRestore(row), [abm]);
+
+  const actions: GridAction[] = useMemo(() => [
     {
       key: 'edit',
       label: 'Editar',
       icon: Edit,
       variant: 'outline',
-      onClick: (row: Country) => abm.handleEdit(row),
+      onClick: onEdit,
       show: (row: Country) => !row.deleted
     },
     {
@@ -102,11 +114,7 @@ export default function CountriesABMPage() {
       label: 'Eliminar',
       icon: Trash2,
       variant: 'destructive',
-      onClick: (row: Country) => {
-        if (confirm(`¿Estás seguro de que quieres eliminar el país "${row.fullName}"?`)) {
-          abm.handleDelete(row);
-        }
-      },
+      onClick: onDelete,
       show: (row: Country) => !row.deleted
     },
     {
@@ -114,13 +122,13 @@ export default function CountriesABMPage() {
       label: 'Restaurar',
       icon: Eye,
       variant: 'outline',
-      onClick: (row: Country) => abm.handleRestore(row),
+      onClick: onRestore,
       show: (row: Country) => row.deleted
     }
-  ];
+  ], [onEdit, onDelete, onRestore]);
 
-  // Configuración de campos del formulario
-  const formFields: FormField[] = [
+  // ===== Form =====
+  const formFields: FormField[] = useMemo(() => [
     {
       key: 'isoCode',
       label: 'Código ISO',
@@ -147,7 +155,7 @@ export default function CountriesABMPage() {
       required: true,
       placeholder: 'ej: Argentino, Estadounidense, Japonés'
     }
-  ];
+  ], []);
 
   return (
     <UnifiedABMLayout
@@ -158,19 +166,19 @@ export default function CountriesABMPage() {
       showForm={abm.showForm}
       editingItem={abm.editingItem}
 
-      // Configuración del grid
+      // Grid
       data={abm.data}
       columns={columns}
       actions={actions}
-      loading={abm.loading}
+      loading={abm.loading || loading}
 
-      // Configuración del formulario
+      // Form
       formFields={formFields}
       formErrors={abm.formErrors}
       formSuccess={abm.formSuccess}
       successMessage="País guardado correctamente"
 
-      // Configuración de búsqueda y filtros
+      // Búsqueda / filtros
       searchPlaceholder="Buscar países..."
       showDeleted={abm.showDeleted}
       onToggleShowDeleted={abm.handleToggleShowDeleted}
@@ -181,7 +189,7 @@ export default function CountriesABMPage() {
       onFormSubmit={abm.handleFormSubmit}
       onFormCancel={abm.handleFormCancel}
 
-      // Mensajes personalizados
+      // Empty
       emptyMessage="No hay países registrados"
     />
   );

@@ -5,7 +5,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PageSkeleton } from "@/components/ui/loading-skeleton";
+import { GameValidationListSkeleton } from "@/components/ui/loading-skeleton";
 import { useErrorHandler } from "@/hooks/use-error-handler";
 import {
   Calculator,
@@ -222,7 +222,7 @@ export function GameValidationList() {
   };
 
   if (loading) {
-    return <PageSkeleton />;
+    return <GameValidationListSkeleton />;
   }
 
   return (

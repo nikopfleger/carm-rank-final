@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useSeasonsOperations } from './use-seasons-operations';
 import { useUnifiedABM } from './use-unified-abm';
 
@@ -26,24 +26,34 @@ export function useSeasonsABM() {
     const [seasonStats, setSeasonStats] = useState<any>(null);
     const [isClosing, setIsClosing] = useState(false);
 
+    // ⚓️ funciones estables
+    const loadFn = useCallback(async (showDeleted?: boolean) => {
+        const result = await seasonsOps.load(showDeleted);
+        return result;
+    }, [seasonsOps.load]);
+
+    const createFn = useCallback((data: Partial<Season>) => seasonsOps.create(data), [seasonsOps.create]);
+
+    const updateFn = useCallback((id: number | string, data: Partial<Season>) => {
+        // Formatear fechas antes de enviar
+        const formattedData = {
+            ...data,
+            startDate: data.startDate ? new Date(data.startDate).toISOString() : undefined,
+            endDate: data.endDate ? new Date(data.endDate).toISOString() : undefined,
+        };
+        return seasonsOps.update(Number(id), formattedData);
+    }, [seasonsOps.update]);
+
+    const deleteFn = useCallback((id: number | string) => seasonsOps.remove(Number(id)), [seasonsOps.remove]);
+    const restoreFn = useCallback((id: number | string) => seasonsOps.restore(Number(id)), [seasonsOps.restore]);
+
     // Hook base unificado
     const abm = useUnifiedABM<Season>({
-        loadFunction: async (showDeleted?: boolean) => {
-            const result = await seasonsOps.load(showDeleted);
-            return result;
-        },
-        createFunction: seasonsOps.create,
-        updateFunction: (id: number | string, data: Partial<Season>) => {
-            // Formatear fechas antes de enviar
-            const formattedData = {
-                ...data,
-                startDate: data.startDate ? new Date(data.startDate).toISOString() : undefined,
-                endDate: data.endDate ? new Date(data.endDate).toISOString() : undefined,
-            };
-            return seasonsOps.update(Number(id), formattedData);
-        },
-        deleteFunction: (id: number | string) => seasonsOps.remove(Number(id)),
-        restoreFunction: (id: number | string) => seasonsOps.restore(Number(id))
+        loadFunction: loadFn,
+        createFunction: createFn,
+        updateFunction: updateFn,
+        deleteFunction: deleteFn,
+        restoreFunction: restoreFn
     });
 
     // Función especial para manejar edición con formato de fechas

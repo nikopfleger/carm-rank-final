@@ -8,7 +8,7 @@ import { Edit, Eye, Trash2 } from '@/components/ui/icons';
 import { useSeasonConfigsOperations } from '@/hooks/use-season-configs-operations';
 import { useUnifiedABM } from '@/hooks/use-unified-abm';
 import dynamic from 'next/dynamic';
-import { useEffect } from 'react';
+import { useCallback, useMemo } from 'react';
 const UnifiedABMLayout = dynamic(() => import('@/components/admin/abm/unified-abm-layout').then(m => m.UnifiedABMLayout));
 
 interface SeasonConfig {
@@ -33,24 +33,29 @@ export default function SeasonConfigsPage() {
     // Usar el hook personalizado para operaciones ABM
     const { loading, load, create, update, remove, restore } = useSeasonConfigsOperations();
 
+    // ⚓️ funciones estables
+    const loadFn = useCallback(async (showDeleted?: boolean) => {
+        const result = await load(showDeleted);
+        return result;
+    }, [load]);
+
+    const createFn = useCallback((data: Partial<SeasonConfig>) => create(data), [create]);
+    const updateFn = useCallback((id: number | string, data: Partial<SeasonConfig>) => update(Number(id), data), [update]);
+    const deleteFn = useCallback((id: number | string) => remove(Number(id)), [remove]);
+    const restoreFn = useCallback((id: number | string) => restore(Number(id)), [restore]);
+
     // Usar el hook unificado de ABM
     const abm = useUnifiedABM<SeasonConfig>({
-        loadFunction: async (showDeleted?: boolean) => {
-            const result = await load(showDeleted);
-            return result;
-        },
-        createFunction: create,
-        updateFunction: (id: number | string, data: Partial<SeasonConfig>) => update(Number(id), data),
-        deleteFunction: (id: number | string) => remove(Number(id)),
-        restoreFunction: (id: number | string) => restore(Number(id))
+        loadFunction: loadFn,
+        createFunction: createFn,
+        updateFunction: updateFn,
+        deleteFunction: deleteFn,
+        restoreFunction: restoreFn
     });
 
-    useEffect(() => {
-        abm.loadData();
-    }, [abm, abm.showDeleted]);
 
     // Configuración de columnas del grid
-    const columns: GridColumn[] = [
+    const columns: GridColumn[] = useMemo(() => [
         {
             key: 'id',
             label: 'ID',
@@ -136,10 +141,10 @@ export default function SeasonConfigsPage() {
                 </Badge>
             )
         }
-    ];
+    ], []);
 
     // Configuración de campos del formulario
-    const formFields: FormField[] = [
+    const formFields: FormField[] = useMemo(() => [
         { key: 'id', label: 'ID', type: 'hidden', required: false },
         { key: 'name', label: 'Nombre', type: 'text', required: true },
         { key: 'sanma', label: 'Sanma (3 jugadores)', type: 'boolean', required: true },
@@ -149,10 +154,10 @@ export default function SeasonConfigsPage() {
         { key: 'fourthPlace', label: '4to Lugar', type: 'number', required: false },
         { key: 'seasonId', label: 'Temporada ID', type: 'number', required: false },
         { key: 'isDefault', label: 'Por Defecto', type: 'boolean', required: false }
-    ];
+    ], []);
 
     // Configuración de acciones del grid
-    const actions: GridAction[] = [
+    const actions: GridAction[] = useMemo(() => [
         {
             key: 'edit',
             label: 'Editar',
@@ -181,7 +186,7 @@ export default function SeasonConfigsPage() {
             onClick: (row: SeasonConfig) => abm.handleRestore(row),
             show: (row: SeasonConfig) => row.deleted
         }
-    ];
+    ], [abm]);
 
     return (
         <UnifiedABMLayout

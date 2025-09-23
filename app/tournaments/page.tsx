@@ -6,7 +6,7 @@ import { PageHeader } from "@/components/shared/page-header";
 import { TournamentStatusBadge } from "@/components/tournaments/tournament-status-badge";
 import { Button } from "@/components/ui/button";
 import { Award, Calendar, Clock, Trophy, Users } from "@/components/ui/icons";
-import { PageSkeleton } from "@/components/ui/loading-skeleton";
+import { TournamentsPageSkeleton } from "@/components/ui/loading-skeleton";
 import { SectionTitle } from "@/components/ui/section-title";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 import { unifiedStyles } from "@/components/ui/unified-styles";
@@ -195,11 +195,7 @@ export default function TournamentsPage() {
   };
 
   if (loading) {
-    return (
-      <div className={styles.tournamentsPage}>
-        <PageSkeleton />
-      </div>
-    );
+    return <TournamentsPageSkeleton />;
   }
 
   // ===== Header compacto que SIEMPRE envuelve (sin ellipsis) =====

@@ -7,7 +7,6 @@ import { SeasonCloseModal } from "@/components/admin/season-close-modal";
 import { Badge } from "@/components/ui/badge";
 import { useSeasonsABM } from "@/hooks/use-seasons-abm";
 import { Edit, Eye, Power, Trash2 } from "lucide-react";
-import { useEffect } from "react";
 
 interface Season {
   id: number;
@@ -27,9 +26,6 @@ export default function SeasonsABMPage() {
   // Usar el hook especializado para Seasons
   const abm = useSeasonsABM();
 
-  useEffect(() => {
-    abm.loadData();
-  }, [abm, abm.showDeleted]);
 
   // Configuración de columnas del grid
   const columns: GridColumn[] = [

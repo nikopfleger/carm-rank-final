@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { useUmaOperations } from "@/hooks/use-abm-operations";
 import { useUnifiedABM } from "@/hooks/use-unified-abm";
 import { Edit, Eye, Trash2 } from "lucide-react";
-import { useEffect } from "react";
+import { useCallback, useMemo } from "react";
 
 interface Uma {
   id: number;
@@ -22,129 +22,134 @@ interface Uma {
   updatedAt: string;
 }
 
-// Configuración de campos del formulario
-const formFields: FormField[] = [
-  {
-    key: 'name',
-    label: 'Nombre',
-    type: 'text',
-    required: true,
-    placeholder: 'ej: UMA Estándar, UMA Torneo'
-  },
-  {
-    key: 'firstPlace',
-    label: '1er Lugar',
-    type: 'number',
-    required: true,
-    placeholder: '30'
-  },
-  {
-    key: 'secondPlace',
-    label: '2do Lugar',
-    type: 'number',
-    required: true,
-    placeholder: '10'
-  },
-  {
-    key: 'thirdPlace',
-    label: '3er Lugar',
-    type: 'number',
-    required: true,
-    placeholder: '-10'
-  },
-  {
-    key: 'fourthPlace',
-    label: '4to Lugar',
-    type: 'number',
-    required: true,
-    placeholder: '-30'
-  }
-];
-
-// Configuración de columnas del grid
-const columns: GridColumn[] = [
-  {
-    key: 'id',
-    label: 'ID',
-    width: '80px',
-    sortable: true
-  },
-  {
-    key: 'name',
-    label: 'Nombre',
-    width: '200px',
-    sortable: true
-  },
-  {
-    key: 'firstPlace',
-    label: '1er Lugar',
-    width: '100px',
-    type: 'number',
-    sortable: true
-  },
-  {
-    key: 'secondPlace',
-    label: '2do Lugar',
-    width: '100px',
-    type: 'number',
-    sortable: true
-  },
-  {
-    key: 'thirdPlace',
-    label: '3er Lugar',
-    width: '100px',
-    type: 'number',
-    sortable: true
-  },
-  {
-    key: 'fourthPlace',
-    label: '4to Lugar',
-    width: '100px',
-    type: 'number',
-    sortable: true
-  },
-  {
-    key: 'deleted',
-    label: 'Estado',
-    type: 'boolean',
-    width: '100px',
-    render: (value: boolean) => (
-      <Badge variant={value ? 'destructive' : 'default'}>
-        {value ? 'Eliminado' : 'Activo'}
-      </Badge>
-    )
-  },
-  {
-    key: 'createdAt',
-    label: 'Creado',
-    width: '150px',
-    type: 'date',
-    sortable: true
-  }
-];
-
 export default function UmaABMPage() {
   // Usar el hook personalizado para operaciones ABM
   const { loading, load, create, update, remove, restore } = useUmaOperations();
 
+  // Configuración de campos del formulario
+  const formFields: FormField[] = useMemo(() => [
+    {
+      key: 'name',
+      label: 'Nombre',
+      type: 'text',
+      required: true,
+      placeholder: 'ej: UMA Estándar, UMA Torneo'
+    },
+    {
+      key: 'firstPlace',
+      label: '1er Lugar',
+      type: 'number',
+      required: true,
+      placeholder: '30'
+    },
+    {
+      key: 'secondPlace',
+      label: '2do Lugar',
+      type: 'number',
+      required: true,
+      placeholder: '10'
+    },
+    {
+      key: 'thirdPlace',
+      label: '3er Lugar',
+      type: 'number',
+      required: true,
+      placeholder: '-10'
+    },
+    {
+      key: 'fourthPlace',
+      label: '4to Lugar',
+      type: 'number',
+      required: true,
+      placeholder: '-30'
+    }
+  ], []);
+
+  // Configuración de columnas del grid
+  const columns: GridColumn[] = useMemo(() => [
+    {
+      key: 'id',
+      label: 'ID',
+      width: '80px',
+      sortable: true
+    },
+    {
+      key: 'name',
+      label: 'Nombre',
+      width: '200px',
+      sortable: true
+    },
+    {
+      key: 'firstPlace',
+      label: '1er Lugar',
+      width: '100px',
+      type: 'number',
+      sortable: true
+    },
+    {
+      key: 'secondPlace',
+      label: '2do Lugar',
+      width: '100px',
+      type: 'number',
+      sortable: true
+    },
+    {
+      key: 'thirdPlace',
+      label: '3er Lugar',
+      width: '100px',
+      type: 'number',
+      sortable: true
+    },
+    {
+      key: 'fourthPlace',
+      label: '4to Lugar',
+      width: '100px',
+      type: 'number',
+      sortable: true
+    },
+    {
+      key: 'deleted',
+      label: 'Estado',
+      type: 'boolean',
+      width: '100px',
+      render: (value: boolean) => (
+        <Badge variant={value ? 'destructive' : 'default'}>
+          {value ? 'Eliminado' : 'Activo'}
+        </Badge>
+      )
+    },
+    {
+      key: 'createdAt',
+      label: 'Creado',
+      width: '150px',
+      type: 'date',
+      sortable: true
+    }
+  ], []);
+
+  // ⚓️ funciones estables
+  const loadFn = useCallback(async (showDeleted?: boolean) => {
+    const result = await load();
+    return { data: result as Uma[] };
+  }, [load]);
+
+  const createFn = useCallback((data: Partial<Uma>) => create(data), [create]);
+  const updateFn = useCallback((id: number | string, data: Partial<Uma>) => update(Number(id), data), [update]);
+  const deleteFn = useCallback((id: number | string) => remove(Number(id)), [remove]);
+  const restoreFn = useCallback((id: number | string) => restore(Number(id)), [restore]);
+
   // Usar el hook unificado de ABM
   const abm = useUnifiedABM<Uma>({
-    loadFunction: async (showDeleted?: boolean) => {
-      const result = await load();
-      return { data: result as Uma[] };
-    },
-    createFunction: create,
-    updateFunction: (id: number | string, data: Partial<Uma>) => update(Number(id), data),
-    deleteFunction: (id: number | string) => remove(Number(id)),
-    restoreFunction: (id: number | string) => restore(Number(id))
+    loadFunction: loadFn,
+    createFunction: createFn,
+    updateFunction: updateFn,
+    deleteFunction: deleteFn,
+    restoreFunction: restoreFn
   });
 
-  useEffect(() => {
-    abm.loadData();
-  }, [abm]);
 
   // Configuración de acciones del grid
-  const actions: GridAction[] = [
+  const actions: GridAction[] = useMemo(() => [
     {
       key: 'edit',
       label: 'Editar',
@@ -173,7 +178,7 @@ export default function UmaABMPage() {
       onClick: (row: Uma) => abm.handleRestore(row),
       show: (row: Uma) => row.deleted
     }
-  ];
+  ], [abm]);
 
   return (
     <UnifiedABMLayout<Uma>

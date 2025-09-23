@@ -1,5 +1,5 @@
 import { useAbmService } from '@/components/providers/services-provider';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useErrorHandler } from './use-error-handler';
 
 // Hook personalizado para operaciones ABM de Players (versión unificada)
@@ -8,7 +8,7 @@ export function usePlayersOperationsUnified() {
     const { handleError, handleSuccess } = useErrorHandler();
     const [loading, setLoading] = useState(false);
 
-    const load = async (showDeleted = false) => {
+    const load = useCallback(async (showDeleted = false) => {
         setLoading(true);
         try {
             let data;
@@ -31,9 +31,9 @@ export function usePlayersOperationsUnified() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError]);
 
-    const create = async (data: any) => {
+    const create = useCallback(async (data: any) => {
         setLoading(true);
         try {
             const result = await abmService.createPlayer(data);
@@ -45,9 +45,9 @@ export function usePlayersOperationsUnified() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError, handleSuccess]);
 
-    const update = async (id: number, data: any) => {
+    const update = useCallback(async (id: number, data: any) => {
         setLoading(true);
         try {
             const result = await abmService.updatePlayer(id, data);
@@ -59,9 +59,9 @@ export function usePlayersOperationsUnified() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError, handleSuccess]);
 
-    const remove = async (id: number) => {
+    const remove = useCallback(async (id: number) => {
         setLoading(true);
         try {
             const result = await abmService.deletePlayer(id);
@@ -73,9 +73,9 @@ export function usePlayersOperationsUnified() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError, handleSuccess]);
 
-    const restore = async (id: number) => {
+    const restore = useCallback(async (id: number) => {
         setLoading(true);
         try {
             const result = await abmService.restorePlayer(id);
@@ -87,10 +87,10 @@ export function usePlayersOperationsUnified() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [abmService, handleError, handleSuccess]);
 
     // Función para cargar países
-    const loadCountries = async () => {
+    const loadCountries = useCallback(async () => {
         try {
             const response = await abmService.getCountries();
             const data = (response as any).data || [];
@@ -103,7 +103,7 @@ export function usePlayersOperationsUnified() {
             handleError(error, 'Cargar países');
             return [];
         }
-    };
+    }, [abmService, handleError]);
 
     return {
         loading,
