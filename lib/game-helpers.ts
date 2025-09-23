@@ -2,7 +2,7 @@
  * Helpers de utilidad para validación y transformación de datos de juegos
  */
 
-import { getDan } from '@/lib/cache/core-cache';
+import { ensureCacheReady, getDan } from '@/lib/cache/core-cache';
 import { type Position } from './game-calculations-client';
 
 
@@ -173,6 +173,7 @@ export function calculateAveragePosition(
  * Obtiene el rango Dan basado en los puntos
  */
 export async function getDanRank(danPoints: number, isSanma: boolean = false): Promise<string> {
+  await ensureCacheReady();
   // Obtener el rango más bajo de la cache
   const danConfigs = getDan();
   const lowestConfig = danConfigs

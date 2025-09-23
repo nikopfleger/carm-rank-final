@@ -1,4 +1,4 @@
-import { getRate } from '@/lib/cache/core-cache';
+import { ensureCacheReady, getRate } from '@/lib/cache/core-cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -8,6 +8,8 @@ export async function GET(request: NextRequest) {
         const name = searchParams.get('name');
 
         let data;
+
+        await ensureCacheReady();
 
         const rateConfigs = getRate();
 

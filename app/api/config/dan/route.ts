@@ -1,4 +1,4 @@
-import { getDan } from '@/lib/cache/core-cache';
+import { ensureCacheReady, getDan } from '@/lib/cache/core-cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -10,6 +10,7 @@ export async function GET(request: NextRequest) {
 
         let data: any;
 
+        await ensureCacheReady();
         const danConfigs = getDan();
 
         if (rank) {

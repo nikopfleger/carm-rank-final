@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth-vercel";
-import { getDan } from "@/lib/cache/core-cache";
+import { ensureCacheReady, getDan } from "@/lib/cache/core-cache";
 import { prisma } from "@/lib/database/client";
 import { getDanRank } from "@/lib/game-helpers";
 import { NextRequest, NextResponse } from "next/server";
@@ -739,6 +739,7 @@ export async function GET(
         const danRankYonma = await getDanRank(danPointsYonma, false);
         const danRankSanma = await getDanRank(danPointsSanma, true);
 
+        await ensureCacheReady();
         const danConfigs = getDan();
         const danConfigYonma = danConfigs.find(config =>
             !config.sanma &&

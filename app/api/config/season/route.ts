@@ -1,4 +1,4 @@
-import { getSeasons } from '@/lib/cache/core-cache';
+import { ensureCacheReady, getSeasons } from '@/lib/cache/core-cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -10,6 +10,7 @@ export async function GET(request: NextRequest) {
 
         let data;
 
+        await ensureCacheReady();
         const seasons = getSeasons();
 
         if (name) {

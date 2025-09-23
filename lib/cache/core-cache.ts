@@ -1,9 +1,7 @@
-// lib/cache/core-cache.ts
 import { prisma } from '@/lib/database/client';
 import { getPlayersWithRanking } from '@/lib/database/queries/players-optimized';
 import 'server-only';
 
-// Tipos (ajustados a lo que pegaste)
 export type DanConfig = {
     id: number;
     rank: string;

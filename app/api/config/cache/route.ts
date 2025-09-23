@@ -1,10 +1,12 @@
-import { getCacheStatus, getColors, getDan, getRate, getSeasons } from '@/lib/cache/core-cache';
+import { ensureCacheReady, getCacheStatus, getColors, getDan, getRate, getSeasons } from '@/lib/cache/core-cache';
 import { NextResponse } from 'next/server';
 
 export const runtime = 'nodejs';
 
 export async function GET() {
     try {
+        await ensureCacheReady();
+
         const dan = getDan();
         const rate = getRate();
         const seasons = getSeasons();
