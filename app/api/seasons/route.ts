@@ -1,11 +1,9 @@
-import { connectToDatabase } from '@/lib/database/connection';
 import { createSeason, getActiveSeason, getAllSeasons } from '@/lib/database/queries/seasons';
 import { NextRequest, NextResponse } from 'next/server';
 
 // GET /api/seasons - Get all seasons or active season
 export async function GET(request: NextRequest) {
   try {
-    await connectToDatabase();
 
     const { searchParams } = new URL(request.url);
     const activeOnly = searchParams.get('active') === 'true';
@@ -41,7 +39,6 @@ export async function GET(request: NextRequest) {
 // POST /api/seasons - Create a new season
 export async function POST(request: NextRequest) {
   try {
-    await connectToDatabase();
 
     const body = await request.json();
     const { name, start_date, end_date, ruleset_id, ranked_games_count } = body;

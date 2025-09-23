@@ -1,4 +1,3 @@
-import { connectToDatabase } from '@/lib/database/connection';
 import { getPlayerByLegajo } from '@/lib/database/queries/players-corrected';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -9,8 +8,6 @@ export async function GET(
 ) {
   const { legajo: legajoParam } = await params;
   try {
-    await connectToDatabase();
-
     const legajo = parseInt(legajoParam);
 
     if (isNaN(legajo)) {

@@ -1,4 +1,4 @@
-import { configCache } from '@/lib/config-cache';
+import { invalidateConfigs } from '@/lib/cache/core-cache';
 import { prisma } from '@/lib/database/client';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
         });
 
         // Actualizar cache solo para DanConfigs
-        await configCache.refreshDanConfigs(prisma as any);
+        await invalidateConfigs();
 
         return NextResponse.json({
             success: true,

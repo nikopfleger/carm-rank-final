@@ -1,9 +1,9 @@
-import { getConfigStatus } from '@/lib/config-initializer';
+import { getCacheStatus } from '@/lib/cache/core-cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
     try {
-        const status = getConfigStatus();
+        const status = getCacheStatus();
 
         return NextResponse.json({
             success: true,

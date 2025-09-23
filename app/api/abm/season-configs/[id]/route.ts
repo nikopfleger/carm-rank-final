@@ -1,4 +1,4 @@
-import { configCache } from '@/lib/config-cache';
+import { invalidateConfigs } from '@/lib/cache/core-cache';
 import { prisma } from '@/lib/database/client';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -8,7 +8,7 @@ export async function GET(
 ) {
     try {
         const { id: idParam } = await params;
-    const id = parseInt(idParam);
+        const id = parseInt(idParam);
 
         const seasonConfig = await (prisma as any).seasonConfig.findUnique({
             where: { id, deleted: false }
@@ -40,7 +40,7 @@ export async function PUT(
 ) {
     try {
         const { id: idParam } = await params;
-    const id = parseInt(idParam);
+        const id = parseInt(idParam);
         const body = await request.json();
 
         // Verificar que existe
@@ -108,7 +108,7 @@ export async function PUT(
         });
 
         // Actualizar cache solo para SeasonConfigs
-        await configCache.refreshSeasonConfigs(prisma as any);
+        await invalidateConfigs();
 
         return NextResponse.json({
             success: true,
@@ -129,7 +129,7 @@ export async function DELETE(
 ) {
     try {
         const { id: idParam } = await params;
-    const id = parseInt(idParam);
+        const id = parseInt(idParam);
 
         // Verificar que existe
         const existing = await (prisma as any).seasonConfig.findUnique({
@@ -153,7 +153,7 @@ export async function DELETE(
         });
 
         // Actualizar cache solo para SeasonConfigs
-        await configCache.refreshSeasonConfigs(prisma as any);
+        await invalidateConfigs();
 
         return NextResponse.json({
             success: true,

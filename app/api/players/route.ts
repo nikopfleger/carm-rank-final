@@ -1,85 +1,115 @@
-import { connectToDatabase } from '@/lib/database/connection';
-import { createPlayer, getPlayersWithRanking } from '@/lib/database/queries/players';
-// i18n se resuelve en el frontend; este endpoint no maneja idioma
-import { rankingCache } from '@/lib/ranking-cache';
-import { getRankingRefreshSchedule } from '@/lib/ranking-prewarm';
+import { invalidateRanking } from '@/lib/cache/core-cache';
+import { prisma } from '@/lib/database/client';
+import { getPlayersWithRanking } from '@/lib/database/queries/players-optimized';
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'node:crypto';
+
+export const runtime = 'nodejs';
 
 // GET /api/players - Get all players with ranking
 export async function GET(request: NextRequest) {
   const startTime = Date.now();
-  let timeoutId: NodeJS.Timeout | undefined;
 
   try {
-    // Timeout suave: si tarda >5s y no hay cache, devolvemos 202 con payload vacío
-    const TIMEOUT_MS = 5000;
-    const TIMEOUT_SENTINEL = Symbol('TIMEOUT');
-    const timeoutPromise = new Promise<symbol>((resolve) => {
-      timeoutId = setTimeout(() => resolve(TIMEOUT_SENTINEL), TIMEOUT_MS);
-    });
-
-    await connectToDatabase();
-
     const { searchParams } = new URL(request.url);
     const seasonId = searchParams.get('season_id');
     const includeInactive = searchParams.get('includeInactive') === 'true';
     const type = searchParams.get('type') as 'GENERAL' | 'TEMPORADA' || 'GENERAL';
     const sanma = searchParams.get('sanma'); // 'true' o 'false' para filtrar por cantidad de jugadores
-    // Idioma: manejado en frontend
 
     console.log(`📊 [${new Date().toISOString()}] Parámetros: includeInactive=${includeInactive}, type=${type}${seasonId ? `, seasonId=${seasonId}` : ''}${sanma ? `, sanma=${sanma}` : ''}`);
 
-    const cacheKey = { seasonId: seasonId ? parseInt(seasonId) : undefined, type, includeInactive, sanma: sanma ? sanma === 'true' : undefined } as const;
-    const cachedJson = rankingCache.getJson(cacheKey);
-    if (cachedJson) {
-      const etag = 'W/"' + crypto.createHash('sha1').update(cachedJson).digest('hex') + '"';
-      const ifNoneMatch = request.headers.get('if-none-match');
-      if (ifNoneMatch && ifNoneMatch === etag) {
-        return new NextResponse(null, { status: 304, headers: { ETag: etag } });
-      }
-      const schedule = getRankingRefreshSchedule();
-      return new NextResponse(cachedJson, { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300', 'X-Refreshed-At': schedule.refreshedAt, 'X-Next-Refresh-At': schedule.nextRefreshAt, ETag: etag } });
-    }
-
-    const playersPromise = getPlayersWithRanking(
-      seasonId ? parseInt(seasonId) : undefined,
+    // Obtener ranking usando la consulta optimizada con filtros/flags
+    const filteredPlayers = await getPlayersWithRanking(
+      undefined,
       type,
       includeInactive,
-      sanma ? sanma === 'true' : undefined // Convertir string a boolean
+      sanma === 'true'
     );
 
-    // Correr con timeout
-    const raced = await Promise.race([playersPromise, timeoutPromise]);
-    if (timeoutId) clearTimeout(timeoutId);
-
-    if (raced === TIMEOUT_SENTINEL) {
-      return NextResponse.json({ success: true, data: [], total: 0, message: 'warming_up' }, { status: 202 });
-    }
-    const players = raced as any;
-
     const duration = Date.now() - startTime;
-    console.log(`✅ [${new Date().toISOString()}] Completado en ${duration}ms. Jugadores: ${players.length}`);
+    console.log(`✅ [${new Date().toISOString()}] Completado en ${duration}ms. Jugadores: ${filteredPlayers.length}`);
+
+    // Mapear campos para el frontend (ya vienen calculados desde la consulta optimizada)
+    const serializedPlayers = filteredPlayers.map(player => {
+      return {
+        id: player.id,
+        player_id: player.player_id,
+        nickname: player.nickname,
+        fullname: player.fullname,
+        country_id: player.country_id,
+        country_iso: player.country_iso,
+        country_name: player.country_name,
+        position: player.position,
+        total_games: player.total_games,
+        average_position: player.average_position,
+        dan_points: player.dan_points,
+        rate_points: player.rate_points,
+        max_rate: player.max_rate,
+        win_rate: player.win_rate,
+        rank: player.rank || 'N/A',
+        rank_color: player.rank_color || '#3B82F6',
+        rank_spanish: player.rank_spanish,
+        games_won: player.first_place_h + player.first_place_t,
+        points: player.dan_points + player.rate_points,
+
+        // Season fields
+        season_points: player.season_points,
+        season_average_position: player.season_average_position,
+
+        // Sanma data (H = Hanchan, T = Tonpu)
+        first_place_h: player.first_place_h,
+        second_place_h: player.second_place_h,
+        third_place_h: player.third_place_h,
+        fourth_place_h: player.fourth_place_h,
+        first_place_t: player.first_place_t,
+        second_place_t: player.second_place_t,
+        third_place_t: player.third_place_t,
+        fourth_place_t: player.fourth_place_t,
+
+        // Rank progress
+        rank_min_points: player.rank_min_points,
+        rank_max_points: player.rank_max_points,
+        next_rank: player.next_rank,
+
+        // Tendencias
+        trend_dan_delta10: player.trend_dan_delta10,
+        trend_season_delta10: player.trend_season_delta10
+      };
+    });
 
     const body = {
       success: true,
-      data: players,
-      total: players.length,
-      message: `Retrieved ${players.length} players ${includeInactive ? '(including inactive)' : '(active only)'} in ${duration}ms`
+      data: serializedPlayers,
+      total: serializedPlayers.length,
+      message: `Retrieved ${serializedPlayers.length} players from cache in ${duration}ms`
     };
-    const json = JSON.stringify(body);
-    rankingCache.set(cacheKey, players);
-    rankingCache.setJson(cacheKey, json);
-    const etag = 'W/"' + crypto.createHash('sha1').update(json).digest('hex') + '"';
-    const schedule = getRankingRefreshSchedule();
-    return new NextResponse(json, { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300', 'X-Refreshed-At': schedule.refreshedAt, 'X-Next-Refresh-At': schedule.nextRefreshAt, ETag: etag } });
-  } catch (error) {
-    if (timeoutId) clearTimeout(timeoutId);
-    const duration = Date.now() - startTime;
 
+    const json = JSON.stringify(body);
+    const etag = 'W/"' + crypto.createHash('sha1').update(json).digest('hex') + '"';
+    const ifNoneMatch = request.headers.get('if-none-match');
+
+    if (ifNoneMatch && ifNoneMatch === etag) {
+      return new NextResponse(null, { status: 304, headers: { ETag: etag } });
+    }
+
+    const now = new Date().toISOString();
+    const nextRefresh = new Date(Date.now() + 5 * 60 * 1000).toISOString(); // 5 minutos
+
+    return new NextResponse(json, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'public, max-age=300',
+        'X-Refreshed-At': now,
+        'X-Next-Refresh-At': nextRefresh,
+        ETag: etag
+      }
+    });
+
+  } catch (error) {
+    const duration = Date.now() - startTime;
     console.error(`❌ [${new Date().toISOString()}] Error in GET /api/players after ${duration}ms:`, error);
 
-    // Respuesta de error estructurada en JSON
     return NextResponse.json(
       {
         success: false,
@@ -101,8 +131,6 @@ export async function GET(request: NextRequest) {
 // POST /api/players - Create a new player
 export async function POST(request: NextRequest) {
   try {
-    await connectToDatabase();
-
     const body = await request.json();
     const { nickname, fullname, country_id, player_id, birthday } = body;
 
@@ -118,19 +146,58 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const player = await createPlayer({
-      nickname,
-      fullname,
-      country_id: parseInt(country_id),
-      player_id: parseInt(player_id),
-      birthday: birthday ? new Date(birthday) : undefined
+    // Crear player y registros iniciales de ranking (4p y 3p)
+    const player = await prisma.player.create({
+      data: {
+        nickname,
+        fullname,
+        countryId: parseInt(country_id, 10),
+        playerNumber: parseInt(player_id, 10),
+        birthday: birthday ? new Date(birthday) : null,
+      },
     });
+
+    // Entradas iniciales en PlayerRanking (4 jugadores)
+    await prisma.playerRanking.create({
+      data: {
+        playerId: player.id,
+        isSanma: false,
+        totalGames: 0,
+        averagePosition: 2.5,
+        danPoints: 0,
+        ratePoints: 1500,
+        seasonPoints: 0,
+        maxRate: 1500,
+        firstPlaceH: 0, secondPlaceH: 0, thirdPlaceH: 0, fourthPlaceH: 0,
+        firstPlaceT: 0, secondPlaceT: 0, thirdPlaceT: 0, fourthPlaceT: 0,
+      },
+    });
+
+    // Entradas iniciales en PlayerRanking (3 jugadores)
+    await prisma.playerRanking.create({
+      data: {
+        playerId: player.id,
+        isSanma: true,
+        totalGames: 0,
+        averagePosition: 2.0,
+        danPoints: 0,
+        ratePoints: 1500,
+        seasonPoints: 0,
+        maxRate: 1500,
+        firstPlaceH: 0, secondPlaceH: 0, thirdPlaceH: 0, fourthPlaceH: 0,
+        firstPlaceT: 0, secondPlaceT: 0, thirdPlaceT: 0, fourthPlaceT: 0,
+      },
+    });
+
+    // Invalidar ranking en cache (write-through)
+    await invalidateRanking();
 
     return NextResponse.json({
       success: true,
       data: player,
-      message: 'Player createdAt successfully'
+      message: 'Player created successfully and ranking cache updated'
     }, { status: 201 });
+
   } catch (error) {
     console.error('Error in POST /api/players:', error);
 

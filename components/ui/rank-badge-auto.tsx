@@ -56,8 +56,8 @@ const KANJI_NUM: Record<string, number> = {
     '六': 6, '七': 7, '八': 8, '九': 9, '十': 10,
 };
 
-function parseRank(rank: string): { tier: 'newbie' | 'kyu' | 'dan' | 'kamuro'; level?: number } {
-    const r = rank.trim();
+function parseRank(rank: string | undefined): { tier: 'newbie' | 'kyu' | 'dan' | 'kamuro'; level?: number } {
+    const r = (rank || '').trim();
 
     if (r === '神室王') return { tier: 'kamuro' };
     if (r === '新人') return { tier: 'newbie' };
@@ -101,7 +101,7 @@ function isHex(c?: string) {
 
 /** ========== Lógica de mapeo automático ========== */
 export function getRankTheme(
-    rank: string,
+    rank: string | undefined,
     dbColor?: string,
     opts?: { preferVioletHighDan?: boolean }
 ): { color: string; variant: Variant; forceDarkText?: boolean } {
@@ -159,7 +159,7 @@ export function RankBadgeAuto({
     ariaLabel,
     className,
 }: {
-    rank: string;
+    rank: string | undefined;
     dbColor?: string;
     size?: Size;
     preferVioletHighDan?: boolean;
@@ -169,7 +169,7 @@ export function RankBadgeAuto({
     const theme = getRankTheme(rank, dbColor, { preferVioletHighDan });
     return (
         <FancyRankBadge
-            label={rank}
+            label={rank || 'N/A'}
             color={theme.color}
             variant={theme.variant}
             size={size}

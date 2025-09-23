@@ -94,7 +94,7 @@ export interface PlayerWithRanking {
 
   // Datos para progreso de rango
   rank_min_points?: number;
-  rank_max_points?: number;
+  rank_max_points?: number | null;
   next_rank?: string;
   first_place_h: number;
   second_place_h: number;
@@ -104,4 +104,8 @@ export interface PlayerWithRanking {
   second_place_t: number;
   third_place_t: number;
   fourth_place_t: number;
+
+  // Tendencias
+  trend_dan_delta10?: number;
+  trend_season_delta10?: number;
 }

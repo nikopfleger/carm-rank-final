@@ -1,10 +1,53 @@
-import { rankingCache } from '@/lib/ranking-cache';
-import { configCache } from '../../config-cache';
-import { getDanRank } from '../../game-helpers';
-import { prisma } from '../client';
-import { PlayerWithRanking } from './types';
+// lib/database/queries/players-optimized.ts
+import 'server-only';
 
-// Función optimizada para verificar actividad de múltiples jugadores de una vez
+// Evitar dependencia de cache en warm-up: resolvemos rank con configs locales
+import { prisma } from '../client';
+import type { PlayerWithRanking } from './types';
+
+// ----------------------------------------------
+// Tipos mínimos locales (lo que realmente usamos)
+// ----------------------------------------------
+type DanConfig = {
+  id: number;
+  rank: string;
+  sanma: boolean;
+  minPoints: number;
+  maxPoints: number | null;
+  color: string;
+};
+
+function getDanRankFromConfigs(danPoints: number, isSanma: boolean, configs: DanConfig[]): string {
+  const sameMode = configs.filter(c => c.sanma === isSanma).sort((a, b) => a.minPoints - b.minPoints);
+  const lowest = sameMode[0];
+  const lowestRank = lowest?.rank || 'N/A';
+  if (lowest && danPoints < (lowest.minPoints ?? 0)) return lowestRank;
+  const current = sameMode.find(c => danPoints >= c.minPoints && (c.maxPoints === null || danPoints <= c.maxPoints));
+  return current?.rank || lowestRank;
+}
+
+// ----------------------------------------------
+// Helper: obtener todas las configs de Dan (DB)
+// ----------------------------------------------
+async function fetchDanConfigs(): Promise<DanConfig[]> {
+  const rows = await prisma.danConfig.findMany({
+    where: { deleted: false },
+    orderBy: [{ sanma: 'asc' }, { minPoints: 'asc' }],
+    select: {
+      id: true,
+      rank: true,
+      sanma: true,
+      minPoints: true,
+      maxPoints: true,
+      color: true,
+    },
+  });
+  return rows;
+}
+
+// ----------------------------------------------
+// Actividad de jugadores (batched)
+// ----------------------------------------------
 type PlayerActivity = {
   player_number: number;
   active_general: boolean;
@@ -17,7 +60,6 @@ async function batchCheckPlayersActivity(playerNumbers: number[]): Promise<Playe
 
     console.log(`🔍 Verificando actividad para ${playerNumbers.length} jugadores`);
 
-    // Query única con EXISTS para temporada activa o actividad en el último año
     const rows = await prisma.$queryRaw<PlayerActivity[]>`
       WITH active_season AS (
         SELECT s.id
@@ -61,309 +103,268 @@ async function batchCheckPlayersActivity(playerNumbers: number[]): Promise<Playe
     `;
 
     return rows;
-
   } catch (error) {
     console.error('Error checking players activity in batch:', error);
     return [];
   }
 }
 
-// i18n se resuelve en el frontend; el backend devuelve la key original
-
+// ----------------------------------------------
+// Ranking principal optimizado
+// ----------------------------------------------
 export async function getPlayersWithRanking(
   seasonId?: number,
   type: 'GENERAL' | 'TEMPORADA' = 'GENERAL',
   includeInactive: boolean = false,
-  sanma?: boolean // true = 3 jugadores, false = 4 jugadores, undefined = todos
+  sanma?: boolean,
 ): Promise<PlayerWithRanking[]> {
   try {
-    const cached = rankingCache.get({ seasonId, type, includeInactive, sanma });
-    if (cached) return cached as PlayerWithRanking[];
+    // Cargamos configs de Dan desde DB para evitar ciclo con la caché
+    const danConfigs = await fetchDanConfigs();
 
-    // Obtener la fecha límite para jugadores activos (1 año atrás)
-    const oneYearAgo = new Date();
-    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+    // Si necesitás, podés usar la fecha límite (no se usa directo acá)
+    // const oneYearAgo = new Date(); oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
 
-    // Obtener la temporada actual (activa y no eliminada)
-    const currentSeason = await prisma.season.findFirst({
+    // Temporada activa (para tendencias)
+    const activeSeason = await prisma.season.findFirst({
       where: { isActive: true, deleted: false },
-      orderBy: { startDate: 'desc' }
+      orderBy: { startDate: 'desc' },
     });
 
-    // Nota: El filtro de actividad se aplicará después de obtener los datos
-    // usando el endpoint /api/players/[legajo]/is-active
-
-    // Consultar datos precalculados desde la tabla PlayerRanking
+    // Datos precalculados desde PlayerRanking
     const rankings = await prisma.playerRanking.findMany({
       where: {
-        ...(sanma !== undefined ? { isSanma: sanma } : {}) // Filtrar por cantidad de jugadores
+        ...(sanma !== undefined ? { isSanma: sanma } : {}),
       },
       include: {
-        player: {
-          include: {
-            country: true
-          }
-        }
+        player: { include: { country: true } },
       },
       orderBy: (() => {
-        const orderBy = type === 'TEMPORADA'
-          ? [
-            { seasonPoints: 'desc' as const },
-            { seasonAveragePosition: 'asc' as const }
-          ]
-          : [
-            { danPoints: 'desc' as const },
-            { ratePoints: 'desc' as const },
-            { averagePosition: 'asc' as const }
-          ];
+        const orderBy =
+          type === 'TEMPORADA'
+            ? [{ seasonPoints: 'desc' as const }, { seasonAveragePosition: 'asc' as const }]
+            : [{ danPoints: 'desc' as const }, { ratePoints: 'desc' as const }, { averagePosition: 'asc' as const }];
         console.log(`📊 OrderBy para ${type}:`, JSON.stringify(orderBy));
         return orderBy;
-      })()
+      })(),
     });
 
-    // Si no se incluyen inactivos, filtrar por actividad usando el endpoint
-
-    // Obtener temporada activa una sola vez
-    const activeSeason = await prisma.season.findFirst({ where: { isActive: true, deleted: false } });
-    const sanmaMode: boolean = sanma !== undefined ? Boolean(sanma) : false;
-
-    // Precargar todas las tendencias de una vez
+    // Precargamos tendencias en batch
     const playerIds = rankings.map(r => r.player.id);
+    const sanmaMode = sanma !== undefined ? Boolean(sanma) : false;
 
-    // Obtener todas las tendencias DAN de una vez
     const allDanPointsHistory = await prisma.points.findMany({
-      where: {
-        playerId: { in: playerIds },
-        pointsType: 'DAN',
-        isSanma: sanmaMode
-      },
+      where: { playerId: { in: playerIds }, pointsType: 'DAN', isSanma: sanmaMode },
       orderBy: [{ playerId: 'asc' }, { id: 'desc' }, { createdAt: 'desc' }],
-      take: playerIds.length * 5 // máximo 5 por jugador
+      take: playerIds.length * 5,
     });
 
-    // Obtener todas las tendencias SEASON de una vez
-    const allSeasonPointsHistory = activeSeason ? await prisma.points.findMany({
-      where: {
-        playerId: { in: playerIds },
-        pointsType: 'SEASON',
-        isSanma: sanmaMode,
-        seasonId: activeSeason.id
-      },
-      orderBy: [{ playerId: 'asc' }, { id: 'desc' }, { createdAt: 'desc' }],
-      take: playerIds.length * 5 // máximo 5 por jugador
-    }) : [];
+    const allSeasonPointsHistory = activeSeason
+      ? await prisma.points.findMany({
+        where: {
+          playerId: { in: playerIds },
+          pointsType: 'SEASON',
+          isSanma: sanmaMode,
+          seasonId: activeSeason.id,
+        },
+        orderBy: [{ playerId: 'asc' }, { id: 'desc' }, { createdAt: 'desc' }],
+        take: playerIds.length * 5,
+      })
+      : [];
 
-    // Agrupar por jugador
     const danHistoryByPlayer = new Map<number, any[]>();
     const seasonHistoryByPlayer = new Map<number, any[]>();
 
-    allDanPointsHistory.forEach(point => {
-      if (!danHistoryByPlayer.has(point.playerId)) {
-        danHistoryByPlayer.set(point.playerId, []);
-      }
-      if (danHistoryByPlayer.get(point.playerId)!.length < 10) {
-        danHistoryByPlayer.get(point.playerId)!.push(point);
-      }
-    });
+    for (const point of allDanPointsHistory) {
+      const arr = danHistoryByPlayer.get(point.playerId) ?? [];
+      if (arr.length < 10) arr.push(point);
+      danHistoryByPlayer.set(point.playerId, arr);
+    }
+    for (const point of allSeasonPointsHistory) {
+      const arr = seasonHistoryByPlayer.get(point.playerId) ?? [];
+      if (arr.length < 10) arr.push(point);
+      seasonHistoryByPlayer.set(point.playerId, arr);
+    }
 
-    allSeasonPointsHistory.forEach(point => {
-      if (!seasonHistoryByPlayer.has(point.playerId)) {
-        seasonHistoryByPlayer.set(point.playerId, []);
-      }
-      if (seasonHistoryByPlayer.get(point.playerId)!.length < 10) {
-        seasonHistoryByPlayer.get(point.playerId)!.push(point);
-      }
-    });
+    // Mapeo final
+    const playersWithRanking: PlayerWithRanking[] = await Promise.all(
+      rankings.map(async (ranking: any, index: number) => {
+        const totalGamesForMode = type === 'TEMPORADA' ? ranking.seasonTotalGames : ranking.totalGames;
+        const firstPlaceHForMode = type === 'TEMPORADA' ? ranking.seasonFirstPlaceH : ranking.firstPlaceH;
+        const secondPlaceHForMode = type === 'TEMPORADA' ? ranking.seasonSecondPlaceH : ranking.secondPlaceH;
+        const thirdPlaceHForMode = type === 'TEMPORADA' ? ranking.seasonThirdPlaceH : ranking.thirdPlaceH;
+        const fourthPlaceHForMode = type === 'TEMPORADA' ? ranking.seasonFourthPlaceH : ranking.fourthPlaceH;
+        const firstPlaceTForMode = type === 'TEMPORADA' ? ranking.seasonFirstPlaceT : ranking.firstPlaceT;
+        const secondPlaceTForMode = type === 'TEMPORADA' ? ranking.seasonSecondPlaceT : ranking.secondPlaceT;
+        const thirdPlaceTForMode = type === 'TEMPORADA' ? ranking.seasonThirdPlaceT : ranking.thirdPlaceT;
+        const fourthPlaceTForMode = type === 'TEMPORADA' ? ranking.seasonFourthPlaceT : ranking.fourthPlaceT;
 
-    // Convertir a formato esperado (ahora sin async en el map)
-    const playersWithRanking: PlayerWithRanking[] = await Promise.all(rankings.map(async (ranking: any, index: number) => {
-      const totalGamesForMode = type === 'TEMPORADA' ? ranking.seasonTotalGames : ranking.totalGames;
-      const firstPlaceHForMode = type === 'TEMPORADA' ? ranking.seasonFirstPlaceH : ranking.firstPlaceH;
-      const secondPlaceHForMode = type === 'TEMPORADA' ? ranking.seasonSecondPlaceH : ranking.secondPlaceH;
-      const thirdPlaceHForMode = type === 'TEMPORADA' ? ranking.seasonThirdPlaceH : ranking.thirdPlaceH;
-      const fourthPlaceHForMode = type === 'TEMPORADA' ? ranking.seasonFourthPlaceH : ranking.fourthPlaceH;
-      const firstPlaceTForMode = type === 'TEMPORADA' ? ranking.seasonFirstPlaceT : ranking.firstPlaceT;
-      const secondPlaceTForMode = type === 'TEMPORADA' ? ranking.seasonSecondPlaceT : ranking.secondPlaceT;
-      const thirdPlaceTForMode = type === 'TEMPORADA' ? ranking.seasonThirdPlaceT : ranking.thirdPlaceT;
-      const fourthPlaceTForMode = type === 'TEMPORADA' ? ranking.seasonFourthPlaceT : ranking.fourthPlaceT;
+        const totalWins = firstPlaceHForMode + firstPlaceTForMode;
+        const winRate = totalGamesForMode > 0 ? (totalWins / totalGamesForMode) * 100 : 0;
 
-      const totalWins = firstPlaceHForMode + firstPlaceTForMode;
-      const winRate = totalGamesForMode > 0 ? ((totalWins / totalGamesForMode) * 100) : 0;
+        const rankingSanmaMode: boolean = sanma !== undefined ? Boolean(sanma) : Boolean(ranking.isSanma);
 
-      // Usar sanmaMode precalculado
-      const rankingSanmaMode: boolean = sanma !== undefined ? Boolean(sanma) : Boolean(ranking.isSanma);
+        const danRankJapon = getDanRankFromConfigs(ranking.danPoints, rankingSanmaMode, danConfigs);
 
-      // Obtener ranking Dan y su color
-      const danRankJapon = await getDanRank(ranking.danPoints);
+        // Resolver color y next rank usando danConfigs locales
+        const currentRankConfig = danConfigs.find(
+          (c) =>
+            c.sanma === rankingSanmaMode &&
+            ranking.danPoints >= c.minPoints &&
+            (c.maxPoints === null || ranking.danPoints <= c.maxPoints),
+        );
+        const rankColor = currentRankConfig?.color ?? '#3b82f6';
 
-      // Obtener color del rango desde la base de datos
-      const danConfig = await configCache.getDanConfigByPoints(ranking.danPoints, rankingSanmaMode);
-      const rankColor = danConfig?.color || '#3b82f6'; // fallback al azul por defecto
+        const nextRankConfig =
+          currentRankConfig && currentRankConfig.maxPoints !== null
+            ? danConfigs.find(
+              (c) =>
+                c.sanma === rankingSanmaMode &&
+                (currentRankConfig.maxPoints! + 1) >= c.minPoints &&
+                (c.maxPoints === null || currentRankConfig.maxPoints! + 1 <= c.maxPoints),
+            )
+            : null;
 
-      // Obtener datos para progreso de rango
-      const currentRankConfig = danConfig;
-      const nextRankConfig = currentRankConfig ?
-        await configCache.getDanConfigByPoints(currentRankConfig.maxPoints + 1, rankingSanmaMode) :
-        null;
+        const danPointsHistory = danHistoryByPlayer.get(ranking.player.id) ?? [];
+        const trendDanDelta10 =
+          danPointsHistory.length >= 2
+            ? Number(danPointsHistory[0].pointsValue) - Number(danPointsHistory[danPointsHistory.length - 1].pointsValue)
+            : 0;
 
-      // Usar datos precargados para tendencias
-      const danPointsHistory = danHistoryByPlayer.get(ranking.player.id) || [];
-      const trendDanDelta10 = danPointsHistory.length >= 2
-        ? Number(danPointsHistory[0].pointsValue) - Number(danPointsHistory[danPointsHistory.length - 1].pointsValue)
-        : 0;
+        const seasonPointsHistory = seasonHistoryByPlayer.get(ranking.player.id) ?? [];
+        const trendSeasonDelta10 =
+          seasonPointsHistory.length >= 2
+            ? Number(seasonPointsHistory[0].pointsValue) - Number(seasonPointsHistory[seasonPointsHistory.length - 1].pointsValue)
+            : 0;
 
-      const seasonPointsHistory = seasonHistoryByPlayer.get(ranking.player.id) || [];
-      const trendSeasonDelta10 = seasonPointsHistory.length >= 2
-        ? Number(seasonPointsHistory[0].pointsValue) - Number(seasonPointsHistory[seasonPointsHistory.length - 1].pointsValue)
-        : 0;
+        return {
+          id: ranking.player.id,
+          nickname: ranking.player.nickname,
+          fullname: ranking.player.fullname,
+          country_id: ranking.player.countryId,
+          player_id: ranking.player.playerNumber,
+          birthday: ranking.player.birthday,
+          country_iso: ranking.player.country?.isoCode || '',
+          country_name: ranking.player.country?.fullName || '',
+          createdAt: ranking.player.createdAt,
+          updatedAt: ranking.player.updatedAt,
 
-      return {
-        id: ranking.player.id,
-        nickname: ranking.player.nickname,
-        fullname: ranking.player.fullname,
-        country_id: ranking.player.countryId,
-        player_id: ranking.player.playerNumber, // legajo
-        birthday: ranking.player.birthday,
-        country_iso: ranking.player.country?.isoCode || '',
-        country_name: ranking.player.country?.fullName || '',
-        createdAt: ranking.player.createdAt,
-        updatedAt: ranking.player.updatedAt,
+          position: index + 1,
+          total_games: totalGamesForMode,
+          average_position: Math.round(((type === 'TEMPORADA' ? ranking.seasonAveragePosition : ranking.averagePosition) || 0) * 100) / 100,
+          dan_points: Math.round(ranking.danPoints),
+          rate_points: Math.round(ranking.ratePoints),
+          season_points: Math.round(ranking.seasonPoints),
+          season_average_position: Math.round((ranking.seasonAveragePosition || 0) * 100) / 100,
+          max_rate: Math.round(ranking.maxRate),
+          win_rate: Math.round(winRate * 100) / 100,
+          rank: danRankJapon,
+          rank_color: rankColor,
 
-        // Ranking fields - datos precalculados
-        position: index + 1, // Se recalculará después del filtro si se excluyen inactivos
-        total_games: totalGamesForMode,
-        average_position: Math.round(((type === 'TEMPORADA' ? ranking.seasonAveragePosition : ranking.averagePosition) || 0) * 100) / 100,
-        dan_points: Math.round(ranking.danPoints),
-        rate_points: Math.round(ranking.ratePoints),
-        season_points: Math.round(ranking.seasonPoints),
-        season_average_position: Math.round((ranking.seasonAveragePosition || 0) * 100) / 100,
-        max_rate: Math.round(ranking.maxRate),
-        win_rate: Math.round(winRate * 100) / 100, // 2 decimales
-        rank: danRankJapon, // Usar japonés como principal
-        rank_color: rankColor, // Color del rango desde la base de datos
+          rank_min_points: currentRankConfig?.minPoints,
+          rank_max_points: currentRankConfig?.maxPoints ?? null,
+          next_rank: nextRankConfig?.rank,
 
-        // Datos para progreso de rango
-        rank_min_points: currentRankConfig?.minPoints,
-        rank_max_points: currentRankConfig?.maxPoints,
-        next_rank: nextRankConfig?.rank,
+          first_place_h: firstPlaceHForMode,
+          second_place_h: secondPlaceHForMode,
+          third_place_h: thirdPlaceHForMode,
+          fourth_place_h: fourthPlaceHForMode,
+          first_place_t: firstPlaceTForMode,
+          second_place_t: secondPlaceTForMode,
+          third_place_t: thirdPlaceTForMode,
+          fourth_place_t: fourthPlaceTForMode,
 
-        // Estadísticas detalladas por tipo de juego
-        first_place_h: firstPlaceHForMode,
-        second_place_h: secondPlaceHForMode,
-        third_place_h: thirdPlaceHForMode,
-        fourth_place_h: fourthPlaceHForMode,
-        first_place_t: firstPlaceTForMode,
-        second_place_t: secondPlaceTForMode,
-        third_place_t: thirdPlaceTForMode,
-        fourth_place_t: fourthPlaceTForMode,
+          trend_dan_delta10: Math.round(trendDanDelta10 * 100) / 100,
+          trend_season_delta10: Math.round(trendSeasonDelta10 * 100) / 100,
+        };
+      }),
+    );
 
-        // Tendencias
-        trend_dan_delta10: Math.round(trendDanDelta10 * 100) / 100,
-        trend_season_delta10: Math.round(trendSeasonDelta10 * 100) / 100
-      };
-    }));
-
-    // Ordenamiento adicional para temporada: mover 0 juegos al final y agregar win rate como tercer criterio
+    // Orden extra para TEMPORADA
     if (type === 'TEMPORADA') {
       console.log(`🔄 Aplicando ordenamiento JavaScript para TEMPORADA`);
       playersWithRanking.sort((a, b) => {
-        // 0) Mover jugadores sin juegos de temporada al final cuando se muestran TODOS
         const aHasGames = (a.total_games || 0) > 0 ? 1 : 0;
         const bHasGames = (b.total_games || 0) > 0 ? 1 : 0;
-        if (aHasGames !== bHasGames) {
-          return bHasGames - aHasGames; // primero los que tienen juegos
-        }
+        if (aHasGames !== bHasGames) return bHasGames - aHasGames;
 
-        // 1. Puntos de temporada (descendente)
         const aSeasonPoints = a.season_points || 0;
         const bSeasonPoints = b.season_points || 0;
-        if (bSeasonPoints !== aSeasonPoints) {
-          return bSeasonPoints - aSeasonPoints;
-        }
+        if (bSeasonPoints !== aSeasonPoints) return bSeasonPoints - aSeasonPoints;
 
-        // 2. Promedio de posición (ascendente - mejor promedio)
         const aSeasonAvgPos = a.season_average_position || 0;
         const bSeasonAvgPos = b.season_average_position || 0;
-        if (aSeasonAvgPos !== bSeasonAvgPos) {
-          return aSeasonAvgPos - bSeasonAvgPos;
-        }
+        if (aSeasonAvgPos !== bSeasonAvgPos) return aSeasonAvgPos - bSeasonAvgPos;
 
-        // 3. Win rate (descendente)
         return b.win_rate - a.win_rate;
       });
     }
 
-    // Filtrar jugadores inactivos si se requiere
+    // Filtrar inactivos si corresponde
     if (!includeInactive) {
       console.log(`🔍 Filtrando jugadores inactivos. Total antes del filtro: ${playersWithRanking.length}`);
-
-      // Verificar actividad de todos los jugadores de una vez (batch)
       const playerNumbers = playersWithRanking.map(p => p.player_id);
       const activityRows = await batchCheckPlayersActivity(playerNumbers);
       const activityByPlayer = new Map(activityRows.map(r => [r.player_number, r]));
-      const activePlayersWithRanking = playersWithRanking.filter(player => {
-        const flags = activityByPlayer.get(player.player_id);
+      const activePlayers = playersWithRanking.filter(p => {
+        const flags = activityByPlayer.get(p.player_id);
         if (!flags) return false;
         return type === 'TEMPORADA' ? flags.active_seasonal : flags.active_general;
       });
-
-      console.log(`✅ Jugadores activos encontrados: ${activePlayersWithRanking.length}`);
-
-      // Recalcular posiciones consecutivas para jugadores activos
-      const activePlayersWithConsecutivePositions = activePlayersWithRanking.map((player, index) => ({
-        ...player,
-        position: index + 1  // Posiciones consecutivas: 1, 2, 3, 4, etc.
-      }));
-
-      return activePlayersWithConsecutivePositions;
+      console.log(`✅ Jugadores activos encontrados: ${activePlayers.length}`);
+      return activePlayers.map((p, i) => ({ ...p, position: i + 1 }));
     }
 
-    rankingCache.set({ seasonId, type, includeInactive, sanma }, playersWithRanking);
     return playersWithRanking;
-
   } catch (error) {
     console.error('❌ Error en consulta optimizada:', error);
     throw new Error(`Failed to get optimized ranking: ${error}`);
   }
 }
 
-// Función para obtener ranking de una temporada específica
+// ----------------------------------------------
+// Ranking por temporada
+// ----------------------------------------------
 export async function getSeasonRanking(seasonId: number): Promise<PlayerWithRanking[]> {
   return getPlayersWithRanking(seasonId, 'TEMPORADA');
 }
 
-// Función para obtener jugador específico
+// ----------------------------------------------
+// Jugador individual
+// ----------------------------------------------
 export async function getPlayerById(playerId: number, sanma: boolean = false): Promise<PlayerWithRanking | null> {
   try {
+    // Cargamos dan configs locales (evitar dependencia de cache)
+    const danConfigs = await fetchDanConfigs();
+
     const ranking = await prisma.playerRanking.findFirst({
-      where: {
-        playerId: playerId,
-        isSanma: sanma
-      },
-      include: {
-        player: {
-          include: {
-            country: true
-          }
-        }
-      }
+      where: { playerId, isSanma: sanma },
+      include: { player: { include: { country: true } } },
     });
 
     if (!ranking) return null;
 
     const totalWins = ranking.firstPlaceH + ranking.firstPlaceT;
-    const winRate = ranking.totalGames > 0 ? ((totalWins / ranking.totalGames) * 100) : 0;
-    const danRankJapon = await getDanRank(ranking.danPoints);
+    const winRate = ranking.totalGames > 0 ? (totalWins / ranking.totalGames) * 100 : 0;
+    const danRankJapon = getDanRankFromConfigs(ranking.danPoints, sanma, danConfigs);
 
-    // Obtener color del rango desde la base de datos
-    const danConfig = await configCache.getDanConfigByPoints(ranking.danPoints, sanma);
-    const rankColor = danConfig?.color || '#3b82f6'; // fallback al azul por defecto
+    const currentRankConfig = danConfigs.find(
+      (c) =>
+        c.sanma === sanma &&
+        ranking.danPoints >= c.minPoints &&
+        (c.maxPoints === null || ranking.danPoints <= c.maxPoints),
+    );
+    const rankColor = currentRankConfig?.color ?? '#3b82f6';
 
-    // Obtener datos para progreso de rango
-    const currentRankConfig = danConfig;
-    const nextRankConfig = currentRankConfig ?
-      await configCache.getDanConfigByPoints(currentRankConfig.maxPoints + 1, sanma) :
-      null;
+    const nextRankConfig =
+      currentRankConfig && currentRankConfig.maxPoints !== null
+        ? danConfigs.find(
+          (c) =>
+            c.sanma === sanma &&
+            (currentRankConfig.maxPoints! + 1) >= c.minPoints &&
+            (c.maxPoints === null || currentRankConfig.maxPoints! + 1 <= c.maxPoints),
+        )
+        : null;
 
     return {
       id: ranking.player.id,
@@ -376,20 +377,21 @@ export async function getPlayerById(playerId: number, sanma: boolean = false): P
       country_name: ranking.player.country?.fullName || '',
       createdAt: ranking.player.createdAt,
       updatedAt: ranking.player.updatedAt,
-      position: 0, // Se puede calcular si es necesario
+
+      position: 0,
       total_games: ranking.totalGames,
       average_position: Math.round(ranking.averagePosition * 100) / 100,
       dan_points: Math.round(ranking.danPoints),
       rate_points: Math.round(ranking.ratePoints),
       max_rate: Math.round(ranking.maxRate),
       win_rate: Math.round(winRate * 100) / 100,
-      rank: danRankJapon, // Usar japonés como principal
-      rank_color: rankColor, // Color del rango desde la base de datos
+      rank: danRankJapon,
+      rank_color: rankColor,
 
-      // Datos para progreso de rango
       rank_min_points: currentRankConfig?.minPoints,
-      rank_max_points: currentRankConfig?.maxPoints,
+      rank_max_points: currentRankConfig?.maxPoints ?? null,
       next_rank: nextRankConfig?.rank,
+
       first_place_h: ranking.firstPlaceH,
       second_place_h: ranking.secondPlaceH,
       third_place_h: ranking.thirdPlaceH,
@@ -397,56 +399,10 @@ export async function getPlayerById(playerId: number, sanma: boolean = false): P
       first_place_t: ranking.firstPlaceT,
       second_place_t: ranking.secondPlaceT,
       third_place_t: ranking.thirdPlaceT,
-      fourth_place_t: ranking.fourthPlaceT
+      fourth_place_t: ranking.fourthPlaceT,
     };
   } catch (error) {
     console.error(`❌ Error obteniendo jugador ${playerId}:`, error);
     return null;
-  }
-}
-
-// Función para crear jugador (mantener compatibilidad)
-export async function createPlayer(playerData: any): Promise<any> {
-  try {
-    const newPlayer = await prisma.player.create({
-      data: playerData
-    });
-
-    // Crear entradas iniciales en PlayerRanking (4 jugadores)
-    await prisma.playerRanking.create({
-      data: {
-        playerId: newPlayer.id,
-        isSanma: false, // 4 jugadores
-        totalGames: 0,
-        averagePosition: 2.5,
-        danPoints: 0, // Empezar en 0 según la memoria
-        ratePoints: 1500,
-        seasonPoints: 0,
-        maxRate: 1500,
-        firstPlaceH: 0, secondPlaceH: 0, thirdPlaceH: 0, fourthPlaceH: 0,
-        firstPlaceT: 0, secondPlaceT: 0, thirdPlaceT: 0, fourthPlaceT: 0
-      }
-    });
-
-    // Crear entradas iniciales en PlayerRanking (3 jugadores)
-    await prisma.playerRanking.create({
-      data: {
-        playerId: newPlayer.id,
-        isSanma: true, // 3 jugadores
-        totalGames: 0,
-        averagePosition: 2.0, // Promedio para 3 jugadores
-        danPoints: 0, // Empezar en 0 según la memoria
-        ratePoints: 1500,
-        seasonPoints: 0,
-        maxRate: 1500,
-        firstPlaceH: 0, secondPlaceH: 0, thirdPlaceH: 0, fourthPlaceH: 0,
-        firstPlaceT: 0, secondPlaceT: 0, thirdPlaceT: 0, fourthPlaceT: 0
-      }
-    });
-
-    return newPlayer;
-  } catch (error) {
-    console.error('❌ Error creando jugador:', error);
-    throw new Error(`Failed to create player: ${error}`);
   }
 }

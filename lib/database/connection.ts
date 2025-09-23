@@ -1,18 +1,36 @@
-// Legacy file - Use lib/database/client.ts for Prisma
-// This file is kept for backward compatibility
+import { PrismaClient } from '@prisma/client';
 
-export { prisma as db } from './client';
-export { 
-  connectToDatabase,
-  checkDatabaseHealth,
-  getDatabaseInfo 
-} from './client';
+// Singleton pattern para evitar múltiples instancias de PrismaClient
+// Neon maneja el pooling automáticamente con PgBouncer
+let prismaInstance: PrismaClient | null = null;
 
-// Transaction helper (deprecated - use Prisma.$transaction directly)
-export async function withTransaction<T>(
-  callback: (db: any) => Promise<T>
-): Promise<T> {
-  // This function is now a placeholder, as Prisma handles transactions differently.
-  // For Prisma transactions, use `prisma.$transaction` directly.
-  throw new Error("withTransaction is deprecated. Use Prisma's $transaction directly from lib/database/client.ts");
+export function getPrismaClient(): PrismaClient {
+    if (!prismaInstance) {
+        prismaInstance = new PrismaClient({
+            log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+            // Neon PostgreSQL maneja el pooling automáticamente
+            // No necesitamos configurar parámetros de pool adicionales
+        });
+    }
+    return prismaInstance;
+}
+
+// Función para limpiar conexiones (solo en desarrollo)
+export async function cleanupPrisma(): Promise<void> {
+    if (prismaInstance && process.env.NODE_ENV !== 'production') {
+        await prismaInstance.$disconnect();
+        prismaInstance = null;
+    }
+}
+
+// Función interna para verificar conexión (no exportar para evitar ciclos)
+async function testConnection(): Promise<boolean> {
+    try {
+        const prisma = getPrismaClient();
+        await prisma.$queryRaw`SELECT 1 as test`;
+        return true;
+    } catch (error) {
+        console.error('❌ Database connection test failed:', error);
+        return false;
+    }
 }

@@ -3,7 +3,8 @@
  * Usa configuraciones dinámicas desde base de datos con cache en memoria
  */
 
-import { configCache } from './config-cache';
+import { getDan, getRate } from '@/lib/cache/core-cache';
+
 
 // ===============================
 // TIPOS Y INTERFACES
@@ -97,7 +98,12 @@ export async function calculateDanPoints(
   isSanma: boolean = false
 ): Promise<number> {
   // Obtener configuración DAN desde cache
-  const danConfig = await configCache.getDanConfigByPoints(currentDanPoints, isSanma);
+  const danConfigs = getDan();
+  const danConfig = danConfigs.find(config =>
+    config.sanma === isSanma &&
+    currentDanPoints >= config.minPoints &&
+    (config.maxPoints === null || currentDanPoints <= config.maxPoints)
+  );
   if (!danConfig) {
     console.warn(`No DAN config found for points ${currentDanPoints}, sanma: ${isSanma}`);
     return currentDanPoints;
@@ -124,7 +130,8 @@ export async function calculateRatePoints(
 ): Promise<number> {
 
   // Obtener configuración RATE desde cache
-  const rateConfig = await configCache.getDefaultRateConfig(isSanma);
+  const rateConfigs = getRate();
+  const rateConfig = rateConfigs.find(config => config.sanma === isSanma);
   if (!rateConfig) {
     console.warn(`No RATE config found for sanma: ${isSanma}`);
     return currentRatePoints;
@@ -178,24 +185,23 @@ export async function calculateSeasonPoints(
   finalPositions: PlayerPosition[],
   seasonId?: number
 ): Promise<number> {
-  // Obtener configuración SEASON desde cache
-  let seasonConfig = null;
+  // Obtener configuración DAN para los puntos de posición
+  const danConfigs = getDan();
+  const danConfig = danConfigs.find(config =>
+    config.sanma === isSanma &&
+    currentSeasonPoints >= config.minPoints &&
+    (config.maxPoints === null || currentSeasonPoints <= config.maxPoints)
+  );
 
-  if (seasonId) {
-    seasonConfig = await configCache.getSeasonConfigForSeason(isSanma, seasonId);
-  } else {
-    seasonConfig = await configCache.getDefaultSeasonConfig(isSanma);
-  }
-
-  if (!seasonConfig) {
-    console.warn(`No SEASON config found for sanma: ${isSanma}, seasonId: ${seasonId}`);
+  if (!danConfig) {
+    console.warn(`No DAN config found for season points ${currentSeasonPoints}, sanma: ${isSanma}`);
     return currentSeasonPoints;
   }
 
   // Puntos base según posición
   const basePoints = isSanma
-    ? [seasonConfig.firstPlace, seasonConfig.secondPlace, seasonConfig.thirdPlace]
-    : [seasonConfig.firstPlace, seasonConfig.secondPlace, seasonConfig.thirdPlace, seasonConfig.fourthPlace || 0];
+    ? [danConfig.firstPlace, danConfig.secondPlace, danConfig.thirdPlace]
+    : [danConfig.firstPlace, danConfig.secondPlace, danConfig.thirdPlace, danConfig.fourthPlace || 0];
 
   // Usar calcularUmaConEmpates para manejo consistente de empates
   const posicionesArray = finalPositions?.map(p => p.finalPosition) || [position];
@@ -339,7 +345,12 @@ export async function calculateDanPointsWithConfig(
  * Obtiene el piso DAN para un jugador (inmunidad)
  */
 export async function getDanFloor(points: number, isSanma: boolean): Promise<number> {
-  const danConfig = await configCache.getDanConfigByPoints(points, isSanma);
+  const danConfigs = getDan();
+  const danConfig = danConfigs.find(config =>
+    config.sanma === isSanma &&
+    points >= config.minPoints &&
+    (config.maxPoints === null || points <= config.maxPoints)
+  );
 
   // Si está protegido, retornar el mínimo del rango actual
   if (danConfig?.isProtected) {
@@ -654,10 +665,15 @@ export function calcularPosiciones(puntajes: number[]): {
 
 export async function pisoDan(puntos: number, isSanma: boolean = false): Promise<number> {
   // Importar configCache para usar configuración consolidada
-  const { configCache } = await import('./config-cache');
+
 
   // Buscar la configuración actual usando los rangos correctos
-  const config = await configCache.getDanConfigByPoints(puntos, isSanma);
+  const danConfigs = getDan();
+  const config = danConfigs.find(c =>
+    c.sanma === isSanma &&
+    puntos >= c.minPoints &&
+    (c.maxPoints === null || puntos <= c.maxPoints)
+  );
 
   // Si está protegido, retornar el mínimo del rango actual
   if (config?.isProtected) {

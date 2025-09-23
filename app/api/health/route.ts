@@ -1,42 +1,24 @@
-import { logToTerminal } from '@/lib/terminal-logger';
-import { NextRequest, NextResponse } from 'next/server';
+// app/api/health/route.ts
+export const runtime = 'nodejs';
 
-export async function GET(request: NextRequest) {
-    const start = Date.now();
+import { getCacheStatus } from '@/lib/cache/core-cache';
+import { prisma } from '@/lib/database/client';
+import { NextResponse } from 'next/server';
 
+export async function GET() {
     try {
-        const timestamp = new Date().toISOString();
-
-        const response = NextResponse.json({
-            status: 'ok',
-            service: 'CARM Rank API',
-            heartbeat: true,
-            timestamp,
-            uptime: process.uptime(),
-            memory: process.memoryUsage(),
-            version: process.env.npm_package_version || '1.0.0',
-            environment: process.env.NODE_ENV || 'development'
+        const dbOk = await prisma.$queryRaw`SELECT 1 as ok`.then(() => true).catch(() => false);
+        const cache = getCacheStatus();
+        return NextResponse.json({
+            ok: dbOk && cache.ready,
+            dbOk,
+            cache,
+            players: cache.playerCount
         });
-
-        const duration = Date.now() - start;
-        logToTerminal(request, response, duration);
-
-        return response;
     } catch (error) {
-        const response = NextResponse.json(
-            {
-                status: 'error',
-                service: 'CARM Rank API',
-                heartbeat: false,
-                timestamp: new Date().toISOString(),
-                error: error instanceof Error ? error.message : 'Unknown error'
-            },
-            { status: 500 }
-        );
-
-        const duration = Date.now() - start;
-        logToTerminal(request, response, duration);
-
-        return response;
+        return NextResponse.json({
+            ok: false,
+            error: error instanceof Error ? error.message : 'Unknown error'
+        }, { status: 500 });
     }
 }

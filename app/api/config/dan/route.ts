@@ -1,4 +1,4 @@
-import { configCache } from '@/lib/config-cache';
+import { getDan } from '@/lib/cache/core-cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -10,16 +10,22 @@ export async function GET(request: NextRequest) {
 
         let data: any;
 
+        const danConfigs = getDan();
+
         if (rank) {
             // Obtener configuración específica por rango
-            data = await configCache.getDanConfig(rank, sanma);
+            data = danConfigs.find(config => config.rank === rank && config.sanma === sanma);
         } else if (points) {
             // Obtener configuración por puntos
             const pointsNum = parseInt(points);
-            data = await configCache.getDanConfigByPoints(pointsNum, sanma);
+            data = danConfigs.find(config =>
+                config.sanma === sanma &&
+                pointsNum >= config.minPoints &&
+                (config.maxPoints === null || pointsNum <= config.maxPoints)
+            );
         } else {
-            // Obtener todas las configuraciones
-            data = await configCache.getAllDanConfigs(sanma);
+            // Obtener todas las configuraciones filtradas por sanma
+            data = danConfigs.filter(config => config.sanma === sanma);
         }
 
         // Logging de diagnóstico para verificar qué está devolviendo el cache

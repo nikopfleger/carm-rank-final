@@ -1,4 +1,4 @@
-import { configCache } from '@/lib/config-cache';
+import { getSeasons } from '@/lib/cache/core-cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -10,19 +10,18 @@ export async function GET(request: NextRequest) {
 
         let data;
 
+        const seasons = getSeasons();
+
         if (name) {
-            // Obtener configuración específica por nombre
-            const seasonIdNum = seasonId ? parseInt(seasonId) : null;
-            data = configCache.getSeasonConfig(name, sanma, seasonIdNum);
+            // Obtener temporada específica por nombre
+            data = seasons.find(season => season.name === name);
         } else if (seasonId) {
-            // Obtener configuración para temporada específica
+            // Obtener temporada específica por ID
             const seasonIdNum = parseInt(seasonId);
-            data = configCache.getSeasonConfigForSeason(sanma, seasonIdNum);
+            data = seasons.find(season => season.id === seasonIdNum);
         } else {
-            // Obtener todas las configuraciones o la default
-            data = sanma !== null
-                ? configCache.getAllSeasonConfigs(sanma)
-                : configCache.getAllSeasonConfigs();
+            // Obtener todas las temporadas
+            data = seasons;
         }
 
         return NextResponse.json({

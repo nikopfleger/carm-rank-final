@@ -1,12 +1,10 @@
-import { connectToDatabase } from '@/lib/database/connection';
 import {
   checkDatabaseHealth,
   getCountries,
   getLocations,
   getOnlineApps,
   getRulesets,
-  getUmaConfigurations,
-  initializeDatabase
+  getUmaConfigurations
 } from '@/lib/database/queries/common';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -26,8 +24,6 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       );
     }
-
-    await connectToDatabase();
 
     switch (type) {
       case 'countries':
@@ -116,9 +112,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
-    await connectToDatabase();
-    await initializeDatabase();
 
     return NextResponse.json({
       success: true,

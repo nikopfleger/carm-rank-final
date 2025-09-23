@@ -2,7 +2,7 @@
  * Helpers de utilidad para validación y transformación de datos de juegos
  */
 
-import { configCache } from './config-cache';
+import { getDan } from '@/lib/cache/core-cache';
 import { type Position } from './game-calculations-client';
 
 
@@ -174,7 +174,10 @@ export function calculateAveragePosition(
  */
 export async function getDanRank(danPoints: number, isSanma: boolean = false): Promise<string> {
   // Obtener el rango más bajo de la cache
-  const lowestConfig = await configCache.getLowestDanConfig(isSanma);
+  const danConfigs = getDan();
+  const lowestConfig = danConfigs
+    .filter(config => config.sanma === isSanma)
+    .sort((a, b) => a.minPoints - b.minPoints)[0];
   const lowestRank = lowestConfig?.rank || 'N/A';
 
   // Si los puntos están por debajo del mínimo, usar el rango más bajo
@@ -182,7 +185,11 @@ export async function getDanRank(danPoints: number, isSanma: boolean = false): P
     return lowestRank;
   }
 
-  const danConfig = await configCache.getDanConfigByPoints(danPoints, isSanma);
+  const danConfig = danConfigs.find(config =>
+    config.sanma === isSanma &&
+    danPoints >= config.minPoints &&
+    (config.maxPoints === null || danPoints <= config.maxPoints)
+  );
   return danConfig?.rank || lowestRank;
 }
 
@@ -191,7 +198,10 @@ export async function getDanRank(danPoints: number, isSanma: boolean = false): P
  */
 export async function getNextDanRank(danPoints: number, isSanma: boolean = false): Promise<{ proximo: string; faltantes: number }> {
   // Obtener el rango más bajo de la cache
-  const lowestConfig = await configCache.getLowestDanConfig(isSanma);
+  const danConfigs = getDan();
+  const lowestConfig = danConfigs
+    .filter(config => config.sanma === isSanma)
+    .sort((a, b) => a.minPoints - b.minPoints)[0];
   const lowestRank = lowestConfig?.rank || 'N/A';
   const lowestMinPoints = lowestConfig ? (lowestConfig.minPoints) : 0;
 
@@ -199,7 +209,7 @@ export async function getNextDanRank(danPoints: number, isSanma: boolean = false
     return { proximo: lowestRank, faltantes: Math.max(0, lowestMinPoints - danPoints) };
   }
 
-  const allConfigs = await configCache.getAllDanConfigs(isSanma);
+  const allConfigs = danConfigs.filter(config => config.sanma === isSanma);
 
   // Ordenar por puntos mínimos
   const sortedConfigs = allConfigs.sort((a, b) => {
@@ -212,7 +222,7 @@ export async function getNextDanRank(danPoints: number, isSanma: boolean = false
   const currentIndex = sortedConfigs.findIndex(config => {
     const min = config.minPoints;
     const max = config.maxPoints;
-    return danPoints >= min && danPoints < max;
+    return danPoints >= min && (max ? danPoints < max : true);
   });
 
   if (currentIndex === -1 || currentIndex >= sortedConfigs.length - 1) {
@@ -240,7 +250,10 @@ export async function getDanRankProgress(danPoints: number, isSanma: boolean = f
   nextRank: string;
 }> {
   // Obtener el rango más bajo de la cache
-  const lowestConfig = await configCache.getLowestDanConfig(isSanma);
+  const danConfigs = getDan();
+  const lowestConfig = danConfigs
+    .filter(config => config.sanma === isSanma)
+    .sort((a, b) => a.minPoints - b.minPoints)[0];
   const lowestRank = lowestConfig?.rank || 'N/A';
   const lowestMinPoints = lowestConfig ? (lowestConfig.minPoints) : 0;
 
@@ -254,7 +267,7 @@ export async function getDanRankProgress(danPoints: number, isSanma: boolean = f
     };
   }
 
-  const allConfigs = await configCache.getAllDanConfigs(isSanma);
+  const allConfigs = danConfigs.filter(config => config.sanma === isSanma);
 
   // Ordenar por puntos mínimos
   const sortedConfigs = allConfigs.sort((a, b) => {
@@ -267,7 +280,7 @@ export async function getDanRankProgress(danPoints: number, isSanma: boolean = f
   const currentIndex = sortedConfigs.findIndex(config => {
     const min = config.minPoints;
     const max = config.maxPoints;
-    return danPoints >= min && danPoints < max;
+    return danPoints >= min && (max ? danPoints < max : true);
   });
 
   if (currentIndex === -1) {
@@ -291,7 +304,7 @@ export async function getDanRankProgress(danPoints: number, isSanma: boolean = f
   const min = currentConfig.minPoints;
   const max = currentConfig.maxPoints;
   const current = danPoints - min;
-  const maxRange = max - min;
+  const maxRange = max ? max - min : Infinity;
   const progress = maxRange > 0 ? (current / maxRange) * 100 : 100;
 
   return {
@@ -307,7 +320,8 @@ export async function getDanRankProgress(danPoints: number, isSanma: boolean = f
  * Obtiene las líneas de referencia para el gráfico de Dan
  */
 export async function getDanRankLines(isSanma: boolean = false): Promise<Array<{ value: number; label: string; color: string }>> {
-  const allConfigs = await configCache.getAllDanConfigs(isSanma);
+  const danConfigs = getDan();
+  const allConfigs = danConfigs.filter(config => config.sanma === isSanma);
 
   // Ordenar por puntos mínimos
   const sortedConfigs = allConfigs.sort((a, b) => {

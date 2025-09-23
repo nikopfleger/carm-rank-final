@@ -1,4 +1,4 @@
-import { configCache } from '@/lib/config-cache';
+import { getRate } from '@/lib/cache/core-cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -9,14 +9,16 @@ export async function GET(request: NextRequest) {
 
         let data;
 
+        const rateConfigs = getRate();
+
         if (name) {
             // Obtener configuración específica por nombre
-            data = configCache.getRateConfig(name, sanma);
+            data = rateConfigs.find(config => config.name === name && config.sanma === sanma);
         } else {
             // Obtener todas las configuraciones o la default
             data = sanma !== null
-                ? configCache.getAllRateConfigs(sanma)
-                : configCache.getAllRateConfigs();
+                ? rateConfigs.filter(config => config.sanma === sanma)
+                : rateConfigs;
         }
 
         return NextResponse.json({

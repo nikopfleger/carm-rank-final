@@ -1,36 +1,36 @@
+// app/api/players/count-games/route.ts
+export const runtime = 'nodejs';
+
 import { prisma } from '@/lib/database/client';
-import { connectToDatabase } from '@/lib/database/connection';
 import { Prisma } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
-    try {
-        await connectToDatabase();
+  try {
 
-        const { searchParams } = new URL(request.url);
-        const includeInactive = searchParams.get('includeInactive') === 'true';
-        const type = (searchParams.get('type') as 'GENERAL' | 'TEMPORADA') || 'GENERAL';
-        const sanmaStr = searchParams.get('sanma'); // 'true' | 'false' | null
-        const sanmaVal = sanmaStr === 'true' ? true : sanmaStr === 'false' ? false : null;
+    const { searchParams } = new URL(request.url);
+    const includeInactive = searchParams.get('includeInactive') === 'true';
+    const type = (searchParams.get('type') as 'GENERAL' | 'TEMPORADA') || 'GENERAL';
+    const sanmaStr = searchParams.get('sanma'); // 'true' | 'false' | null
+    const sanmaVal = sanmaStr === 'true' ? true : sanmaStr === 'false' ? false : null;
 
-        // 1) construimos TODAS las cláusulas en un solo array
-        const clauses: Prisma.Sql[] = [
-            Prisma.sql`g.is_validated = true`,
-            Prisma.sql`g.deleted = false`,
-        ];
+    // 1) Cláusulas dinámicas
+    const clauses: Prisma.Sql[] = [
+      Prisma.sql`g.is_validated = true`,
+      Prisma.sql`g.deleted = false`,
+    ];
 
-        if (sanmaVal !== null) {
-            clauses.push(Prisma.sql`r.sanma = ${sanmaVal}`);
-        }
+    if (sanmaVal !== null) {
+      clauses.push(Prisma.sql`r.sanma = ${sanmaVal}`);
+    }
 
-        if (type === 'TEMPORADA') {
-            clauses.push(Prisma.sql`g.season_id IS NOT NULL`);
-            clauses.push(Prisma.sql`g.tournament_id IS NOT NULL`);
-        }
+    if (type === 'TEMPORADA') {
+      clauses.push(Prisma.sql`g.season_id IS NOT NULL`);
+      clauses.push(Prisma.sql`g.tournament_id IS NOT NULL`);
+    }
 
-        // Jugadores activos (solo si no se incluyen inactivos)
-        if (!includeInactive) {
-            clauses.push(Prisma.sql`
+    if (!includeInactive) {
+      clauses.push(Prisma.sql`
         EXISTS (
           SELECT 1
           FROM active_players ap
@@ -39,14 +39,14 @@ export async function GET(request: NextRequest) {
            AND gr2.player_id = ap.player_id
         )
       `);
-        }
+    }
 
-        // 2) WHERE final
-        const whereSql: Prisma.Sql =
-            clauses.length ? Prisma.sql`WHERE ${Prisma.join(clauses, ' AND ')}` : Prisma.empty;
+    // 2) WHERE final
+    const whereSql =
+      clauses.length ? Prisma.sql`WHERE ${Prisma.join(clauses, ' AND ')}` : Prisma.empty;
 
-        // 3) Query única con CTEs
-        const rows = await prisma.$queryRaw<{ count: bigint }[]>(Prisma.sql`
+    // 3) Query única con CTEs
+    const rows = await prisma.$queryRaw<{ count: bigint }[]>(Prisma.sql`
       WITH s AS (
         SELECT start_date, COALESCE(end_date, NOW()) AS end_date
         FROM season
@@ -69,18 +69,19 @@ export async function GET(request: NextRequest) {
       ${whereSql}
     `);
 
-        const totalUniqueGames = rows.length ? Number(rows[0].count) : 0;
+    // 4) bigint -> number (si esperás volúmenes enormes, podrías devolver string)
+    const totalUniqueGames = rows.length ? Number(rows[0].count) : 0;
 
-        return NextResponse.json({
-            success: true,
-            totalUniqueGames,
-            message: `Found ${totalUniqueGames} unique games`,
-        });
-    } catch (error) {
-        console.error('Error in GET /api/players/count-games:', error);
-        return NextResponse.json(
-            { success: false, error: 'Failed to count games', message: (error as Error).message },
-            { status: 500 }
-        );
-    }
+    return NextResponse.json({
+      success: true,
+      totalUniqueGames,
+      message: `Found ${totalUniqueGames} unique games`,
+    });
+  } catch (error) {
+    console.error('Error in GET /api/players/count-games:', error);
+    return NextResponse.json(
+      { success: false, error: 'Failed to count games', message: (error as Error).message },
+      { status: 500 }
+    );
+  }
 }

@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth-vercel";
-import { configCache } from "@/lib/config-cache";
+import { getDan } from "@/lib/cache/core-cache";
 import { prisma } from "@/lib/database/client";
 import { getDanRank } from "@/lib/game-helpers";
 import { NextRequest, NextResponse } from "next/server";
@@ -739,8 +739,17 @@ export async function GET(
         const danRankYonma = await getDanRank(danPointsYonma, false);
         const danRankSanma = await getDanRank(danPointsSanma, true);
 
-        const danConfigYonma = await configCache.getDanConfigByPoints(danPointsYonma, false);
-        const danConfigSanma = await configCache.getDanConfigByPoints(danPointsSanma, true);
+        const danConfigs = getDan();
+        const danConfigYonma = danConfigs.find(config =>
+            !config.sanma &&
+            danPointsYonma >= config.minPoints &&
+            (config.maxPoints === null || danPointsYonma <= config.maxPoints)
+        );
+        const danConfigSanma = danConfigs.find(config =>
+            config.sanma &&
+            danPointsSanma >= config.minPoints &&
+            (config.maxPoints === null || danPointsSanma <= config.maxPoints)
+        );
 
         const rankColorYonma = danConfigYonma?.color || '#3b82f6';
         const rankColorSanma = danConfigSanma?.color || '#3b82f6';

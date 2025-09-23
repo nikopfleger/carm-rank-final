@@ -1,112 +1,39 @@
-import { prewarmRankingCache, startRankingAutoRefresh } from '@/lib/ranking-prewarm';
-import { PrismaClient } from '@prisma/client';
-import { initializeConfigurations } from '../config-initializer';
-import { createVersionedPrismaClient } from './prisma-interceptor';
+// lib/database/client.ts
+import 'server-only';
+import { createAuditInterceptor } from './audit-interceptor';
+import { getPrismaClient } from './connection';
 
-// Prevent multiple instances of Prisma Client in development
-const globalForPrisma = globalThis as unknown as {
-  prisma: ReturnType<typeof createVersionedPrismaClient> | undefined;
-};
+// ==========================================================
+// Prisma client con interceptor de auditoría (solo servidor)
+// ==========================================================
+const basePrisma = getPrismaClient();
+export const prisma = createAuditInterceptor(basePrisma);
 
-// Crear cliente base de Prisma con DATABASE_URL estándar
-// Neon PostgreSQL maneja el pooling automáticamente con PgBouncer
-// No necesitamos agregar parámetros de pool adicionales
-const basePrisma = new PrismaClient({
-  log: ['error'],
-  // Prisma usa automáticamente DATABASE_URL del environment
-  // Neon ya maneja el pooling con hasta 10,000 conexiones concurrentes
-});
-
-// Aplicar extensión de versionado y soft delete
-export const prisma = globalForPrisma.prisma ?? createVersionedPrismaClient(basePrisma);
-
-if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma;
-
-  // En desarrollo, limpiar conexiones periódicamente
-  if (typeof window === 'undefined') {
-    setInterval(async () => {
-      try {
-        await prisma.$disconnect();
-        console.log('🧹 Development: Cleaned up database connections');
-      } catch (error) {
-        // Ignorar errores de desconexión en desarrollo
-      }
-    }, 60000); // Cada minuto
-  }
-}
-
-// Función de test de conexión con SELECT 1
-export async function testDatabaseConnection(): Promise<boolean> {
-  try {
-    const result = await prisma.$queryRaw`SELECT 1 as test`;
-    console.log('✅ Database connection test successful:', result);
-    return true;
-  } catch (error) {
-    console.error('❌ Database connection test failed:', error);
-    return false;
-  }
-}
-
-let keepAliveTimer: NodeJS.Timeout | null = null;
-
-export function startKeepAlive(intervalMs: number = 60000): NodeJS.Timeout {
-  if (keepAliveTimer) {
-    return keepAliveTimer;
-  }
-  keepAliveTimer = setInterval(async () => {
-    try {
-      await prisma.$queryRaw`SELECT 1 as keepalive`;
-    } catch (error) {
-      console.error('💔 Keep-alive ping failed:', error);
-    }
-  }, intervalMs);
-  return keepAliveTimer;
-}
-
-/**
- * Database connection and health check
- */
-export async function connectToDatabase() {
+// ==========================================================
+// Conexión y chequeos
+// ==========================================================
+export async function connectToDatabase(): Promise<boolean> {
   try {
     await prisma.$connect();
     console.log('✅ Database connected successfully');
 
-    // Test connection with SELECT 1
-    const connectionTest = await testDatabaseConnection();
-    if (!connectionTest) {
-      throw new Error('Database connection test failed');
-    }
-
-    // Initialize configuration cache after database connection
-    await initializeConfigurations();
-
-    // Prewarm y auto-refresh cada 5 minutos (no bloquea)
-    prewarmRankingCache().then(() => startRankingAutoRefresh()).catch(() => { });
-
-    // Start keep-alive (solo en producción)
-    if (process.env.NODE_ENV === 'production') {
-      const keepAliveInterval = parseInt(process.env.DB_KEEP_ALIVE_INTERVAL || '60000');
-      startKeepAlive(keepAliveInterval);
-      console.log(`💓 Keep-alive started every ${keepAliveInterval}ms`);
-    }
+    // Verificar conexión usando el mismo cliente
+    await prisma.$queryRaw`SELECT 1 as test`;
+    console.log('✅ Database connection test successful');
 
     return true;
   } catch (error) {
     console.error('❌ Database connection error:', error);
-    throw new Error('Failed to connect to database');
+    throw error;
   }
 }
 
-/**
- * Database health check
- */
 export async function checkDatabaseHealth() {
   try {
-    // Test connection
+    // Test de conexión
     await prisma.$queryRaw`SELECT 1 as test`;
 
-    // Check if main tables exist by trying to count records
+    // Verificar tablas principales (si no existen, count() lanza y capturamos 0)
     const counts = await Promise.all([
       prisma.country.count().catch(() => 0),
       prisma.player.count().catch(() => 0),
@@ -115,20 +42,18 @@ export async function checkDatabaseHealth() {
     ]);
 
     const [countryCount, playerCount, seasonCount, gameCount] = counts;
-    const tablesExist = countryCount >= 0; // If we can count, tables exist
-    const dataExists = countryCount > 0;
 
     return {
       connected: true,
-      tablesExist,
-      dataExists,
-      errors: [],
+      tablesExist: countryCount >= 0,
+      dataExists: countryCount > 0,
+      errors: [] as string[],
       stats: {
         countries: countryCount,
         players: playerCount,
         seasons: seasonCount,
         games: gameCount,
-      }
+      },
     };
   } catch (error) {
     return {
@@ -141,45 +66,11 @@ export async function checkDatabaseHealth() {
         players: 0,
         seasons: 0,
         games: 0,
-      }
+      },
     };
   }
 }
 
-/**
- * Initialize database with seed data
- */
-export async function initializeDatabase() {
-  try {
-    console.log('🚀 Initializing database...');
-
-    // Check if data already exists
-    const countryCount = await prisma.country.count();
-    if (countryCount > 0) {
-      console.log('✅ Database already initialized');
-      return;
-    }
-
-    // Run seed data - solo en el servidor
-    if (typeof window === 'undefined') {
-      const { exec } = await import('child_process');
-      const { promisify } = await import('util');
-      const execAsync = promisify(exec);
-
-      await execAsync('npm run db:seed');
-      console.log('✅ Database initialized with seed data');
-    } else {
-      console.log('⚠️ Database initialization skipped in browser environment');
-    }
-  } catch (error) {
-    console.error('❌ Error initializing database:', error);
-    throw error;
-  }
-}
-
-/**
- * Get database info
- */
 export async function getDatabaseInfo() {
   try {
     const result = await prisma.$queryRaw<Array<{
@@ -199,5 +90,15 @@ export async function getDatabaseInfo() {
   }
 }
 
-// Función helper para filtrar solo elementos eliminados
-export const onlyDeleted = (deleted: boolean = true) => ({ deleted });
+// ==========================================================
+// Helpers para deleted
+// ==========================================================
+export const includeDeleted = (where: any = {}) => ({
+  ...where,
+  deleted: undefined,
+});
+
+export const onlyDeleted = (where: any = {}) => ({
+  ...where,
+  deleted: true,
+});

@@ -529,16 +529,16 @@ export function RankTableNew({
                                     {/* Pos. Prom. */}
                                     <div className={unifiedStyles.statContainer}>
                                         <div className={unifiedStyles.statLabel}>Pos. Prom.</div>
-                                        <div className={`${unifiedStyles.statValue} ${getPositionColor(p.average_position)}`}>
-                                            {p.average_position.toFixed(2)}
+                                        <div className={`${unifiedStyles.statValue} ${getPositionColor(p.average_position || 0)}`}>
+                                            {(p.average_position || 0).toFixed(2)}
                                         </div>
                                     </div>
 
                                     {/* % Victoria */}
                                     <div className={unifiedStyles.statContainer}>
                                         <div className={unifiedStyles.statLabel}>% Victoria</div>
-                                        <div className={`${unifiedStyles.statValue} ${getWinRateColor(p.win_rate)}`}>
-                                            {p.win_rate.toFixed(1)}%
+                                        <div className={`${unifiedStyles.statValue} ${getWinRateColor(p.win_rate || 0)}`}>
+                                            {(p.win_rate || 0).toFixed(1)}%
                                         </div>
                                     </div>
 
@@ -636,15 +636,15 @@ export function RankTableNew({
                                 <div className="grid grid-cols-2 gap-x-4 gap-y-2 mt-3 md:hidden w-full">
                                     <div className="text-center">
                                         <div className={unifiedStyles.statLabel}>Pos. Prom.</div>
-                                        <div className={`${unifiedStyles.statValue} ${getPositionColor(p.average_position)}`}>
-                                            {p.average_position.toFixed(1)}
+                                        <div className={`${unifiedStyles.statValue} ${getPositionColor(p.average_position || 0)}`}>
+                                            {(p.average_position || 0).toFixed(1)}
                                         </div>
                                     </div>
 
                                     <div className="text-center">
                                         <div className={unifiedStyles.statLabel}>% Victoria</div>
-                                        <div className={`${unifiedStyles.statValue} ${getWinRateColor(p.win_rate)}`}>
-                                            {p.win_rate.toFixed(1)}%
+                                        <div className={`${unifiedStyles.statValue} ${getWinRateColor(p.win_rate || 0)}`}>
+                                            {(p.win_rate || 0).toFixed(1)}%
                                         </div>
                                     </div>
 

@@ -1,4 +1,4 @@
-import { configCache } from '@/lib/config-cache';
+import { getDan } from '@/lib/cache/core-cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -6,7 +6,8 @@ export async function GET(request: NextRequest) {
         const { searchParams } = new URL(request.url);
         const sanma = searchParams.get('sanma') === 'true';
 
-        const danConfigs = await configCache.getAllDanConfigs(sanma);
+        const allDanConfigs = getDan();
+        const danConfigs = allDanConfigs.filter(config => config.sanma === sanma);
 
         // Transformar a formato que espera el cliente
         const clientConfigs = danConfigs.map(config => ({

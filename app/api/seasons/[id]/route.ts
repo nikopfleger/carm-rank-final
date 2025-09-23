@@ -1,4 +1,3 @@
-import { connectToDatabase } from '@/lib/database/connection';
 import { activateSeason, archiveSeason, getSeasonStatistics, updateSeason } from '@/lib/database/queries/seasons';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -8,7 +7,6 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await connectToDatabase();
 
     const { id } = await params;
     const seasonId = parseInt(id);
@@ -82,7 +80,6 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await connectToDatabase();
 
     const { id } = await params;
     const seasonId = parseInt(id);
@@ -127,7 +124,6 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await connectToDatabase();
 
     const { id } = await params;
     const seasonId = parseInt(id);

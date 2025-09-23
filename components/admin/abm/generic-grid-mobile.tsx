@@ -117,9 +117,9 @@ export function GenericGridMobile({
         );
     }, [data, searchTerm, columns]);
 
-    const getNestedValue = (obj: any, path: string) => {
+    function getNestedValue(obj: any, path: string) {
         return path.split('.').reduce((current, key) => current?.[key], obj);
-    };
+    }
 
     const renderCellValue = (column: GridColumn, value: any, row: any) => {
         if (column.render) {
