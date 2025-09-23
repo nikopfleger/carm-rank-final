@@ -1,6 +1,8 @@
 import { prisma } from '@/lib/database/client';
 import { NextRequest, NextResponse } from 'next/server';
 
+;
+
 // Tipo para el juego pendiente con todas las relaciones incluidas
 type PendingGameWithRelations = {
   id: number;

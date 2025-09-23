@@ -1,7 +1,7 @@
 import { getCacheStatus, isCacheReady } from '@/lib/cache/core-cache';
 import { NextResponse } from 'next/server';
 
-export const runtime = 'nodejs';
+;
 
 export async function GET() {
     try {

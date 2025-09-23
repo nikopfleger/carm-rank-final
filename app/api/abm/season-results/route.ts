@@ -1,6 +1,8 @@
 import { prisma } from '@/lib/database/client';
 import { NextRequest, NextResponse } from 'next/server';
 
+;
+
 // GET /api/abm/season-results - Get all season results
 export async function GET(request: NextRequest) {
     try {

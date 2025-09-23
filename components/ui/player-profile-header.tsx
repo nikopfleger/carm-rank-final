@@ -145,13 +145,14 @@ export function PlayerProfileHeader({
                                     console.log('Botón de vincular presionado');
                                     onLinkRequest();
                                 }}
-                                disabled={isLinkRequestPending}
+                                disabled={Boolean(isLinkRequestPending) || Boolean(submitting)}
                                 className={unifiedStyles.smallButton}
                             >
-                                {isLinkRequestPending
+                                {submitting
                                     ? t("player.profilePage.sendingRequest")
-                                    : t("player.profilePage.linkPlayer")
-                                }
+                                    : isLinkRequestPending
+                                        ? t("player.profilePage.requestPending")
+                                        : t("player.profilePage.linkPlayer")}
                             </Button>
                         )}
                         {onUnlinkRequest && isLinkedToCurrentUser && (

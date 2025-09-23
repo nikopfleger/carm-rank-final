@@ -4,6 +4,8 @@ import { prisma } from "@/lib/database/client";
 import { getDanRank } from "@/lib/game-helpers";
 import { NextRequest, NextResponse } from "next/server";
 
+;
+
 // Función para calcular si un jugador está activo
 async function calculatePlayerActivity(playerId: number): Promise<boolean> {
     // Obtener la temporada activa actual

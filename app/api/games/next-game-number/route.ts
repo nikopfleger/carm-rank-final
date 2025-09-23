@@ -3,6 +3,8 @@ import { ensureGameSubmit } from "@/lib/server-authorization";
 import { PendingGameStatus } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
+;
+
 export async function GET(request: NextRequest) {
     try {
         const authz = await ensureGameSubmit();

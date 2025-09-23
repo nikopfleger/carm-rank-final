@@ -1,6 +1,8 @@
 import { prisma } from '@/lib/database/client';
 import { NextRequest, NextResponse } from 'next/server';
 
+;
+
 // GET /api/players/check-legajo?legajo=xxx&excludeId=xxx
 export async function GET(request: NextRequest) {
     try {

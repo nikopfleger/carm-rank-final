@@ -1,5 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/database/client";
+import { NextRequest, NextResponse } from "next/server";
+
+;
 
 export async function GET(request: NextRequest) {
   try {
@@ -8,7 +10,7 @@ export async function GET(request: NextRequest) {
     const includeDeleted = searchParams.get("includeDeleted") === "true";
 
     const where: any = {};
-    
+
     if (!includeDeleted) {
       where.deleted = false;
     }
@@ -38,7 +40,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    
+
     // Validar campos requeridos
     if (!body.name) {
       return NextResponse.json(

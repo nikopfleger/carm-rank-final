@@ -2,6 +2,8 @@ import { prisma } from "@/lib/database/client";
 import { ensureAbmManage } from "@/lib/server-authorization";
 import { NextRequest, NextResponse } from "next/server";
 
+;
+
 export async function GET(request: NextRequest) {
   try {
     const search = request.nextUrl.searchParams.get("q");

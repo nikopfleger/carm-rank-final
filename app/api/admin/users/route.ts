@@ -3,6 +3,8 @@ import { hasAuthority } from "@/lib/authorization";
 import { prisma } from "@/lib/database/client";
 import { NextRequest, NextResponse } from "next/server";
 
+;
+
 export async function GET(request: NextRequest) {
     const session = await auth();
     if (!session?.user) {

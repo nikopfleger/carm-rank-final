@@ -1,5 +1,5 @@
 // app/api/players/count-games/route.ts
-export const runtime = 'nodejs';
+;
 
 import { prisma } from '@/lib/database/client';
 import { Prisma } from '@prisma/client';

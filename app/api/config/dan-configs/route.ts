@@ -1,5 +1,5 @@
 // app/api/dan/configs/route.ts  (o donde esté tu handler)
-export const runtime = 'nodejs'; // evita Edge
+; // evita Edge
 
 import { ensureCacheReady, getDan } from '@/lib/cache/core-cache';
 import { NextRequest, NextResponse } from 'next/server';

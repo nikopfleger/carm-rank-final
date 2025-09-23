@@ -1,6 +1,8 @@
 import { prisma } from '@/lib/database/client';
 import { NextRequest, NextResponse } from 'next/server';
 
+;
+
 interface SeasonResultInput {
     id?: number;
     seasonId: number;

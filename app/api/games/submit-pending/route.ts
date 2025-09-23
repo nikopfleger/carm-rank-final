@@ -4,6 +4,8 @@ import { emailNotificationService } from '@/lib/services/email-notification-serv
 import { hybridImageStorage } from '@/lib/simplified-image-storage';
 import { NextRequest, NextResponse } from 'next/server';
 
+;
+
 export async function POST(request: NextRequest) {
   try {
     // ✅ Verificar autorización y obtener usuario

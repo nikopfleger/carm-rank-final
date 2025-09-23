@@ -362,11 +362,13 @@ export function PlayerProfileNew({ legajo }: PlayerProfileProps) {
       }
 
       const result = await response.json();
-      setLinkMessage(t('player.profilePage.linkRequestSent'));
       setHasPendingRequest(true);
+      setLinkMessage(t('player.profilePage.requestSent'));
+      handleSuccess(t('player.profilePage.requestSent'));
     } catch (error) {
       console.error('Error enviando solicitud de vinculación:', error);
       setLinkMessage(error instanceof Error ? error.message : 'Error al enviar solicitud');
+      handleError(error, 'Solicitud de vinculación');
     } finally {
       setSubmitting(false);
     }

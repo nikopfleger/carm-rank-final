@@ -2,6 +2,8 @@ import { prisma } from '@/lib/database/client';
 import { logToTerminal } from '@/lib/terminal-logger';
 import { NextRequest, NextResponse } from 'next/server';
 
+;
+
 export async function GET(request: NextRequest) {
     const start = Date.now();
 

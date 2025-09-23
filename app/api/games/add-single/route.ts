@@ -9,6 +9,8 @@ import { prisma } from '@/lib/database/client';
 import { ensureGameSubmit } from '@/lib/server-authorization';
 import { NextRequest, NextResponse } from 'next/server';
 
+;
+
 export async function POST(request: NextRequest) {
   try {
     const authz = await ensureGameSubmit();

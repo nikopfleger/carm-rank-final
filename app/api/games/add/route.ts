@@ -3,6 +3,8 @@ import { getNuevoRate, puntajeDan } from '@/lib/game-calculations';
 import { ensureGameSubmit } from '@/lib/server-authorization';
 import { NextRequest, NextResponse } from 'next/server';
 
+;
+
 interface GamePlayer {
   player: { id: number; playerId: number; nickname: string };
   wind: string;

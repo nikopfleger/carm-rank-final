@@ -4,7 +4,7 @@ import { getPlayersWithRanking } from '@/lib/database/queries/players-optimized'
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'node:crypto';
 
-export const runtime = 'nodejs';
+;
 
 // GET /api/players - Get all players with ranking
 export async function GET(request: NextRequest) {

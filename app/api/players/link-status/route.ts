@@ -2,6 +2,8 @@ import { auth } from "@/lib/auth-vercel";
 import { prisma } from "@/lib/database/client";
 import { NextResponse } from "next/server";
 
+;
+
 export async function GET() {
     try {
         const session = await auth();

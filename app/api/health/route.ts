@@ -1,5 +1,5 @@
 // app/api/health/route.ts
-export const runtime = 'nodejs';
+;
 
 import { getCacheStatus } from '@/lib/cache/core-cache';
 import { prisma } from '@/lib/database/client';

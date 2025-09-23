@@ -2,6 +2,8 @@ import { auth } from "@/lib/auth-vercel";
 import { prisma } from "@/lib/database/client";
 import { NextRequest, NextResponse } from "next/server";
 
+;
+
 export const dynamic = "force-dynamic";
 
 // POST - Desvincular usuario del jugador actual (marcar como eliminado)

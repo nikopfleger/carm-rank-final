@@ -1,6 +1,8 @@
 import { onlyDeleted, prisma } from '@/lib/database/client';
 import { NextRequest, NextResponse } from 'next/server';
 
+;
+
 // GET /api/abm/countries - Obtener países
 export async function GET(request: NextRequest) {
   try {

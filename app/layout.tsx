@@ -7,6 +7,7 @@ import { NotificationProvider } from '@/components/providers/notification-provid
 import { ServicesProvider } from '@/components/providers/services-provider';
 import AuthSessionProvider from '@/components/providers/session-provider';
 import { PageContainer } from '@/components/shared/page-container';
+import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -75,6 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </I18nProvider>
         </CacheGate>
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );

@@ -1,6 +1,8 @@
 import { prisma } from '@/lib/database/client';
 import { NextRequest, NextResponse } from 'next/server';
 
+;
+
 export async function GET(request: NextRequest) {
     try {
         console.log('🧪 Testing database pooling...');

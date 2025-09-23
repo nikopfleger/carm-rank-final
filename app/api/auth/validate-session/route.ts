@@ -2,7 +2,7 @@ import { prisma } from '@/lib/database/client';
 import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
 
-export const runtime = 'nodejs'; // Necesario para Prisma
+; // Necesario para Prisma
 
 export async function POST(request: NextRequest) {
     try {
