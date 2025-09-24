@@ -3,6 +3,7 @@
 import { useI18nContext } from "@/components/providers/i18n-provider";
 import { Card } from "@/components/ui/card";
 import { EditPlayerModal } from "@/components/ui/edit-player-modal";
+import { HistoricalChart } from "@/components/ui/historical-chart";
 import { PlayerProfileSkeleton } from "@/components/ui/loading-skeleton";
 import { StickyPlayerHeader } from "@/components/ui/sticky-player-header";
 import { UnifiedPlayerCard } from "@/components/ui/unified-player-card";
@@ -10,20 +11,7 @@ import { unifiedStyles } from "@/components/ui/unified-styles";
 import { useErrorHandler } from "@/hooks/use-error-handler";
 import { DanConfig, getDanRank, getNextDanRank } from "@/lib/game-helpers-client";
 import { useSession } from "next-auth/react";
-import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
-
-// Carga diferida del gráfico
-const HistoricalChart = dynamic(
-  () => import("@/components/ui/historical-chart").then(m => m.HistoricalChart),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="h-[280px] w-full rounded-lg bg-muted/40 animate-pulse" />
-    )
-  }
-);
-
 // ===============================
 // Helpers de formato
 // ===============================
