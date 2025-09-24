@@ -110,6 +110,47 @@ let cache: CacheShape | null = null;
 let initPromise: Promise<void> | null = null;
 let lastInitAt = 0;
 
+// ==== Warm-up guards / helpers (agregar arriba del archivo) ====
+const INIT_TIMEOUT_MS = 25_000;       // corta warm-up colgado
+const RETRY_COOLDOWN_MS = 30_000;     // evita reintentos en loop si falla
+let lastInitErrorAt = 0;
+
+function shouldWarmupNow() {
+    // saltar en build o si está deshabilitado explícitamente
+    const stage = process.env.STAGE || process.env.NODE_ENV || '';
+    if (process.env.DISABLE_CACHE_WARMUP === '1') return false;
+    if (stage === 'build' || process.env.NEXT_PHASE === 'phase-production-build') return false;
+    return true;
+}
+
+function requireDbUrl() {
+    const url =
+        process.env.POSTGRES_PRISMA_URL ||
+        process.env.DATABASE_URL ||
+        process.env.DIRECT_URL ||
+        process.env.DATABASE_URL_POOL ||
+        process.env.POSTGRES_URL_NON_POOLING ||
+        process.env.POSTGRES_URL ||
+        process.env.DATABASE_URL_MIGRATE;
+
+    if (!url) {
+        throw new Error(
+            'DB URL no definida. Seteá POSTGRES_PRISMA_URL (o DATABASE_URL/DIRECT_URL) antes del warm-up de cache.'
+        );
+    }
+}
+
+function withTimeout<T>(p: Promise<T>, ms: number, label = 'operación'): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+        const t = setTimeout(() => reject(new Error(`Timeout en ${label} (${ms}ms)`)), ms);
+        p.then(
+            (v) => { clearTimeout(t); resolve(v); },
+            (e) => { clearTimeout(t); reject(e); }
+        );
+    });
+}
+
+
 // === Loaders (DB) ===
 async function loadDan(): Promise<DanConfig[]> {
     const raw = await prisma.danConfig.findMany({
@@ -554,120 +595,115 @@ async function loadColors(dan: DanConfig[], rate: RateConfig[]): Promise<Record<
     return colors;
 }
 
-// === Warm-up idempotente ===
 export async function initializeCache(): Promise<void> {
     if (cache) {
-        console.log('🔥 Cache ya inicializada, saltando...');
+        // ya inicializada
         return;
     }
     if (initPromise) {
-        console.log('🔥 Cache inicializándose, esperando...');
+        // single-flight: reutilizar la misma promesa si otra llamada ya inició
         return initPromise;
     }
+    if (!shouldWarmupNow()) {
+        console.log('⏭️ Cache warm-up omitido (build/disabled stage).');
+        return;
+    }
+
+    // Evitar reintentos en loop si falló recién
+    const now = Date.now();
+    if (lastInitErrorAt && now - lastInitErrorAt < RETRY_COOLDOWN_MS) {
+        const left = Math.max(0, RETRY_COOLDOWN_MS - (now - lastInitErrorAt));
+        console.log(`⏳ Cooldown tras error de warm-up: reintento en ~${Math.ceil(left / 1000)}s`);
+        // devolvemos una promesa resuelta para no romper llamadas concurrentes
+        initPromise = Promise.resolve();
+        try { await initPromise; } finally { initPromise = null; }
+        return;
+    }
+
+    // Validar que exista la URL que Prisma va a usar (evita el flood de logs)
+    requireDbUrl();
 
     console.log('🔥 Iniciando warm-up de cache...');
-    const startTime = Date.now();
+    const startedAt = Date.now();
 
-    initPromise = (async () => {
-        try {
-            console.log('📊 Cargando configuraciones Dan...');
-            const dan = await loadDan();
-            console.log(`✅ Dan configs cargadas: ${dan.length} configuraciones`);
+    const doInit = async () => {
+        // Cargamos en paralelo
+        const [
+            dan, rate, seasons, ranking,
+            r4ga, r4gt, r4ta, r4tt,
+            r3ga, r3gt, r3ta, r3tt,
+        ] = await Promise.all([
+            loadDan(),
+            loadRate(),
+            loadSeasons(),
+            loadRanking(),
+            loadRanking4pGeneralActivos(),
+            loadRanking4pGeneralTodos(),
+            loadRanking4pTemporadaActivos(),
+            loadRanking4pTemporadaTodos(),
+            loadRanking3pGeneralActivos(),
+            loadRanking3pGeneralTodos(),
+            loadRanking3pTemporadaActivos(),
+            loadRanking3pTemporadaTodos(),
+        ]);
 
-            console.log('📊 Cargando configuraciones Rate...');
-            const rate = await loadRate();
-            console.log(`✅ Rate configs cargadas: ${rate.length} configuraciones`);
+        const colors = await loadColors(dan, rate);
 
-            console.log('📊 Cargando temporadas...');
-            const seasons = await loadSeasons();
-            console.log(`✅ Temporadas cargadas: ${seasons.length} temporadas`);
+        cache = {
+            dan,
+            rate,
+            seasons,
+            ranking,
+            ranking_4p_general_activos: r4ga,
+            ranking_4p_general_todos: r4gt,
+            ranking_4p_temporada_activos: r4ta,
+            ranking_4p_temporada_todos: r4tt,
+            ranking_3p_general_activos: r3ga,
+            ranking_3p_general_todos: r3gt,
+            ranking_3p_temporada_activos: r3ta,
+            ranking_3p_temporada_todos: r3tt,
+            colors,
+            lastUpdated: Date.now(),
+        };
 
-            console.log('📊 Cargando ranking de jugadores...');
-            const ranking = await loadRanking();
-            console.log(`✅ Ranking cargado: ${ranking.length} jugadores`);
+        lastInitAt = Date.now();
+        console.log(`🎉 CACHE READY en ${lastInitAt - startedAt}ms`);
+    };
 
-            console.log('📊 Cargando ranking 4p general activos...');
-            const ranking_4p_general_activos = await loadRanking4pGeneralActivos();
-            console.log(`✅ Ranking 4p general activos cargado: ${ranking_4p_general_activos.length} jugadores`);
+    // single-flight + timeout + cooldown on error
+    initPromise = withTimeout(doInit(), INIT_TIMEOUT_MS, 'warm-up de cache')
+        .catch((e) => {
+            lastInitErrorAt = Date.now();
+            throw e;
+        })
+        .finally(() => {
+            initPromise = null;
+        });
 
-            console.log('📊 Cargando ranking 4p general todos...');
-            const ranking_4p_general_todos = await loadRanking4pGeneralTodos();
-            console.log(`✅ Ranking 4p general todos cargado: ${ranking_4p_general_todos.length} jugadores`);
-
-            console.log('📊 Cargando ranking 4p temporada activos...');
-            const ranking_4p_temporada_activos = await loadRanking4pTemporadaActivos();
-            console.log(`✅ Ranking 4p temporada activos cargado: ${ranking_4p_temporada_activos.length} jugadores`);
-
-            console.log('📊 Cargando ranking 4p temporada todos...');
-            const ranking_4p_temporada_todos = await loadRanking4pTemporadaTodos();
-            console.log(`✅ Ranking 4p temporada todos cargado: ${ranking_4p_temporada_todos.length} jugadores`);
-
-            console.log('📊 Cargando ranking 3p general activos...');
-            const ranking_3p_general_activos = await loadRanking3pGeneralActivos();
-            console.log(`✅ Ranking 3p general activos cargado: ${ranking_3p_general_activos.length} jugadores`);
-
-            console.log('📊 Cargando ranking 3p general todos...');
-            const ranking_3p_general_todos = await loadRanking3pGeneralTodos();
-            console.log(`✅ Ranking 3p general todos cargado: ${ranking_3p_general_todos.length} jugadores`);
-
-            console.log('📊 Cargando ranking 3p temporada activos...');
-            const ranking_3p_temporada_activos = await loadRanking3pTemporadaActivos();
-            console.log(`✅ Ranking 3p temporada activos cargado: ${ranking_3p_temporada_activos.length} jugadores`);
-
-            console.log('📊 Cargando ranking 3p temporada todos...');
-            const ranking_3p_temporada_todos = await loadRanking3pTemporadaTodos();
-            console.log(`✅ Ranking 3p temporada todos cargado: ${ranking_3p_temporada_todos.length} jugadores`);
-
-            console.log('🎨 Cargando colores...');
-            const colors = await loadColors(dan, rate);
-            console.log(`✅ Colores cargados: ${Object.keys(colors).length} colores`);
-
-            cache = {
-                dan,
-                rate,
-                seasons,
-                ranking,
-                ranking_4p_general_activos,
-                ranking_4p_general_todos,
-                ranking_4p_temporada_activos,
-                ranking_4p_temporada_todos,
-                ranking_3p_general_activos,
-                ranking_3p_general_todos,
-                ranking_3p_temporada_activos,
-                ranking_3p_temporada_todos,
-                colors,
-                lastUpdated: Date.now(),
-            };
-
-            lastInitAt = Date.now();
-            const duration = Date.now() - startTime;
-            console.log(
-                `🎉 CACHE READY! Inicializada en ${duration}ms`,
-            );
-        } catch (error) {
-            console.error('❌ Error inicializando cache:', error);
-            throw error;
-        }
-    })();
-
-    try {
-        await initPromise;
-    } finally {
-        initPromise = null; // si falla, permite reintentar
-    }
+    return initPromise;
 }
 
-// === Gate síncrono para Server Components/Routes ===
+
 export async function ensureCacheReady() {
-    console.log('🔍 ensureCacheReady called, cache status:', !!cache);
-    if (!cache) {
-        console.log('🚀 Cache not ready, initializing...');
-        await initializeCache();
-        console.log('✅ Cache initialization completed');
-    } else {
-        console.log('✅ Cache already ready');
+    console.log('🔍 ensureCacheReady:', { ready: !!cache, stage: process.env.STAGE });
+
+    if (cache) return;
+
+    if (!shouldWarmupNow()) {
+        console.log('⏭️ ensureCacheReady: saltando warm-up (build/disabled).');
+        return;
     }
+
+    // si hubo un error reciente, no spamear
+    const now = Date.now();
+    if (lastInitErrorAt && now - lastInitErrorAt < RETRY_COOLDOWN_MS) {
+        console.log('⏳ ensureCacheReady: en cooldown tras un fallo, no se reintenta aún.');
+        return;
+    }
+
+    await initializeCache();
 }
+
 
 // === Lectores ===
 export function getDan(): DanConfig[] {

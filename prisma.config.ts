@@ -15,6 +15,13 @@ if (directUrl && directUrl !== databaseUrl) {
     process.env.DIRECT_URL = directUrl;
 }
 
+// Logging para verificar configuración de Supabase
+console.log('🔗 Supabase Database Configuration:');
+console.log(`📡 Main URL: ${databaseUrl.replace(/:[^:]*@/, ':***@')}`);
+if (directUrl && directUrl !== databaseUrl) {
+    console.log(`🔗 Direct URL: ${directUrl.replace(/:[^:]*@/, ':***@')}`);
+}
+
 export default defineConfig({
     schema: './prisma/schema.prisma',
     migrations: {

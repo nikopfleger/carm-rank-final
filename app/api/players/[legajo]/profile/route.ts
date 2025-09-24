@@ -235,7 +235,7 @@ export async function GET(
                     gameType: 'HANCHAN'
                 }
             },
-            _count: { id: true }
+            _count: { _all: true }
         });
 
         const fourPlayerTonpuusenPositions = await prisma.gameResult.groupBy({
@@ -247,7 +247,7 @@ export async function GET(
                     gameType: 'TONPUUSEN'
                 }
             },
-            _count: { id: true }
+            _count: { _all: true }
         });
 
         const threePlayerHanchanPositions = await prisma.gameResult.groupBy({
@@ -259,7 +259,7 @@ export async function GET(
                     gameType: 'HANCHAN'
                 }
             },
-            _count: { id: true }
+            _count: { _all: true }
         });
 
         const threePlayerTonpuusenPositions = await prisma.gameResult.groupBy({
@@ -271,7 +271,7 @@ export async function GET(
                     gameType: 'TONPUUSEN'
                 }
             },
-            _count: { id: true }
+            _count: { _all: true }
         });
 
         // Obtener juegos recientes para el gráfico con información completa
@@ -697,17 +697,17 @@ export async function GET(
         // Calcular estadísticas generales
         const totalGames = gameStats._count.id || 0;
         const avgPosition = gameStats._avg.finalPosition || 0;
-        const firstPlaces = (fourPlayerHanchanPositions.find(p => p.finalPosition === 1)?._count.id || 0) +
-            (fourPlayerTonpuusenPositions.find(p => p.finalPosition === 1)?._count.id || 0) +
-            (threePlayerHanchanPositions.find(p => p.finalPosition === 1)?._count.id || 0) +
-            (threePlayerTonpuusenPositions.find(p => p.finalPosition === 1)?._count.id || 0);
+        const firstPlaces = (fourPlayerHanchanPositions.find(p => p.finalPosition === 1)?._count._all || 0) +
+            (fourPlayerTonpuusenPositions.find(p => p.finalPosition === 1)?._count._all || 0) +
+            (threePlayerHanchanPositions.find(p => p.finalPosition === 1)?._count._all || 0) +
+            (threePlayerTonpuusenPositions.find(p => p.finalPosition === 1)?._count._all || 0);
 
         // Función para calcular estadísticas detalladas por tipo
         const calculateDetailedStats = (positions: any[], total: number, isThreePlayer: boolean = false) => {
-            const first = positions.find(p => p.finalPosition === 1)?._count.id || 0;
-            const second = positions.find(p => p.finalPosition === 2)?._count.id || 0;
-            const third = positions.find(p => p.finalPosition === 3)?._count.id || 0;
-            const fourth = isThreePlayer ? 0 : (positions.find(p => p.finalPosition === 4)?._count.id || 0);
+            const first = positions.find(p => p.finalPosition === 1)?._count._all || 0;
+            const second = positions.find(p => p.finalPosition === 2)?._count._all || 0;
+            const third = positions.find(p => p.finalPosition === 3)?._count._all || 0;
+            const fourth = isThreePlayer ? 0 : (positions.find(p => p.finalPosition === 4)?._count._all || 0);
 
             const rentaiRate = total > 0 ? ((first + second) / total * 100) : 0;
 

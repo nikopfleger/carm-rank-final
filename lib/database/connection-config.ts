@@ -6,22 +6,22 @@
 export function getDatabaseUrl(): string {
     const stage = process.env.STAGE;
 
-    // Para migraciones, usar conexión directa (sin pooling)
+    // Para migraciones, usar conexión directa de Supabase (sin pooling)
     if (stage === 'migrate') {
-        return process.env.DATABASE_URL_MIGRATE || process.env.DATABASE_URL || '';
+        return process.env.POSTGRES_URL_NON_POOLING || process.env.POSTGRES_URL || process.env.DATABASE_URL || '';
     }
 
-    // Para aplicación, usar pooling si está disponible
+    // Para aplicación, usar pooling de Supabase
     if (stage === 'run' || stage === 'build') {
-        return process.env.DATABASE_URL_POOL || process.env.DATABASE_URL || '';
+        return process.env.POSTGRES_URL || process.env.DATABASE_URL || '';
     }
 
-    // Para desarrollo y otros casos, usar URL por defecto
-    return process.env.DATABASE_URL || '';
+    // Para desarrollo y otros casos, usar URL de Supabase por defecto
+    return process.env.POSTGRES_URL || process.env.DATABASE_URL || '';
 }
 
 export function getDirectUrl(): string {
-    return process.env.DIRECT_URL || process.env.DATABASE_URL || '';
+    return process.env.POSTGRES_URL_NON_POOLING || process.env.POSTGRES_URL || process.env.DATABASE_URL || '';
 }
 
 /**
