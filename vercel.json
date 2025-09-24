@@ -7,12 +7,6 @@
     "functions": {
         "app/**/route.ts": {
             "maxDuration": 10
-        },
-        "app/**/route.js": {
-            "maxDuration": 10
-        },
-        "api/**/*.js": {
-            "maxDuration": 10
         }
     },
     "headers": [
