@@ -16,8 +16,8 @@ interface HistoryPoint {
 // ...imports y tipos iguales
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ legajo: string }> }) {
-      const { legajo } = await params;
-    try {
+  const { legajo } = await params;
+  try {
     const legajoNum = parseInt(legajo);
     if (isNaN(legajoNum)) return NextResponse.json({ error: 'Legajo inválido' }, { status: 400 });
 
@@ -118,7 +118,17 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       }
     }
 
-    const games = [...gamesMap.values()]
+    const gamesArr: {
+      gameId: number;
+      gameDate: string;
+      gameType?: 'HANCHAN' | 'TONPUUSEN';
+      position?: number;
+      finalScore?: number;
+      danPoints?: number;
+      ratePoints?: number;
+    }[] = [];
+    gamesMap.forEach((v) => { gamesArr.push(v); });
+    const games = gamesArr
       .filter(g => g.danPoints !== undefined && g.ratePoints !== undefined)
       .sort((a, b) => a.gameDate.localeCompare(b.gameDate));
 

@@ -141,9 +141,11 @@ export async function GET(request: NextRequest) {
     });
 
     // Combinar ambos conjuntos (temporada actual O último año)
-    const currentSeasonPlayerIds = new Set(currentSeasonPlayers.map(g => g.playerId));
-    const lastYearPlayerIds = new Set(lastYearPlayers.map(g => g.playerId));
-    const activePlayerIds = new Set([...currentSeasonPlayerIds, ...lastYearPlayerIds]);
+    // Construir set de jugadores activos sin usar spread de Set (compatibilidad TS)
+    const activePlayerIds = new Set<number>([
+      ...currentSeasonPlayers.map(g => g.playerId),
+      ...lastYearPlayers.map(g => g.playerId)
+    ]);
 
     // Filtrar rankings por jugadores activos
     const activeRankings = allRankings.filter(ranking =>

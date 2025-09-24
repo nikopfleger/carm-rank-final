@@ -66,7 +66,9 @@ export async function GET(request: NextRequest) {
         // Obtener números de juegos existentes (pendientes + regulares)
         const pendingNumbers = pendingGames.map(g => g.nroJuegoDia).filter(n => n !== null);
         const regularNumbers = regularGames.map(g => g.nroJuegoDia).filter(n => n !== null);
-        const existingNumbers = new Set([...pendingNumbers, ...regularNumbers]);
+        const existingNumbers = new Set<number>(
+            pendingNumbers.concat(regularNumbers) as number[]
+        );
 
         // Debug: Log para ver qué está pasando
         console.log('🔍 Debug next-game-number:', {

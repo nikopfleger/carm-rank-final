@@ -102,8 +102,9 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Verificar que todos los jugadores existen
-        const playerIds = [...new Set(results.map((r: SeasonResultInput) => r.playerId))];
+        // Verificar que todos los jugadores existen (sin usar Set/spread para compatibilidad TS)
+        const playerIdsAll = results.map((r: SeasonResultInput) => r.playerId);
+        const playerIds = playerIdsAll.filter((id, idx) => playerIdsAll.indexOf(id) === idx);
         const existingPlayers = await prisma.player.findMany({
             where: { id: { in: playerIds } },
             select: { id: true }

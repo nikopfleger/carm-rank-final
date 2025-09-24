@@ -5,7 +5,8 @@ export const runtime = 'nodejs';
 export async function register() {
     // Evitar durante build
     if (process.env.NEXT_PHASE === 'phase-production-build') return;
-    if (typeof globalThis.EdgeRuntime === 'string' || process.env.NEXT_RUNTIME === 'edge') {
+    const maybeEdgeRuntime = (globalThis as any).EdgeRuntime as unknown;
+    if (typeof maybeEdgeRuntime === 'string' || process.env.NEXT_RUNTIME === 'edge') {
         console.log('🔧 instrumentation: Edge runtime detectado → skip warm-up');
         return;
     }

@@ -139,7 +139,12 @@ export function GameValidationList() {
 
   // Función para marcar un juego como visto
   const markGameAsViewed = (gameId: number) => {
-    setViewedGames(prev => new Set([...prev, gameId]));
+    setViewedGames(prev => {
+      const next = new Set<number>();
+      prev.forEach((v) => next.add(v));
+      next.add(gameId);
+      return next;
+    });
   };
 
   // Función para verificar si un juego puede ser procesado
