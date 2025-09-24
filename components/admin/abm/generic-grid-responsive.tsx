@@ -110,6 +110,10 @@ function GenericGrid({
         isOpen: false,
         item: null
     });
+    const [restoreConfirm, setRestoreConfirm] = useState<{ isOpen: boolean; item: any | null }>({
+        isOpen: false,
+        item: null
+    });
 
     // Acciones por defecto (memoizadas para no recrearlas si las props no cambian)
     const finalActions = useMemo<GridAction[]>(() => {
@@ -131,7 +135,10 @@ function GenericGrid({
                 label: 'Eliminar',
                 icon: Trash2,
                 variant: 'destructive',
-                onClick: (row: any) => setDeleteConfirm({ isOpen: true, item: row }),
+                onClick: (row: any) => {
+                    console.log('🔴 Modal DELETE abierto para:', row);
+                    setDeleteConfirm({ isOpen: true, item: row });
+                },
                 show: (row: any) => !row.deleted
             });
         }
@@ -141,7 +148,10 @@ function GenericGrid({
                 label: 'Restaurar',
                 icon: RefreshCw,
                 variant: 'outline',
-                onClick: onRestore,
+                onClick: (row: any) => {
+                    console.log('🔵 Modal RESTORE abierto para:', row);
+                    setRestoreConfirm({ isOpen: true, item: row });
+                },
                 show: (row: any) => row.deleted
             });
         }
@@ -158,10 +168,24 @@ function GenericGrid({
     }, [actions, onEdit, onDelete, onRestore, onView, includeEditButton, includeDeleteButton, includeRestoreButton]);
 
     const handleConfirmDelete = () => {
+        console.log('🔴 Modal DELETE confirmado para:', deleteConfirm.item);
         if (deleteConfirm.item && onDelete) onDelete(deleteConfirm.item);
         setDeleteConfirm({ isOpen: false, item: null });
     };
-    const handleCancelDelete = () => setDeleteConfirm({ isOpen: false, item: null });
+    const handleCancelDelete = () => {
+        console.log('🔴 Modal DELETE cancelado');
+        setDeleteConfirm({ isOpen: false, item: null });
+    };
+
+    const handleConfirmRestore = () => {
+        console.log('🔵 Modal RESTORE confirmado para:', restoreConfirm.item);
+        if (restoreConfirm.item && onRestore) onRestore(restoreConfirm.item);
+        setRestoreConfirm({ isOpen: false, item: null });
+    };
+    const handleCancelRestore = () => {
+        console.log('🔵 Modal RESTORE cancelado');
+        setRestoreConfirm({ isOpen: false, item: null });
+    };
 
     // Filtro local (memoizado)
     const filteredData = useMemo(() => {
@@ -409,6 +433,17 @@ function GenericGrid({
                 description={`¿Estás seguro de que deseas eliminar este ${entityName}? El ${entityName} se marcará como eliminado pero se puede restaurar.`}
                 variant="danger"
                 confirmText="Eliminar"
+                cancelText="Cancelar"
+            />
+
+            <ConfirmationModal
+                isOpen={restoreConfirm.isOpen}
+                onClose={handleCancelRestore}
+                onConfirm={handleConfirmRestore}
+                title="Confirmar restauración"
+                description={`¿Estás seguro de que deseas restaurar este ${entityName}? El ${entityName} volverá a estar disponible.`}
+                variant="info"
+                confirmText="Restaurar"
                 cancelText="Cancelar"
             />
         </UnifiedCard>

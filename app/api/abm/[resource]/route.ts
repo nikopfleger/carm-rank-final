@@ -2,6 +2,8 @@ import { getResource } from '@/lib/abm/registry';
 import { runWithRequestContextAsync } from '@/lib/request-context.server';
 import { NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(
     request: Request,
     context: { params: Promise<{ resource: string }> }

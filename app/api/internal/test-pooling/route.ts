@@ -20,7 +20,10 @@ export async function GET(request: NextRequest) {
             return {
                 queryNumber: index,
                 queryTime: queryEnd - queryStart,
-                result: (result as any)[0],
+                result: {
+                    query_number: Number((result as any)[0]?.query_number || 0),
+                    query_time: (result as any)[0]?.query_time?.toString() || new Date().toISOString(),
+                },
             };
         });
 
@@ -49,10 +52,10 @@ export async function GET(request: NextRequest) {
                 queries: results,
             },
             databaseStats: {
-                countries: countryCount,
-                players: playerCount,
-                seasons: seasonCount,
-                games: gameCount,
+                countries: Number(countryCount),
+                players: Number(playerCount),
+                seasons: Number(seasonCount),
+                games: Number(gameCount),
             },
         });
     } catch (error) {

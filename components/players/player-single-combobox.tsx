@@ -1,5 +1,4 @@
 // PlayerSingleCombobox.tsx (shadcn Command + Popover)
-"use client";
 import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";

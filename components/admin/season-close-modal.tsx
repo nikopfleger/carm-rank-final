@@ -1,5 +1,3 @@
-"use client";
-
 import { useI18nContext } from "@/components/providers/i18n-provider";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
@@ -46,8 +44,8 @@ interface SeasonCloseModalProps {
     currentSeason: Season | null;
     newSeason: Season;
     seasonStats?: SeasonStats;
-    onConfirm: () => Promise<void>;
-    onCancel: () => void;
+    onConfirm(): Promise<void>;
+    onCancel(): void;
     loading?: boolean;
 }
 

@@ -3,6 +3,8 @@ import { prisma } from '@/lib/database/client';
 import { getPlayersWithRanking } from '@/lib/database/queries/players-optimized';
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 async function weakEtag(payload: string): Promise<string> {
   const data = new TextEncoder().encode(payload);
   const digest = await crypto.subtle.digest('SHA-1', data);

@@ -1,4 +1,6 @@
 import { createSeason, getActiveSeason, getAllSeasons } from '@/lib/database/queries/seasons';
+
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 
 // GET /api/seasons - Get all seasons or active season

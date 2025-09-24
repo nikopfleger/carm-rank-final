@@ -50,6 +50,37 @@ export const registry: Record<string, ResourceConfig> = {
         searchable: ['name'],
         orderBy: { id: 'asc' },
     },
+    'rate-configs': {
+        model: prisma.rateConfig,
+        searchable: ['name'],
+        orderBy: { id: 'asc' },
+    },
+    'dan-configs': {
+        model: prisma.danConfig,
+        searchable: ['rank'],
+        orderBy: { id: 'asc' },
+    },
+    'season-configs': {
+        model: prisma.seasonConfig,
+        searchable: ['name'],
+        include: { season: { select: { id: true, name: true } } },
+        orderBy: { id: 'asc' },
+    },
+    'email-accounts': {
+        model: prisma.emailAccount,
+        searchable: ['name', 'fromAddress', 'server'],
+        orderBy: { id: 'asc' },
+    },
+    'users': {
+        model: prisma.user,
+        searchable: ['name', 'email'],
+        orderBy: { id: 'asc' },
+    },
+    'seasons': {
+        model: prisma.season,
+        searchable: ['name'],
+        orderBy: { id: 'asc' },
+    },
 };
 
 export function getResource(resource: string): ResourceConfig {

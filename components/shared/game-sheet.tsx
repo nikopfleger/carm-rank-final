@@ -1,6 +1,3 @@
-"use client";
-
-import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calculator } from "lucide-react";
@@ -47,20 +44,20 @@ interface CalculatedPlayer extends GamePlayer {
   finalPosition: number;
 }
 
-export function GameSheet({ 
-  players, 
-  ruleset, 
-  sanma = false, 
+export function GameSheet({
+  players,
+  ruleset,
+  sanma = false,
   readonly = true,
   showHeader = true,
   title = "Planilla de Juego"
 }: GameSheetProps) {
-  
+
   // Función para calcular Uma, Oka y posiciones
   const calculateGameResults = (): CalculatedPlayer[] => {
     const playerCount = sanma ? 3 : 4;
     const activePlayers = players.slice(0, playerCount);
-    
+
     // 1. CALCULAR UMA
     const devolutionFixed = ruleset.outPoints / 1000;
     const playersWithTransitoryScore = activePlayers
@@ -73,19 +70,19 @@ export function GameSheet({
 
     const umaArray = [
       ruleset.uma.firstPlace,
-      ruleset.uma.secondPlace, 
+      ruleset.uma.secondPlace,
       ruleset.uma.thirdPlace,
       ...(ruleset.uma.fourthPlace !== undefined ? [ruleset.uma.fourthPlace] : [])
     ];
 
     // Calcular UMA con manejo de empates
     const calculatedPlayers = activePlayers.map(p => ({ ...p, uma: 0, oka: 0, finalScore: 0, finalPosition: 1 }));
-    
+
     const processedPositions = new Set<number>();
     playersWithTransitoryScore.forEach((player, currentIndex) => {
       if (processedPositions.has(currentIndex)) return;
 
-      const tiedPlayers = playersWithTransitoryScore.filter(p => 
+      const tiedPlayers = playersWithTransitoryScore.filter(p =>
         Math.abs(p.transitoryScore - player.transitoryScore) < 0.01
       );
 
@@ -97,15 +94,15 @@ export function GameSheet({
         const startPosition = currentIndex;
         const endPosition = currentIndex + tiedPlayers.length - 1;
         let totalUma = 0;
-        
+
         for (let pos = startPosition; pos <= endPosition; pos++) {
           totalUma += umaArray[pos] || 0;
         }
-        
+
         const averageUma = totalUma / tiedPlayers.length;
         tiedPlayers.forEach(tiedPlayer => {
           calculatedPlayers[tiedPlayer.originalIndex].uma = averageUma;
-          const tiedIndex = playersWithTransitoryScore.findIndex(p => 
+          const tiedIndex = playersWithTransitoryScore.findIndex(p =>
             p.originalIndex === tiedPlayer.originalIndex
           );
           processedPositions.add(tiedIndex);
@@ -115,25 +112,25 @@ export function GameSheet({
 
     // 2. CALCULAR OKA
     calculatedPlayers.forEach(p => { p.oka = 0; });
-    
+
     const playersWithPreOkaScore = calculatedPlayers
       .map((p, index) => {
         const devolution = ruleset.outPoints / 1000;
         const chonboTotal = p.chonbos * ruleset.chonbo;
         const puntajeAntesDeOka = (p.gameScore / 1000) - devolution + p.uma + chonboTotal;
-        return { 
-          ...p, 
-          originalIndex: index, 
-          puntajeAntesDeOka 
+        return {
+          ...p,
+          originalIndex: index,
+          puntajeAntesDeOka
         };
       })
       .sort((a, b) => b.puntajeAntesDeOka - a.puntajeAntesDeOka);
-    
+
     const highestScore = playersWithPreOkaScore[0]?.puntajeAntesDeOka;
-    const winners = playersWithPreOkaScore.filter(p => 
+    const winners = playersWithPreOkaScore.filter(p =>
       Math.abs(p.puntajeAntesDeOka - highestScore) < 0.01
     );
-    
+
     if (winners.length > 0) {
       const okaPerWinner = ruleset.oka / winners.length;
       winners.forEach(winner => {
@@ -156,7 +153,7 @@ export function GameSheet({
     let currentPosition = 1;
     for (let i = 0; i < playersWithFinalScores.length; i++) {
       const currentPlayer = playersWithFinalScores[i];
-      
+
       let tiedCount = 1;
       for (let j = i + 1; j < playersWithFinalScores.length; j++) {
         if (Math.abs(playersWithFinalScores[j].finalScore - currentPlayer.finalScore) < 0.01) {
@@ -165,11 +162,11 @@ export function GameSheet({
           break;
         }
       }
-      
+
       for (let k = 0; k < tiedCount; k++) {
         calculatedPlayers[playersWithFinalScores[i + k].originalIndex].finalPosition = currentPosition;
       }
-      
+
       i += tiedCount - 1;
       currentPosition += tiedCount;
     }
@@ -219,14 +216,14 @@ export function GameSheet({
                 const devolution = ruleset.outPoints / 1000;
                 const chonboTotal = player.chonbos * ruleset.chonbo;
                 const puntajeAntesDeOka = (player.gameScore / 1000) - devolution + player.uma + chonboTotal;
-                
+
                 return (
                   <tr key={index}>
                     {/* Viento */}
                     <td className="border border-gray-300 px-3 py-2 text-center">
                       <span className="font-medium">{player.wind || '--'}</span>
                     </td>
-                    
+
                     {/* Nombre */}
                     <td className="border border-gray-300 px-3 py-2">
                       <div>
@@ -362,12 +359,12 @@ export function GameSheet({
                           const puntaje = (p.gameScore / 1000) - devolution + p.uma + chonboTotal;
                           return sum + puntaje;
                         }, 0);
-                        
+
                         // Para que siempre dé 0.0, compensar con oka (que ya está incluido en el puntaje final)
                         // No duplicar chonbos porque ya están incluidos en el puntaje individual
                         const totalOka = calculatedPlayers.slice(0, playerCount).reduce((sum, p) => sum + p.oka, 0);
                         const totalCorregido = total + totalOka;
-                        
+
                         return totalCorregido.toFixed(1);
                       })()}
                     </span>
@@ -378,10 +375,10 @@ export function GameSheet({
                         const puntaje = (p.gameScore / 1000) - devolution + p.uma + chonboTotal;
                         return sum + puntaje;
                       }, 0);
-                      
+
                       const totalOka = calculatedPlayers.slice(0, playerCount).reduce((sum, p) => sum + p.oka, 0);
                       const totalCorregido = total + totalOka;
-                      
+
                       // El total corregido siempre debe dar 0.0
                       return Math.abs(totalCorregido) < 0.1 ? (
                         <span className="text-green-600 font-bold text-lg">✓</span>

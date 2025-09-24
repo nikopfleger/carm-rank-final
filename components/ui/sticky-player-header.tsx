@@ -1,5 +1,3 @@
-'use client';
-
 import { useI18nContext } from "@/components/providers/i18n-provider";
 import { Badge } from "@/components/ui/badge";
 import { CountryFlag } from "@/components/ui/country-flag";
@@ -13,9 +11,9 @@ interface StickyPlayerHeaderProps {
     isActive: boolean;
     country?: string;
     isSanma: boolean;
-    onSanmaChange: (isSanma: boolean) => void;
+    onSanmaChange(isSanma: boolean): void;
     gameTypeFilter: 'HANCHAN' | 'TONPUUSEN' | 'TOTAL';
-    setGameTypeFilter: (value: 'HANCHAN' | 'TONPUUSEN' | 'TOTAL') => void;
+    setGameTypeFilter(value: 'HANCHAN' | 'TONPUUSEN' | 'TOTAL'): void;
 }
 
 export function StickyPlayerHeader({

@@ -1,7 +1,7 @@
 import { ensureCacheReady, getCacheStatus, getColors, getDan, getRanking3pGeneralActivos, getRanking3pGeneralTodos, getRanking3pTemporadaActivos, getRanking3pTemporadaTodos, getRanking4pGeneralActivos, getRanking4pGeneralTodos, getRanking4pTemporadaActivos, getRanking4pTemporadaTodos, getRate, getSeasons } from '@/lib/cache/core-cache';
 import { NextResponse } from 'next/server';
 
-;
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
     try {

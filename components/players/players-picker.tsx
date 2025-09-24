@@ -1,4 +1,3 @@
-"use client";
 import PlayerSingleCombobox, { type Player } from "@/components/players/player-single-combobox";
 import * as React from "react";
 

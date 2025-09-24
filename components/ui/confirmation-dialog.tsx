@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -13,14 +11,14 @@ import { AlertTriangle, CheckCircle, XCircle } from "lucide-react";
 
 interface ConfirmationDialogProps {
     open: boolean;
-    onOpenChange: (open: boolean) => void;
+    onOpenChange(open: boolean): void;
     title: string;
     description: string;
     confirmText?: string;
     cancelText?: string;
     variant?: "default" | "destructive" | "success";
-    onConfirm: () => void;
-    onCancel?: () => void;
+    onConfirm(): void;
+    onCancel?(): void;
     loading?: boolean;
 }
 

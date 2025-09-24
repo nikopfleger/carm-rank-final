@@ -1,5 +1,3 @@
-"use client";
-
 import { GameSheet } from "@/components/shared/game-sheet";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -55,9 +53,9 @@ interface GameDetailModalProps {
   };
   isOpen: boolean;
   isFirstInOrder?: boolean;
-  onClose: () => void;
-  onApprove: (gameId: number) => Promise<void>;
-  onReject: (gameId: number, reason: string) => Promise<void>;
+  onClose(): void;
+  onApprove(gameId: number): Promise<void>;
+  onReject(gameId: number, reason: string): Promise<void>;
 }
 
 export function GameDetailModal({

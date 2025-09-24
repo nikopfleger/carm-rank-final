@@ -1,5 +1,3 @@
-'use client';
-
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -9,8 +7,8 @@ import React, { useState } from 'react';
 interface RankingNavigationProps {
     totalPlayers: number;
     currentPlayerPosition?: number;
-    onGoToPosition: (position: number) => void;
-    onGoToMyPosition: () => void;
+    onGoToPosition(position: number): void;
+    onGoToMyPosition(): void;
     className?: string;
 }
 

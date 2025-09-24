@@ -1,5 +1,3 @@
-"use client";
-
 import { useI18nContext } from "@/components/providers/i18n-provider";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
@@ -45,8 +43,8 @@ interface TournamentFinalizeModalProps {
     isOpen: boolean;
     tournament: Tournament | null;
     participants?: TournamentParticipant[];
-    onConfirm: () => Promise<void>;
-    onCancel: () => void;
+    onConfirm(): Promise<void>;
+    onCancel(): void;
     loading?: boolean;
 }
 

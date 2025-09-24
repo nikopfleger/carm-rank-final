@@ -34,10 +34,10 @@ interface UnifiedABMLayoutProps<T = any> {
     onToggleShowDeleted?: () => void;
 
     // Callbacks
-    onAdd: () => void;
-    onRefresh: () => void;
-    onFormSubmit: (data: any) => Promise<void>;
-    onFormCancel: () => void;
+    onAdd(): void;
+    onRefresh(): void;
+    onFormSubmit(data: any): Promise<void>;
+    onFormCancel(): void;
 
     // Acciones genéricas del grid (para usar confirm modal unificado)
     onEditRow?: (row: any) => void;

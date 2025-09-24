@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,10 +28,10 @@ export interface InlineSubABMProps<T extends SubABMRow> {
   title: string;
   columns: { key: keyof T | string; label: string; render?: (row: T) => React.ReactNode }[];
   rows: T[];
-  onStageAdd: (draft: Partial<T>) => void;
-  onStageDelete: (id: number) => void;
-  onStageRestore?: (id: number) => void;
-  onStageUpdate?: (id: number, partial: Partial<T>) => void;
+  onStageAdd(draft: Partial<T>): void;
+  onStageDelete(id: number): void;
+  onStageRestore?(id: number): void;
+  onStageUpdate?(id: number, partial: Partial<T>): void;
   pendingAdds: T[];
   pendingDeletes: number[];
   pendingUpdates?: Record<number, Partial<T>>;

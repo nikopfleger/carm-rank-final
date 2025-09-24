@@ -1,5 +1,3 @@
-"use client";
-
 import { cn } from "@/lib/utils";
 
 type Value = "left" | "center" | "right";
@@ -10,7 +8,7 @@ interface Props {
   centerLabel: string;
   rightLabel: string;
   value: Value;
-  onChange: (val: Value) => void;
+  onChange(val: Value): void;
   size?: Size;
   className?: string;
 }

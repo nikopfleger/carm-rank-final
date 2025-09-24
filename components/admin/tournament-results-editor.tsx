@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -40,8 +38,8 @@ interface Player {
 
 interface TournamentResultsEditorProps {
     tournament: Tournament;
-    onSave: (results: TournamentResultData[]) => Promise<void>;
-    onCancel: () => void;
+    onSave(results: TournamentResultData[]): Promise<void>;
+    onCancel(): void;
 }
 
 export function TournamentResultsEditor({

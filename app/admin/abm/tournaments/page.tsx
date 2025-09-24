@@ -226,16 +226,35 @@ export default function TournamentsUnifiedPage() {
     { key: 'extraData', label: 'Datos Extra', type: 'textarea' }
   ];
 
+  // Estado para modal de confirmación de finalización
+  const [finalizeConfirm, setFinalizeConfirm] = useState<{ isOpen: boolean; tournament: Tournament | null }>({
+    isOpen: false,
+    tournament: null
+  });
+
   // Manejar finalización de torneo
-  const handleFinalizeTournament = async (tournament: Tournament) => {
-    if (confirm(`¿Estás seguro de que quieres finalizar el torneo "${tournament.name}"? Esta acción calculará los resultados automáticamente.`)) {
+  const handleFinalizeTournament = (tournament: Tournament) => {
+    console.log('🟡 Modal FINALIZAR abierto para:', tournament);
+    setFinalizeConfirm({ isOpen: true, tournament });
+  };
+
+  const handleConfirmFinalize = async () => {
+    console.log('🟡 Modal FINALIZAR confirmado para:', finalizeConfirm.tournament);
+    if (finalizeConfirm.tournament) {
       try {
-        await finalize(tournament.id);
+        await finalize(finalizeConfirm.tournament.id);
         await abm.handleRefresh(); // Recargar datos
+        setFinalizeConfirm({ isOpen: false, tournament: null });
       } catch (error) {
         console.error('Error finalizando torneo:', error);
+        setFinalizeConfirm({ isOpen: false, tournament: null });
       }
     }
+  };
+
+  const handleCancelFinalize = () => {
+    console.log('🟡 Modal FINALIZAR cancelado');
+    setFinalizeConfirm({ isOpen: false, tournament: null });
   };
 
   // Configuración de acciones del grid
@@ -336,6 +355,38 @@ export default function TournamentsUnifiedPage() {
         // Mensajes personalizados
         emptyMessage="No hay torneos registrados"
       />
+
+      {/* Modal de confirmación para finalizar torneo */}
+      {finalizeConfirm.isOpen && finalizeConfirm.tournament && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="text-2xl text-yellow-600">⚠️</div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                Confirmar finalización
+              </h3>
+            </div>
+            <p className="text-gray-700 dark:text-gray-300 mb-6">
+              ¿Estás seguro de que quieres finalizar el torneo &quot;{finalizeConfirm.tournament.name}&quot;?
+              Esta acción calculará los resultados automáticamente y no se puede deshacer.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={handleCancelFinalize}
+                className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleConfirmFinalize}
+                className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition-colors"
+              >
+                Finalizar Torneo
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

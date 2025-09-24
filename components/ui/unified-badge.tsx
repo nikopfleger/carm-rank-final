@@ -1,5 +1,3 @@
-"use client";
-
 import { Badge, BadgeProps } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";

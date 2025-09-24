@@ -1,5 +1,3 @@
-'use client';
-
 import { useI18nContext } from '@/components/providers/i18n-provider';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -12,18 +10,18 @@ import { useState } from 'react';
 
 interface EditPlayerModalProps {
     isOpen: boolean;
-    onClose: () => void;
+    onClose(): void;
     playerData: {
         nickname: string;
         fullname?: string;
         country?: string;
         birthday?: string;
     };
-    onSave: (data: {
+    onSave(data: {
         fullname?: string;
         country?: string;
         birthday?: string;
-    }) => Promise<void>;
+    }): Promise<void>;
     submitting?: boolean;
 }
 

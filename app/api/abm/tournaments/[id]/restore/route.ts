@@ -1,63 +1,84 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/database/client";
+import { getResource } from '@/lib/abm/registry';
+import { getPrismaClient } from '@/lib/database/connection';
+import { NextResponse } from 'next/server';
 
 export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+    _request: Request,
+    context: { params: Promise<{ id: string }> }
 ) {
-  try {
-    const { id: idParam } = await params;
-    const id = parseInt(idParam);
-    
-    if (isNaN(id)) {
-      return NextResponse.json(
-        { error: "ID inválido" },
-        { status: 400 }
-      );
-    }
+    const { id } = await context.params;
 
-    // Verificar que el torneo existe
-    const existingTournament = await prisma.tournament.findUnique({
-      where: { id }
-    });
+    try {
+        console.log(`🔄 Restoring tournaments with id: ${id}`);
 
-    if (!existingTournament) {
-      return NextResponse.json(
-        { error: "Torneo no encontrado" },
-        { status: 404 }
-      );
-    }
+        const cfg = getResource('tournaments');
+        console.log(`📋 Config for tournaments:`, {
+            idField: cfg.idField,
+            hasSelect: !!cfg.select,
+            hasInclude: !!cfg.include
+        });
 
-    if (!existingTournament.deleted) {
-      return NextResponse.json(
-        { error: "El torneo no está eliminado" },
-        { status: 400 }
-      );
-    }
+        // Usar cliente directo para evitar problemas con el interceptor
+        const directPrisma = getPrismaClient();
 
-    // Restaurar (soft delete)
-    const tournament = await prisma.tournament.update({
-      where: { id },
-      data: { deleted: false },
-      include: {
-        season: {
-          select: {
-            id: true,
-            name: true
-          }
+        // Mapear nombres de recursos a modelos de Prisma
+        const modelMap: Record<string, string> = {
+            'tournaments': 'tournament'
+        };
+
+        const modelName = modelMap['tournaments'] || 'tournament';
+        const directModel = (directPrisma as any)[modelName];
+
+        console.log(`🔍 Using direct model for restore: ${modelName}`);
+
+        // Primero obtener el registro actual para conseguir la versión
+        // Manejar diferentes tipos de ID (String vs Number)
+        const idValue = Number(id);
+        const current = await directModel.findFirst({
+            where: {
+                [cfg.idField!]: idValue,
+                deleted: true
+            },
+            select: { version: true, deleted: true }
+        });
+
+        console.log(`📋 Current record:`, current);
+
+        if (!current) {
+            throw new Error(`Registro con ID ${id} no encontrado`);
         }
-      }
-    });
 
-    return NextResponse.json({ 
-      message: "Torneo restaurado correctamente",
-      tournament 
-    });
-  } catch (error) {
-    console.error("Error restoring tournament:", error);
-    return NextResponse.json(
-      { error: "Error interno del servidor" },
-      { status: 500 }
-    );
-  }
+        if (!current.deleted) {
+            throw new Error(`El registro con ID ${id} no está marcado como eliminado`);
+        }
+
+        // Restore usando cliente directo
+        const updateData: any = {
+            where: {
+                [cfg.idField!]: idValue,
+                version: current.version
+            },
+            data: { deleted: false }
+        };
+
+        // Solo agregar select/include si están definidos
+        if (cfg.select) updateData.select = cfg.select;
+        if (cfg.include) updateData.include = cfg.include;
+
+        const restored = await directModel.update(updateData);
+
+        console.log(`✅ Restored record:`, restored);
+
+        console.log(`✅ Successfully restored tournaments ${id}`);
+        return NextResponse.json({ success: true, data: restored });
+    } catch (err: any) {
+        console.error(`❌ Error restoring tournaments ${id}:`, err);
+        console.error('Error details:', {
+            message: err.message,
+            code: err.code,
+            meta: err.meta,
+            stack: err.stack
+        });
+        return NextResponse.json({ success: false, error: err.message || 'Error' }, { status: 500 });
+    }
 }

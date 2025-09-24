@@ -1,5 +1,3 @@
-'use client';
-
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { Search, X } from 'lucide-react';
@@ -8,7 +6,7 @@ import { useEffect, useState } from 'react';
 interface SearchInputProps {
     placeholder?: string;
     value: string;
-    onChange: (value: string) => void;
+    onChange(value: string): void;
     onClear?: () => void;
     className?: string;
     debounceMs?: number;

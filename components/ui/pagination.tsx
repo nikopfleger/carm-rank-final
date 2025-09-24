@@ -1,6 +1,5 @@
-'use client';
-
 import { Button } from '@/components/ui/button';
+import { formatNumber } from '@/lib/format-utils';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
 
@@ -9,7 +8,7 @@ interface PaginationProps {
     totalPages: number;
     totalItems: number;
     itemsPerPage: number;
-    onPageChange: (page: number) => void;
+    onPageChange(page: number): void;
     className?: string;
     showInfo?: boolean;
     compact?: boolean;
@@ -79,7 +78,7 @@ export function Pagination({
             {/* Información de elementos mostrados */}
             {showInfo && (
                 <div className="text-sm text-muted-foreground">
-                    Mostrando {startItem.toLocaleString('es-AR')}–{endItem.toLocaleString('es-AR')} de {totalItems.toLocaleString('es-AR')}
+                    Mostrando {formatNumber(startItem)}–{formatNumber(endItem)} de {formatNumber(totalItems)}
                 </div>
             )}
 

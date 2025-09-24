@@ -5,6 +5,7 @@ import { CountryFlag } from "@/components/ui/country-flag";
 import { RankBadgeAuto } from "@/components/ui/rank-badge-auto";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { unifiedStyles } from "@/components/ui/unified-styles";
+import { formatNumber } from "@/lib/format-utils";
 import { Award, Eye, TrendingDown, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { useI18nContext } from "../providers/i18n-provider";
@@ -168,14 +169,14 @@ export function PlayerResultCard({
                                 </div>
                                 <div className={`${unifiedStyles.statValue} ${unifiedStyles.colors.primary}`}>
                                     {variant === 'tournament'
-                                        ? stats.seasonPoints?.toLocaleString('es-AR') || '0'
+                                        ? formatNumber(stats.seasonPoints || 0)
                                         : variant === 'season'
-                                            ? Math.round(stats.seasonPoints || 0).toLocaleString('es-AR')
-                                            : Math.round(stats.ratePoints || 0).toLocaleString('es-AR')}
+                                            ? formatNumber(Math.round(stats.seasonPoints || 0))
+                                            : formatNumber(Math.round(stats.ratePoints || 0))}
                                 </div>
                                 {variant === 'main' && stats.maxRate && (
                                     <div className="text-xs text-gray-500 dark:text-gray-400">
-                                        Máx: {Math.round(stats.maxRate).toLocaleString('es-AR')}
+                                        Máx: {formatNumber(Math.round(stats.maxRate))}
                                     </div>
                                 )}
                             </div>
@@ -226,7 +227,7 @@ export function PlayerResultCard({
                             <div className={unifiedStyles.statContainer}>
                                 <div className={unifiedStyles.statLabel}>Juegos</div>
                                 <div className={`${unifiedStyles.statValue} ${unifiedStyles.colors.secondary}`}>
-                                    {stats.totalGames.toLocaleString('es-AR')}
+                                    {formatNumber(stats.totalGames)}
                                 </div>
                                 {variant === "main" && stats.hanchanGames !== undefined && stats.tonpuusenGames !== undefined && (
                                     <div className="text-xs text-gray-500 dark:text-gray-400">
@@ -282,14 +283,14 @@ export function PlayerResultCard({
                                 </div>
                                 <div className={`${unifiedStyles.statValue} ${unifiedStyles.colors.primary}`}>
                                     {variant === 'tournament'
-                                        ? stats.seasonPoints?.toLocaleString('es-AR') || '0'
+                                        ? formatNumber(stats.seasonPoints || 0)
                                         : variant === 'season'
-                                            ? Math.round(stats.seasonPoints || 0).toLocaleString('es-AR')
-                                            : Math.round(stats.ratePoints || 0).toLocaleString('es-AR')}
+                                            ? formatNumber(Math.round(stats.seasonPoints || 0))
+                                            : formatNumber(Math.round(stats.ratePoints || 0))}
                                 </div>
                                 {variant === 'main' && stats.maxRate && (
                                     <div className="text-[11px] text-gray-500 dark:text-gray-400">
-                                        Máx: {Math.round(stats.maxRate).toLocaleString('es-AR')}
+                                        Máx: {formatNumber(Math.round(stats.maxRate))}
                                     </div>
                                 )}
                             </div>
@@ -305,7 +306,7 @@ export function PlayerResultCard({
                             <div className="text-center">
                                 <div className={unifiedStyles.statLabel}>Juegos</div>
                                 <div className={`${unifiedStyles.statValue} ${unifiedStyles.colors.secondary}`}>
-                                    {stats.totalGames.toLocaleString('es-AR')}
+                                    {formatNumber(stats.totalGames)}
                                 </div>
                                 {variant === "main" && stats.hanchanGames !== undefined && stats.tonpuusenGames !== undefined && (
                                     <div className="text-[11px] text-gray-500 dark:text-gray-400">

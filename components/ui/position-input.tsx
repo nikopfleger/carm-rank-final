@@ -1,5 +1,3 @@
-'use client';
-
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Target } from 'lucide-react';
@@ -7,7 +5,7 @@ import { useState } from 'react';
 
 interface PositionInputProps {
     totalPlayers: number;
-    onGoToPosition: (position: number) => void;
+    onGoToPosition(position: number): void;
     className?: string;
 }
 

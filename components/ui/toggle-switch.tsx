@@ -1,5 +1,3 @@
-'use client';
-
 import { cn } from '@/lib/utils';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -7,7 +5,7 @@ interface ToggleSwitchProps {
   leftLabel: string;
   rightLabel: string;
   value: 'left' | 'right';
-  onChange: (value: 'left' | 'right') => void;
+  onChange(value: 'left' | 'right'): void;
   className?: string;
   size?: 'sm' | 'md' | 'lg';
 }

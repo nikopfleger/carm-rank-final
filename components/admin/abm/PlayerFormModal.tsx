@@ -1,5 +1,3 @@
-"use client";
-
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { PlayerFormWithOnlineAccounts } from "./PlayerFormWithOnlineAccounts";
 
@@ -11,14 +9,14 @@ interface Country {
 
 interface PlayerFormModalProps {
     isOpen: boolean;
-    onClose: () => void;
+    onClose(): void;
     title: string;
     initialData?: any;
     countries: Country[];
-    onSubmit: (data: { player: any; onlineUsers: any[] }) => void;
-    validateNickname: (value: string) => Promise<string | null>;
-    validateLegajo: (value: number) => Promise<string | null>;
-    onRevertSubgrid?: (revertFn: () => void) => void;
+    onSubmit(data: { player: any; onlineUsers: any[] }): void;
+    validateNickname(value: string): Promise<string | null>;
+    validateLegajo(value: number): Promise<string | null>;
+    onRevertSubgrid?(revertFn: () => void): void;
 }
 
 export function PlayerFormModal({

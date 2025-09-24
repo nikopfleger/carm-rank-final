@@ -1,6 +1,8 @@
 import { activateSeason, archiveSeason, getSeasonStatistics, updateSeason } from '@/lib/database/queries/seasons';
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 // PUT /api/seasons/[id] - Update a season
 export async function PUT(
   request: NextRequest,

@@ -143,11 +143,7 @@ export default function SeasonsABMPage() {
       label: "Eliminar",
       icon: Trash2,
       variant: "destructive",
-      onClick: (row: Season) => {
-        if (confirm(`¿Estás seguro de que quieres eliminar la temporada "${row.name}"?`)) {
-          abm.handleDelete(row);
-        }
-      },
+      onClick: (row: Season) => abm.handleDelete(row),
       show: (row: Season) => !row.deleted && !row.isActive
     },
     {

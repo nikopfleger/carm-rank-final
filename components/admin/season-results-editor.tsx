@@ -5,15 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 // Tabs component not available, using simple state-based tabs
 import { useErrorHandler } from "@/hooks/use-error-handler";
+import { formatNumber } from "@/lib/format-utils";
 import { Calendar, Edit, Save, Trophy, Users, X } from "lucide-react";
 import { useEffect, useState } from "react";
-// Simple number formatting function
-const formatNumber = (num: number, decimals: number = 0) => {
-    return num.toLocaleString('es-AR', {
-        minimumFractionDigits: decimals,
-        maximumFractionDigits: decimals
-    });
-};
 
 interface Season {
     id: number;
@@ -58,8 +52,8 @@ interface Player {
 
 interface SeasonResultsEditorProps {
     season: Season;
-    onSave: (results: SeasonResultData[]) => Promise<void>;
-    onCancel: () => void;
+    onSave(results: SeasonResultData[]): Promise<void>;
+    onCancel(): void;
 }
 
 export function SeasonResultsEditor({
@@ -257,7 +251,7 @@ export function SeasonResultsEditor({
                                                     max={isSanma ? "3" : "4"}
                                                 />
                                             ) : (
-                                                formatNumber(result.seasonAveragePosition, 2)
+                                                formatNumber(result.seasonAveragePosition, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
                                             )}
                                         </td>
                                         {/* 1º H */}
@@ -432,7 +426,7 @@ export function SeasonResultsEditor({
                                                     className="w-20 h-8 text-center font-bold"
                                                 />
                                             ) : (
-                                                formatNumber(result.seasonPoints, 1)
+                                                formatNumber(result.seasonPoints, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
                                             )}
                                         </td>
                                         {/* Acción */}

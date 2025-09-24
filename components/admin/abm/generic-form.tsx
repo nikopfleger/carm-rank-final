@@ -1,5 +1,3 @@
-"use client";
-
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -40,8 +38,8 @@ export interface GenericFormProps {
   fields: FormField[];
   initialData?: any;
   loading?: boolean;
-  onSubmit: (data: any) => void;
-  onCancel: () => void;
+  onSubmit(data: any): void;
+  onCancel(): void;
   submitLabel?: string;
   cancelLabel?: string;
   errors?: Record<string, string>;

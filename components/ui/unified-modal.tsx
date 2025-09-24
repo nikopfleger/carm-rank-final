@@ -1,5 +1,3 @@
-"use client";
-
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { LucideIcon, X } from "lucide-react";

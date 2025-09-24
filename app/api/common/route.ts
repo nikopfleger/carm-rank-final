@@ -8,6 +8,8 @@ import {
 } from '@/lib/database/queries/common';
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 // GET /api/common?type=countries|locations|rulesets|uma|online_apps|health
 export async function GET(request: NextRequest) {
   try {

@@ -1,5 +1,3 @@
-'use client';
-
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -7,7 +5,7 @@ interface ToggleTwoStatesProps {
     on: boolean;
     onLabel: string;
     offLabel: string;
-    onChange: (on: boolean) => void;
+    onChange(on: boolean): void;
     className?: string;
     size?: 'sm' | 'md';
     disabled?: boolean;

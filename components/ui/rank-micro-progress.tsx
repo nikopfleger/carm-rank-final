@@ -1,5 +1,6 @@
 'use client';
 
+import { formatNumber } from '@/lib/format-utils';
 import { cn } from '@/lib/utils';
 import { SimpleTooltip } from './simple-tooltip';
 
@@ -31,7 +32,7 @@ export function RankMicroProgress({
     if (!show) return null;
 
     const percentage = (pct * 100).toFixed(1).replace('.', ',');
-    const tooltipText = `${current.toLocaleString('es-AR')} / ${max.toLocaleString('es-AR')} (${percentage}%)${nextLabel ? ` – faltan ${remaining} para ${nextLabel}` : ''}`;
+    const tooltipText = `${formatNumber(current)} / ${formatNumber(max)} (${percentage}%)${nextLabel ? ` – faltan ${remaining} para ${nextLabel}` : ''}`;
 
     return (
         <div className={cn("flex items-center gap-2 min-w-0 flex-1", className)}>

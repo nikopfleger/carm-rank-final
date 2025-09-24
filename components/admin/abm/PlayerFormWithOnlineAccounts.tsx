@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -37,12 +35,12 @@ interface PlayerFormWithOnlineAccountsProps {
     title?: string;
     initialData?: any;
     countries: Country[];
-    onSubmit: (data: { player: PlayerFormData; onlineUsers: OnlineUser[] }) => void;
-    onCancel: () => void;
-    validateNickname: (value: string) => Promise<string | null>;
-    validateLegajo: (value: number) => Promise<string | null>;
+    onSubmit(data: { player: PlayerFormData; onlineUsers: OnlineUser[] }): void;
+    onCancel(): void;
+    validateNickname(value: string): Promise<string | null>;
+    validateLegajo(value: number): Promise<string | null>;
     showCard?: boolean;
-    onRevertSubgrid?: (revertFn: () => void) => void;
+    onRevertSubgrid?(revertFn: () => void): void;
 }
 
 export function PlayerFormWithOnlineAccounts({
