@@ -39,11 +39,23 @@ interface UnifiedABMLayoutProps<T = any> {
     onFormSubmit: (data: any) => Promise<void>;
     onFormCancel: () => void;
 
+    // Acciones genéricas del grid (para usar confirm modal unificado)
+    onEditRow?: (row: any) => void;
+    onDeleteRow?: (row: any) => void;
+    onRestoreRow?: (row: any) => void;
+    onViewRow?: (row: any) => void;
+
     // Mensajes personalizados
     emptyMessage?: string;
 
     // Contenido adicional (para casos especiales como sub-ABMs)
     additionalFormContent?: ReactNode;
+
+    // Flags para mostrar/ocultar botones del grid genérico
+    includeAddButton?: boolean;
+    includeEditButton?: boolean;
+    includeDeleteButton?: boolean;
+    includeRestoreButton?: boolean;
 }
 
 export function UnifiedABMLayout<T = any>({
@@ -68,8 +80,16 @@ export function UnifiedABMLayout<T = any>({
     onRefresh,
     onFormSubmit,
     onFormCancel,
+    onEditRow,
+    onDeleteRow,
+    onRestoreRow,
+    onViewRow,
     emptyMessage,
     additionalFormContent
+    , includeAddButton = true
+    , includeEditButton = true
+    , includeDeleteButton = true
+    , includeRestoreButton = true
 }: UnifiedABMLayoutProps<T>) {
 
     const defaultSearchPlaceholder = searchPlaceholder || `Buscar ${title.toLowerCase()}...`;
@@ -114,11 +134,19 @@ export function UnifiedABMLayout<T = any>({
                     loading={loading}
                     onRefresh={onRefresh}
                     onAdd={onAdd}
+                    onEdit={onEditRow}
+                    onDelete={onDeleteRow}
+                    onRestore={onRestoreRow}
+                    onView={onViewRow}
                     searchable={searchable}
                     searchPlaceholder={defaultSearchPlaceholder}
                     showDeleted={showDeleted}
                     onToggleShowDeleted={onToggleShowDeleted}
                     emptyMessage={defaultEmptyMessage}
+                    includeAddButton={includeAddButton}
+                    includeEditButton={includeEditButton}
+                    includeDeleteButton={includeDeleteButton}
+                    includeRestoreButton={includeRestoreButton}
                 />
             )}
         </div>

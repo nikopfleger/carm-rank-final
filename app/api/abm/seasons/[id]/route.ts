@@ -53,6 +53,10 @@ export async function PUT(
     }
 
     const body = await request.json();
+    const expectedVersion = Number(body?.version ?? body?.__expectedVersion ?? body?.expectedVersion);
+    if (!Number.isFinite(expectedVersion)) {
+      return NextResponse.json({ error: "Falta versión para optimistic locking" }, { status: 409 });
+    }
 
     // Verificar que la temporada existe
     const existingSeason = await prisma.season.findUnique({
@@ -93,7 +97,7 @@ export async function PUT(
     if (body.isActive !== undefined) updatedAta.isActive = body.isActive;
 
     const season = await prisma.season.update({
-      where: { id },
+      where: { id, version: expectedVersion },
       data: updatedAta
     });
 
@@ -134,10 +138,9 @@ export async function DELETE(
       );
     }
 
-    // Soft delete
-    await prisma.season.update({
-      where: { id },
-      data: { deleted: true }
+    // Soft delete mediante interceptor
+    await prisma.season.delete({
+      where: { id }
     });
 
     return NextResponse.json({ message: "Temporada eliminada correctamente" });

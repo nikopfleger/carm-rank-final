@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/database/client";
+import { runWithRequestContext } from "@/lib/request-context.server";
 import { ensureAbmManage } from "@/lib/server-authorization";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -6,12 +7,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    const search = request.nextUrl.searchParams.get("q");
+    const search = request.nextUrl.searchParams.get("q") ?? "";
+    const includeDeleted = request.nextUrl.searchParams.get("includeDeleted") === "true";
     const includeResults = request.nextUrl.searchParams.get("includeResults") === "true";
 
-    const tournaments = await prisma.tournament.findMany({
+    const tournaments = await runWithRequestContext({ includeDeleted }, () => prisma.tournament.findMany({
       where: {
-        deleted: false,
         ...(search
           ? {
             OR: [
@@ -28,20 +29,15 @@ export async function GET(request: NextRequest) {
           tournamentResults: {
             include: {
               player: {
-                select: {
-                  id: true,
-                  nickname: true,
-                  fullname: true,
-                  playerNumber: true
-                }
+                select: { id: true, nickname: true, fullname: true, playerNumber: true }
               }
             },
             orderBy: { position: 'asc' }
           }
         } : {})
       },
-      orderBy: { createdAt: "desc" },
-    });
+      orderBy: { id: "asc" },
+    }));
 
     return NextResponse.json(tournaments);
   } catch (error) {

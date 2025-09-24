@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/database/client";
+import { runWithRequestContext } from "@/lib/request-context.server";
 import { ensureAbmManage } from "@/lib/server-authorization";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -6,22 +7,16 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    const search = request.nextUrl.searchParams.get("q");
+    const search = request.nextUrl.searchParams.get("q") ?? "";
+    const includeDeleted = request.nextUrl.searchParams.get("includeDeleted") === "true";
 
-    const rulesets = await prisma.ruleset.findMany({
+    const rulesets = await runWithRequestContext({ includeDeleted }, () => prisma.ruleset.findMany({
       where: {
-        deleted: false,
-        ...(search
-          ? {
-            name: { contains: search, mode: "insensitive" },
-          }
-          : {}),
+        ...(search ? { name: { contains: search, mode: "insensitive" } } : {}),
       },
-      include: {
-        uma: true,
-      },
-      orderBy: { createdAt: "desc" },
-    });
+      include: { uma: true },
+      orderBy: { id: "asc" },
+    }));
 
     return NextResponse.json(rulesets);
   } catch (error) {

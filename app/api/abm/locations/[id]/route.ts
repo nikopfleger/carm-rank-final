@@ -75,6 +75,10 @@ export async function PUT(
         }
 
         const body = await request.json();
+        const expectedVersion = Number((body as any)?.version ?? (body as any)?.__expectedVersion ?? (body as any)?.expectedVersion);
+        if (!Number.isFinite(expectedVersion)) {
+            return NextResponse.json({ error: "Falta versión para optimistic locking" }, { status: 409 });
+        }
         const { name, address, city, country, extraData } = body as LocationInput;
 
         // Verificar que la ubicación existe
@@ -131,7 +135,7 @@ export async function PUT(
         if (extraData !== undefined) updateData.extraData = extraData;
 
         const location = await prisma.location.update({
-            where: { id: locationId },
+            where: { id: locationId, version: expectedVersion },
             data: updateData,
             include: {
                 _count: {
@@ -221,10 +225,9 @@ export async function DELETE(
             );
         }
 
-        // Eliminar lógicamente
-        const location = await prisma.location.update({
-            where: { id: locationId },
-            data: { deleted: true }
+        // Soft delete mediante interceptor (delete -> update deleted=true)
+        const location = await prisma.location.delete({
+            where: { id: locationId }
         });
 
         console.log(`✅ Ubicación eliminada: ${location.name} (ID: ${location.id})`);

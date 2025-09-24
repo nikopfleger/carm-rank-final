@@ -69,6 +69,10 @@ export async function PUT(
 
     const body = await request.json();
     const { isoCode, fullName, nationality } = body;
+    const expectedVersion = Number(body?.version ?? body?.__expectedVersion ?? body?.expectedVersion);
+    if (!Number.isFinite(expectedVersion)) {
+      return NextResponse.json({ success: false, error: "Falta versión para optimistic locking" }, { status: 409 });
+    }
 
     // Validaciones
     if (!isoCode || !fullName || !nationality) {
@@ -139,7 +143,7 @@ export async function PUT(
     }
 
     const country = await prisma.country.update({
-      where: { id },
+      where: { id, version: expectedVersion },
       data: {
         isoCode,
         fullName,

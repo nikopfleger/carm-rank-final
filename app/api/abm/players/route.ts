@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/database/client";
+import { runWithRequestContextAsync } from "@/lib/request-context.server";
 import { ensureAbmManage } from "@/lib/server-authorization";
 import { NextRequest, NextResponse } from "next/server";
 
-;
 
 export async function GET(request: NextRequest) {
   try {
@@ -20,71 +20,11 @@ export async function GET(request: NextRequest) {
     // Optional: escape LIKE wildcards for legajo search
     const escapeLike = (s: string) => s.replace(/[%_\\]/g, (m) => "\\" + m);
 
-    let idsByLegajo: number[] = [];
-    if (search && /^\d+$/.test(search)) {
-      const term = escapeLike(search.trim());
-      const pattern = `%${term}%`;
-      const rows = await prisma.$queryRaw<Array<{ id: number }>>`
-        SELECT id
-        FROM player
-        WHERE ${includeDeleted ? '1=1' : 'deleted = false'}
-          AND CAST(player_number AS TEXT) ILIKE ${pattern} ESCAPE '\\'
-      `;
-      idsByLegajo = rows.map((r) => r.id);
-    }
+    const idsByLegajo: number[] = [];
 
     let players;
 
-    if (includeDeleted) {
-      // Usar queryRaw para bypasear el middleware cuando queremos incluir eliminados
-      players = await prisma.$queryRaw`
-        SELECT 
-          p.id,
-          p.nickname,
-          p.fullname,
-          p.country_id as "countryId",
-          p.player_number as "playerNumber",
-          p.birthday,
-          p.version,
-          p.deleted,
-          p.createdAt as "createdAt",
-          p.updatedAt as "updatedAt",
-          c.id as "country_id",
-          c.full_name as "country_fullName"
-        FROM player p
-        LEFT JOIN country c ON p.country_id = c.id
-        ORDER BY p.player_number ASC
-      `;
-
-      // Convertir a formato esperado
-      players = (players as any[]).map((p: any) => {
-        console.log('🔍 Mapeando jugador:', {
-          id: p.id,
-          nickname: p.nickname,
-          countryId: p.countryId,
-          country_id: p.country_id,
-          country_fullName: p.country_fullName
-        });
-        return {
-          id: p.id,
-          nickname: p.nickname,
-          fullname: p.fullname,
-          countryId: p.countryId,
-          playerNumber: p.playerNumber,
-          birthday: p.birthday,
-          version: p.version,
-          deleted: p.deleted,
-          createdAt: p.createdAt,
-          updatedAt: p.updatedAt,
-          country: p.country_id ? {
-            id: p.country_id,
-            fullName: p.country_fullName
-          } : null,
-          onlineUsers: [] // Por simplicidad, no incluimos onlineUsers en la consulta raw
-        };
-      });
-    } else {
-      // Usar findMany normal para activos (con middleware)
+    if (!includeDeleted) {
       players = await prisma.player.findMany({
         where: {
           ...(search
@@ -92,7 +32,7 @@ export async function GET(request: NextRequest) {
               OR: [
                 { nickname: { contains: search, mode: "insensitive" } },
                 { fullname: { contains: search, mode: "insensitive" } },
-                ...(idsByLegajo.length > 0 ? [{ playerNumber: { in: idsByLegajo } }] : []),
+                ...(/^\d+$/.test(search) ? [{ playerNumber: Number(search) }] : []),
               ],
             }
             : {}),
@@ -109,12 +49,26 @@ export async function GET(request: NextRequest) {
         orderBy: [{ playerNumber: "asc" }],
       });
 
-      console.log('🔍 Query normal - jugadores encontrados:', players.map(p => ({
-        id: p.id,
-        nickname: p.nickname,
-        country_id: p.countryId,
-        country: p.country
-      })));
+    } else {
+      // Con includeDeleted habilitamos el contexto para que el interceptor no agregue deleted:false
+      players = await runWithRequestContextAsync({ includeDeleted: true }, async () => prisma.player.findMany({
+        where: {
+          ...(search
+            ? {
+              OR: [
+                { nickname: { contains: search, mode: "insensitive" } },
+                { fullname: { contains: search, mode: "insensitive" } },
+                ...(/^\d+$/.test(search) ? [{ playerNumber: Number(search) }] : []),
+              ],
+            }
+            : {}),
+        },
+        include: {
+          country: { select: { id: true, fullName: true } },
+          onlineUsers: { where: { deleted: false }, select: { id: true, platform: true, username: true, idOnline: true, isActive: true } }
+        },
+        orderBy: [{ playerNumber: "asc" }],
+      }));
     }
 
     return NextResponse.json(players);

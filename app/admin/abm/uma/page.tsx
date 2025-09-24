@@ -4,10 +4,8 @@ import { FormField } from "@/components/admin/abm/generic-form";
 import { GridAction, GridColumn } from "@/components/admin/abm/generic-grid-responsive";
 import { UnifiedABMLayout } from "@/components/admin/abm/unified-abm-layout";
 import { Badge } from "@/components/ui/badge";
-import { useUmaOperations } from "@/hooks/use-abm-operations";
-import { useUnifiedABM } from "@/hooks/use-unified-abm";
-import { Edit, Eye, Trash2 } from "lucide-react";
-import { useCallback, useMemo } from "react";
+import { useCrud } from "@/hooks/use-crud";
+import { useMemo } from "react";
 
 interface Uma {
   id: number;
@@ -23,8 +21,7 @@ interface Uma {
 }
 
 export default function UmaABMPage() {
-  // Usar el hook personalizado para operaciones ABM
-  const { loading, load, create, update, remove, restore } = useUmaOperations();
+  const abm = useCrud<Uma>({ resource: 'uma' });
 
   // Configuración de campos del formulario
   const formFields: FormField[] = useMemo(() => [
@@ -127,58 +124,11 @@ export default function UmaABMPage() {
     }
   ], []);
 
-  // ⚓️ funciones estables
-  const loadFn = useCallback(async (showDeleted?: boolean) => {
-    const result = await load();
-    return { data: result as Uma[] };
-  }, [load]);
-
-  const createFn = useCallback((data: Partial<Uma>) => create(data), [create]);
-  const updateFn = useCallback((id: number | string, data: Partial<Uma>) => update(Number(id), data), [update]);
-  const deleteFn = useCallback((id: number | string) => remove(Number(id)), [remove]);
-  const restoreFn = useCallback((id: number | string) => restore(Number(id)), [restore]);
-
-  // Usar el hook unificado de ABM
-  const abm = useUnifiedABM<Uma>({
-    loadFunction: loadFn,
-    createFunction: createFn,
-    updateFunction: updateFn,
-    deleteFunction: deleteFn,
-    restoreFunction: restoreFn
-  });
+  // Note: CRUD genérico maneja load/create/update/delete/restore
 
 
   // Configuración de acciones del grid
-  const actions: GridAction[] = useMemo(() => [
-    {
-      key: 'edit',
-      label: 'Editar',
-      icon: Edit,
-      variant: 'outline',
-      onClick: (row: Uma) => abm.handleEdit(row),
-      show: (row: Uma) => !row.deleted
-    },
-    {
-      key: 'delete',
-      label: 'Eliminar',
-      icon: Trash2,
-      variant: 'destructive',
-      onClick: (row: Uma) => {
-        if (confirm(`¿Estás seguro de que quieres eliminar la configuración UMA "${row.name}"?`)) {
-          abm.handleDelete(row);
-        }
-      },
-      show: (row: Uma) => !row.deleted
-    },
-    {
-      key: 'restore',
-      label: 'Restaurar',
-      icon: Eye,
-      variant: 'outline',
-      onClick: (row: Uma) => abm.handleRestore(row),
-      show: (row: Uma) => row.deleted
-    }
-  ], [abm]);
+  const actions: GridAction[] = useMemo(() => [], []);
 
   return (
     <UnifiedABMLayout<Uma>
@@ -210,7 +160,10 @@ export default function UmaABMPage() {
       onAdd={abm.handleAdd}
       onRefresh={abm.handleRefresh}
       onFormSubmit={abm.handleFormSubmit}
-      onFormCancel={abm.handleFormCancel}
+      onFormCancel={abm.handleCancel}
+      onEditRow={abm.handleEdit}
+      onDeleteRow={abm.handleDelete}
+      onRestoreRow={abm.handleRestore}
 
       // Mensajes personalizados
       emptyMessage="No hay configuraciones UMA registradas"

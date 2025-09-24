@@ -4,10 +4,8 @@ import { FormField } from "@/components/admin/abm/generic-form";
 import { GridAction, GridColumn } from "@/components/admin/abm/generic-grid-responsive";
 import UnifiedABMLayout from "@/components/admin/abm/unified-abm-layout";
 import { Badge } from "@/components/ui/badge";
-import { Edit, Eye, Trash2 } from "@/components/ui/icons";
-import { useCountriesOperations } from "@/hooks/use-abm-operations";
-import { useUnifiedABM } from "@/hooks/use-unified-abm";
-import { useCallback, useMemo } from "react";
+import { useCrud } from "@/hooks/use-crud";
+import { useMemo } from "react";
 
 interface Country {
   id: number;
@@ -21,29 +19,7 @@ interface Country {
 }
 
 export default function CountriesABMPage() {
-  // Hook de operaciones (asegurate de que dentro use callbacks memorizados)
-  const { loading, load, create, update, remove, restore } = useCountriesOperations();
-
-  // ✅ funciones estables que le pasamos al hook unificado
-  const loadFn = useCallback(async (showDeleted?: boolean) => {
-    const result = await load(showDeleted);
-    // Normalizamos el shape que espera el hook unificado
-    return { data: (result as any)?.data ?? [] };
-  }, [load]);
-
-  const createFn = useCallback((data: Partial<Country>) => create(data), [create]);
-  const updateFn = useCallback((id: number | string, data: Partial<Country>) => update(Number(id), data), [update]);
-  const deleteFn = useCallback((id: number | string) => remove(Number(id)), [remove]);
-  const restoreFn = useCallback((id: number | string) => restore(Number(id)), [restore]);
-
-  // Hook unificado de ABM
-  const abm = useUnifiedABM<Country>({
-    loadFunction: loadFn,
-    createFunction: createFn,
-    updateFunction: updateFn,
-    deleteFunction: deleteFn,
-    restoreFunction: restoreFn
-  });
+  const abm = useCrud<Country>({ resource: 'countries' });
 
   // ===== Config del grid =====
   const columns: GridColumn[] = useMemo(() => [
@@ -91,41 +67,8 @@ export default function CountriesABMPage() {
     }
   ], []);
 
-  // Handlers estables para acciones (no dependas del objeto `abm` entero)
-  const onEdit = useCallback((row: Country) => abm.handleEdit(row), [abm]);
-  const onDelete = useCallback((row: Country) => {
-    if (confirm(`¿Estás seguro de que quieres eliminar el país "${row.fullName}"?`)) {
-      abm.handleDelete(row);
-    }
-  }, [abm]);
-  const onRestore = useCallback((row: Country) => abm.handleRestore(row), [abm]);
-
-  const actions: GridAction[] = useMemo(() => [
-    {
-      key: 'edit',
-      label: 'Editar',
-      icon: Edit,
-      variant: 'outline',
-      onClick: onEdit,
-      show: (row: Country) => !row.deleted
-    },
-    {
-      key: 'delete',
-      label: 'Eliminar',
-      icon: Trash2,
-      variant: 'destructive',
-      onClick: onDelete,
-      show: (row: Country) => !row.deleted
-    },
-    {
-      key: 'restore',
-      label: 'Restaurar',
-      icon: Eye,
-      variant: 'outline',
-      onClick: onRestore,
-      show: (row: Country) => row.deleted
-    }
-  ], [onEdit, onDelete, onRestore]);
+  // Usamos acciones genéricas del grid (sin confirm del browser)
+  const actions: GridAction[] = useMemo(() => [], []);
 
   // ===== Form =====
   const formFields: FormField[] = useMemo(() => [
@@ -170,7 +113,7 @@ export default function CountriesABMPage() {
       data={abm.data}
       columns={columns}
       actions={actions}
-      loading={abm.loading || loading}
+      loading={abm.loading}
 
       // Form
       formFields={formFields}
@@ -186,8 +129,11 @@ export default function CountriesABMPage() {
       // Callbacks
       onAdd={abm.handleAdd}
       onRefresh={abm.handleRefresh}
+      onEditRow={abm.handleEdit}
+      onDeleteRow={abm.handleDelete}
+      onRestoreRow={abm.handleRestore}
       onFormSubmit={abm.handleFormSubmit}
-      onFormCancel={abm.handleFormCancel}
+      onFormCancel={abm.handleCancel}
 
       // Empty
       emptyMessage="No hay países registrados"

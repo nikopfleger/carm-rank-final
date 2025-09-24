@@ -53,6 +53,10 @@ export async function PUT(
     }
 
     const body = await request.json();
+    const expectedVersion = Number(body?.version ?? body?.__expectedVersion ?? body?.expectedVersion);
+    if (!Number.isFinite(expectedVersion)) {
+      return NextResponse.json({ error: "Falta versión para optimistic locking" }, { status: 409 });
+    }
 
     // Verificar que el UMA existe
     const existingUma = await prisma.uma.findUnique({
@@ -93,7 +97,7 @@ export async function PUT(
     if (body.fourthPlace !== undefined) updatedAta.fourthPlace = parseInt(body.fourthPlace);
 
     const uma = await prisma.uma.update({
-      where: { id },
+      where: { id, version: expectedVersion },
       data: updatedAta
     });
 
@@ -134,10 +138,9 @@ export async function DELETE(
       );
     }
 
-    // Soft delete
-    await prisma.uma.update({
-      where: { id },
-      data: { deleted: true }
+    // Soft delete mediante interceptor
+    await prisma.uma.delete({
+      where: { id }
     });
 
     return NextResponse.json({ message: "UMA eliminado correctamente" });

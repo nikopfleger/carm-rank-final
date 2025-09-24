@@ -1,7 +1,7 @@
 "use client";
 
 import { hasRequiredRole } from "@/lib/authorization"; // fuente única
-import { UserRole } from "@prisma/client";
+import type { UserRole } from "@/types/user-role";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";

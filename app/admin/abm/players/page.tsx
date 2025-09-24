@@ -2,13 +2,12 @@
 
 import { FormField } from "@/components/admin/abm/generic-form";
 import { GridAction, GridColumn } from "@/components/admin/abm/generic-grid-responsive";
+import { useAbmService } from "@/components/providers/services-provider";
 import { Badge } from "@/components/ui/badge";
-import { Edit, Eye, Trash2, Users } from "@/components/ui/icons";
-import { usePlayersOperationsUnified } from "@/hooks/use-players-operations-unified";
-import { useUnifiedABM } from "@/hooks/use-unified-abm";
+import { useCrud } from "@/hooks/use-crud";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const UnifiedABMLayout = dynamic(() =>
     import("@/components/admin/abm/unified-abm-layout").then((m) => m.UnifiedABMLayout)
@@ -40,35 +39,8 @@ interface Country {
 export default function PlayersABMPageUnified() {
     const router = useRouter();
     const [countries, setCountries] = useState<Country[]>([]);
-
-    // Hook de operaciones
-    const { loading, load, create, update, remove, restore, loadCountries } =
-        usePlayersOperationsUnified();
-
-    // ==== Callbacks estables que le pasamos al ABM ====
-    const loadFn = useCallback(
-        async (showDeleted?: boolean) => {
-            const result = await load(showDeleted);
-            return { data: (result as any)?.data ?? [] };
-        },
-        [load]
-    );
-    const createFn = useCallback((data: Partial<Player>) => create(data), [create]);
-    const updateFn = useCallback(
-        (id: number | string, data: Partial<Player>) => update(Number(id), data),
-        [update]
-    );
-    const deleteFn = useCallback((id: number | string) => remove(Number(id)), [remove]);
-    const restoreFn = useCallback((id: number | string) => restore(Number(id)), [restore]);
-
-    // Hook unificado
-    const abm = useUnifiedABM<Player>({
-        loadFunction: loadFn,
-        createFunction: createFn,
-        updateFunction: updateFn,
-        deleteFunction: deleteFn,
-        restoreFunction: restoreFn,
-    });
+    const abm = useCrud<Player>({ resource: 'players' });
+    const abmService = useAbmService();
 
     // ==== Cargar países SOLO UNA VEZ ====
     const didLoadCountries = useRef(false);
@@ -78,8 +50,9 @@ export default function PlayersABMPageUnified() {
 
         (async () => {
             try {
-                const countriesData = await loadCountries();
-                setCountries(countriesData);
+                const list: any = await (abmService as any).list('countries', { includeDeleted: true });
+                const mapped = Array.isArray(list) ? list : (list && list.data ? list.data : []);
+                setCountries(mapped.map((c: any) => ({ id: c.id, name_es: c.fullName ?? c.name_es, iso_code: c.isoCode ?? c.iso_code })));
             } catch (error) {
                 console.error("Error loading countries:", error);
             }
@@ -141,46 +114,7 @@ export default function PlayersABMPageUnified() {
         [countries]
     );
 
-    const actions: GridAction[] = useMemo(
-        () => [
-            {
-                key: "view",
-                label: "Ver Perfil",
-                icon: Users,
-                variant: "outline",
-                onClick: (row: Player) => router.push(`/player/${row.playerNumber}`),
-            },
-            {
-                key: "edit",
-                label: "Editar",
-                icon: Edit,
-                variant: "outline",
-                onClick: (row: Player) => abm.handleEdit(row),
-                show: (row: Player) => !row.deleted,
-            },
-            {
-                key: "delete",
-                label: "Eliminar",
-                icon: Trash2,
-                variant: "destructive",
-                onClick: (row: Player) => {
-                    if (confirm(`¿Estás seguro de que quieres eliminar al jugador "${row.nickname}"?`)) {
-                        abm.handleDelete(row);
-                    }
-                },
-                show: (row: Player) => !row.deleted,
-            },
-            {
-                key: "restore",
-                label: "Restaurar",
-                icon: Eye,
-                variant: "outline",
-                onClick: (row: Player) => abm.handleRestore(row),
-                show: (row: Player) => row.deleted,
-            },
-        ],
-        [router, abm]
-    );
+    const actions: GridAction[] = useMemo(() => [], []);
 
     return (
         <UnifiedABMLayout
@@ -192,7 +126,7 @@ export default function PlayersABMPageUnified() {
             data={abm.data}
             columns={columns}
             actions={actions}
-            loading={abm.loading || loading}
+            loading={abm.loading}
             formFields={formFields}
             formErrors={abm.formErrors}
             formSuccess={abm.formSuccess}
@@ -202,8 +136,11 @@ export default function PlayersABMPageUnified() {
             onToggleShowDeleted={abm.handleToggleShowDeleted}
             onAdd={abm.handleAdd}
             onRefresh={abm.handleRefresh}
+            onEditRow={abm.handleEdit}
+            onDeleteRow={abm.handleDelete}
+            onRestoreRow={abm.handleRestore}
             onFormSubmit={abm.handleFormSubmit}
-            onFormCancel={abm.handleFormCancel}
+            onFormCancel={abm.handleCancel}
             emptyMessage="No hay jugadores registrados"
         />
     );

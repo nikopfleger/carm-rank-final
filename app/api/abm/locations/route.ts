@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/database/client';
+import { runWithRequestContext } from '@/lib/request-context.server';
 import { NextRequest, NextResponse } from 'next/server';
 
 ;
@@ -15,44 +16,26 @@ export async function GET(request: NextRequest) {
     try {
         const { searchParams } = new URL(request.url);
         const includeDeleted = searchParams.get('includeDeleted') === 'true';
-        const search = searchParams.get('search');
+        const search = (searchParams.get('search') ?? '').trim();
 
-        let whereClause: any = {};
-
-        if (!includeDeleted) {
-            whereClause.deleted = false;
-        }
-
-        if (search) {
-            whereClause.OR = [
-                { name: { contains: search, mode: 'insensitive' } },
-                { address: { contains: search, mode: 'insensitive' } },
-                { city: { contains: search, mode: 'insensitive' } },
-                { country: { contains: search, mode: 'insensitive' } }
-            ];
-        }
-
-        const locations = await prisma.location.findMany({
-            where: whereClause,
-            orderBy: [
-                { name: 'asc' }
-            ],
+        const locations = await runWithRequestContext({ includeDeleted }, () => prisma.location.findMany({
+            where: {
+                ...(search ? {
+                    OR: [
+                        { name: { contains: search, mode: 'insensitive' } },
+                        { address: { contains: search, mode: 'insensitive' } },
+                        { city: { contains: search, mode: 'insensitive' } },
+                        { country: { contains: search, mode: 'insensitive' } }
+                    ]
+                } : {})
+            },
+            orderBy: [{ id: 'asc' }],
             include: {
-                _count: {
-                    select: {
-                        tournaments: true,
-                        games: true
-                    }
-                }
+                _count: { select: { tournaments: true, games: true } }
             }
-        });
+        }));
 
-        console.log(`✅ Ubicaciones obtenidas: ${locations.length}`);
-
-        return NextResponse.json({
-            success: true,
-            data: locations
-        });
+        return NextResponse.json({ success: true, data: locations });
 
     } catch (error) {
         console.error("❌ Error obteniendo ubicaciones:", error);

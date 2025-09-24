@@ -5,8 +5,9 @@ import { GridAction, GridColumn } from "@/components/admin/abm/generic-grid-resp
 import { UnifiedABMLayout } from "@/components/admin/abm/unified-abm-layout";
 import { SeasonCloseModal } from "@/components/admin/season-close-modal";
 import { Badge } from "@/components/ui/badge";
-import { useSeasonsABM } from "@/hooks/use-seasons-abm";
+import { useCrud } from "@/hooks/use-crud";
 import { Edit, Eye, Power, Trash2 } from "lucide-react";
+import { useCallback, useState } from "react";
 
 interface Season {
   id: number;
@@ -23,8 +24,14 @@ interface Season {
 }
 
 export default function SeasonsABMPage() {
-  // Usar el hook especializado para Seasons
-  const abm = useSeasonsABM();
+  const abm = useCrud<Season>({ resource: 'seasons' });
+  const [showCloseModal, setShowCloseModal] = useState(false);
+  const [seasonToActivate, setSeasonToActivate] = useState<Season | null>(null);
+
+  const handleActivateSeason = useCallback((row: Season) => {
+    setSeasonToActivate(row);
+    setShowCloseModal(true);
+  }, []);
 
 
   // Configuración de columnas del grid
@@ -114,12 +121,13 @@ export default function SeasonsABMPage() {
 
   // Configuración de acciones del grid
   const actions: GridAction[] = [
+    // Botón extra custom
     {
       key: "activate",
       label: "Activar/Cerrar",
       icon: Power,
       variant: "outline",
-      onClick: (row: Season) => abm.handleActivateSeason(row),
+      onClick: (row: Season) => handleActivateSeason(row),
       show: (row: Season) => !row.deleted && !row.isClosed
     },
     {
@@ -187,14 +195,17 @@ export default function SeasonsABMPage() {
         onAdd={abm.handleAdd}
         onRefresh={abm.handleRefresh}
         onFormSubmit={abm.handleFormSubmit}
-        onFormCancel={abm.handleFormCancel}
+        onFormCancel={abm.handleCancel}
+        onEditRow={abm.handleEdit}
+        onDeleteRow={abm.handleDelete}
+        onRestoreRow={abm.handleRestore}
 
         // Mensajes personalizados
         emptyMessage="No hay temporadas registradas"
       />
 
       {/* Modal especial para cierre de temporadas */}
-      {abm.showCloseModal && (() => {
+      {showCloseModal && (() => {
         const currentSeason = abm.data.find(s => s.isActive);
         const adaptSeason = (season: Season | null) => {
           if (!season) return null;
@@ -207,13 +218,13 @@ export default function SeasonsABMPage() {
 
         return (
           <SeasonCloseModal
-            isOpen={abm.showCloseModal}
+            isOpen={showCloseModal}
             currentSeason={adaptSeason(currentSeason || null)}
-            newSeason={adaptSeason(abm.seasonToActivate) as any}
-            seasonStats={abm.seasonStats}
-            onConfirm={abm.handleConfirmSeasonClose}
-            onCancel={abm.handleCancelSeasonClose}
-            loading={abm.isClosing}
+            newSeason={adaptSeason(seasonToActivate) as any}
+            seasonStats={undefined}
+            onConfirm={async () => { setShowCloseModal(false); }}
+            onCancel={async () => { setShowCloseModal(false); }}
+            loading={false}
           />
         );
       })()}

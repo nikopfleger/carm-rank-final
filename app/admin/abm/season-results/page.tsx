@@ -209,6 +209,10 @@ export default function SeasonResultsSpecialPage() {
                 columns={columns}
                 actions={actions}
                 loading={loading}
+                includeAddButton={false}
+                includeEditButton={false}
+                includeDeleteButton={false}
+                includeRestoreButton={false}
 
                 // Configuración del formulario (no usado)
                 formFields={[]}

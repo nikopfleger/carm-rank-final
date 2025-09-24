@@ -4,11 +4,9 @@ import { FormField } from '@/components/admin/abm/generic-form';
 import { GridAction, GridColumn } from '@/components/admin/abm/generic-grid-responsive';
 import { useI18nContext } from '@/components/providers/i18n-provider';
 import { Badge } from '@/components/ui/badge';
-import { Edit, Eye, Trash2 } from '@/components/ui/icons';
-import { useRateConfigsOperations } from '@/hooks/use-rate-configs-operations';
-import { useUnifiedABM } from '@/hooks/use-unified-abm';
+import { useCrud } from '@/hooks/use-crud';
 import dynamic from 'next/dynamic';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 const UnifiedABMLayout = dynamic(() => import('@/components/admin/abm/unified-abm-layout').then(m => m.UnifiedABMLayout));
 
 interface RateConfig {
@@ -31,28 +29,7 @@ interface RateConfig {
 export default function RateConfigsPage() {
     const { t } = useI18nContext();
 
-    // Usar el hook personalizado para operaciones ABM
-    const { loading, load, create, update, remove, restore } = useRateConfigsOperations();
-
-    // ⚓️ funciones estables
-    const loadFn = useCallback(async (showDeleted?: boolean) => {
-        const result = await load(showDeleted);
-        return result;
-    }, [load]);
-
-    const createFn = useCallback((data: Partial<RateConfig>) => create(data), [create]);
-    const updateFn = useCallback((id: number | string, data: Partial<RateConfig>) => update(Number(id), data), [update]);
-    const deleteFn = useCallback((id: number | string) => remove(Number(id)), [remove]);
-    const restoreFn = useCallback((id: number | string) => restore(Number(id)), [restore]);
-
-    // Usar el hook unificado de ABM
-    const abm = useUnifiedABM<RateConfig>({
-        loadFunction: loadFn,
-        createFunction: createFn,
-        updateFunction: updateFn,
-        deleteFunction: deleteFn,
-        restoreFunction: restoreFn,
-    });
+    const abm = useCrud<RateConfig>({ resource: 'rate-configs' });
 
 
     // Configuración de columnas del grid
@@ -162,36 +139,7 @@ export default function RateConfigsPage() {
     ], [t]);
 
     // Configuración de acciones del grid
-    const actions: GridAction[] = useMemo(() => [
-        {
-            key: 'edit',
-            label: 'Editar',
-            icon: Edit,
-            variant: 'outline',
-            onClick: (row: RateConfig) => abm.handleEdit(row),
-            show: (row: RateConfig) => !row.deleted
-        },
-        {
-            key: 'delete',
-            label: 'Eliminar',
-            icon: Trash2,
-            variant: 'destructive',
-            onClick: (row: RateConfig) => {
-                if (confirm(t('admin.configLabels.deleteConfirm'))) {
-                    abm.handleDelete(row);
-                }
-            },
-            show: (row: RateConfig) => !row.deleted
-        },
-        {
-            key: 'restore',
-            label: 'Restaurar',
-            icon: Eye,
-            variant: 'outline',
-            onClick: (row: RateConfig) => abm.handleRestore(row),
-            show: (row: RateConfig) => row.deleted
-        }
-    ], [abm, t]);
+    const actions: GridAction[] = useMemo(() => [], []);
 
     return (
         <UnifiedABMLayout
@@ -227,7 +175,10 @@ export default function RateConfigsPage() {
             onAdd={abm.handleAdd}
             onRefresh={abm.handleRefresh}
             onFormSubmit={abm.handleFormSubmit}
-            onFormCancel={abm.handleFormCancel}
+            onFormCancel={abm.handleCancel}
+            onEditRow={abm.handleEdit}
+            onDeleteRow={abm.handleDelete}
+            onRestoreRow={abm.handleRestore}
 
             // Mensajes personalizados
             emptyMessage="No hay configuraciones RATE registradas"

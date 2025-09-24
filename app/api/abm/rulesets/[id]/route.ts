@@ -53,6 +53,10 @@ export async function PUT(
     }
 
     const body = await request.json();
+    const expectedVersion = Number(body?.version ?? body?.__expectedVersion ?? body?.expectedVersion);
+    if (!Number.isFinite(expectedVersion)) {
+      return NextResponse.json({ error: "Falta versión para optimistic locking" }, { status: 409 });
+    }
 
     // Verificar que la regla existe
     const existingRuleset = await prisma.ruleset.findUnique({
@@ -91,7 +95,7 @@ export async function PUT(
     if (body.isActive !== undefined) updatedAta.isActive = body.isActive;
 
     const ruleset = await prisma.ruleset.update({
-      where: { id },
+      where: { id, version: expectedVersion },
       data: updatedAta
     });
 
@@ -132,10 +136,9 @@ export async function DELETE(
       );
     }
 
-    // Soft delete
-    await prisma.ruleset.update({
-      where: { id },
-      data: { deleted: true }
+    // Soft delete mediante interceptor
+    await prisma.ruleset.delete({
+      where: { id }
     });
 
     return NextResponse.json({ message: "Regla eliminada correctamente" });

@@ -1,5 +1,5 @@
-import { getRequestContext } from '@/lib/request-context';
-import { PrismaClient } from '@prisma/client';
+import { getRequestContext } from '@/lib/request-context.server';
+import type { PrismaClient } from '@prisma/client';
 import { handleConcurrencyError } from './concurrency-handler';
 
 // Modelos que NO deben tener auditoría (OAuth de NextAuth)
@@ -35,8 +35,14 @@ export function createAuditInterceptor(prisma: PrismaClient) {
 
                     // findUnique NO permite agregar más campos al where; usamos findFirst
                     const d = delegateOf(model, prisma);
+                    const { where, select, include, orderBy, take, skip } = args as any;
                     return d.findFirst({
-                        where: { ...(args as any).where, deleted: false },
+                        where: { ...where, deleted: false },
+                        select,
+                        include,
+                        orderBy,
+                        take,
+                        skip,
                     });
                 },
 
@@ -45,12 +51,16 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                         return query(args);
                     }
 
-                    // Agregar filtro deleted: false para soft-delete
+                    // Agregar filtro deleted solo si el contexto NO pide includeDeleted
+                    const ctx = getRequestContext();
                     const where = (args as any).where || {};
-                    (args as any).where = {
-                        ...where,
-                        deleted: false,
-                    };
+                    if (ctx?.includeDeleted) {
+                        // eliminar cualquier filtro residual de deleted
+                        if (Object.prototype.hasOwnProperty.call(where, 'deleted')) delete (where as any).deleted;
+                        (args as any).where = where;
+                    } else {
+                        (args as any).where = { ...where, deleted: false };
+                    }
 
                     return query(args);
                 },
@@ -60,12 +70,15 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                         return query(args);
                     }
 
-                    // Agregar filtro deleted: false para soft-delete
+                    // Agregar filtro deleted solo si el contexto NO pide includeDeleted
+                    const ctx = getRequestContext();
                     const where = (args as any).where || {};
-                    (args as any).where = {
-                        ...where,
-                        deleted: false,
-                    };
+                    if (ctx?.includeDeleted) {
+                        if (Object.prototype.hasOwnProperty.call(where, 'deleted')) delete (where as any).deleted;
+                        (args as any).where = where;
+                    } else {
+                        (args as any).where = { ...where, deleted: false };
+                    }
 
                     return query(args);
                 },
@@ -280,13 +293,17 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                         return query(args);
                     }
 
-                    if (!args.where) {
-                        args.where = { deleted: false };
+                    const ctx = getRequestContext();
+                    if (ctx?.includeDeleted) {
+                        const where = (args as any).where || {};
+                        if (Object.prototype.hasOwnProperty.call(where, 'deleted')) delete (where as any).deleted;
+                        (args as any).where = where;
                     } else {
-                        args.where = {
-                            ...args.where,
-                            deleted: false,
-                        };
+                        if (!args.where) {
+                            args.where = { deleted: false };
+                        } else {
+                            args.where = { ...args.where, deleted: false } as any;
+                        }
                     }
 
                     return query(args);

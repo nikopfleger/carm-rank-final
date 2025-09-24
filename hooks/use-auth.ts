@@ -1,5 +1,5 @@
 import { Authority, hasAuthority, hasRequiredRole, isAdminFromRole, isOwnerFromRole } from "@/lib/authorization";
-import { UserRole } from "@prisma/client";
+import type { UserRole } from "@/types/user-role";
 import { signOut, useSession } from "next-auth/react";
 
 export function useAuth() {

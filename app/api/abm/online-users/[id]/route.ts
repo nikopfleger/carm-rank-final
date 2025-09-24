@@ -86,6 +86,10 @@ export async function PUT(
     }
 
     const body = await request.json();
+    const expectedVersion = Number((body as any)?.version ?? (body as any)?.__expectedVersion ?? (body as any)?.expectedVersion);
+    if (!Number.isFinite(expectedVersion)) {
+      return NextResponse.json({ error: "Falta versión para optimistic locking" }, { status: 409 });
+    }
 
     // Verificar que el usuario online existe
     const existingOnlineUser = await prisma.onlineUser.findUnique({
@@ -141,7 +145,7 @@ export async function PUT(
     if (body.isActive !== undefined) updatedAta.isActive = body.isActive;
 
     const onlineUser = await prisma.onlineUser.update({
-      where: { id },
+      where: { id, version: expectedVersion },
       data: updatedAta,
       include: {
         player: {

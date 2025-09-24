@@ -12,7 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useErrorHandler } from "@/hooks/use-error-handler";
 import { useSessionUpdate } from "@/hooks/use-session-update";
 import { canAssignAuthority, canAssignRole, canModifyUser, getAvailableAuthorities, getAvailableRoles, getRoleLevel, hasAuthority, mergeRoleAuthorities } from "@/lib/authorization";
-import { UserRole } from "@prisma/client";
+import type { UserRole } from "@/types/user-role";
 import { ChevronDown, LogOut } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useMemo, useState } from "react";

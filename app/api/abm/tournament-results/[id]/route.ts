@@ -68,6 +68,10 @@ export async function PUT(
     }
 
     const body = await request.json();
+    const expectedVersion = Number(body?.version ?? body?.__expectedVersion ?? body?.expectedVersion);
+    if (!Number.isFinite(expectedVersion)) {
+      return NextResponse.json({ error: "Falta versión para optimistic locking" }, { status: 409 });
+    }
 
     // Verificar que el resultado existe
     const existingResult = await prisma.tournamentResult.findUnique({
@@ -137,7 +141,7 @@ export async function PUT(
     if (body.tournamentId !== undefined) updatedAta.tournamentId = parseInt(body.tournamentId);
 
     const tournamentResult = await prisma.tournamentResult.update({
-      where: { id },
+      where: { id, version: expectedVersion },
       data: updatedAta,
       include: {
         player: {
@@ -193,10 +197,9 @@ export async function DELETE(
       );
     }
 
-    // Soft delete
-    await prisma.tournamentResult.update({
-      where: { id },
-      data: { deleted: true }
+    // Soft delete mediante interceptor
+    await prisma.tournamentResult.delete({
+      where: { id }
     });
 
     return NextResponse.json({ message: "Resultado de torneo eliminado correctamente" });

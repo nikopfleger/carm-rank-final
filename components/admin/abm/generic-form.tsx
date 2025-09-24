@@ -20,7 +20,7 @@ import React, { useEffect, useRef, useState } from "react";
 export interface FormField {
   key: string;
   label: string;
-  type: 'text' | 'email' | 'password' | 'number' | 'date' | 'datetime' | 'textarea' | 'select' | 'boolean' | 'hidden';
+  type: 'text' | 'email' | 'password' | 'number' | 'date' | 'datetime' | 'textarea' | 'select' | 'boolean' | 'hidden' | 'color';
   required?: boolean;
   placeholder?: string;
   options?: { value: any; label: string }[];
@@ -75,7 +75,7 @@ export function GenericForm({
   }, [initialData]);
 
   const validateField = (field: FormField, value: any): string | null => {
-    if (field.required && (!value || value === '')) {
+    if (field.required && (value === null || value === undefined || value === '')) {
       return `${field.label} es requerido`;
     }
     if (field.validation && value) {
@@ -142,7 +142,7 @@ export function GenericForm({
   };
 
   const renderField = (field: FormField) => {
-    let value = formData?.[field.key] || '';
+    let value = formData?.[field.key] ?? '';
 
     // Convertir fechas al formato correcto para inputs de tipo date/datetime
     if ((field.type === 'date' || field.type === 'datetime') && value) {

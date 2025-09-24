@@ -2,9 +2,13 @@ import { ensureCacheReady, getRanking3pGeneralActivos, getRanking3pGeneralTodos,
 import { prisma } from '@/lib/database/client';
 import { getPlayersWithRanking } from '@/lib/database/queries/players-optimized';
 import { NextRequest, NextResponse } from 'next/server';
-import crypto from 'node:crypto';
 
-;
+async function weakEtag(payload: string): Promise<string> {
+  const data = new TextEncoder().encode(payload);
+  const digest = await crypto.subtle.digest('SHA-1', data);
+  const hex = Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+  return `W/"${hex}"`;
+}
 
 // GET /api/players - Get all players with ranking
 export async function GET(request: NextRequest) {
@@ -119,7 +123,7 @@ export async function GET(request: NextRequest) {
     };
 
     const json = JSON.stringify(body);
-    const etag = 'W/"' + crypto.createHash('sha1').update(json).digest('hex') + '"';
+    const etag = await weakEtag(json);
     const ifNoneMatch = request.headers.get('if-none-match');
 
     if (ifNoneMatch && ifNoneMatch === etag) {

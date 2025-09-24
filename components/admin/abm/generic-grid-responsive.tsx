@@ -59,6 +59,12 @@ export interface GenericGridProps {
     entityName?: string;
     onToggleShowDeleted?: () => void;
     emptyMessage?: string;
+
+    // Flags para incluir/excluir botones generados por defecto
+    includeAddButton?: boolean;
+    includeEditButton?: boolean;
+    includeDeleteButton?: boolean;
+    includeRestoreButton?: boolean;
 }
 
 function getNestedValue(obj: any, path: string) {
@@ -91,7 +97,11 @@ function GenericGrid({
     onToggleShowDeleted,
     emptyMessage = "No hay datos disponibles",
     searchFields = [],
-    entityName = "registro"
+    entityName = "registro",
+    includeAddButton = true,
+    includeEditButton = true,
+    includeDeleteButton = true,
+    includeRestoreButton = true
 }: GenericGridProps) {
     const [searchTerm, setSearchTerm] = useState("");
     const [sortColumn, setSortColumn] = useState<string | null>(null);
@@ -106,7 +116,7 @@ function GenericGrid({
         if (actions && actions.length) return actions;
 
         const defaults: GridAction[] = [];
-        if (onEdit) {
+        if (onEdit && includeEditButton) {
             defaults.push({
                 key: 'edit',
                 label: 'Editar',
@@ -115,7 +125,7 @@ function GenericGrid({
                 onClick: onEdit
             });
         }
-        if (onDelete) {
+        if (onDelete && includeDeleteButton) {
             defaults.push({
                 key: 'delete',
                 label: 'Eliminar',
@@ -125,7 +135,7 @@ function GenericGrid({
                 show: (row: any) => !row.deleted
             });
         }
-        if (onRestore) {
+        if (onRestore && includeRestoreButton) {
             defaults.push({
                 key: 'restore',
                 label: 'Restaurar',
@@ -145,7 +155,7 @@ function GenericGrid({
             });
         }
         return defaults;
-    }, [actions, onEdit, onDelete, onRestore, onView]);
+    }, [actions, onEdit, onDelete, onRestore, onView, includeEditButton, includeDeleteButton, includeRestoreButton]);
 
     const handleConfirmDelete = () => {
         if (deleteConfirm.item && onDelete) onDelete(deleteConfirm.item);
@@ -257,7 +267,7 @@ function GenericGrid({
                                 <span className="hidden sm:inline">Actualizar</span>
                             </UnifiedButton>
                         )}
-                        {onAdd && (
+                        {onAdd && includeAddButton && (
                             <UnifiedButton
                                 variant="primary"
                                 size="sm"

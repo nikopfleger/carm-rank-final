@@ -8,7 +8,7 @@ export async function GET(
 ) {
     try {
         const { id: idParam } = await params;
-    const id = parseInt(idParam);
+        const id = parseInt(idParam);
 
         const seasonResult = await (prisma as any).seasonResult.findUnique({
             where: { id },
@@ -53,8 +53,12 @@ export async function PUT(
 ) {
     try {
         const { id: idParam } = await params;
-    const id = parseInt(idParam);
+        const id = parseInt(idParam);
         const body = await request.json();
+        const expectedVersion = Number((body as any)?.version ?? (body as any)?.__expectedVersion ?? (body as any)?.expectedVersion);
+        if (!Number.isFinite(expectedVersion)) {
+            return NextResponse.json({ error: 'Falta versión para optimistic locking' }, { status: 409 });
+        }
 
         const {
             seasonTotalGames,
@@ -87,7 +91,7 @@ export async function PUT(
         if (extraData !== undefined) updatedAta.extraData = extraData;
 
         const seasonResult = await (prisma as any).seasonResult.update({
-            where: { id },
+            where: { id, version: expectedVersion },
             data: updatedAta,
             include: {
                 player: {
@@ -123,11 +127,10 @@ export async function DELETE(
 ) {
     try {
         const { id: idParam } = await params;
-    const id = parseInt(idParam);
+        const id = parseInt(idParam);
 
-        const seasonResult = await (prisma as any).seasonResult.update({
+        const seasonResult = await (prisma as any).seasonResult.delete({
             where: { id },
-            data: { deleted: true },
             include: {
                 player: {
                     select: {

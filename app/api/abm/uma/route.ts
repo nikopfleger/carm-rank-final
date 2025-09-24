@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/database/client";
+import { runWithRequestContext } from "@/lib/request-context.server";
 import { NextRequest, NextResponse } from "next/server";
 
 ;
@@ -6,26 +7,15 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const search = searchParams.get("search");
+    const search = searchParams.get("search") ?? "";
     const includeDeleted = searchParams.get("includeDeleted") === "true";
 
-    const where: any = {};
-
-    if (!includeDeleted) {
-      where.deleted = false;
-    }
-
-    if (search) {
-      where.name = { contains: search, mode: "insensitive" };
-    }
-
-    const umas = await prisma.uma.findMany({
-      where,
-      orderBy: [
-        { deleted: "asc" },
-        { name: "asc" }
-      ]
-    });
+    const umas = await runWithRequestContext({ includeDeleted }, () => prisma.uma.findMany({
+      where: {
+        ...(search ? { name: { contains: search, mode: "insensitive" } } : {}),
+      },
+      orderBy: [{ id: "asc" }]
+    }));
 
     return NextResponse.json(umas);
   } catch (error) {

@@ -3,11 +3,9 @@
 import { FormField } from "@/components/admin/abm/generic-form";
 import { GridAction, GridColumn } from "@/components/admin/abm/generic-grid-responsive";
 import { Badge } from "@/components/ui/badge";
-import { Edit, Eye, Trash2 } from "@/components/ui/icons";
-import { useRulesetsOperations } from "@/hooks/use-rulesets-operations";
-import { useUnifiedABM } from "@/hooks/use-unified-abm";
+import { useCrud } from "@/hooks/use-crud";
 import dynamic from "next/dynamic";
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 const UnifiedABMLayout = dynamic(() => import("@/components/admin/abm/unified-abm-layout").then(m => m.UnifiedABMLayout));
 
 interface Ruleset {
@@ -22,28 +20,7 @@ interface Ruleset {
 }
 
 export default function RulesetsABMPage() {
-  // Usar el hook personalizado para operaciones ABM
-  const { loading, load, create, update, remove, restore } = useRulesetsOperations();
-
-  // ⚓️ funciones estables
-  const loadFn = useCallback(async (showDeleted?: boolean) => {
-    const result = await load(showDeleted);
-    return result;
-  }, [load]);
-
-  const createFn = useCallback((data: Partial<Ruleset>) => create(data), [create]);
-  const updateFn = useCallback((id: number | string, data: Partial<Ruleset>) => update(Number(id), data), [update]);
-  const deleteFn = useCallback((id: number | string) => remove(Number(id)), [remove]);
-  const restoreFn = useCallback((id: number | string) => restore(Number(id)), [restore]);
-
-  // Usar el hook unificado de ABM
-  const abm = useUnifiedABM<Ruleset>({
-    loadFunction: loadFn,
-    createFunction: createFn,
-    updateFunction: updateFn,
-    deleteFunction: deleteFn,
-    restoreFunction: restoreFn
-  });
+  const abm = useCrud<Ruleset>({ resource: 'rulesets' });
 
 
   // Configuración de columnas del grid
@@ -115,36 +92,7 @@ export default function RulesetsABMPage() {
   ], []);
 
   // Configuración de acciones del grid
-  const actions: GridAction[] = useMemo(() => [
-    {
-      key: "edit",
-      label: "Editar",
-      icon: Edit,
-      variant: "outline",
-      onClick: (row: Ruleset) => abm.handleEdit(row),
-      show: (row: Ruleset) => !row.deleted
-    },
-    {
-      key: "delete",
-      label: "Eliminar",
-      icon: Trash2,
-      variant: "destructive",
-      onClick: (row: Ruleset) => {
-        if (confirm(`¿Estás seguro de que quieres eliminar la regla "${row.name}"?`)) {
-          abm.handleDelete(row);
-        }
-      },
-      show: (row: Ruleset) => !row.deleted
-    },
-    {
-      key: "restore",
-      label: "Restaurar",
-      icon: Eye,
-      variant: "outline",
-      onClick: (row: Ruleset) => abm.handleRestore(row),
-      show: (row: Ruleset) => row.deleted
-    }
-  ], [abm]);
+  const actions: GridAction[] = useMemo(() => [], []);
 
   return (
     <UnifiedABMLayout
@@ -173,14 +121,17 @@ export default function RulesetsABMPage() {
 
       // Configuración de búsqueda y filtros
       searchPlaceholder="Buscar reglas..."
-      showDeleted={false}
-      onToggleShowDeleted={undefined}
+      showDeleted={abm.showDeleted}
+      onToggleShowDeleted={abm.handleToggleShowDeleted}
 
       // Callbacks
       onAdd={abm.handleAdd}
       onRefresh={abm.handleRefresh}
       onFormSubmit={abm.handleFormSubmit}
-      onFormCancel={abm.handleFormCancel}
+      onFormCancel={abm.handleCancel}
+      onEditRow={abm.handleEdit}
+      onDeleteRow={abm.handleDelete}
+      onRestoreRow={abm.handleRestore}
 
       // Mensajes personalizados
       emptyMessage="No hay reglas registradas"

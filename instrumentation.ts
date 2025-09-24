@@ -1,5 +1,6 @@
-// instrumentation.ts
-;
+import 'server-only';
+
+export const runtime = 'nodejs';
 
 export async function register() {
     // Evitar durante build

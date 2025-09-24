@@ -42,6 +42,10 @@ export async function PUT(
         const { id: idParam } = await params;
         const id = parseInt(idParam);
         const body = await request.json();
+        const expectedVersion = Number((body as any)?.version ?? (body as any)?.__expectedVersion ?? (body as any)?.expectedVersion);
+        if (!Number.isFinite(expectedVersion)) {
+            return NextResponse.json({ success: false, error: 'Falta versión para optimistic locking' }, { status: 409 });
+        }
 
         // Verificar que existe
         const existing = await (prisma as any).seasonConfig.findUnique({
@@ -93,7 +97,7 @@ export async function PUT(
         }
 
         const seasonConfig = await (prisma as any).seasonConfig.update({
-            where: { id },
+            where: { id, version: expectedVersion },
             data: {
                 name: body.name,
                 sanma: body.sanma,
@@ -143,13 +147,9 @@ export async function DELETE(
             );
         }
 
-        // Soft delete
-        await (prisma as any).seasonConfig.update({
-            where: { id },
-            data: {
-                deleted: true,
-                version: { increment: 1 }
-            }
+        // Soft delete mediante interceptor
+        await (prisma as any).seasonConfig.delete({
+            where: { id }
         });
 
         // Actualizar cache solo para SeasonConfigs

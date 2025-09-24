@@ -1,4 +1,5 @@
-import { onlyDeleted, prisma } from '@/lib/database/client';
+import { prisma } from '@/lib/database/client';
+import { runWithRequestContextAsync } from '@/lib/request-context.server';
 import { NextRequest, NextResponse } from 'next/server';
 
 ;
@@ -7,14 +8,10 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const deleted = searchParams.get('deleted') === 'true';
+    const includeDeleted = searchParams.get('includeDeleted') === 'true';
     const search = searchParams.get('search');
 
     let where: any = {};
-
-    if (deleted) {
-      where = onlyDeleted();
-    }
 
     if (search) {
       where = {
@@ -27,9 +24,11 @@ export async function GET(request: NextRequest) {
       };
     }
 
-    const countries = await prisma.country.findMany({
-      where,
-      orderBy: { fullName: 'asc' }
+    const countries = await runWithRequestContextAsync({ includeDeleted }, async () => {
+      return prisma.country.findMany({
+        where,
+        orderBy: { id: 'asc' }
+      });
     });
 
     return NextResponse.json({

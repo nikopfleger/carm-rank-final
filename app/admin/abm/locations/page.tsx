@@ -3,10 +3,9 @@
 import { GridColumn } from "@/components/admin/abm/generic-grid-responsive";
 import { useI18nContext } from "@/components/providers/i18n-provider";
 import { Badge } from "@/components/ui/badge";
-import { Archive, Building2, Edit, Globe, MapPin, RotateCcw, Trash2 } from "@/components/ui/icons";
-import { useErrorHandler } from "@/hooks/use-error-handler";
+import { Building2, Globe, MapPin } from "@/components/ui/icons";
+import { useCrud } from "@/hooks/use-crud";
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useState } from "react";
 const UnifiedABMLayout = dynamic(() => import("@/components/admin/abm/unified-abm-layout").then(m => m.UnifiedABMLayout));
 
 interface Location {
@@ -36,127 +35,10 @@ interface LocationInput {
 
 export default function LocationsUnifiedPage() {
     const { t } = useI18nContext();
-    const { handleError, handleSuccess } = useErrorHandler();
-
-    // Estado
-    const [data, setData] = useState<Location[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [showForm, setShowForm] = useState(false);
-    const [editingItem, setEditingItem] = useState<Location | null>(null);
-    const [formData, setFormData] = useState<LocationInput>({
-        name: '',
-        address: '',
-        city: '',
-        country: '',
-        extraData: null
-    });
-    const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-    const [formSuccess, setFormSuccess] = useState(false);
-    const [successMessage, setSuccessMessage] = useState('');
-    const [showDeleted, setShowDeleted] = useState(false);
-
-    // Cargar datos
-    const loadData = useCallback(async () => {
-        setLoading(true);
-        try {
-            const params = new URLSearchParams();
-            if (showDeleted) params.append('includeDeleted', 'true');
-
-            const response = await fetch(`/api/abm/locations?${params}`);
-            if (response.ok) {
-                const result = await response.json();
-                const locations = result.data || result; // Soportar ambos formatos
-                setData(locations);
-            } else {
-                throw new Error('Error cargando ubicaciones');
-            }
-        } catch (error) {
-            handleError(error, 'Cargar ubicaciones');
-        } finally {
-            setLoading(false);
-        }
-    }, [showDeleted, handleError]);
-
-    useEffect(() => {
-        loadData();
-    }, [loadData]);
+    const abm = useCrud<Location>({ resource: 'locations' });
 
     // Funciones de manejo
-    const handleAdd = () => {
-        setEditingItem(null);
-        setFormData({ name: '', address: '', city: '', country: '', extraData: null });
-        setFormErrors({});
-        setFormSuccess(false);
-        setShowForm(true);
-    };
-
-    const handleEdit = (item: Location) => {
-        setEditingItem(item);
-        setFormData({
-            name: item.name,
-            address: item.address || '',
-            city: item.city || '',
-            country: item.country || '',
-            extraData: item.extraData
-        });
-        setFormErrors({});
-        setFormSuccess(false);
-        setShowForm(true);
-    };
-
-    const handleDelete = async (item: Location) => {
-        if (!confirm(`¿Estás seguro de eliminar la ubicación "${item.name}"?`)) return;
-
-        try {
-            setLoading(true);
-            const response = await fetch(`/api/abm/locations/${item.id}`, {
-                method: 'DELETE'
-            });
-
-            if (response.ok) {
-                handleSuccess('Ubicación eliminada exitosamente', 'Eliminación exitosa');
-                await loadData();
-            } else {
-                const error = await response.json();
-                throw new Error(error.error || 'Error eliminando ubicación');
-            }
-        } catch (error) {
-            handleError(error, 'Eliminar ubicación');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleRestore = async (item: Location) => {
-        try {
-            setLoading(true);
-            const response = await fetch(`/api/abm/locations/${item.id}/restore`, {
-                method: 'PUT'
-            });
-
-            if (response.ok) {
-                handleSuccess('Ubicación restaurada exitosamente', 'Restauración exitosa');
-                await loadData();
-            } else {
-                const error = await response.json();
-                throw new Error(error.error || 'Error restaurando ubicación');
-            }
-        } catch (error) {
-            handleError(error, 'Restaurar ubicación');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleFormCancel = () => {
-        setShowForm(false);
-        setFormErrors({});
-        setFormSuccess(false);
-    };
-
-    const handleRefresh = () => {
-        loadData();
-    };
+    // El CRUD genérico maneja add/edit/delete/restore/refresh
 
     // Configuración de columnas del grid
     const columns: GridColumn[] = [
@@ -220,10 +102,7 @@ export default function LocationsUnifiedPage() {
             width: '100px',
             render: (value: boolean) => (
                 value ? (
-                    <Badge variant="secondary">
-                        <Archive className="w-3 h-3 mr-1" />
-                        Eliminada
-                    </Badge>
+                    <Badge variant="secondary">Eliminada</Badge>
                 ) : (
                     <Badge variant="default">Activa</Badge>
                 )
@@ -278,8 +157,8 @@ export default function LocationsUnifiedPage() {
         }
     ];
 
-    const formTitle = editingItem
-        ? `Editar Ubicación: ${editingItem.name}`
+    const formTitle = abm.editingItem
+        ? `Editar Ubicación: ${abm.editingItem.name}`
         : 'Nueva Ubicación';
 
     return (
@@ -288,93 +167,35 @@ export default function LocationsUnifiedPage() {
             description="Administra las ubicaciones donde se realizan torneos y juegos de mahjong"
 
             // Estado del formulario
-            showForm={showForm}
-            editingItem={editingItem}
+            showForm={abm.showForm}
+            editingItem={abm.editingItem}
             formTitle={formTitle}
 
             // Configuración del grid
-            data={data}
+            data={abm.data}
             columns={columns}
-            actions={[
-                {
-                    key: 'edit',
-                    label: 'Editar',
-                    icon: Edit,
-                    onClick: handleEdit,
-                    variant: 'outline',
-                    show: (item: Location) => !item.deleted
-                },
-                {
-                    key: 'delete',
-                    label: 'Eliminar',
-                    icon: Trash2,
-                    onClick: handleDelete,
-                    variant: 'destructive',
-                    show: (item: Location) => !item.deleted
-                },
-                {
-                    key: 'restore',
-                    label: 'Restaurar',
-                    icon: RotateCcw,
-                    onClick: handleRestore,
-                    variant: 'outline',
-                    show: (item: Location) => item.deleted
-                }
-            ]}
-            loading={loading}
+            actions={[]}
+            loading={abm.loading}
 
             // Configuración del formulario
             formFields={formFields}
-            formErrors={formErrors}
-            formSuccess={formSuccess}
-            successMessage={successMessage}
+            formErrors={abm.formErrors}
+            formSuccess={abm.formSuccess}
+            successMessage="Ubicación guardada correctamente"
 
             // Configuración de búsqueda y filtros
             searchPlaceholder="Buscar ubicaciones..."
-            showDeleted={showDeleted}
-            onToggleShowDeleted={() => setShowDeleted(!showDeleted)}
+            showDeleted={abm.showDeleted}
+            onToggleShowDeleted={abm.handleToggleShowDeleted}
 
             // Callbacks
-            onAdd={handleAdd}
-            onRefresh={handleRefresh}
-            onFormSubmit={async (data) => {
-                try {
-                    setFormErrors({});
-                    setLoading(true);
-
-                    const url = editingItem
-                        ? `/api/abm/locations/${editingItem.id}`
-                        : '/api/abm/locations';
-
-                    const method = editingItem ? 'PUT' : 'POST';
-
-                    const response = await fetch(url, {
-                        method,
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(data)
-                    });
-
-                    if (response.ok) {
-                        const result = await response.json();
-                        handleSuccess(result.message, editingItem ? 'Actualización exitosa' : 'Creación exitosa');
-                        setFormSuccess(true);
-
-                        await loadData();
-                        setTimeout(() => {
-                            setShowForm(false);
-                            setFormSuccess(false);
-                        }, 1500);
-                    } else {
-                        const error = await response.json();
-                        throw new Error(error.error || 'Error en el formulario');
-                    }
-                } catch (error) {
-                    handleError(error, editingItem ? 'Actualizar ubicación' : 'Crear ubicación');
-                } finally {
-                    setLoading(false);
-                }
-            }}
-            onFormCancel={handleFormCancel}
+            onAdd={abm.handleAdd}
+            onRefresh={abm.handleRefresh}
+            onFormSubmit={abm.handleFormSubmit}
+            onFormCancel={abm.handleCancel}
+            onEditRow={abm.handleEdit}
+            onDeleteRow={abm.handleDelete}
+            onRestoreRow={abm.handleRestore}
 
             // Mensajes personalizados
             emptyMessage="No hay ubicaciones registradas"

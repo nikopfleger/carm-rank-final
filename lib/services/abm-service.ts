@@ -2,67 +2,35 @@ import { apiService } from './api-service';
 
 // Servicio específico para ABM (similar a Angular services)
 export class AbmService {
-    // Países
-    async getCountries(deleted = false) {
-        return apiService.get(`/abm/countries?deleted=${deleted}`);
+    // ===== Generic helpers used by unified ABM =====
+    async list(resource: string, options?: { includeDeleted?: boolean; deleted?: boolean; onlyDeleted?: boolean; search?: string }) {
+        const params = new URLSearchParams();
+        if (options?.includeDeleted) params.set('includeDeleted', 'true');
+        if (options?.deleted) params.set('deleted', 'true');
+        if (options?.onlyDeleted) params.set('onlyDeleted', 'true');
+        if (options?.search) params.set('search', options.search);
+        const qs = params.toString();
+        return apiService.get(`/abm/${resource}${qs ? `?${qs}` : ''}`);
     }
 
-    async createCountry(data: any) {
-        return apiService.post('/abm/countries', data);
+    async getOne(resource: string, id: number | string) {
+        return apiService.get(`/abm/${resource}/${id}`);
     }
 
-    async updateCountry(id: number, data: any) {
-        return apiService.put(`/abm/countries/${id}`, data);
+    async create(resource: string, data: any) {
+        return apiService.post(`/abm/${resource}`, data);
     }
 
-    async deleteCountry(id: number) {
-        return apiService.delete(`/abm/countries/${id}`);
+    async update(resource: string, id: number | string, data: any) {
+        return apiService.put(`/abm/${resource}/${id}`, data);
     }
 
-    async restoreCountry(id: number) {
-        return apiService.post(`/abm/countries/${id}/restore`, {});
+    async remove(resource: string, id: number | string) {
+        return apiService.delete(`/abm/${resource}/${id}`);
     }
 
-    // UMA
-    async getUmas() {
-        return apiService.get('/abm/uma');
-    }
-
-    async createUma(data: any) {
-        return apiService.post('/abm/uma', data);
-    }
-
-    async updateUma(id: number, data: any) {
-        return apiService.put(`/abm/uma/${id}`, data);
-    }
-
-    async deleteUma(id: number) {
-        return apiService.delete(`/abm/uma/${id}`);
-    }
-
-    async restoreUma(id: number) {
-        return apiService.post(`/abm/uma/${id}/restore`, {});
-    }
-
-    // Jugadores
-    async getPlayers() {
-        return apiService.get('/abm/players');
-    }
-
-    async createPlayer(data: any) {
-        return apiService.post('/abm/players', data);
-    }
-
-    async updatePlayer(id: number, data: any) {
-        return apiService.put(`/abm/players/${id}`, data);
-    }
-
-    async deletePlayer(id: number) {
-        return apiService.delete(`/abm/players/${id}`);
-    }
-
-    async restorePlayer(id: number) {
-        return apiService.patch(`/abm/players/${id}`, { action: 'restore' });
+    async restore(resource: string, id: number | string) {
+        return apiService.post(`/abm/${resource}/${id}/restore`, {});
     }
 
     // Link Requests
@@ -111,173 +79,21 @@ export class AbmService {
         return apiService.post(`/admin/email-accounts/${id}/restore`, {});
     }
 
-    // Seasons
-    async getSeasons() {
-        return apiService.get('/abm/seasons');
-    }
+    // Seasons (usar genéricos list/create/update/remove/restore)
 
-    async createSeason(data: any) {
-        return apiService.post('/abm/seasons', data);
-    }
+    // Tournaments (usar genéricos)
 
-    async updateSeason(id: number, data: any) {
-        return apiService.put(`/abm/seasons/${id}`, data);
-    }
+    // Rulesets (usar genéricos)
 
-    async deleteSeason(id: number) {
-        return apiService.delete(`/abm/seasons/${id}`);
-    }
+    // Online Users (usar genéricos)
 
-    async restoreSeason(id: number) {
-        return apiService.post(`/abm/seasons/${id}/restore`, {});
-    }
+    // Tournament Results (usar genéricos)
 
-    // Tournaments
-    async getTournaments() {
-        return apiService.get('/abm/tournaments');
-    }
+    // Rate Configs (usar genéricos)
 
-    async createTournament(data: any) {
-        return apiService.post('/abm/tournaments', data);
-    }
+    // Dan Configs (usar genéricos)
 
-    async updateTournament(id: number, data: any) {
-        return apiService.put(`/abm/tournaments/${id}`, data);
-    }
-
-    async deleteTournament(id: number) {
-        return apiService.delete(`/abm/tournaments/${id}`);
-    }
-
-    async restoreTournament(id: number) {
-        return apiService.post(`/abm/tournaments/${id}/restore`, {});
-    }
-
-    // Rulesets
-    async getRulesets() {
-        return apiService.get('/abm/rulesets');
-    }
-
-    async createRuleset(data: any) {
-        return apiService.post('/abm/rulesets', data);
-    }
-
-    async updateRuleset(id: number, data: any) {
-        return apiService.put(`/abm/rulesets/${id}`, data);
-    }
-
-    async deleteRuleset(id: number) {
-        return apiService.delete(`/abm/rulesets/${id}`);
-    }
-
-    async restoreRuleset(id: number) {
-        return apiService.post(`/abm/rulesets/${id}/restore`, {});
-    }
-
-    // Online Users
-    async getOnlineUsers() {
-        return apiService.get('/abm/online-users');
-    }
-
-    async createOnlineUser(data: any) {
-        return apiService.post('/abm/online-users', data);
-    }
-
-    async updateOnlineUser(id: number, data: any) {
-        return apiService.put(`/abm/online-users/${id}`, data);
-    }
-
-    async deleteOnlineUser(id: number) {
-        return apiService.delete(`/abm/online-users/${id}`);
-    }
-
-    async restoreOnlineUser(id: number) {
-        return apiService.post(`/abm/online-users/${id}/restore`, {});
-    }
-
-    // Tournament Results
-    async getTournamentResults() {
-        return apiService.get('/abm/tournament-results');
-    }
-
-    async createTournamentResult(data: any) {
-        return apiService.post('/abm/tournament-results', data);
-    }
-
-    async updateTournamentResult(id: number, data: any) {
-        return apiService.put(`/abm/tournament-results/${id}`, data);
-    }
-
-    async deleteTournamentResult(id: number) {
-        return apiService.delete(`/abm/tournament-results/${id}`);
-    }
-
-    async restoreTournamentResult(id: number) {
-        return apiService.post(`/abm/tournament-results/${id}/restore`, {});
-    }
-
-    // Rate Configs
-    async getRateConfigs() {
-        return apiService.get('/abm/rate-configs');
-    }
-
-    async createRateConfig(data: any) {
-        return apiService.post('/abm/rate-configs', data);
-    }
-
-    async updateRateConfig(id: number, data: any) {
-        return apiService.put(`/abm/rate-configs/${id}`, data);
-    }
-
-    async deleteRateConfig(id: number) {
-        return apiService.delete(`/abm/rate-configs/${id}`);
-    }
-
-    async restoreRateConfig(id: number) {
-        return apiService.post(`/abm/rate-configs/${id}/restore`, {});
-    }
-
-    // Dan Configs
-    async getDanConfigs() {
-        return apiService.get('/abm/dan-configs');
-    }
-
-    async createDanConfig(data: any) {
-        return apiService.post('/abm/dan-configs', data);
-    }
-
-    async updateDanConfig(id: number, data: any) {
-        return apiService.put(`/abm/dan-configs/${id}`, data);
-    }
-
-    async deleteDanConfig(id: number) {
-        return apiService.delete(`/abm/dan-configs/${id}`);
-    }
-
-    async restoreDanConfig(id: number) {
-        return apiService.post(`/abm/dan-configs/${id}/restore`, {});
-    }
-
-    // Season Configs
-    async getSeasonConfigs() {
-        return apiService.get('/abm/season-configs');
-    }
-
-    async createSeasonConfig(data: any) {
-        return apiService.post('/abm/season-configs', data);
-    }
-
-    async updateSeasonConfig(id: number, data: any) {
-        return apiService.put(`/abm/season-configs/${id}`, data);
-    }
-
-    async deleteSeasonConfig(id: number) {
-        return apiService.delete(`/abm/season-configs/${id}`);
-    }
-
-    async restoreSeasonConfig(id: number) {
-        return apiService.post(`/abm/season-configs/${id}/restore`, {});
-    }
+    // Season Configs (usar genéricos)
 }
 
 // Singleton instance

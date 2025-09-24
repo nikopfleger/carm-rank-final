@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth-vercel";
 import { hasAuthority, hasRequiredRole, isAdminFromRole } from "@/lib/authorization";
 import { prisma } from "@/lib/database/client";
-import { UserRole } from "@prisma/client";
+import type { UserRole } from "@/types/user-role";
 import { NextResponse } from "next/server";
 
 export async function ensureAbmManage() {

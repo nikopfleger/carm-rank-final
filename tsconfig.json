@@ -1,16 +1,15 @@
 {
   "compilerOptions": {
     "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ES2022"
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
@@ -26,33 +25,13 @@
       "@/*": [
         "./*"
       ]
-    },
-    "target": "ES2022",
-    "baseUrl": ".",
-    "typeRoots": [
-      "./types",
-      "./node_modules/@types"
-    ],
-    "types": [
-      "react",
-      "react-dom",
-      "node"
-    ]
+    }
   },
   "include": [
     "next-env.d.ts",
-    "app/**/*.ts",
-    "app/**/*.tsx",
-    "components/**/*.ts",
-    "components/**/*.tsx",
-    "hooks/**/*.ts",
-    "hooks/**/*.tsx",
-    "lib/**/*.ts",
-    "lib/**/*.tsx",
-    "utils/**/*.ts",
-    "utils/**/*.tsx",
-    ".next/types/**/*.ts",
-    "types/**/*.d.ts"
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

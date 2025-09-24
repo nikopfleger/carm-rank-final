@@ -16,7 +16,7 @@ import {
     Search,
     Trash2
 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { GenericGridProps, GridAction, GridColumn } from "./generic-grid-responsive";
 
 export function GenericGridMobile({
@@ -37,7 +37,11 @@ export function GenericGridMobile({
     onToggleShowDeleted,
     emptyMessage = "No hay datos disponibles",
     searchFields = [],
-    entityName = "registro"
+    entityName = "registro",
+    includeAddButton = true,
+    includeEditButton = true,
+    includeDeleteButton = true,
+    includeRestoreButton = true
 }: GenericGridProps) {
     const { t } = useI18nContext();
     const [searchTerm, setSearchTerm] = useState("");
@@ -47,48 +51,51 @@ export function GenericGridMobile({
     });
     const [expandedActions, setExpandedActions] = useState<number | null>(null);
 
-    // Generar acciones automáticamente si no se proporcionan
-    const defaultActions: GridAction[] = [];
-    if (onEdit) {
-        defaultActions.push({
-            key: 'edit',
-            label: t('common.edit', 'Editar'),
-            icon: Edit,
-            variant: 'outline',
-            onClick: onEdit
-        });
-    }
-    if (onDelete) {
-        defaultActions.push({
-            key: 'delete',
-            label: t('common.delete', 'Eliminar'),
-            icon: Trash2,
-            variant: 'destructive',
-            onClick: (row: any) => setDeleteConfirm({ isOpen: true, item: row }),
-            show: (row: any) => !row.deleted
-        });
-    }
-    if (onRestore) {
-        defaultActions.push({
-            key: 'restore',
-            label: 'Restaurar',
-            icon: RefreshCw,
-            variant: 'outline',
-            onClick: onRestore,
-            show: (row: any) => row.deleted
-        });
-    }
-    if (onView) {
-        defaultActions.push({
-            key: 'view',
-            label: 'Ver',
-            icon: Eye,
-            variant: 'ghost',
-            onClick: onView
-        });
-    }
+    // Generar acciones automáticamente si no se proporcionan (memoizado)
+    const defaultActions: GridAction[] = useMemo(() => {
+        const defs: GridAction[] = [];
+        if (onEdit && includeEditButton) {
+            defs.push({
+                key: 'edit',
+                label: t('common.edit', 'Editar'),
+                icon: Edit,
+                variant: 'outline',
+                onClick: onEdit
+            });
+        }
+        if (onDelete && includeDeleteButton) {
+            defs.push({
+                key: 'delete',
+                label: t('common.delete', 'Eliminar'),
+                icon: Trash2,
+                variant: 'destructive',
+                onClick: (row: any) => setDeleteConfirm({ isOpen: true, item: row }),
+                show: (row: any) => !row.deleted
+            });
+        }
+        if (onRestore && includeRestoreButton) {
+            defs.push({
+                key: 'restore',
+                label: 'Restaurar',
+                icon: RefreshCw,
+                variant: 'outline',
+                onClick: onRestore,
+                show: (row: any) => row.deleted
+            });
+        }
+        if (onView) {
+            defs.push({
+                key: 'view',
+                label: 'Ver',
+                icon: Eye,
+                variant: 'ghost',
+                onClick: onView
+            });
+        }
+        return defs;
+    }, [onEdit, includeEditButton, onDelete, includeDeleteButton, onRestore, includeRestoreButton, onView, t]);
 
-    const finalActions = actions || defaultActions;
+    const finalActions = useMemo(() => actions || defaultActions, [actions, defaultActions]);
 
     // Funciones para manejar la confirmación de eliminación
     const handleConfirmDelete = () => {
@@ -187,7 +194,7 @@ export function GenericGridMobile({
                                 <span className="hidden sm:inline">Actualizar</span>
                             </Button>
                         )}
-                        {onAdd && (
+                        {onAdd && includeAddButton && (
                             <Button
                                 onClick={onAdd}
                                 size="sm"

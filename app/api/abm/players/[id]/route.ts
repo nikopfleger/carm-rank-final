@@ -65,6 +65,10 @@ export async function PUT(
     }
 
     const body = await request.json();
+    const expectedVersion = Number(body?.version ?? body?.__expectedVersion ?? body?.expectedVersion);
+    if (!Number.isFinite(expectedVersion)) {
+      return NextResponse.json({ error: "Falta versión para optimistic locking" }, { status: 409 });
+    }
 
     // Verificar que el jugador existe
     const existingPlayer = await prisma.player.findUnique({
@@ -118,17 +122,13 @@ export async function PUT(
 
     if (body.nickname !== undefined) updatedData.nickname = body.nickname;
     if (body.fullname !== undefined) updatedData.fullname = body.fullname;
-    if (body.countryId !== undefined) {
-      updatedData.country = {
-        connect: { id: parseInt(body.countryId) }
-      };
-    }
+    if (body.countryId !== undefined) updatedData.countryId = parseInt(body.countryId);
     if (body.playerNumber !== undefined) updatedData.playerNumber = parseInt(body.playerNumber);
     if (body.birthday !== undefined) updatedData.birthday = body.birthday ? new Date(body.birthday) : null;
     if (body.extraData !== undefined) updatedData.extraData = body.extraData;
 
     const player = await prisma.player.update({
-      where: { id },
+      where: { id, version: expectedVersion },
       data: updatedData,
       include: {
         country: {
@@ -177,10 +177,9 @@ export async function DELETE(
       );
     }
 
-    // Soft delete
-    await prisma.player.update({
-      where: { id },
-      data: { deleted: true }
+    // Soft delete mediante interceptor: usar delete
+    await prisma.player.delete({
+      where: { id }
     });
 
     return NextResponse.json({ message: "Jugador eliminado correctamente" });

@@ -1,6 +1,5 @@
 import { prisma } from '@/lib/database/client';
 import { cleanupImage } from '@/lib/image-cleanup-simple';
-import logger from '@/lib/logger';
 import { ensureGameValidate } from '@/lib/server-authorization';
 import { emailNotificationService } from '@/lib/services/email-notification-service';
 import { NextRequest, NextResponse } from 'next/server';
@@ -115,14 +114,6 @@ export async function POST(
       gameData.tournamentId = (pendingGame as any).tournamentId;
     }
 
-    logger.info('Preparando juego oficial', {
-      gameDate: pendingGame.gameDate,
-      gameType: gameData.gameType,
-      seasonId: selectedSeasonId ?? 'null',
-      rulesetId: pendingGame.rulesetId,
-      imageUrl: pendingGame.imageUrl ? 'EXCLUIDA (solo validación)' : 'No disponible'
-    });
-
     // 2) Armar jugadores (3 o 4 según sanma)
     const players = [
       {
@@ -187,13 +178,6 @@ export async function POST(
     ];
 
     // 7) Calcular posiciones y nuevos Dan/Rate (aunque luego se “gateen”)
-    logger.api('Iniciando cálculos de juego', {
-      playerScores: playerScoresForLogs,
-      tipo_juego: pendingGame.duration === 'HANCHAN' ? 'H' : 'T',
-      averageTableRate,
-      umaValues,
-      valores_iniciales: { Dan: INITIAL_DAN_POINTS, Rate: INITIAL_RATE_POINTS }
-    });
 
     // Usar calculateGameResults centralizado para todos los cálculos
     const { calculateGameResults } = await import('@/lib/game-calculations');
@@ -218,15 +202,6 @@ export async function POST(
       });
     }
 
-    logger.calculation('Iniciando cálculos centralizados', {
-      playerScores,
-      seasonEligible,
-      gameType,
-      isSanma,
-      tournamentId: (pendingGame as any).tournamentId,
-      selectedSeasonId
-    });
-
     const calculatedResults = calculateGameResults(
       playerScores,
       gameType,
@@ -235,10 +210,6 @@ export async function POST(
       isSanma,
       seasonEligible
     );
-
-    logger.calculation('Resultados calculados', calculatedResults);
-
-    logger.api('Cálculos completados', calculatedResults);
 
     // 8) Preparar payloads para rankings (no dependen de gameId)
     const rankingsToUpdate: any[] = [];
@@ -513,13 +484,6 @@ export async function POST(
       }
 
       // 9.5) Vincular el pending game con el juego oficial (también dentro de la transacción)
-      logger.info('Actualizando pending game', {
-        pendingGameId,
-        status: 'VALIDATED',
-        gameId: createdAtGame.id,
-        imageUrl: pendingGame.imageUrl ? 'ELIMINADA (solo validación)' : 'No disponible'
-      });
-
       await tx.pendingGame.update({
         where: { id: pendingGameId },
         data: {
@@ -533,7 +497,6 @@ export async function POST(
 
     // 10) LIMPIEZA DE IMAGEN - Eliminar imagen temporal (solo validación)
     if (pendingGame.imageFileName) {
-      logger.info('Iniciando limpieza de imagen', { imageFileName: pendingGame.imageFileName });
       await cleanupImage(pendingGame.imageFileName, pendingGame.imageUrl || undefined);
     }
 
@@ -565,7 +528,6 @@ export async function POST(
       gameResults: (await calculatedResults).length
     });
   } catch (error) {
-    logger.error('Error approving game', error);
     return NextResponse.json(
       { success: false, message: 'Error interno del servidor' },
       { status: 500 }
