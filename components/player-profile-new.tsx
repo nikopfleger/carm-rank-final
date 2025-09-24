@@ -11,31 +11,7 @@ import { unifiedStyles } from "@/components/ui/unified-styles";
 import { useErrorHandler } from "@/hooks/use-error-handler";
 import { DanConfig, getDanRank, getNextDanRank } from "@/lib/game-helpers-client";
 import { useSession } from "next-auth/react";
-import { useEffect, useRef, useState } from "react";
-// ===============================
-// Helpers de formato
-// ===============================
-const formatArgentineNumber = (num: number, decimals: number = 0): string => {
-  return num.toLocaleString('es-AR', {
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals
-  });
-};
-
-const formatPercentage = (num: number, decimals: number = 1): string => {
-  return num.toLocaleString('es-AR', {
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals
-  }) + '%';
-};
-
-const formatPosition = (num: number, decimals: number = 2): string => {
-  return num.toLocaleString('es-AR', {
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals
-  });
-};
-
+import { useEffect, useState } from "react";
 interface PlayerData {
   id: number;
   playerId: number;
@@ -290,10 +266,6 @@ export function PlayerProfileNew({ legajo, initial }: PlayerProfileProps) {
   const [chartType, setChartType] = useState<'dan' | 'rate' | 'position' | 'season'>('dan');
   const [submitting, setSubmitting] = useState(false);
 
-  // Estados para carga diferida del gráfico
-  const [chartVisible, setChartVisible] = useState(false);
-  const chartSentinelRef = useRef<HTMLDivElement | null>(null);
-
   const [error, setError] = useState<string | null>(null);
 
 
@@ -306,21 +278,7 @@ export function PlayerProfileNew({ legajo, initial }: PlayerProfileProps) {
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [isUnlinking, setIsUnlinking] = useState(false);
 
-  // IntersectionObserver para carga diferida del gráfico
-  useEffect(() => {
-    if (!chartSentinelRef.current || chartVisible) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some(e => e.isIntersecting)) {
-          setChartVisible(true);
-          io.disconnect();
-        }
-      },
-      { root: null, rootMargin: "200px", threshold: 0 }
-    );
-    io.observe(chartSentinelRef.current);
-    return () => io.disconnect();
-  }, [chartVisible]);
+  // Render directo del gráfico histórico (sin carga diferida)
 
   // Función para abrir modal de edición
   const handleEditProfile = () => {
@@ -722,11 +680,8 @@ export function PlayerProfileNew({ legajo, initial }: PlayerProfileProps) {
           );
         })()}
 
-        {/* Sentinel para activar la carga del gráfico */}
-        <div ref={chartSentinelRef} />
-
-        {/* Gráfico histórico - carga diferida */}
-        {chartVisible && chartData.length > 0 && (
+        {/* Gráfico histórico - render directo */}
+        {chartData.length > 0 && (
           <Card className={`p-6 ${unifiedStyles.card}`}>
             <HistoricalChart
               chartData={chartData}
