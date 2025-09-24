@@ -13,7 +13,7 @@
 ```bash
 # DATABASE_URL estándar (RECOMENDADO - formato Vercel)
 DATABASE_URL=postgresql://user:password@host:5432/database?schema=carm
-DIRECT_URL=postgresql://user:password@host:5432/database?schema=carm
+POSTGRES_URL_NON_POOLING=postgresql://user:password@host:5432/database?schema=carm
 
 # Vercel Blob Storage (para imágenes)
 CARM_BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xDW0UcmfAvqYQPEh_ndz3gFikPFmqnZmRnsBsAW69ocRNGS
@@ -55,11 +55,11 @@ DB_KEEP_ALIVE_INTERVAL=30000
 
 # Opción A: Schema específico (ej: carm)
 DATABASE_URL=postgresql://user:password@host:5432/db?schema=carm
-DIRECT_URL=postgresql://user:password@host:5432/db?schema=carm
+POSTGRES_URL_NON_POOLING=postgresql://user:password@host:5432/db?schema=carm
 
 # Opción B: Schema por defecto (public - más simple)
 DATABASE_URL=postgresql://user:password@host:5432/db
-DIRECT_URL=postgresql://user:password@host:5432/db
+POSTGRES_URL_NON_POOLING=postgresql://user:password@host:5432/db
 
 # Vercel automáticamente:
 # 1. Cifra las variables en reposo
@@ -82,7 +82,7 @@ DIRECT_URL=postgresql://user:password@host:5432/db
 2. **Crear proyecto** con PostgreSQL 15+
 3. **Crear base de datos** llamada `carm_ranking`
 4. **Obtener connection string** desde el dashboard
-5. **Copiar a Vercel** como `DATABASE_URL` y `DIRECT_URL`
+5. **Copiar a Vercel** como `DATABASE_URL` y `POSTGRES_URL_NON_POOLING`
 
 Ejemplo de connection string:
 ```
@@ -121,7 +121,7 @@ Ir a **Settings → Environment Variables** y agregar:
 
 ```bash
 DATABASE_URL=postgresql://username:password@host:5432/carm_ranking?schema=carm
-DIRECT_URL=postgresql://username:password@host:5432/carm_ranking?schema=carm
+POSTGRES_URL_NON_POOLING=postgresql://username:password@host:5432/carm_ranking?schema=carm
 CARM_BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xDW0UcmfAvqYQPEh_ndz3gFikPFmqnZmRnsBsAW69ocRNGS
 RUN_LOAD_DATA_ON_BUILD=true
 GOOGLE_CLIENT_ID=tu_client_id_produccion

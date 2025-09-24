@@ -11,8 +11,11 @@ const directUrl = getDirectUrl();
 
 // Establecer las variables de entorno para que Prisma las use
 process.env.DATABASE_URL = databaseUrl;
+// Alinear aliases esperados por schema/datasource
+if (!process.env.POSTGRES_PRISMA_URL) process.env.POSTGRES_PRISMA_URL = databaseUrl;
+if (!process.env.POSTGRES_URL) process.env.POSTGRES_URL = databaseUrl; // compat si el schema usa POSTGRES_URL
 if (directUrl && directUrl !== databaseUrl) {
-    process.env.DIRECT_URL = directUrl;
+    if (!process.env.POSTGRES_URL_NON_POOLING) process.env.POSTGRES_URL_NON_POOLING = directUrl;
 }
 
 // Logging para verificar configuración de Supabase

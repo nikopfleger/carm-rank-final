@@ -67,7 +67,7 @@ Mantener solo las esenciales aquí; el detalle vive en `README.md` y `VERCEL_SET
 
 ```env
 DATABASE_URL=postgresql://user:pass@host:5432/db?schema=carm
-DIRECT_URL=postgresql://user:pass@host:5432/db?schema=carm
+POSTGRES_URL_NON_POOLING=postgresql://user:pass@host:5432/db?schema=carm
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=changeme
 GOOGLE_CLIENT_ID=...

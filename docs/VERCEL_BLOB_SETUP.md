@@ -56,7 +56,7 @@ CARM_BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xDW0UcmfAvqYQPEh_ndz3gFikPFmqnZmRnsBsA
 
 # Database URLs (formato estándar Vercel/Prisma)
 DATABASE_URL=postgresql://user:password@host:5432/database?schema=carm
-DIRECT_URL=postgresql://user:password@host:5432/database?schema=carm
+POSTGRES_URL_NON_POOLING=postgresql://user:password@host:5432/database?schema=carm
 
 # OAuth con Google
 GOOGLE_CLIENT_ID=tu_client_id_produccion

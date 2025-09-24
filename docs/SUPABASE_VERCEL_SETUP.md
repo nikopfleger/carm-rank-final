@@ -13,7 +13,7 @@ Basada en la solución de Digital Ocean, implementamos un sistema de **stages** 
 ```bash
 # Para desarrollo local
 DATABASE_URL=postgresql://usuario:password@localhost:5432/database?schema=schema
-DIRECT_URL=postgresql://usuario:password@localhost:5432/database?schema=schema
+POSTGRES_URL_NON_POOLING=postgresql://usuario:password@localhost:5432/database?schema=schema
 
 # Para producción con Supabase
 # URL directa (sin pooling) - para migraciones

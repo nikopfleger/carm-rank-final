@@ -135,7 +135,7 @@ function requireDbUrl() {
 
     if (!url) {
         throw new Error(
-            'DB URL no definida. Seteá POSTGRES_PRISMA_URL (o DATABASE_URL/DIRECT_URL) antes del warm-up de cache.'
+            'DB URL no definida. Seteá POSTGRES_PRISMA_URL (o DATABASE_URL/POSTGRES_URL_NON_POOLING) antes del warm-up de cache.'
         );
     }
 }

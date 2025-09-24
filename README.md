@@ -299,7 +299,7 @@ OWNER_NAME=Super Admin
 ```bash
 # Database URLs (formato estándar)
 DATABASE_URL=postgresql://username:password@localhost:5432/database_name?schema=carm
-DIRECT_URL=postgresql://username:password@localhost:5432/database_name?schema=carm
+POSTGRES_URL_NON_POOLING=postgresql://username:password@localhost:5432/database_name?schema=carm
 
 # Database Pool Configuration
 DB_POOL_MAX=20
@@ -324,7 +324,7 @@ OWNER_EMAIL=tu_email_aqui
 ```
 
 ### 🛡️ **Seguridad en Vercel:**
-- **Variables en Vercel**: Configurar `DATABASE_URL` y `DIRECT_URL` en Vercel → Settings → Environment Variables
+- **Variables en Vercel**: Configurar `DATABASE_URL` y `POSTGRES_URL_NON_POOLING` en Vercel → Settings → Environment Variables
 - **Cifrado automático**: Vercel cifra las variables de entorno en reposo y en tránsito
 - **Sin credenciales en repo**: El archivo `.env` está en `.gitignore` 
 - **Logs seguros**: Las variables no se imprimen en logs de Vercel

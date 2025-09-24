@@ -19,7 +19,7 @@ function testConnectionConfig() {
     console.log(`DATABASE_URL: ${process.env.DATABASE_URL ? '✅ Configurada' : '❌ No configurada'}`);
     console.log(`DATABASE_URL_MIGRATE: ${process.env.DATABASE_URL_MIGRATE ? '✅ Configurada' : '❌ No configurada'}`);
     console.log(`DATABASE_URL_POOL: ${process.env.DATABASE_URL_POOL ? '✅ Configurada' : '❌ No configurada'}`);
-    console.log(`DIRECT_URL: ${process.env.DIRECT_URL ? '✅ Configurada' : '❌ No configurada'}`);
+    console.log(`POSTGRES_URL_NON_POOLING: ${process.env.POSTGRES_URL_NON_POOLING ? '✅ Configurada' : '❌ No configurada'}`);
 
     // Mostrar URL seleccionada
     const selectedUrl = getDatabaseUrl();
