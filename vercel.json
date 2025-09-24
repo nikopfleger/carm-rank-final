@@ -1,14 +1,23 @@
 {
     "version": 2,
     "name": "camr-rank",
-    "env": {
-        "NODE_ENV": "production"
-    },
     "functions": {
-        "app/api/**/*.ts": {
-            "maxDuration": 30
+        "app/**/route.{ts,js}": {
+            "regions": [
+                "gru1"
+            ],
+            "maxDuration": 10
+        },
+        "api/**/*.js": {
+            "regions": [
+                "gru1"
+            ],
+            "maxDuration": 10
         }
     },
+    "regions": [
+        "gru1"
+    ],
     "headers": [
         {
             "source": "/images/(.*)",
@@ -27,12 +36,6 @@
                     "value": "no-cache, no-store, must-revalidate"
                 }
             ]
-        }
-    ],
-    "rewrites": [
-        {
-            "source": "/images/(.*)",
-            "destination": "/images/$1"
         }
     ]
 }
