@@ -1,5 +1,6 @@
 import { invalidateConfigs } from '@/lib/cache/core-cache';
 import { prisma } from '@/lib/database/client';
+import { isConcurrencyError, isOptimisticLockError } from '@/lib/database/concurrency-handler';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
@@ -72,9 +73,17 @@ export async function PUT(
             );
         }
 
+        // Extraer versión del body y pasarla en el WHERE para optimistic locking
+        const { version, ...updateData } = body;
+
+        // El interceptor ahora EXIGE que la versión esté en el WHERE
         const danConfig = await (prisma as any).danConfig.update({
-            where: { id },
+            where: {
+                id,
+                version: version // Versión esperada para optimistic locking
+            },
             data: {
+                ...updateData,
                 rank: body.rank,
                 sanma: body.sanma,
                 minPoints: parseInt(body.minPoints),
@@ -86,8 +95,7 @@ export async function PUT(
                 isProtected: body.isProtected,
                 color: body.color,
                 cssClass: body.cssClass,
-                isLastRank: body.isLastRank,
-                version: { increment: 1 }
+                isLastRank: body.isLastRank
             }
         });
 
@@ -100,6 +108,34 @@ export async function PUT(
         });
     } catch (error) {
         console.error('Error updating dan config:', error);
+
+        // Manejar errores de optimistic lock específicamente
+        if (isOptimisticLockError(error)) {
+            const current = (error as any).meta?.current;
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: `El registro fue modificado por otro usuario. Versión actual: ${current?.version || 'desconocida'}. ¿Desea actualizar con los datos más recientes?`,
+                    code: 'OPTIMISTIC_LOCK',
+                    currentVersion: current?.version,
+                    lastModified: current?.updatedAt
+                },
+                { status: 409 }
+            );
+        }
+
+        // Manejar otros errores de concurrencia
+        if (isConcurrencyError(error)) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: 'Conflicto de concurrencia: El registro fue modificado por otro usuario. Por favor, recarga la página e intenta nuevamente.',
+                    code: 'CONCURRENCY_ERROR'
+                },
+                { status: 409 }
+            );
+        }
+
         return NextResponse.json(
             { success: false, error: 'Failed to update dan config' },
             { status: 500 }

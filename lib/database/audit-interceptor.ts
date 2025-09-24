@@ -1,8 +1,15 @@
 import { getRequestContext } from '@/lib/request-context';
 import { PrismaClient } from '@prisma/client';
+import { handleConcurrencyError } from './concurrency-handler';
 
 // Modelos que NO deben tener auditoría (OAuth de NextAuth)
 const EXCLUDED_MODELS = ['Account', 'Session', 'VerificationToken'];
+
+// Helper: acceder al delegate dinámico del modelo
+function delegateOf(model: string, prisma: PrismaClient) {
+    const lc = model.charAt(0).toLowerCase() + model.slice(1);
+    return (prisma as any)[lc];
+}
 
 // Obtener información de auditoría del contexto de la request
 async function getAuditInfo() {
@@ -18,8 +25,50 @@ async function getAuditInfo() {
 export function createAuditInterceptor(prisma: PrismaClient) {
     return prisma.$extends({
         query: {
-            // Interceptar operaciones de escritura para agregar campos de auditoría
+            // Interceptar operaciones de lectura y escritura
             $allModels: {
+                async findUnique({ args, query, model }) {
+                    if (EXCLUDED_MODELS.includes(model)) {
+                        // si es NextAuth, dejá pasar como estaba
+                        return delegateOf(model, prisma).findUnique(args);
+                    }
+
+                    // findUnique NO permite agregar más campos al where; usamos findFirst
+                    const d = delegateOf(model, prisma);
+                    return d.findFirst({
+                        where: { ...(args as any).where, deleted: false },
+                    });
+                },
+
+                async findFirst({ args, query, model }) {
+                    if (EXCLUDED_MODELS.includes(model)) {
+                        return query(args);
+                    }
+
+                    // Agregar filtro deleted: false para soft-delete
+                    const where = (args as any).where || {};
+                    (args as any).where = {
+                        ...where,
+                        deleted: false,
+                    };
+
+                    return query(args);
+                },
+
+                async findMany({ args, query, model }) {
+                    if (EXCLUDED_MODELS.includes(model)) {
+                        return query(args);
+                    }
+
+                    // Agregar filtro deleted: false para soft-delete
+                    const where = (args as any).where || {};
+                    (args as any).where = {
+                        ...where,
+                        deleted: false,
+                    };
+
+                    return query(args);
+                },
                 async create({ args, query, model }) {
                     if (EXCLUDED_MODELS.includes(model)) {
                         return query(args);
@@ -47,24 +96,56 @@ export function createAuditInterceptor(prisma: PrismaClient) {
 
                 async update({ args, query, model }) {
                     if (EXCLUDED_MODELS.includes(model)) {
-                        return query(args);
+                        const auditInfo = await getAuditInfo();
+                        (args as any).data = {
+                            ...(args as any).data,
+                            updatedAt: auditInfo.timestamp,
+                            updatedBy: auditInfo.userId,
+                            updatedIp: auditInfo.userIp,
+                        };
+                        return delegateOf(model, prisma).update(args);
                     }
 
-                    const auditInfo = await getAuditInfo();
-                    const auditFields = {
-                        updatedAt: auditInfo.timestamp,
-                        updatedBy: auditInfo.userId,
-                        updatedIp: auditInfo.userIp,
-                        // Solo incrementar versión si no es un soft delete
-                        ...(!(args.data as any).deleted && { version: { increment: 1 } }),
-                    };
+                    return handleConcurrencyError(async () => {
+                        const audit = await getAuditInfo();
+                        const d = delegateOf(model, prisma);
+                        const { where, data } = args as any;
 
-                    args.data = {
-                        ...args.data,
-                        ...auditFields,
-                    };
+                        // FORZAR optimistic locking: exigir que toda update lleve version en el where
+                        if (!('version' in where)) {
+                            throw new Error(`[${model}] Falta 'version' en WHERE para optimistic locking. Debe incluir la versión esperada del registro.`);
+                        }
 
-                    return query(args);
+                        // Convertir update -> updateMany para poder chequear count
+                        const res = await d.updateMany({
+                            where,
+                            data: {
+                                ...data,
+                                version: { increment: 1 },
+                                updatedAt: audit.timestamp,
+                                updatedBy: audit.userId,
+                                updatedIp: audit.userIp,
+                            }
+                        });
+
+                        if (res.count === 0) {
+                            // Conflict: nadie matcheó id+version
+                            const current = await d.findFirst({
+                                where: { id: where.id },
+                                select: { id: true, version: true, updatedAt: true },
+                            });
+
+                            const err: any = new Error("OPTIMISTIC_LOCK");
+                            err.code = "OPTIMISTIC_LOCK";
+                            err.meta = { current };
+                            throw err;
+                        }
+
+                        // Devolver el registro actualizado (sin version en where para obtener el actualizado)
+                        return d.findFirst({
+                            where: { id: where.id }
+                        });
+                    });
                 },
 
                 async updateMany({ args, query, model }) {
@@ -72,61 +153,84 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                         return query(args);
                     }
 
-                    const auditInfo = await getAuditInfo();
-                    const auditFields = {
-                        updatedAt: auditInfo.timestamp,
-                        updatedBy: auditInfo.userId,
-                        updatedIp: auditInfo.userIp,
-                        ...(!(args.data as any).deleted && { version: { increment: 1 } }),
-                    };
+                    return handleConcurrencyError(async () => {
+                        const auditInfo = await getAuditInfo();
+                        const auditFields = {
+                            updatedAt: auditInfo.timestamp,
+                            updatedBy: auditInfo.userId,
+                            updatedIp: auditInfo.userIp,
+                            ...(!(args.data as any).deleted && { version: { increment: 1 } }),
+                        };
 
-                    args.data = {
-                        ...args.data,
-                        ...auditFields,
-                    };
+                        args.data = {
+                            ...args.data,
+                            ...auditFields,
+                        };
 
-                    return query(args);
+                        return query(args);
+                    });
                 },
 
                 async upsert({ args, query, model }) {
                     if (EXCLUDED_MODELS.includes(model)) {
-                        return query(args);
+                        return delegateOf(model, prisma).upsert(args);
                     }
 
-                    const auditInfo = await getAuditInfo();
-                    const now = auditInfo.timestamp;
+                    return handleConcurrencyError(async () => {
+                        const audit = await getAuditInfo();
+                        const d = delegateOf(model, prisma);
 
-                    // Campos para create
-                    const createAuditFields = {
-                        version: 0,
-                        deleted: false,
-                        createdAt: now,
-                        createdBy: auditInfo.userId,
-                        createdIp: auditInfo.userIp,
-                        updatedAt: now,
-                        updatedBy: auditInfo.userId,
-                        updatedIp: auditInfo.userIp,
-                    };
+                        const now = audit.timestamp;
 
-                    // Campos para update
-                    const updateAuditFields = {
-                        updatedAt: now,
-                        updatedBy: auditInfo.userId,
-                        updatedIp: auditInfo.userIp,
-                        ...(!(args.update as any).deleted && { version: { increment: 1 } }),
-                    };
+                        // extraemos expectedVersion del update.* y lo quitamos
+                        const upd: any = (args as any).update || {};
+                        const expectedVersion: number | undefined =
+                            upd.__expectedVersion ?? upd.expectedVersion ?? upd.versionExpected;
 
-                    args.create = {
-                        ...args.create,
-                        ...createAuditFields,
-                    };
+                        delete upd.__expectedVersion;
+                        delete upd.expectedVersion;
+                        delete upd.versionExpected;
 
-                    args.update = {
-                        ...args.update,
-                        ...updateAuditFields,
-                    };
+                        // audit fields
+                        const createAudit = {
+                            version: 0,
+                            deleted: false,
+                            createdAt: now,
+                            createdBy: audit.userId,
+                            createdIp: audit.userIp,
+                            updatedAt: now,
+                            updatedBy: audit.userId,
+                            updatedIp: audit.userIp,
+                        };
+                        const updateAudit = {
+                            updatedAt: now,
+                            updatedBy: audit.userId,
+                            updatedIp: audit.userIp,
+                            ...(!upd.deleted && { version: { increment: 1 } }),
+                        };
 
-                    return query(args);
+                        // upsert manual para poder chequear versión
+                        const existing = await d.findFirst({ where: (args as any).where });
+
+                        if (!existing) {
+                            return d.create({ data: { ...(args as any).create, ...createAudit } });
+                        }
+
+                        if (expectedVersion != null && existing.version !== expectedVersion) {
+                            const err: any = new Error("OPTIMISTIC_LOCK");
+                            err.code = "OPTIMISTIC_LOCK";
+                            err.meta = { current: { id: existing.id, version: existing.version, updatedAt: existing.updatedAt } };
+                            throw err;
+                        }
+
+                        // update con versión OK
+                        await d.updateMany({
+                            where: { ...(args as any).where, ...(expectedVersion != null ? { version: expectedVersion } : {}) },
+                            data: { ...upd, ...updateAudit },
+                        });
+
+                        return d.findFirst({ where: (args as any).where });
+                    });
                 },
 
                 async delete({ args, query, model }) {
@@ -169,54 +273,7 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                     });
                 },
 
-                // Filtrar registros eliminados en operaciones de lectura
-                async findMany({ args, query, model }) {
-                    if (EXCLUDED_MODELS.includes(model)) {
-                        return query(args);
-                    }
 
-                    if (!args.where) {
-                        args.where = { deleted: false };
-                    } else {
-                        args.where = {
-                            ...args.where,
-                            deleted: false,
-                        };
-                    }
-
-                    return query(args);
-                },
-
-                async findFirst({ args, query, model }) {
-                    if (EXCLUDED_MODELS.includes(model)) {
-                        return query(args);
-                    }
-
-                    if (!args.where) {
-                        args.where = { deleted: false };
-                    } else {
-                        args.where = {
-                            ...args.where,
-                            deleted: false,
-                        };
-                    }
-
-                    return query(args);
-                },
-
-                async findUnique({ args, query, model }) {
-                    if (EXCLUDED_MODELS.includes(model)) {
-                        return query(args);
-                    }
-
-                    // Para findUnique, agregar deleted: false al AND del where
-                    args.where = {
-                        ...args.where,
-                        deleted: false,
-                    };
-
-                    return query(args);
-                },
 
                 async count({ args, query, model }) {
                     if (EXCLUDED_MODELS.includes(model)) {

@@ -3,7 +3,6 @@
 import { useI18nContext } from "@/components/providers/i18n-provider";
 import { Card } from "@/components/ui/card";
 import { EditPlayerModal } from "@/components/ui/edit-player-modal";
-import { HistoricalChart } from "@/components/ui/historical-chart";
 import { PlayerProfileSkeleton } from "@/components/ui/loading-skeleton";
 import { StickyPlayerHeader } from "@/components/ui/sticky-player-header";
 import { UnifiedPlayerCard } from "@/components/ui/unified-player-card";
@@ -11,7 +10,19 @@ import { unifiedStyles } from "@/components/ui/unified-styles";
 import { useErrorHandler } from "@/hooks/use-error-handler";
 import { DanConfig, getDanRank, getNextDanRank } from "@/lib/game-helpers-client";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { useEffect, useRef, useState } from "react";
+
+// Carga diferida del gráfico
+const HistoricalChart = dynamic(
+  () => import("@/components/ui/historical-chart").then(m => m.HistoricalChart),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[280px] w-full rounded-lg bg-muted/40 animate-pulse" />
+    )
+  }
+);
 
 // ===============================
 // Helpers de formato
@@ -170,9 +181,22 @@ interface ChartDataPoint {
 
 interface PlayerProfileProps {
   legajo: number;
+  initial?: {
+    player: PlayerData;
+    stats: PlayerStats;
+    rankings: PlayerRankings;
+    chartData: ChartDataPoint[];
+    seasonData: ChartDataPoint[];
+    danConfigsYonma: DanConfig[];
+    danConfigsSanma: DanConfig[];
+    isLinked?: boolean;
+    hasPendingRequest?: boolean;
+    userHasAnyLink?: boolean;
+    userHasRejectedRequest?: boolean;
+  };
 }
 
-export function PlayerProfileNew({ legajo }: PlayerProfileProps) {
+export function PlayerProfileNew({ legajo, initial }: PlayerProfileProps) {
   const { t, language, isReady } = useI18nContext();
   const { data: session, status } = useSession();
   const { handleError, handleSuccess } = useErrorHandler();
@@ -265,18 +289,22 @@ export function PlayerProfileNew({ legajo }: PlayerProfileProps) {
   };
 
 
-  const [playerData, setPlayerData] = useState<PlayerData | null>(null);
-  const [stats, setStats] = useState<PlayerStats | null>(null);
-  const [rankings, setRankings] = useState<PlayerRankings | null>(null);
-  const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
-  const [seasonData, setSeasonData] = useState<ChartDataPoint[]>([]);
-  const [danConfigsYonma, setDanConfigsYonma] = useState<DanConfig[]>([]);
-  const [danConfigsSanma, setDanConfigsSanma] = useState<DanConfig[]>([]);
+  const [playerData, setPlayerData] = useState<PlayerData | null>(initial?.player ?? null);
+  const [stats, setStats] = useState<PlayerStats | null>(initial?.stats ?? null);
+  const [rankings, setRankings] = useState<PlayerRankings | null>(initial?.rankings ?? null);
+  const [chartData, setChartData] = useState<ChartDataPoint[]>(initial?.chartData ?? []);
+  const [seasonData, setSeasonData] = useState<ChartDataPoint[]>(initial?.seasonData ?? []);
+  const [danConfigsYonma, setDanConfigsYonma] = useState<DanConfig[]>(initial?.danConfigsYonma ?? []);
+  const [danConfigsSanma, setDanConfigsSanma] = useState<DanConfig[]>(initial?.danConfigsSanma ?? []);
   const [loading, setLoading] = useState(false);
   const [gameTypeFilter, setGameTypeFilter] = useState<'HANCHAN' | 'TONPUUSEN' | 'TOTAL'>('TOTAL');
   const [isSanma, setIsSanma] = useState<boolean>(false); // false = 4 jugadores, true = 3 jugadores
   const [chartType, setChartType] = useState<'dan' | 'rate' | 'position' | 'season'>('dan');
   const [submitting, setSubmitting] = useState(false);
+
+  // Estados para carga diferida del gráfico
+  const [chartVisible, setChartVisible] = useState(false);
+  const chartSentinelRef = useRef<HTMLDivElement | null>(null);
 
   const [error, setError] = useState<string | null>(null);
 
@@ -284,11 +312,27 @@ export function PlayerProfileNew({ legajo }: PlayerProfileProps) {
   // Estados para vinculación
   const [linkMessage, setLinkMessage] = useState<string | null>(null);
   const [linkedPlayerId, setLinkedPlayerId] = useState<number | null>(null);
-  const [hasPendingRequest, setHasPendingRequest] = useState(false);
-  const [userHasAnyLink, setUserHasAnyLink] = useState(false); // ✅ Nuevo estado para verificar si el usuario ya está vinculado a algún jugador
-  const [userHasRejectedRequest, setUserHasRejectedRequest] = useState(false); // ✅ Nuevo estado para verificar si el usuario tiene solicitudes rechazadas
+  const [hasPendingRequest, setHasPendingRequest] = useState(initial?.hasPendingRequest ?? false);
+  const [userHasAnyLink, setUserHasAnyLink] = useState(initial?.userHasAnyLink ?? false); // ✅ Nuevo estado para verificar si el usuario ya está vinculado a algún jugador
+  const [userHasRejectedRequest, setUserHasRejectedRequest] = useState(initial?.userHasRejectedRequest ?? false); // ✅ Nuevo estado para verificar si el usuario tiene solicitudes rechazadas
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [isUnlinking, setIsUnlinking] = useState(false);
+
+  // IntersectionObserver para carga diferida del gráfico
+  useEffect(() => {
+    if (!chartSentinelRef.current || chartVisible) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some(e => e.isIntersecting)) {
+          setChartVisible(true);
+          io.disconnect();
+        }
+      },
+      { root: null, rootMargin: "200px", threshold: 0 }
+    );
+    io.observe(chartSentinelRef.current);
+    return () => io.disconnect();
+  }, [chartVisible]);
 
   // Función para abrir modal de edición
   const handleEditProfile = () => {
@@ -428,6 +472,9 @@ export function PlayerProfileNew({ legajo }: PlayerProfileProps) {
   useEffect(() => {
     if (!isReady) return; // Esperar a que i18n esté listo
 
+    // Si llegó del server, no pegues el primer fetch
+    if (initial?.player && initial?.stats) return;
+
     // Cargando perfil...
 
     // ✅ Si no está autenticado, limpiar estado de vinculación pero seguir cargando datos del jugador
@@ -446,7 +493,7 @@ export function PlayerProfileNew({ legajo }: PlayerProfileProps) {
       try {
         setLoading(true);
         setError(null); // Limpiar error al empezar
-        const response = await fetch(`/api/players/${legajo}/profile?t=${Date.now()}`, {
+        const response = await fetch(`/api/players/${legajo}/profile`, {
           signal: ac.signal,
           cache: 'no-store' // ✅ Evitar caché del navegador
         });
@@ -501,27 +548,27 @@ export function PlayerProfileNew({ legajo }: PlayerProfileProps) {
     return () => {
       ac.abort();
     };
-  }, [legajo, isReady, t, status, handleError]);
+  }, [legajo, isReady, t, status, handleError, initial]);
 
   // Cargar configuraciones DAN para ambos modos una sola vez (evita flicker al cambiar)
   useEffect(() => {
+    // Si ya tenemos las configs del server, no hacer fetch
+    if (initial?.danConfigsYonma && initial?.danConfigsSanma) return;
+
     (async () => {
       try {
-        const [resYonma, resSanma] = await Promise.all([
-          fetch(`/api/config/dan-configs?sanma=false`),
-          fetch(`/api/config/dan-configs?sanma=true`)
-        ]);
-        if (resYonma.ok) {
-          setDanConfigsYonma(await resYonma.json());
-        }
-        if (resSanma.ok) {
-          setDanConfigsSanma(await resSanma.json());
-        }
+        // Un solo viaje: trae { dan, rate, seasons, colors }
+        const res = await fetch("/api/config/cache", { cache: "force-cache" });
+        if (!res.ok) return;
+        const json = await res.json();
+        const dan: DanConfig[] = json?.data?.dan ?? [];
+        setDanConfigsYonma(dan.filter(d => !d.sanma));
+        setDanConfigsSanma(dan.filter(d => d.sanma));
       } catch (err) {
-        console.error('Error loading DAN configs:', err);
+        console.error("Error loading DAN configs:", err);
       }
     })();
-  }, []);
+  }, [initial]);
 
   // Verificar vinculación del usuario y solicitudes pendientes
   useEffect(() => {
@@ -687,8 +734,11 @@ export function PlayerProfileNew({ legajo }: PlayerProfileProps) {
           );
         })()}
 
-        {/* Gráfico histórico */}
-        {chartData.length > 0 && (
+        {/* Sentinel para activar la carga del gráfico */}
+        <div ref={chartSentinelRef} />
+
+        {/* Gráfico histórico - carga diferida */}
+        {chartVisible && chartData.length > 0 && (
           <Card className={`p-6 ${unifiedStyles.card}`}>
             <HistoricalChart
               chartData={chartData}

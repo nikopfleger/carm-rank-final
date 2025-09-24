@@ -1,11 +1,13 @@
 import { useAbmService } from '@/components/providers/services-provider';
 import { useCallback, useState } from 'react';
+import { useConcurrencyErrorHandler } from './use-concurrency-error-handler';
 import { useErrorHandler } from './use-error-handler';
 
 // Hook personalizado para operaciones ABM de Countries
 export function useCountriesOperations() {
     const abmService = useAbmService();
     const { handleError, handleSuccess } = useErrorHandler();
+    const { handleConcurrencyError, handleOptimisticLockError } = useConcurrencyErrorHandler();
     const [loading, setLoading] = useState(false);
 
     const load = useCallback(async (deleted = false) => {
@@ -41,13 +43,23 @@ export function useCountriesOperations() {
             const result = await abmService.updateCountry(id, data);
             handleSuccess('País actualizado exitosamente', 'Actualización exitosa');
             return result;
-        } catch (error) {
+        } catch (error: any) {
+            // Manejar errores de optimistic lock específicamente
+            if (handleOptimisticLockError(error, 'Actualizar país', error.response?.data)) {
+                return; // El error ya fue manejado
+            }
+
+            // Manejar otros errores de concurrencia
+            if (handleConcurrencyError(error, 'Actualizar país')) {
+                return; // El error ya fue manejado
+            }
+
             handleError(error, 'Actualizar país');
             throw error;
         } finally {
             setLoading(false);
         }
-    }, [abmService, handleError, handleSuccess]);
+    }, [abmService, handleError, handleSuccess, handleConcurrencyError, handleOptimisticLockError]);
 
     const remove = useCallback(async (id: number) => {
         setLoading(true);

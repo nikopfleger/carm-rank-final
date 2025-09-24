@@ -91,6 +91,16 @@ export type CacheShape = {
     rate: RateConfig[];
     seasons: SeasonConfig[];
     ranking: PlayerRanking[];
+    // 4p rankings
+    ranking_4p_general_activos: PlayerRanking[];
+    ranking_4p_general_todos: PlayerRanking[];
+    ranking_4p_temporada_activos: PlayerRanking[];
+    ranking_4p_temporada_todos: PlayerRanking[];
+    // 3p rankings
+    ranking_3p_general_activos: PlayerRanking[];
+    ranking_3p_general_todos: PlayerRanking[];
+    ranking_3p_temporada_activos: PlayerRanking[];
+    ranking_3p_temporada_todos: PlayerRanking[];
     colors: Record<string, string>;
     lastUpdated: number;
 };
@@ -200,6 +210,334 @@ async function loadRanking(): Promise<PlayerRanking[]> {
     }));
 }
 
+async function loadRanking4pGeneralActivos(): Promise<PlayerRanking[]> {
+    const players = await getPlayersWithRanking(undefined, 'GENERAL', false, false);
+    return players.map(p => ({
+        id: p.id,
+        nickname: p.nickname,
+        fullname: p.fullname,
+        country_id: p.country_id,
+        player_id: p.player_id,
+        birthday: p.birthday,
+        country_iso: p.country_iso,
+        country_name: p.country_name,
+        createdAt: p.createdAt,
+        updatedAt: p.updatedAt,
+        position: p.position,
+        total_games: p.total_games,
+        average_position: p.average_position,
+        dan_points: p.dan_points,
+        rate_points: p.rate_points,
+        max_rate: p.max_rate,
+        win_rate: p.win_rate,
+        rank: p.rank,
+        rank_spanish: p.rank_spanish,
+        rank_color: p.rank_color,
+        season_points: p.season_points,
+        season_average_position: p.season_average_position,
+        rank_min_points: p.rank_min_points,
+        rank_max_points: p.rank_max_points,
+        next_rank: p.next_rank,
+        first_place_h: p.first_place_h,
+        second_place_h: p.second_place_h,
+        third_place_h: p.third_place_h,
+        fourth_place_h: p.fourth_place_h,
+        first_place_t: p.first_place_t,
+        second_place_t: p.second_place_t,
+        third_place_t: p.third_place_t,
+        fourth_place_t: p.fourth_place_t,
+        trend_dan_delta10: p.trend_dan_delta10,
+        trend_season_delta10: p.trend_season_delta10,
+    }));
+}
+
+async function loadRanking4pGeneralTodos(): Promise<PlayerRanking[]> {
+    const players = await getPlayersWithRanking(undefined, 'GENERAL', true, false);
+    return players.map(p => ({
+        id: p.id,
+        nickname: p.nickname,
+        fullname: p.fullname,
+        country_id: p.country_id,
+        player_id: p.player_id,
+        birthday: p.birthday,
+        country_iso: p.country_iso,
+        country_name: p.country_name,
+        createdAt: p.createdAt,
+        updatedAt: p.updatedAt,
+        position: p.position,
+        total_games: p.total_games,
+        average_position: p.average_position,
+        dan_points: p.dan_points,
+        rate_points: p.rate_points,
+        max_rate: p.max_rate,
+        win_rate: p.win_rate,
+        rank: p.rank,
+        rank_spanish: p.rank_spanish,
+        rank_color: p.rank_color,
+        season_points: p.season_points,
+        season_average_position: p.season_average_position,
+        rank_min_points: p.rank_min_points,
+        rank_max_points: p.rank_max_points,
+        next_rank: p.next_rank,
+        first_place_h: p.first_place_h,
+        second_place_h: p.second_place_h,
+        third_place_h: p.third_place_h,
+        fourth_place_h: p.fourth_place_h,
+        first_place_t: p.first_place_t,
+        second_place_t: p.second_place_t,
+        third_place_t: p.third_place_t,
+        fourth_place_t: p.fourth_place_t,
+        trend_dan_delta10: p.trend_dan_delta10,
+        trend_season_delta10: p.trend_season_delta10,
+    }));
+}
+
+async function loadRanking4pTemporadaActivos(): Promise<PlayerRanking[]> {
+    const players = await getPlayersWithRanking(undefined, 'TEMPORADA', false, false);
+    return players.map(p => ({
+        id: p.id,
+        nickname: p.nickname,
+        fullname: p.fullname,
+        country_id: p.country_id,
+        player_id: p.player_id,
+        birthday: p.birthday,
+        country_iso: p.country_iso,
+        country_name: p.country_name,
+        createdAt: p.createdAt,
+        updatedAt: p.updatedAt,
+        position: p.position,
+        total_games: p.total_games,
+        average_position: p.average_position,
+        dan_points: p.dan_points,
+        rate_points: p.rate_points,
+        max_rate: p.max_rate,
+        win_rate: p.win_rate,
+        rank: p.rank,
+        rank_spanish: p.rank_spanish,
+        rank_color: p.rank_color,
+        season_points: p.season_points,
+        season_average_position: p.season_average_position,
+        rank_min_points: p.rank_min_points,
+        rank_max_points: p.rank_max_points,
+        next_rank: p.next_rank,
+        first_place_h: p.first_place_h,
+        second_place_h: p.second_place_h,
+        third_place_h: p.third_place_h,
+        fourth_place_h: p.fourth_place_h,
+        first_place_t: p.first_place_t,
+        second_place_t: p.second_place_t,
+        third_place_t: p.third_place_t,
+        fourth_place_t: p.fourth_place_t,
+        trend_dan_delta10: p.trend_dan_delta10,
+        trend_season_delta10: p.trend_season_delta10,
+    }));
+}
+
+async function loadRanking4pTemporadaTodos(): Promise<PlayerRanking[]> {
+    const players = await getPlayersWithRanking(undefined, 'TEMPORADA', true, false);
+    return players.map(p => ({
+        id: p.id,
+        nickname: p.nickname,
+        fullname: p.fullname,
+        country_id: p.country_id,
+        player_id: p.player_id,
+        birthday: p.birthday,
+        country_iso: p.country_iso,
+        country_name: p.country_name,
+        createdAt: p.createdAt,
+        updatedAt: p.updatedAt,
+        position: p.position,
+        total_games: p.total_games,
+        average_position: p.average_position,
+        dan_points: p.dan_points,
+        rate_points: p.rate_points,
+        max_rate: p.max_rate,
+        win_rate: p.win_rate,
+        rank: p.rank,
+        rank_spanish: p.rank_spanish,
+        rank_color: p.rank_color,
+        season_points: p.season_points,
+        season_average_position: p.season_average_position,
+        rank_min_points: p.rank_min_points,
+        rank_max_points: p.rank_max_points,
+        next_rank: p.next_rank,
+        first_place_h: p.first_place_h,
+        second_place_h: p.second_place_h,
+        third_place_h: p.third_place_h,
+        fourth_place_h: p.fourth_place_h,
+        first_place_t: p.first_place_t,
+        second_place_t: p.second_place_t,
+        third_place_t: p.third_place_t,
+        fourth_place_t: p.fourth_place_t,
+        trend_dan_delta10: p.trend_dan_delta10,
+        trend_season_delta10: p.trend_season_delta10,
+    }));
+}
+
+async function loadRanking3pGeneralActivos(): Promise<PlayerRanking[]> {
+    const players = await getPlayersWithRanking(undefined, 'GENERAL', false, true);
+    return players.map(p => ({
+        id: p.id,
+        nickname: p.nickname,
+        fullname: p.fullname,
+        country_id: p.country_id,
+        player_id: p.player_id,
+        birthday: p.birthday,
+        country_iso: p.country_iso,
+        country_name: p.country_name,
+        createdAt: p.createdAt,
+        updatedAt: p.updatedAt,
+        position: p.position,
+        total_games: p.total_games,
+        average_position: p.average_position,
+        dan_points: p.dan_points,
+        rate_points: p.rate_points,
+        max_rate: p.max_rate,
+        win_rate: p.win_rate,
+        rank: p.rank,
+        rank_spanish: p.rank_spanish,
+        rank_color: p.rank_color,
+        season_points: p.season_points,
+        season_average_position: p.season_average_position,
+        rank_min_points: p.rank_min_points,
+        rank_max_points: p.rank_max_points,
+        next_rank: p.next_rank,
+        first_place_h: p.first_place_h,
+        second_place_h: p.second_place_h,
+        third_place_h: p.third_place_h,
+        fourth_place_h: p.fourth_place_h,
+        first_place_t: p.first_place_t,
+        second_place_t: p.second_place_t,
+        third_place_t: p.third_place_t,
+        fourth_place_t: p.fourth_place_t,
+        trend_dan_delta10: p.trend_dan_delta10,
+        trend_season_delta10: p.trend_season_delta10,
+    }));
+}
+
+async function loadRanking3pGeneralTodos(): Promise<PlayerRanking[]> {
+    const players = await getPlayersWithRanking(undefined, 'GENERAL', true, true);
+    return players.map(p => ({
+        id: p.id,
+        nickname: p.nickname,
+        fullname: p.fullname,
+        country_id: p.country_id,
+        player_id: p.player_id,
+        birthday: p.birthday,
+        country_iso: p.country_iso,
+        country_name: p.country_name,
+        createdAt: p.createdAt,
+        updatedAt: p.updatedAt,
+        position: p.position,
+        total_games: p.total_games,
+        average_position: p.average_position,
+        dan_points: p.dan_points,
+        rate_points: p.rate_points,
+        max_rate: p.max_rate,
+        win_rate: p.win_rate,
+        rank: p.rank,
+        rank_spanish: p.rank_spanish,
+        rank_color: p.rank_color,
+        season_points: p.season_points,
+        season_average_position: p.season_average_position,
+        rank_min_points: p.rank_min_points,
+        rank_max_points: p.rank_max_points,
+        next_rank: p.next_rank,
+        first_place_h: p.first_place_h,
+        second_place_h: p.second_place_h,
+        third_place_h: p.third_place_h,
+        fourth_place_h: p.fourth_place_h,
+        first_place_t: p.first_place_t,
+        second_place_t: p.second_place_t,
+        third_place_t: p.third_place_t,
+        fourth_place_t: p.fourth_place_t,
+        trend_dan_delta10: p.trend_dan_delta10,
+        trend_season_delta10: p.trend_season_delta10,
+    }));
+}
+
+async function loadRanking3pTemporadaActivos(): Promise<PlayerRanking[]> {
+    const players = await getPlayersWithRanking(undefined, 'TEMPORADA', false, true);
+    return players.map(p => ({
+        id: p.id,
+        nickname: p.nickname,
+        fullname: p.fullname,
+        country_id: p.country_id,
+        player_id: p.player_id,
+        birthday: p.birthday,
+        country_iso: p.country_iso,
+        country_name: p.country_name,
+        createdAt: p.createdAt,
+        updatedAt: p.updatedAt,
+        position: p.position,
+        total_games: p.total_games,
+        average_position: p.average_position,
+        dan_points: p.dan_points,
+        rate_points: p.rate_points,
+        max_rate: p.max_rate,
+        win_rate: p.win_rate,
+        rank: p.rank,
+        rank_spanish: p.rank_spanish,
+        rank_color: p.rank_color,
+        season_points: p.season_points,
+        season_average_position: p.season_average_position,
+        rank_min_points: p.rank_min_points,
+        rank_max_points: p.rank_max_points,
+        next_rank: p.next_rank,
+        first_place_h: p.first_place_h,
+        second_place_h: p.second_place_h,
+        third_place_h: p.third_place_h,
+        fourth_place_h: p.fourth_place_h,
+        first_place_t: p.first_place_t,
+        second_place_t: p.second_place_t,
+        third_place_t: p.third_place_t,
+        fourth_place_t: p.fourth_place_t,
+        trend_dan_delta10: p.trend_dan_delta10,
+        trend_season_delta10: p.trend_season_delta10,
+    }));
+}
+
+async function loadRanking3pTemporadaTodos(): Promise<PlayerRanking[]> {
+    const players = await getPlayersWithRanking(undefined, 'TEMPORADA', true, true);
+    return players.map(p => ({
+        id: p.id,
+        nickname: p.nickname,
+        fullname: p.fullname,
+        country_id: p.country_id,
+        player_id: p.player_id,
+        birthday: p.birthday,
+        country_iso: p.country_iso,
+        country_name: p.country_name,
+        createdAt: p.createdAt,
+        updatedAt: p.updatedAt,
+        position: p.position,
+        total_games: p.total_games,
+        average_position: p.average_position,
+        dan_points: p.dan_points,
+        rate_points: p.rate_points,
+        max_rate: p.max_rate,
+        win_rate: p.win_rate,
+        rank: p.rank,
+        rank_spanish: p.rank_spanish,
+        rank_color: p.rank_color,
+        season_points: p.season_points,
+        season_average_position: p.season_average_position,
+        rank_min_points: p.rank_min_points,
+        rank_max_points: p.rank_max_points,
+        next_rank: p.next_rank,
+        first_place_h: p.first_place_h,
+        second_place_h: p.second_place_h,
+        third_place_h: p.third_place_h,
+        fourth_place_h: p.fourth_place_h,
+        first_place_t: p.first_place_t,
+        second_place_t: p.second_place_t,
+        third_place_t: p.third_place_t,
+        fourth_place_t: p.fourth_place_t,
+        trend_dan_delta10: p.trend_dan_delta10,
+        trend_season_delta10: p.trend_season_delta10,
+    }));
+}
+
 
 
 async function loadColors(dan: DanConfig[], rate: RateConfig[]): Promise<Record<string, string>> {
@@ -248,6 +586,38 @@ export async function initializeCache(): Promise<void> {
             const ranking = await loadRanking();
             console.log(`✅ Ranking cargado: ${ranking.length} jugadores`);
 
+            console.log('📊 Cargando ranking 4p general activos...');
+            const ranking_4p_general_activos = await loadRanking4pGeneralActivos();
+            console.log(`✅ Ranking 4p general activos cargado: ${ranking_4p_general_activos.length} jugadores`);
+
+            console.log('📊 Cargando ranking 4p general todos...');
+            const ranking_4p_general_todos = await loadRanking4pGeneralTodos();
+            console.log(`✅ Ranking 4p general todos cargado: ${ranking_4p_general_todos.length} jugadores`);
+
+            console.log('📊 Cargando ranking 4p temporada activos...');
+            const ranking_4p_temporada_activos = await loadRanking4pTemporadaActivos();
+            console.log(`✅ Ranking 4p temporada activos cargado: ${ranking_4p_temporada_activos.length} jugadores`);
+
+            console.log('📊 Cargando ranking 4p temporada todos...');
+            const ranking_4p_temporada_todos = await loadRanking4pTemporadaTodos();
+            console.log(`✅ Ranking 4p temporada todos cargado: ${ranking_4p_temporada_todos.length} jugadores`);
+
+            console.log('📊 Cargando ranking 3p general activos...');
+            const ranking_3p_general_activos = await loadRanking3pGeneralActivos();
+            console.log(`✅ Ranking 3p general activos cargado: ${ranking_3p_general_activos.length} jugadores`);
+
+            console.log('📊 Cargando ranking 3p general todos...');
+            const ranking_3p_general_todos = await loadRanking3pGeneralTodos();
+            console.log(`✅ Ranking 3p general todos cargado: ${ranking_3p_general_todos.length} jugadores`);
+
+            console.log('📊 Cargando ranking 3p temporada activos...');
+            const ranking_3p_temporada_activos = await loadRanking3pTemporadaActivos();
+            console.log(`✅ Ranking 3p temporada activos cargado: ${ranking_3p_temporada_activos.length} jugadores`);
+
+            console.log('📊 Cargando ranking 3p temporada todos...');
+            const ranking_3p_temporada_todos = await loadRanking3pTemporadaTodos();
+            console.log(`✅ Ranking 3p temporada todos cargado: ${ranking_3p_temporada_todos.length} jugadores`);
+
             console.log('🎨 Cargando colores...');
             const colors = await loadColors(dan, rate);
             console.log(`✅ Colores cargados: ${Object.keys(colors).length} colores`);
@@ -257,6 +627,14 @@ export async function initializeCache(): Promise<void> {
                 rate,
                 seasons,
                 ranking,
+                ranking_4p_general_activos,
+                ranking_4p_general_todos,
+                ranking_4p_temporada_activos,
+                ranking_4p_temporada_todos,
+                ranking_3p_general_activos,
+                ranking_3p_general_todos,
+                ranking_3p_temporada_activos,
+                ranking_3p_temporada_todos,
                 colors,
                 lastUpdated: Date.now(),
             };
@@ -310,6 +688,46 @@ export function getSeasons(): SeasonConfig[] {
 export function getRanking(): PlayerRanking[] {
     if (!cache) throw new Error('Cache not initialized');
     return cache.ranking;
+}
+
+export function getRanking4pGeneralActivos(): PlayerRanking[] {
+    if (!cache) throw new Error('Cache not initialized');
+    return cache.ranking_4p_general_activos;
+}
+
+export function getRanking4pGeneralTodos(): PlayerRanking[] {
+    if (!cache) throw new Error('Cache not initialized');
+    return cache.ranking_4p_general_todos;
+}
+
+export function getRanking4pTemporadaActivos(): PlayerRanking[] {
+    if (!cache) throw new Error('Cache not initialized');
+    return cache.ranking_4p_temporada_activos;
+}
+
+export function getRanking4pTemporadaTodos(): PlayerRanking[] {
+    if (!cache) throw new Error('Cache not initialized');
+    return cache.ranking_4p_temporada_todos;
+}
+
+export function getRanking3pGeneralActivos(): PlayerRanking[] {
+    if (!cache) throw new Error('Cache not initialized');
+    return cache.ranking_3p_general_activos;
+}
+
+export function getRanking3pGeneralTodos(): PlayerRanking[] {
+    if (!cache) throw new Error('Cache not initialized');
+    return cache.ranking_3p_general_todos;
+}
+
+export function getRanking3pTemporadaActivos(): PlayerRanking[] {
+    if (!cache) throw new Error('Cache not initialized');
+    return cache.ranking_3p_temporada_activos;
+}
+
+export function getRanking3pTemporadaTodos(): PlayerRanking[] {
+    if (!cache) throw new Error('Cache not initialized');
+    return cache.ranking_3p_temporada_todos;
 }
 
 export function getColors(): Record<string, string> {
@@ -433,10 +851,21 @@ export async function upsertRate(input: Omit<RateConfig, 'id'> & { id?: number }
 
 export async function invalidateRanking() {
     if (!cache) return;
-    console.log('🔄 Actualizando ranking en cache...');
+    console.log('🔄 Actualizando rankings en cache...');
+
+    // Actualizar todos los rankings
     cache.ranking = await loadRanking();
+    cache.ranking_4p_general_activos = await loadRanking4pGeneralActivos();
+    cache.ranking_4p_general_todos = await loadRanking4pGeneralTodos();
+    cache.ranking_4p_temporada_activos = await loadRanking4pTemporadaActivos();
+    cache.ranking_4p_temporada_todos = await loadRanking4pTemporadaTodos();
+    cache.ranking_3p_general_activos = await loadRanking3pGeneralActivos();
+    cache.ranking_3p_general_todos = await loadRanking3pGeneralTodos();
+    cache.ranking_3p_temporada_activos = await loadRanking3pTemporadaActivos();
+    cache.ranking_3p_temporada_todos = await loadRanking3pTemporadaTodos();
+
     cache.lastUpdated = Date.now();
-    console.log(`✅ Ranking actualizado - ${cache.ranking.length} jugadores`);
+    console.log(`✅ Rankings actualizados - 4p general activos: ${cache.ranking_4p_general_activos.length}, 4p general todos: ${cache.ranking_4p_general_todos.length}, 4p temporada activos: ${cache.ranking_4p_temporada_activos.length}, 4p temporada todos: ${cache.ranking_4p_temporada_todos.length}, 3p general activos: ${cache.ranking_3p_general_activos.length}, 3p general todos: ${cache.ranking_3p_general_todos.length}, 3p temporada activos: ${cache.ranking_3p_temporada_activos.length}, 3p temporada todos: ${cache.ranking_3p_temporada_todos.length} jugadores`);
 }
 
 export async function invalidateConfigs() {

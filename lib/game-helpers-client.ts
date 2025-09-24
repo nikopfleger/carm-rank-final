@@ -6,6 +6,7 @@ export interface DanConfig {
     maxPoints: number;
     color: string;
     cssClass: string;
+    sanma?: boolean;
 }
 
 export interface RateConfig {

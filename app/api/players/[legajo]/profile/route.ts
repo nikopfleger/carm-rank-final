@@ -854,7 +854,12 @@ export async function GET(
             }
         };
 
-        return NextResponse.json(response);
+        return NextResponse.json(response, {
+            headers: {
+                // 10 segundos fresco + SWR 30 segundos para perfiles
+                "Cache-Control": "s-maxage=10, stale-while-revalidate=30"
+            }
+        });
     } catch (error) {
         console.error("Error fetching player profile:", error);
         return NextResponse.json(

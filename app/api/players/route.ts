@@ -1,4 +1,4 @@
-import { invalidateRanking } from '@/lib/cache/core-cache';
+import { ensureCacheReady, getRanking3pGeneralActivos, getRanking3pGeneralTodos, getRanking3pTemporadaActivos, getRanking3pTemporadaTodos, getRanking4pGeneralActivos, getRanking4pGeneralTodos, getRanking4pTemporadaActivos, getRanking4pTemporadaTodos, invalidateRanking } from '@/lib/cache/core-cache';
 import { prisma } from '@/lib/database/client';
 import { getPlayersWithRanking } from '@/lib/database/queries/players-optimized';
 import { NextRequest, NextResponse } from 'next/server';
@@ -19,13 +19,46 @@ export async function GET(request: NextRequest) {
 
     console.log(`📊 [${new Date().toISOString()}] Parámetros: includeInactive=${includeInactive}, type=${type}${seasonId ? `, seasonId=${seasonId}` : ''}${sanma ? `, sanma=${sanma}` : ''}`);
 
-    // Obtener ranking usando la consulta optimizada con filtros/flags
-    const filteredPlayers = await getPlayersWithRanking(
-      undefined,
-      type,
-      includeInactive,
-      sanma === 'true'
-    );
+    // Usar caché para obtener rankings precalculados
+    await ensureCacheReady();
+
+    let filteredPlayers;
+    const isSanma = sanma === 'true';
+
+    if (type === 'GENERAL' && !isSanma && !includeInactive) {
+      // 4p General Activos
+      filteredPlayers = getRanking4pGeneralActivos();
+    } else if (type === 'GENERAL' && !isSanma && includeInactive) {
+      // 4p General Todos
+      filteredPlayers = getRanking4pGeneralTodos();
+    } else if (type === 'TEMPORADA' && !isSanma && !includeInactive) {
+      // 4p Temporada Activos
+      filteredPlayers = getRanking4pTemporadaActivos();
+    } else if (type === 'TEMPORADA' && !isSanma && includeInactive) {
+      // 4p Temporada Todos
+      filteredPlayers = getRanking4pTemporadaTodos();
+    } else if (type === 'GENERAL' && isSanma && !includeInactive) {
+      // 3p General Activos
+      filteredPlayers = getRanking3pGeneralActivos();
+    } else if (type === 'GENERAL' && isSanma && includeInactive) {
+      // 3p General Todos
+      filteredPlayers = getRanking3pGeneralTodos();
+    } else if (type === 'TEMPORADA' && isSanma && !includeInactive) {
+      // 3p Temporada Activos
+      filteredPlayers = getRanking3pTemporadaActivos();
+    } else if (type === 'TEMPORADA' && isSanma && includeInactive) {
+      // 3p Temporada Todos
+      filteredPlayers = getRanking3pTemporadaTodos();
+    } else {
+      // Fallback a consulta directa si no coincide con los 8 casos
+      console.log('⚠️ Usando fallback a consulta directa');
+      filteredPlayers = await getPlayersWithRanking(
+        undefined,
+        type,
+        includeInactive,
+        isSanma
+      );
+    }
 
     const duration = Date.now() - startTime;
     console.log(`✅ [${new Date().toISOString()}] Completado en ${duration}ms. Jugadores: ${filteredPlayers.length}`);
