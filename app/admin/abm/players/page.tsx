@@ -8,8 +8,11 @@ import { usePlayersOperationsUnified } from "@/hooks/use-players-operations-unif
 import { useUnifiedABM } from "@/hooks/use-unified-abm";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-const UnifiedABMLayout = dynamic(() => import("@/components/admin/abm/unified-abm-layout").then(m => m.UnifiedABMLayout));
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
+const UnifiedABMLayout = dynamic(() =>
+    import("@/components/admin/abm/unified-abm-layout").then((m) => m.UnifiedABMLayout)
+);
 
 interface Player {
     id: number;
@@ -38,181 +41,169 @@ export default function PlayersABMPageUnified() {
     const router = useRouter();
     const [countries, setCountries] = useState<Country[]>([]);
 
-    // Usar el hook personalizado para operaciones ABM
-    const { loading, load, create, update, remove, restore, loadCountries } = usePlayersOperationsUnified();
+    // Hook de operaciones
+    const { loading, load, create, update, remove, restore, loadCountries } =
+        usePlayersOperationsUnified();
 
-    // Usar el hook unificado de ABM
-    const abm = useUnifiedABM<Player>({
-        loadFunction: async (showDeleted?: boolean) => {
+    // ==== Callbacks estables que le pasamos al ABM ====
+    const loadFn = useCallback(
+        async (showDeleted?: boolean) => {
             const result = await load(showDeleted);
-            return result;
+            return { data: (result as any)?.data ?? [] };
         },
-        createFunction: create,
-        updateFunction: (id: number | string, data: Partial<Player>) => update(Number(id), data),
-        deleteFunction: (id: number | string) => remove(Number(id)),
-        restoreFunction: (id: number | string) => restore(Number(id))
+        [load]
+    );
+    const createFn = useCallback((data: Partial<Player>) => create(data), [create]);
+    const updateFn = useCallback(
+        (id: number | string, data: Partial<Player>) => update(Number(id), data),
+        [update]
+    );
+    const deleteFn = useCallback((id: number | string) => remove(Number(id)), [remove]);
+    const restoreFn = useCallback((id: number | string) => restore(Number(id)), [restore]);
+
+    // Hook unificado
+    const abm = useUnifiedABM<Player>({
+        loadFunction: loadFn,
+        createFunction: createFn,
+        updateFunction: updateFn,
+        deleteFunction: deleteFn,
+        restoreFunction: restoreFn,
     });
 
-    // Cargar datos iniciales
+    // ==== Cargar países SOLO UNA VEZ ====
+    const didLoadCountries = useRef(false);
     useEffect(() => {
-        const loadInitialData = async () => {
+        if (didLoadCountries.current) return;
+        didLoadCountries.current = true; // guard idempotente
+
+        (async () => {
             try {
                 const countriesData = await loadCountries();
                 setCountries(countriesData);
-                await abm.loadData();
             } catch (error) {
-                console.error('Error loading initial data:', error);
+                console.error("Error loading countries:", error);
             }
-        };
-        loadInitialData();
-    }, [loadCountries, abm]);
+        })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // <-- intencionalmente vacío, para no depender de loadCountries
 
-    // Configuración de columnas del grid
-    const columns: GridColumn[] = [
-        {
-            key: "id",
-            label: "ID",
-            width: "80px",
-            sortable: true,
-            type: "number"
-        },
-        {
-            key: "nickname",
-            label: "Nickname",
-            width: "150px",
-            sortable: true,
-            type: "text"
-        },
-        {
-            key: "fullname",
-            label: "Nombre",
-            width: "200px",
-            sortable: true,
-            type: "text",
-            render: (value: string | undefined) => value !== undefined && value !== null ? value : '-'
-        },
-        {
-            key: "playerNumber",
-            label: "Legajo",
-            width: "100px",
-            sortable: true,
-            type: "number"
-        },
-        {
-            key: "country.fullName",
-            label: "País",
-            width: "150px",
-            sortable: true,
-            type: "text",
-            render: (value: string | undefined) => value !== undefined && value !== null ? value : '-'
-        },
-        {
-            key: "deleted",
-            label: "Estado",
-            type: "boolean",
-            width: "100px",
-            render: (value: boolean) => (
-                <Badge variant={value ? "destructive" : "default"}>
-                    {value ? "Eliminado" : "Activo"}
-                </Badge>
-            )
-        }
-    ];
-
-    // Configuración de campos del formulario
-    const formFields: FormField[] = [
-        { key: "nickname", label: "Nickname", type: "text", required: true },
-        { key: "fullname", label: "Nombre Completo", type: "text", required: false },
-        {
-            key: "countryId",
-            label: "País",
-            type: "select",
-            required: true,
-            options: countries.map(c => ({ value: c.id.toString(), label: c.name_es }))
-        },
-        { key: "playerNumber", label: "Legajo", type: "number", required: true },
-        { key: "birthday", label: "Fecha de Nacimiento", type: "date", required: false }
-    ];
-
-    // Configuración de acciones del grid
-    const actions: GridAction[] = [
-        {
-            key: "view",
-            label: "Ver Perfil",
-            icon: Users,
-            variant: "outline",
-            onClick: (row: Player) => {
-                router.push(`/player/${row.playerNumber}`);
+    // ==== Columnas, acciones y form fields memoizados ====
+    const columns: GridColumn[] = useMemo(
+        () => [
+            { key: "id", label: "ID", width: "80px", sortable: true, type: "number" },
+            { key: "nickname", label: "Nickname", width: "150px", sortable: true, type: "text" },
+            {
+                key: "fullname",
+                label: "Nombre",
+                width: "200px",
+                sortable: true,
+                type: "text",
+                render: (value?: string) => (value ?? "-"),
             },
-            show: () => true
-        },
-        {
-            key: "edit",
-            label: "Editar",
-            icon: Edit,
-            variant: "outline",
-            onClick: (row: Player) => abm.handleEdit(row),
-            show: (row: Player) => !row.deleted
-        },
-        {
-            key: "delete",
-            label: "Eliminar",
-            icon: Trash2,
-            variant: "destructive",
-            onClick: (row: Player) => {
-                if (confirm(`¿Estás seguro de que quieres eliminar al jugador "${row.nickname}"?`)) {
-                    abm.handleDelete(row);
-                }
+            { key: "playerNumber", label: "Legajo", width: "100px", sortable: true, type: "number" },
+            {
+                key: "country.fullName",
+                label: "País",
+                width: "150px",
+                sortable: true,
+                type: "text",
+                render: (value?: string) => (value ?? "-"),
             },
-            show: (row: Player) => !row.deleted
-        },
-        {
-            key: "restore",
-            label: "Restaurar",
-            icon: Eye,
-            variant: "outline",
-            onClick: (row: Player) => abm.handleRestore(row),
-            show: (row: Player) => row.deleted
-        }
-    ];
+            {
+                key: "deleted",
+                label: "Estado",
+                type: "boolean",
+                width: "100px",
+                render: (value: boolean) => (
+                    <Badge variant={value ? "destructive" : "default"}>
+                        {value ? "Eliminado" : "Activo"}
+                    </Badge>
+                ),
+            },
+        ],
+        []
+    );
+
+    const formFields: FormField[] = useMemo(
+        () => [
+            { key: "nickname", label: "Nickname", type: "text", required: true },
+            { key: "fullname", label: "Nombre Completo", type: "text", required: false },
+            {
+                key: "countryId",
+                label: "País",
+                type: "select",
+                required: true,
+                options: countries.map((c) => ({ value: String(c.id), label: c.name_es })),
+            },
+            { key: "playerNumber", label: "Legajo", type: "number", required: true },
+            { key: "birthday", label: "Fecha de Nacimiento", type: "date", required: false },
+        ],
+        [countries]
+    );
+
+    const actions: GridAction[] = useMemo(
+        () => [
+            {
+                key: "view",
+                label: "Ver Perfil",
+                icon: Users,
+                variant: "outline",
+                onClick: (row: Player) => router.push(`/player/${row.playerNumber}`),
+            },
+            {
+                key: "edit",
+                label: "Editar",
+                icon: Edit,
+                variant: "outline",
+                onClick: (row: Player) => abm.handleEdit(row),
+                show: (row: Player) => !row.deleted,
+            },
+            {
+                key: "delete",
+                label: "Eliminar",
+                icon: Trash2,
+                variant: "destructive",
+                onClick: (row: Player) => {
+                    if (confirm(`¿Estás seguro de que quieres eliminar al jugador "${row.nickname}"?`)) {
+                        abm.handleDelete(row);
+                    }
+                },
+                show: (row: Player) => !row.deleted,
+            },
+            {
+                key: "restore",
+                label: "Restaurar",
+                icon: Eye,
+                variant: "outline",
+                onClick: (row: Player) => abm.handleRestore(row),
+                show: (row: Player) => row.deleted,
+            },
+        ],
+        [router, abm]
+    );
 
     return (
         <UnifiedABMLayout
             title="Gestión de Jugadores"
             description="Administra los jugadores registrados en el sistema"
-
-            // Estado del formulario
             showForm={abm.showForm}
             editingItem={abm.editingItem}
-            formTitle={abm.editingItem ?
-                `Editar Jugador: ${abm.editingItem.nickname}` :
-                "Nuevo Jugador"
-            }
-
-            // Configuración del grid
+            formTitle={abm.editingItem ? `Editar Jugador: ${abm.editingItem.nickname}` : "Nuevo Jugador"}
             data={abm.data}
             columns={columns}
             actions={actions}
             loading={abm.loading || loading}
-
-            // Configuración del formulario
             formFields={formFields}
             formErrors={abm.formErrors}
             formSuccess={abm.formSuccess}
             successMessage="Jugador guardado correctamente"
-
-            // Configuración de búsqueda y filtros
             searchPlaceholder="Buscar jugadores..."
             showDeleted={abm.showDeleted}
             onToggleShowDeleted={abm.handleToggleShowDeleted}
-
-            // Callbacks
             onAdd={abm.handleAdd}
             onRefresh={abm.handleRefresh}
             onFormSubmit={abm.handleFormSubmit}
             onFormCancel={abm.handleFormCancel}
-
-            // Mensajes personalizados
             emptyMessage="No hay jugadores registrados"
         />
     );

@@ -5,9 +5,8 @@ import { ApiService } from '@/lib/services/api-service';
 import { GameService } from '@/lib/services/game-service';
 import { PlayerService } from '@/lib/services/player-service';
 import { PublicService } from '@/lib/services/public-service';
-import { createContext, ReactNode, useContext } from 'react';
+import { createContext, ReactNode, useContext, useMemo } from 'react';
 
-// Definir la interfaz de servicios
 interface Services {
     api: ApiService;
     abm: AbmService;
@@ -16,60 +15,41 @@ interface Services {
     public: PublicService;
 }
 
-// Crear el contexto
 const ServicesContext = createContext<Services | null>(null);
 
-// Props del provider
 interface ServicesProviderProps {
     children: ReactNode;
-    services?: Partial<Services>; // Para testing/mocking
+    services?: Partial<Services>; // para tests/mocks
 }
 
-// Provider component
 export function ServicesProvider({ children, services }: ServicesProviderProps) {
-    // Instancias por defecto
-    const defaultServices: Services = {
-        api: new ApiService(),
-        abm: new AbmService(),
-        game: new GameService(),
-        player: new PlayerService(),
-        public: new PublicService(),
-        ...services, // Override para testing
-    };
+    // Instancias: si viene override lo usamos, si no creamos UNA sola vez (useMemo deps por override)
+    const api = useMemo(() => services?.api ?? new ApiService(), [services?.api]);
+    const abm = useMemo(() => services?.abm ?? new AbmService(), [services?.abm]);
+    const game = useMemo(() => services?.game ?? new GameService(), [services?.game]);
+    const player = useMemo(() => services?.player ?? new PlayerService(), [services?.player]);
+    const pub = useMemo(() => services?.public ?? new PublicService(), [services?.public]);
+
+    // Objeto de contexto con identidad estable
+    const value = useMemo<Services>(() => ({
+        api, abm, game, player, public: pub
+    }), [api, abm, game, player, pub]);
 
     return (
-        <ServicesContext.Provider value={defaultServices}>
+        <ServicesContext.Provider value={value}>
             {children}
         </ServicesContext.Provider>
     );
 }
 
-// Hook para usar los servicios
 export function useServices(): Services {
-    const services = useContext(ServicesContext);
-    if (!services) {
-        throw new Error('useServices must be used within a ServicesProvider');
-    }
-    return services;
+    const ctx = useContext(ServicesContext);
+    if (!ctx) throw new Error('useServices must be used within a ServicesProvider');
+    return ctx;
 }
 
-// Hooks específicos para cada servicio
-export function useApiService(): ApiService {
-    return useServices().api;
-}
-
-export function useAbmService(): AbmService {
-    return useServices().abm;
-}
-
-export function useGameService(): GameService {
-    return useServices().game;
-}
-
-export function usePlayerService(): PlayerService {
-    return useServices().player;
-}
-
-export function usePublicService(): PublicService {
-    return useServices().public;
-}
+export const useApiService = () => useServices().api;
+export const useAbmService = () => useServices().abm;
+export const useGameService = () => useServices().game;
+export const usePlayerService = () => useServices().player;
+export const usePublicService = () => useServices().public;
