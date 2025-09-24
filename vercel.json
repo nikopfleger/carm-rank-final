@@ -1,23 +1,20 @@
 {
     "version": 2,
-    "name": "camr-rank",
-    "functions": {
-        "app/**/route.{ts,js}": {
-            "regions": [
-                "gru1"
-            ],
-            "maxDuration": 10
-        },
-        "api/**/*.js": {
-            "regions": [
-                "gru1"
-            ],
-            "maxDuration": 10
-        }
-    },
+    "name": "carm-rank",
     "regions": [
         "gru1"
     ],
+    "functions": {
+        "app/**/route.ts": {
+            "maxDuration": 10
+        },
+        "app/**/route.js": {
+            "maxDuration": 10
+        },
+        "api/**/*.js": {
+            "maxDuration": 10
+        }
+    },
     "headers": [
         {
             "source": "/images/(.*)",
