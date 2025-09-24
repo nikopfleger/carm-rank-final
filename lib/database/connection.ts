@@ -1,15 +1,25 @@
 import { PrismaClient } from '@prisma/client';
+import { getPrismaConfig, logConnectionInfo } from './connection-config';
 
 // Singleton pattern para evitar múltiples instancias de PrismaClient
-// Neon maneja el pooling automáticamente con PgBouncer
 let prismaInstance: PrismaClient | null = null;
 
 export function getPrismaClient(): PrismaClient {
     if (!prismaInstance) {
+        const config = getPrismaConfig();
+
+        // Log de información de conexión para debugging
+        if (process.env.NODE_ENV === 'development') {
+            logConnectionInfo();
+        }
+
         prismaInstance = new PrismaClient({
             log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
-            // Neon PostgreSQL maneja el pooling automáticamente
-            // No necesitamos configurar parámetros de pool adicionales
+            datasources: {
+                db: {
+                    url: config.url,
+                },
+            },
         });
     }
     return prismaInstance;

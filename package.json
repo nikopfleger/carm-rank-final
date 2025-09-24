@@ -13,15 +13,18 @@
   "scripts": {
     "analyze": "cross-env ANALYZE=true next build",
     "dev": "next dev",
-    "build": "npm run prisma:generate && npm run migrate:deploy && next build",
-    "start": "next start",
+    "build": "cross-env STAGE=build npm run prisma:generate && cross-env STAGE=migrate npm run migrate:deploy && cross-env STAGE=build next build",
+    "start": "cross-env STAGE=run next start",
     "prisma:generate": "prisma generate",
     "migrate:deploy": "prisma migrate deploy",
     "seed": "prisma db seed",
-    "postinstall": "prisma generate"
+    "postinstall": "cross-env STAGE=postinstall prisma generate",
+    "test:connection-config": "tsx scripts/test-connection-config.ts",
+    "lint": "next lint"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
+    "@aws-sdk/client-ses": "^3.895.0",
     "@prisma/client": "^6.15.0",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-icons": "^1.3.0",
@@ -31,8 +34,6 @@
     "@radix-ui/react-toggle": "^1.1.10",
     "@radix-ui/react-toggle-group": "^1.1.11",
     "@radix-ui/react-tooltip": "^1.2.8",
-    "@types/nodemailer": "^7.0.1",
-    "@types/uuid": "^10.0.0",
     "@vercel/analytics": "^1.5.0",
     "@vercel/blob": "^1.1.1",
     "@vercel/speed-insights": "^1.2.0",
@@ -45,7 +46,6 @@
     "lucide-react": "^0.363.0",
     "next": "^15.5.2",
     "next-auth": "^5.0.0-beta.29",
-    "node-fetch": "^2.7.0",
     "nodemailer": "^6.10.1",
     "react": "^18.3.1",
     "react-country-flag": "^3.1.0",
@@ -58,19 +58,24 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^15.5.3",
-    "@types/node": "^20",
+    "@types/node": "20.11.30",
+    "@types/nodemailer": "^7.0.1",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "autoprefixer": "^10.0.1",
     "cross-env": "^10.0.0",
     "csv-parse": "^6.1.0",
-    "eslint": "^8",
-    "eslint-config-next": "14.1.4",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^15.5.2",
     "postcss": "^8",
     "prisma": "^6.15.0",
-    "tailwindcss": "^3.3.0",
+    "tailwindcss": "^3.4.14",
     "tsx": "^4.6.0",
-    "typescript": "5.3"
-  }
+    "typescript": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=18.18 <23"
+  },
+  "packageManager": "npm@11.5.2"
 }

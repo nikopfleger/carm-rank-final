@@ -73,7 +73,7 @@ function toPlainText(x: any): string {
     return "";
 }
 
-function _GenericGrid({
+function GenericGrid({
     title,
     columns,
     actions,
@@ -407,5 +407,5 @@ function _GenericGrid({
 
 // ⛑️ Memo para evitar renders innecesarios si las props no cambian.
 // Útil cuando el padre re-crea objetos pero con igual contenido.
-export const GenericGridResponsive = React.memo(_GenericGrid);
+export const GenericGridResponsive = React.memo(GenericGrid);
 export default GenericGridResponsive;

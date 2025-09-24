@@ -33,11 +33,17 @@
     "typescriptreact": "html"
   },
   // ===== TypeScript (editor) =====
-  "typescript.tsdk": "node_modules\\typescript\\lib", // Usa TS de la workspace
+  // ✅ Fuerza a VS Code a usar la TS del proyecto (evita conflictos con @types/node)
+  "typescript.tsdk": "node_modules/typescript/lib",
+  // ✅ Muestra el prompt para confirmar que usas la TS del workspace
+  "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.tsserver.experimental.enableProjectDiagnostics": true,
   "typescript.validate.enable": true,
   "typescript.preferences.includePackageJsonAutoImports": "on",
   "typescript.suggest.autoImports": true,
+  // Opcionales (rendimiento en proyectos grandes):
+  // "typescript.tsserver.maxTsServerMemory": 4096,
+  // "typescript.tsserver.useSeparateSyntaxServer": true,
   // ===== ESLint =====
   "eslint.validate": [
     "javascript",
