@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
                 data: {
                     // Si no estaba completado y ahora tiene resultados, marcarlo como completado
                     isCompleted: !tournament.isCompleted ? true : tournament.isCompleted,
-                    endDate: !tournament.endDate ? new Date() : tournament.endDate
+                    endDate: !tournament.endDate ? new Date().toISOString().split('T')[0] : tournament.endDate
                 }
             });
 

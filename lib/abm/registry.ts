@@ -38,6 +38,76 @@ export const registry: Record<string, ResourceConfig> = {
         searchable: ['name', 'description'],
         include: { season: { select: { id: true, name: true } }, location: { select: { id: true, name: true } } },
         orderBy: { id: 'asc' },
+        mapCreate: (data: any) => {
+            // Filtrar campos que no deben enviarse a Prisma
+            const { id, createdAt, updatedAt, createdBy, createdIp, updatedBy, updatedIp, ...cleanData } = data;
+
+            // Convertir fechas de string a Date
+            if (data.startDate && typeof data.startDate === 'string') {
+                cleanData.startDate = new Date(data.startDate);
+            }
+            if (data.endDate && typeof data.endDate === 'string') {
+                cleanData.endDate = new Date(data.endDate);
+            }
+
+            // Convertir IDs de string a number
+            if (data.locationId && typeof data.locationId === 'string') {
+                cleanData.locationId = parseInt(data.locationId, 10);
+            }
+            if (data.seasonId && typeof data.seasonId === 'string') {
+                cleanData.seasonId = parseInt(data.seasonId, 10);
+            }
+
+            // Normalizar tipo de torneo
+            if (data.type && typeof data.type === 'string') {
+                const typeMap: Record<string, 'INDIVIDUAL' | 'TEAM' | 'LEAGUE'> = {
+                    individual: 'INDIVIDUAL',
+                    team: 'TEAM',
+                    league: 'LEAGUE',
+                    INDIVIDUAL: 'INDIVIDUAL',
+                    TEAM: 'TEAM',
+                    LEAGUE: 'LEAGUE',
+                };
+                cleanData.type = typeMap[data.type.toLowerCase()] || data.type;
+            }
+
+            return cleanData;
+        },
+        mapUpdate: (data: any) => {
+            // Filtrar campos que no deben enviarse a Prisma
+            const { id, createdAt, updatedAt, createdBy, createdIp, updatedBy, updatedIp, ...cleanData } = data;
+
+            // Convertir fechas de string a Date
+            if (data.startDate && typeof data.startDate === 'string') {
+                cleanData.startDate = new Date(data.startDate);
+            }
+            if (data.endDate && typeof data.endDate === 'string') {
+                cleanData.endDate = new Date(data.endDate);
+            }
+
+            // Convertir IDs de string a number
+            if (data.locationId && typeof data.locationId === 'string') {
+                cleanData.locationId = parseInt(data.locationId, 10);
+            }
+            if (data.seasonId && typeof data.seasonId === 'string') {
+                cleanData.seasonId = parseInt(data.seasonId, 10);
+            }
+
+            // Normalizar tipo de torneo
+            if (data.type && typeof data.type === 'string') {
+                const typeMap: Record<string, 'INDIVIDUAL' | 'TEAM' | 'LEAGUE'> = {
+                    individual: 'INDIVIDUAL',
+                    team: 'TEAM',
+                    league: 'LEAGUE',
+                    INDIVIDUAL: 'INDIVIDUAL',
+                    TEAM: 'TEAM',
+                    LEAGUE: 'LEAGUE',
+                };
+                cleanData.type = typeMap[data.type.toLowerCase()] || data.type;
+            }
+
+            return cleanData;
+        }
     },
     rulesets: {
         model: prisma.ruleset,

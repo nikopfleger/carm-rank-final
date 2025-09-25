@@ -5,7 +5,7 @@
  * Basado en la solución de Digital Ocean para prepared statements
  */
 
-import { getDatabaseUrl, getDirectUrl, getPrismaConfig, logConnectionInfo } from '../lib/database/connection-config';
+import { getDatabaseUrl, getDirectUrl, getPrismaConfig, logConnectionInfo } from '../../lib/database/connection-config';
 
 function testConnectionConfig() {
     console.log('🔍 Verificando configuración de conexión dinámica...\n');

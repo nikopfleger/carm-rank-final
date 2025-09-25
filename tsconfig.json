@@ -16,6 +16,10 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "types": [
+      "@types/node",
+      "@playwright/test"
+    ],
     "plugins": [
       {
         "name": "next"
@@ -34,6 +38,7 @@
     ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "tests/e2e/**"
   ]
 }

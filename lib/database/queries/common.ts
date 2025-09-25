@@ -58,7 +58,7 @@ export async function getRulesets(): Promise<Ruleset[]> {
     });
 
     // Type assertion to include updatedAt until Prisma client regenerates
-    type RulesetWithupdatedAt = typeof rulesets[0] & { updatedAt?: Date };
+    type RulesetWithupdatedAt = typeof rulesets[0] & { updatedAt: Date | null };
 
     return rulesets.map((ruleset: RulesetWithupdatedAt) => ({
       id: ruleset.id,

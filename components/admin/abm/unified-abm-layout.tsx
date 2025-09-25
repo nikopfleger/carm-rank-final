@@ -114,7 +114,7 @@ export function UnifiedABMLayout<T = any>({
                     <GenericForm
                         title={defaultFormTitle}
                         fields={formFields}
-                        initialData={editingItem || {}}
+                        initialData={editingItem ? { ...editingItem } : {}}
                         onSubmit={onFormSubmit}
                         onCancel={onFormCancel}
                         errors={formErrors}

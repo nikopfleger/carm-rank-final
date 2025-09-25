@@ -30,7 +30,7 @@ CREATE TABLE "country" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 
@@ -50,7 +50,7 @@ CREATE TABLE "player" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 
@@ -70,7 +70,7 @@ CREATE TABLE "uma" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 
@@ -94,7 +94,7 @@ CREATE TABLE "ruleset" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 
@@ -115,7 +115,7 @@ CREATE TABLE "season" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 
@@ -135,7 +135,7 @@ CREATE TABLE "location" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 
@@ -191,7 +191,7 @@ CREATE TABLE "pending_game" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 
@@ -215,7 +215,7 @@ CREATE TABLE "game" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 
@@ -238,7 +238,7 @@ CREATE TABLE "game_result" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 
@@ -266,7 +266,7 @@ CREATE TABLE "tournament" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 
@@ -287,7 +287,7 @@ CREATE TABLE "tournament_result" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 
@@ -307,7 +307,7 @@ CREATE TABLE "points" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
     "points_type" "points_type" NOT NULL DEFAULT 'DAN',
@@ -352,7 +352,7 @@ CREATE TABLE "player_ranking" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 
@@ -405,7 +405,7 @@ CREATE TABLE "user" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 
@@ -433,7 +433,7 @@ CREATE TABLE "online_user" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 
@@ -450,7 +450,7 @@ CREATE TABLE "user_player_link" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 
@@ -471,7 +471,7 @@ CREATE TABLE "user_player_link_request" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 
@@ -498,7 +498,7 @@ CREATE TABLE "email_account" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 
@@ -525,7 +525,7 @@ CREATE TABLE "dan_config" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 
@@ -549,7 +549,7 @@ CREATE TABLE "rate_config" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 
@@ -572,7 +572,7 @@ CREATE TABLE "season_config" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 
@@ -602,7 +602,7 @@ CREATE TABLE "season_result" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" VARCHAR(255),
     "created_ip" VARCHAR(45),
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
     "updated_by" VARCHAR(255),
     "updated_ip" VARCHAR(45),
 

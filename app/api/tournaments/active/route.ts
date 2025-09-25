@@ -8,9 +8,8 @@ export async function GET(request: NextRequest) {
         const tournaments = await prisma.tournament.findMany({
             where: {
                 deleted: false,
-                // Solo torneos activos (sin fecha de finalización específica)
-                // Como endDate no es nullable, usamos una fecha muy futura como indicador
-                endDate: { gte: new Date('2099-12-31') }
+                // Solo torneos activos (no completados)
+                isCompleted: false
             },
             select: {
                 id: true,

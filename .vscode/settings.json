@@ -1,13 +1,10 @@
 {
-  // ===== CSS / Preprocesadores =====
   "css.validate": false,
   "less.validate": false,
   "scss.validate": false,
-  // ===== CSS Modules (extensión) =====
   "cssModules.autoComplete": true,
   "cssModules.camelCase": true,
   "cssModules.showNotifications": true,
-  // ===== Tailwind CSS =====
   "tailwindCSS.includeLanguages": {
     "typescript": "typescript",
     "typescriptreact": "typescriptreact"
@@ -27,24 +24,20 @@
     ]
   ],
   "tailwindCSS.emmetCompletions": true,
-  // ===== Emmet =====
   "emmet.includeLanguages": {
     "typescript": "html",
     "typescriptreact": "html"
   },
-  // ===== TypeScript (editor) =====
-  // ✅ Fuerza a VS Code a usar la TS del proyecto (evita conflictos con @types/node)
   "typescript.tsdk": "node_modules/typescript/lib",
-  // ✅ Muestra el prompt para confirmar que usas la TS del workspace
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.tsserver.experimental.enableProjectDiagnostics": true,
   "typescript.validate.enable": true,
   "typescript.preferences.includePackageJsonAutoImports": "on",
   "typescript.suggest.autoImports": true,
-  // Opcionales (rendimiento en proyectos grandes):
-  // "typescript.tsserver.maxTsServerMemory": 4096,
-  // "typescript.tsserver.useSeparateSyntaxServer": true,
-  // ===== ESLint =====
+  "typescript.tsserver.watchOptions": {
+    "watchFile": "useFsEventsOnParentDirectory",
+    "watchDirectory": "useFsEvents"
+  },
   "eslint.validate": [
     "javascript",
     "javascriptreact",
@@ -64,24 +57,19 @@
     "typescript",
     "typescriptreact"
   ],
-  // ===== Formato / Fixes al guardar =====
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit"
   },
-  // ===== Reglas por lenguaje =====
   "[typescriptreact]": {
     "editor.defaultFormatter": "vscode.typescript-language-features",
     "editor.formatOnSave": true
   },
-  // ===== Snippets =====
   "editor.snippetSuggestions": "top",
   "editor.tabCompletion": "on",
-  // ===== Extensión Next.js (WillLuke) =====
   "WillLuke.nextjs.addTypesOnSave": true,
   "WillLuke.nextjs.hasPrompted": true,
-  // ===== Problems panel =====
   "problems.showCurrentInStatus": true,
   "problems.sortOrder": "severity"
 }

@@ -94,9 +94,6 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                         createdAt: auditInfo.timestamp,
                         createdBy: auditInfo.userId,
                         createdIp: auditInfo.userIp,
-                        updatedAt: auditInfo.timestamp,
-                        updatedBy: auditInfo.userId,
-                        updatedIp: auditInfo.userIp,
                     };
 
                     args.data = {
@@ -211,9 +208,7 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                             createdAt: now,
                             createdBy: audit.userId,
                             createdIp: audit.userIp,
-                            updatedAt: now,
-                            updatedBy: audit.userId,
-                            updatedIp: audit.userIp,
+                            // updatedAt NO se llena en creación, solo en actualizaciones
                         };
                         const updateAudit = {
                             updatedAt: now,

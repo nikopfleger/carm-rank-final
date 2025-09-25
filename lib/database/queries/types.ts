@@ -7,7 +7,7 @@ export interface Player {
   playerId: number; // legajo
   birthday: Date | null;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt: Date | null;
 }
 
 // Additional types for common.ts
@@ -24,7 +24,7 @@ export interface Location {
   address?: string;
   online_platform?: string;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt: Date | null;
 }
 
 export interface Ruleset {
@@ -32,7 +32,7 @@ export interface Ruleset {
   name: string;
   description?: string;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt: Date | null;
   // Real fields from schema
   umaId: number;
   oka: number;
@@ -52,7 +52,7 @@ export interface Uma {
   third_place: number;
   fourth_place: number | null; // Corregido: puede ser null
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt: Date | null;
 }
 
 export interface OnlineApp {
@@ -60,7 +60,7 @@ export interface OnlineApp {
   platform: string;
   name: string;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt: Date | null;
 }
 
 // Type for player with full ranking information
@@ -74,7 +74,7 @@ export interface PlayerWithRanking {
   country_iso: string;
   country_name: string;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt: Date | null;
 
   // Ranking fields
   position: number;

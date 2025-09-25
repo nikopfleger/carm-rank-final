@@ -50,7 +50,7 @@ export type PlayerRanking = {
     country_iso: string;
     country_name: string;
     createdAt: Date;
-    updatedAt: Date;
+    updatedAt: Date | null;
 
     // Ranking fields
     position: number;

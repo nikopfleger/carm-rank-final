@@ -1,6 +1,6 @@
 {
   "name": "carm-rank",
-  "version": "1.2.0-SNAPSHOT",
+  "version": "1.2.0.0-SNAPSHOT",
   "private": true,
   "repository": {
     "type": "git",
@@ -20,7 +20,12 @@
     "seed": "prisma db seed",
     "postinstall": "cross-env STAGE=postinstall prisma generate",
     "test:connection-config": "tsx scripts/test-connection-config.ts",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:install": "playwright install",
+    "dev:e2e": "cross-env E2E_AUTH_BYPASS=1 next dev"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
@@ -58,6 +63,7 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^15.5.3",
+    "@playwright/test": "^1.55.1",
     "@types/node": "20.19.17",
     "@types/nodemailer": "^7.0.1",
     "@types/react": "18.3.24",

@@ -1,5 +1,5 @@
 import { useAbmService } from '@/components/providers/services-provider';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useErrorHandler } from './use-error-handler';
 
 // Hook personalizado para operaciones ABM de Tournaments
@@ -8,7 +8,7 @@ export function useTournamentsOperations() {
     const { handleError, handleSuccess } = useErrorHandler();
     const [loading, setLoading] = useState(false);
 
-    const load = async (showDeleted = false) => {
+    const load = useCallback(async (showDeleted = false) => {
         setLoading(true);
         try {
             const response = await fetch(`/api/abm/tournaments${showDeleted ? '?includeDeleted=true' : ''}`);
@@ -24,12 +24,13 @@ export function useTournamentsOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [handleError]);
 
-    const create = async (data: any) => {
+    const create = useCallback(async (data: any) => {
         setLoading(true);
         try {
-            const response = await fetch('/api/abm/tournaments', {
+            // Primero validar usando el endpoint específico
+            const validateResponse = await fetch('/api/abm/tournaments/validate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -37,10 +38,26 @@ export function useTournamentsOperations() {
                 body: JSON.stringify(data)
             });
 
+            if (!validateResponse.ok) {
+                const error = await validateResponse.json();
+                throw new Error(error.error || 'Error de validación');
+            }
+
+            const validatedData = await validateResponse.json();
+
+            // Luego crear usando el API genérico
+            const response = await fetch('/api/abm/tournaments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(validatedData.data)
+            });
+
             if (response.ok) {
                 const result = await response.json();
                 handleSuccess('Torneo creado exitosamente', 'Creación exitosa');
-                return result;
+                return result.data;
             } else {
                 const error = await response.json();
                 throw new Error(error.error || 'Error creando torneo');
@@ -51,9 +68,9 @@ export function useTournamentsOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [handleError, handleSuccess]);
 
-    const update = async (id: number, data: any) => {
+    const update = useCallback(async (id: number, data: any) => {
         setLoading(true);
         try {
             const response = await fetch(`/api/abm/tournaments/${id}`, {
@@ -78,9 +95,9 @@ export function useTournamentsOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [handleError, handleSuccess]);
 
-    const remove = async (id: number) => {
+    const remove = useCallback(async (id: number) => {
         setLoading(true);
         try {
             const response = await fetch(`/api/abm/tournaments/${id}`, {
@@ -100,9 +117,9 @@ export function useTournamentsOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [handleError, handleSuccess]);
 
-    const restore = async (id: number) => {
+    const restore = useCallback(async (id: number) => {
         setLoading(true);
         try {
             const response = await fetch(`/api/abm/tournaments/${id}/restore`, {
@@ -122,9 +139,9 @@ export function useTournamentsOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [handleError, handleSuccess]);
 
-    const finalize = async (id: number) => {
+    const finalize = useCallback(async (id: number) => {
         setLoading(true);
         try {
             const response = await fetch(`/api/tournaments/${id}/finalize`, {
@@ -145,7 +162,7 @@ export function useTournamentsOperations() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [handleError, handleSuccess]);
 
     return {
         loading,

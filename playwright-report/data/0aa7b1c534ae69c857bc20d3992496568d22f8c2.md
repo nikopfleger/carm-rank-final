@@ -1,0 +1,127 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - button "Abrir menú de navegación" [ref=e3] [cursor=pointer]:
+    - img [ref=e4] [cursor=pointer]
+  - generic [ref=e7]:
+    - generic [ref=e8]: 👆
+    - generic [ref=e9]:
+      - generic [ref=e10]: ¡Bienvenido a CARM!
+      - generic [ref=e11]: Toca aquí para explorar el menú y descubrir todas las funciones
+    - button "Cerrar" [ref=e12] [cursor=pointer]:
+      - img [ref=e13] [cursor=pointer]
+  - main [ref=e16]:
+    - generic [ref=e19]:
+      - generic [ref=e21]:
+        - img [ref=e22]
+        - generic [ref=e26]:
+          - heading "Gestión de Resultados" [level=4] [ref=e27]
+          - paragraph [ref=e28]:
+            - text: Los resultados de torneos se gestionan en el
+            - link "ABM de Resultados de Torneos" [ref=e29] [cursor=pointer]:
+              - /url: /admin/abm/tournament-results
+            - text: . Desde allí puedes editar los resultados de cada torneo de forma intuitiva.
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - heading "Torneos" [level=1] [ref=e32]
+          - paragraph [ref=e33]: Gestiona los torneos - crea, edita y finaliza torneos. Los resultados se gestionan por separado.
+        - generic [ref=e35]:
+          - heading "Crear Torneo" [level=3] [ref=e37]
+          - generic [ref=e39]:
+            - generic [ref=e40]:
+              - generic [ref=e42]:
+                - generic [ref=e43]:
+                  - text: Nombre
+                  - generic [ref=e44]: "*"
+                - textbox "Nombre*" [ref=e45]
+              - generic [ref=e47]:
+                - generic [ref=e48]:
+                  - text: Tipo
+                  - generic [ref=e49]: "*"
+                - generic [ref=e50]:
+                  - button "Tipo*" [active] [ref=e51] [cursor=pointer]:
+                    - generic [ref=e52] [cursor=pointer]: Seleccionar
+                    - img [ref=e53] [cursor=pointer]
+                  - generic [ref=e55]:
+                    - generic [ref=e56] [cursor=pointer]: Individual
+                    - generic [ref=e57] [cursor=pointer]: Equipo
+                    - generic [ref=e58] [cursor=pointer]: Liga
+                    - generic [ref=e59] [cursor=pointer]: Campeonato
+              - generic [ref=e61]:
+                - generic [ref=e62]:
+                  - text: Fecha Inicio
+                  - generic [ref=e63]: "*"
+                - textbox "Fecha Inicio*" [ref=e64]
+              - generic [ref=e66]:
+                - generic [ref=e67]: Fecha Fin
+                - textbox "Fecha Fin" [ref=e68]
+              - generic [ref=e70]:
+                - generic [ref=e71]: Ubicación
+                - button "Ubicación" [ref=e73] [cursor=pointer]:
+                  - generic [ref=e74] [cursor=pointer]: Seleccionar
+                  - img [ref=e75] [cursor=pointer]
+              - generic [ref=e78]:
+                - generic [ref=e79]: Temporada
+                - button "Temporada" [ref=e81] [cursor=pointer]:
+                  - generic [ref=e82] [cursor=pointer]: Seleccionar
+                  - img [ref=e83] [cursor=pointer]
+              - generic [ref=e86]:
+                - generic [ref=e87]: Máximo de Jugadores
+                - spinbutton "Máximo de Jugadores" [ref=e88]
+              - generic [ref=e90]:
+                - generic [ref=e91]: Costo de Inscripción
+                - spinbutton "Costo de Inscripción" [ref=e92]
+              - generic [ref=e94]:
+                - generic [ref=e95]: Premio Total
+                - spinbutton "Premio Total" [ref=e96]
+              - generic [ref=e98]:
+                - generic [ref=e99]: Datos Extra
+                - textbox "Datos Extra" [ref=e100]
+            - generic [ref=e101]:
+              - button "Cancelar" [ref=e102] [cursor=pointer]:
+                - img [ref=e103] [cursor=pointer]
+                - text: Cancelar
+              - button "Guardar" [ref=e106] [cursor=pointer]:
+                - img [ref=e107] [cursor=pointer]
+                - text: Guardar
+  - contentinfo [ref=e111]:
+    - generic [ref=e112]:
+      - generic [ref=e113]:
+        - generic [ref=e114]:
+          - generic [ref=e115]:
+            - img "CARM Logo" [ref=e117]
+            - heading "Club Argentino de Riichi Mahjong" [level=3] [ref=e118]
+          - paragraph [ref=e119]: Sistema oficial de ranking y gestión de la comunidad argentina de Riichi Mahjong.
+        - generic [ref=e120]:
+          - heading "Síguenos" [level=3] [ref=e121]
+          - generic [ref=e122]:
+            - link "Facebook" [ref=e123] [cursor=pointer]:
+              - /url: https://www.facebook.com/ClubArgentinoDeMahjong
+              - img [ref=e124] [cursor=pointer]
+            - link "Instagram" [ref=e126] [cursor=pointer]:
+              - /url: https://www.instagram.com/carm.arg
+              - img [ref=e127] [cursor=pointer]
+            - link "LinkedIn" [ref=e130] [cursor=pointer]:
+              - /url: https://www.linkedin.com/company/33259811/
+              - img [ref=e131] [cursor=pointer]
+            - link "X (Twitter)" [ref=e135] [cursor=pointer]:
+              - /url: https://x.com/camriichi
+              - img [ref=e136] [cursor=pointer]
+            - link "Twitch" [ref=e138] [cursor=pointer]:
+              - /url: http://twitch.tv/carmahjong
+              - img [ref=e139] [cursor=pointer]
+            - link "Discord" [ref=e141] [cursor=pointer]:
+              - /url: https://discord.gg/Z4kN9fbERm
+              - img [ref=e142] [cursor=pointer]
+        - generic [ref=e144]:
+          - heading "Créditos" [level=3] [ref=e145]
+          - paragraph [ref=e146]:
+            - text: Logo diseñado por
+            - link "Patrick Du" [ref=e147] [cursor=pointer]:
+              - /url: https://www.linkedin.com/in/patrick-du-b7271285/
+      - generic [ref=e149]:
+        - paragraph [ref=e150]: © 2025 Club Argentino de Riichi Mahjong. Todos los derechos reservados.
+        - paragraph [ref=e151]: "Última actualización: 25/9/2025"
+  - alert [ref=e152]
+```

@@ -8,7 +8,7 @@ export interface Season {
   isActive: boolean;
   extraData?: any;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt: Date | null;
 }
 
 export interface SeasonWithStats extends Season {

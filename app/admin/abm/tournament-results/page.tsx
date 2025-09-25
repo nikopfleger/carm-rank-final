@@ -4,8 +4,10 @@ import { GridColumn } from "@/components/admin/abm/generic-grid-responsive";
 import { UnifiedABMLayout } from "@/components/admin/abm/unified-abm-layout";
 import { TournamentResultsEditor } from "@/components/admin/tournament-results-editor";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useErrorHandler } from "@/hooks/use-error-handler";
-import { Edit, Trophy, Users } from "lucide-react";
+import { AlertTriangle, CheckCircle, Edit, Trophy, Users } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 interface Tournament {
@@ -47,6 +49,10 @@ export default function TournamentResultsSpecialPage() {
   const [loading, setLoading] = useState(false);
   const [editingTournament, setEditingTournament] = useState<Tournament | null>(null);
   const [showEditor, setShowEditor] = useState(false);
+  const [finalizeConfirm, setFinalizeConfirm] = useState<{ isOpen: boolean; tournament: Tournament | null }>({
+    isOpen: false,
+    tournament: null
+  });
 
   // Cargar torneos
   const loadTournaments = useCallback(async () => {
@@ -196,6 +202,40 @@ export default function TournamentResultsSpecialPage() {
     }
   };
 
+  // Manejar finalización de torneo
+  const handleFinalizeTournament = (tournament: Tournament) => {
+    setFinalizeConfirm({ isOpen: true, tournament });
+  };
+
+  const handleConfirmFinalize = async () => {
+    if (!finalizeConfirm.tournament) return;
+
+    try {
+      const response = await fetch(`/api/abm/tournament-results/${finalizeConfirm.tournament.id}/finalize`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        handleSuccess('Torneo finalizado exitosamente. Los puntos de temporada han sido cargados.', 'Finalización exitosa');
+        setFinalizeConfirm({ isOpen: false, tournament: null });
+        await loadTournaments(); // Recargar datos
+      } else {
+        const error = await response.json();
+        throw new Error(error.error || 'Error finalizando torneo');
+      }
+    } catch (error) {
+      handleError(error, 'Finalizar torneo');
+      setFinalizeConfirm({ isOpen: false, tournament: null });
+    }
+  };
+
+  const handleCancelFinalize = () => {
+    setFinalizeConfirm({ isOpen: false, tournament: null });
+  };
+
   // Configuración de acciones del grid
   const actions = [
     {
@@ -205,6 +245,14 @@ export default function TournamentResultsSpecialPage() {
       variant: 'outline' as const,
       onClick: (row: Tournament) => handleEditResults(row),
       show: () => true
+    },
+    {
+      key: 'finalize',
+      label: 'Finalizar Torneo',
+      icon: CheckCircle,
+      variant: 'default' as const,
+      onClick: (row: Tournament) => handleFinalizeTournament(row),
+      show: (row: Tournament) => !row.isCompleted && (row.tournamentResults?.length || 0) > 0
     }
   ];
 
@@ -261,6 +309,48 @@ export default function TournamentResultsSpecialPage() {
           }}
         />
       )}
+
+      {/* Modal de confirmación de finalización */}
+      <Dialog open={finalizeConfirm.isOpen} onOpenChange={(open) => !open && handleCancelFinalize()}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 text-amber-500" />
+              Finalizar Torneo
+            </DialogTitle>
+            <DialogDescription className="space-y-3">
+              <div className="font-semibold text-amber-700">
+                ⚠️ Esta acción realizará las siguientes operaciones:
+              </div>
+              <ul className="list-disc list-inside space-y-1 text-sm">
+                <li><strong>Cerrar el torneo:</strong> Se marcará como completado y se establecerá fecha de fin</li>
+                <li><strong>Cargar puntos de temporada:</strong> Se convertirán los resultados en puntos para el ranking</li>
+                <li><strong>Procesar ranking:</strong> Los puntos se aplicarán a la temporada correspondiente</li>
+              </ul>
+              <div className="bg-amber-50 border border-amber-200 rounded-md p-3">
+                <div className="font-medium text-amber-800">
+                  Torneo: <strong>{finalizeConfirm.tournament?.name}</strong>
+                </div>
+                <div className="text-sm text-amber-700">
+                  Esta acción no se puede deshacer.
+                </div>
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={handleCancelFinalize}>
+              Cancelar
+            </Button>
+            <Button
+              onClick={handleConfirmFinalize}
+              className="bg-amber-600 hover:bg-amber-700"
+            >
+              <CheckCircle className="h-4 w-4 mr-2" />
+              Finalizar Torneo
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

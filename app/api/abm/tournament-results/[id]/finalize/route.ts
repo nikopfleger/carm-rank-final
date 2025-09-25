@@ -27,7 +27,7 @@ async function loadTournamentSeasonPoints(tournamentId: number, seasonId: number
             isSanma: false, // Por defecto, se puede ajustar según el torneo
             extraData: JSON.stringify({
                 position: (result as any).position,
-                source: 'tournament_close'
+                source: 'tournament_finalize'
             })
         }));
 
@@ -50,66 +50,85 @@ export async function POST(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id } = await params;
-        const tournamentId = parseInt(id);
+        const { id: idParam } = await params;
+        const id = parseInt(idParam);
 
-        if (isNaN(tournamentId)) {
+        if (isNaN(id)) {
             return NextResponse.json(
-                { error: "ID de torneo inválido" },
+                { success: false, error: "ID inválido" },
                 { status: 400 }
             );
         }
 
         // Verificar que el torneo existe
         const tournament = await prisma.tournament.findUnique({
-            where: { id: tournamentId }
+            where: { id }
         });
 
         if (!tournament) {
             return NextResponse.json(
-                { error: "Torneo no encontrado" },
+                { success: false, error: "Torneo no encontrado" },
                 { status: 404 }
             );
         }
 
         if (tournament.deleted) {
             return NextResponse.json(
-                { error: "No se puede cerrar un torneo eliminado" },
+                { success: false, error: "No se puede finalizar un torneo eliminado" },
                 { status: 400 }
             );
         }
 
-        if (tournament.endDate) {
+        if (tournament.isCompleted) {
             return NextResponse.json(
-                { error: "El torneo ya está cerrado" },
+                { success: false, error: "El torneo ya está finalizado" },
                 { status: 400 }
             );
         }
 
-        // Cerrar el torneo estableciendo la fecha de finalización
-        const updatedAtTournament = await prisma.tournament.update({
-            where: { id: tournamentId },
-            data: {
-                endDate: new Date().toISOString().split('T')[0],
-                isCompleted: true
+        // Verificar que tiene resultados
+        const resultsCount = await prisma.tournamentResult.count({
+            where: {
+                tournamentId: id,
+                deleted: false
             }
         });
 
-        // Cargar puntos de temporada si el torneo tiene temporada asociada
-        if (tournament.seasonId) {
-            await loadTournamentSeasonPoints(tournamentId, tournament.seasonId);
+        if (resultsCount === 0) {
+            return NextResponse.json(
+                { success: false, error: "No se puede finalizar un torneo sin resultados" },
+                { status: 400 }
+            );
         }
+
+        // Ejecutar finalización en transacción
+        const result = await prisma.$transaction(async (tx) => {
+            // 1. Finalizar el torneo
+            const updatedTournament = await tx.tournament.update({
+                where: { id },
+                data: {
+                    isCompleted: true,
+                    endDate: tournament.endDate || new Date().toISOString().split('T')[0]
+                }
+            });
+
+            // 2. Cargar puntos de temporada si el torneo tiene temporada asociada
+            if (tournament.seasonId) {
+                await loadTournamentSeasonPoints(id, tournament.seasonId);
+            }
+
+            return updatedTournament;
+        });
 
         return NextResponse.json({
             success: true,
-            message: "Torneo cerrado exitosamente",
-            tournament: updatedAtTournament
+            data: result,
+            message: "Torneo finalizado correctamente. Los puntos de temporada han sido cargados."
         });
-
     } catch (error) {
-        console.error("Error cerrando torneo:", error);
+        console.error("Error finalizing tournament:", error);
         return NextResponse.json(
-            { error: "Error interno del servidor" },
+            { success: false, error: "Error interno del servidor" },
             { status: 500 }
         );
     }

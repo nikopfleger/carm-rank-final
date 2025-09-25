@@ -1,14 +1,12 @@
 datasource db {
   provider  = "postgresql"
   url       = env("POSTGRES_PRISMA_URL") // pooler (6543)
-  directUrl = env("POSTGRES_URL_NON_POOLING")          // directo (5432)
+  directUrl = env("POSTGRES_URL_NON_POOLING") // directo (5432)
 }
-
 
 generator client {
   provider = "prisma-client-js"
 }
-
 
 // Tipo base para todos los modelos con campos de auditoría
 // Nota: Prisma no soporta herencia directa como Java, pero podemos usar este comentario
@@ -20,61 +18,59 @@ generator client {
 //   createdAt   DateTime @default(now()) @map("created_at")
 //   createdBy String?  @map("created_by") @db.VarChar(255)
 //   createdIp String?  @map("created_ip") @db.VarChar(45)
-//   updatedAt   DateTime @updatedAt @map("updated_at")
+//   updatedAt   DateTime? @updatedAt @map("updated_at")
 //   updatedBy String?  @map("updated_by") @db.VarChar(255)
 //   updatedIp String?  @map("updated_ip") @db.VarChar(45)
 
 model Country {
-  id          Int      @id @default(autoincrement())
-  isoCode     String   @unique @map("iso_code") @db.VarChar(3)
-  fullName    String   @map("full_name") @db.VarChar(255)
-  nationality String   @db.VarChar(255)
-  version     Int      @default(0)
-  deleted     Boolean  @default(false)
-  createdAt     DateTime @default(now()) @map("created_at")
-  createdBy   String?  @map("created_by") @db.VarChar(255)
-  createdIp   String?  @map("created_ip") @db.VarChar(45)
-  updatedAt     DateTime @updatedAt @map("updated_at")
-  updatedBy     String?  @map("updated_by") @db.VarChar(255)
-  updatedIp     String?  @map("updated_ip") @db.VarChar(45)
+  id          Int       @id @default(autoincrement())
+  isoCode     String    @unique @map("iso_code") @db.VarChar(3)
+  fullName    String    @map("full_name") @db.VarChar(255)
+  nationality String    @db.VarChar(255)
+  version     Int       @default(0)
+  deleted     Boolean   @default(false)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  createdBy   String?   @map("created_by") @db.VarChar(255)
+  createdIp   String?   @map("created_ip") @db.VarChar(45)
+  updatedAt   DateTime? @updatedAt @map("updated_at")
+  updatedBy   String?   @map("updated_by") @db.VarChar(255)
+  updatedIp   String?   @map("updated_ip") @db.VarChar(45)
   players     Player[]
 
   @@map("country")
-  
 }
 
 model Player {
-  id                    Int                @id @default(autoincrement())
-  nickname              String             @unique @db.VarChar(255)
-  fullname              String?            @db.VarChar(255)
-  countryId             Int                @map("country_id")
-  playerNumber          Int                @unique @map("player_number")
-  birthday              DateTime?          @db.Date
-  version               Int                @default(0)
-  deleted               Boolean            @default(false)
-  createdAt               DateTime           @default(now()) @map("created_at")
-  createdBy             String?            @map("created_by") @db.VarChar(255)
-  createdIp             String?            @map("created_ip") @db.VarChar(45)
-  updatedAt               DateTime           @updatedAt @map("updated_at")
-  updatedBy             String?            @map("updated_by") @db.VarChar(255)
-  updatedIp             String?            @map("updated_ip") @db.VarChar(45)
+  id                    Int           @id @default(autoincrement())
+  nickname              String        @unique @db.VarChar(255)
+  fullname              String?       @db.VarChar(255)
+  countryId             Int           @map("country_id")
+  playerNumber          Int           @unique @map("player_number")
+  birthday              DateTime?     @db.Date
+  version               Int           @default(0)
+  deleted               Boolean       @default(false)
+  createdAt             DateTime      @default(now()) @map("created_at")
+  createdBy             String?       @map("created_by") @db.VarChar(255)
+  createdIp             String?       @map("created_ip") @db.VarChar(45)
+  updatedAt             DateTime?     @updatedAt @map("updated_at")
+  updatedBy             String?       @map("updated_by") @db.VarChar(255)
+  updatedIp             String?       @map("updated_ip") @db.VarChar(45)
   gameResults           GameResult[]
   onlineUsers           OnlineUser[]
-  pendingGamesAsPlayer1 PendingGame[]      @relation("PendingGamePlayer1")
-  pendingGamesAsPlayer2 PendingGame[]      @relation("PendingGamePlayer2")
-  pendingGamesAsPlayer3 PendingGame[]      @relation("PendingGamePlayer3")
-  pendingGamesAsPlayer4 PendingGame[]      @relation("PendingGamePlayer4")
+  pendingGamesAsPlayer1 PendingGame[] @relation("PendingGamePlayer1")
+  pendingGamesAsPlayer2 PendingGame[] @relation("PendingGamePlayer2")
+  pendingGamesAsPlayer3 PendingGame[] @relation("PendingGamePlayer3")
+  pendingGamesAsPlayer4 PendingGame[] @relation("PendingGamePlayer4")
 
-  country               Country            @relation(fields: [countryId], references: [id])
-  rankings              PlayerRanking[]
-  tournamentResults     TournamentResult[]
-  points                Points[]
-  userPlayerLink        UserPlayerLink[]        @relation("Player_UserPlayerLink")
+  country                Country                 @relation(fields: [countryId], references: [id])
+  rankings               PlayerRanking[]
+  tournamentResults      TournamentResult[]
+  points                 Points[]
+  userPlayerLink         UserPlayerLink[]        @relation("Player_UserPlayerLink")
   userPlayerLinkRequests UserPlayerLinkRequest[] @relation("Player_UserPlayerLinkRequest")
-  seasonResults         SeasonResult[]
+  seasonResults          SeasonResult[]
 
   @@map("player")
-  
 }
 
 model Uma {
@@ -86,16 +82,15 @@ model Uma {
   fourthPlace Int?      @map("fourth_place")
   version     Int       @default(0)
   deleted     Boolean   @default(false)
-  createdAt     DateTime  @default(now()) @map("created_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
   createdBy   String?   @map("created_by") @db.VarChar(255)
   createdIp   String?   @map("created_ip") @db.VarChar(45)
-  updatedAt     DateTime  @updatedAt @map("updated_at")
-  updatedBy     String?   @map("updated_by") @db.VarChar(255)
-  updatedIp     String?   @map("updated_ip") @db.VarChar(45)
+  updatedAt   DateTime? @updatedAt @map("updated_at")
+  updatedBy   String?   @map("updated_by") @db.VarChar(255)
+  updatedIp   String?   @map("updated_ip") @db.VarChar(45)
   rulesets    Ruleset[]
 
   @@map("uma")
-  
 }
 
 model Ruleset {
@@ -111,10 +106,10 @@ model Ruleset {
   extraData    Json?         @map("extra_data")
   version      Int           @default(0)
   deleted      Boolean       @default(false)
-  createdAt      DateTime      @default(now()) @map("created_at")
+  createdAt    DateTime      @default(now()) @map("created_at")
   createdBy    String?       @map("created_by") @db.VarChar(255)
   createdIp    String?       @map("created_ip") @db.VarChar(45)
-  updatedAt      DateTime      @updatedAt @map("updated_at")
+  updatedAt    DateTime?     @updatedAt @map("updated_at")
   updatedBy    String?       @map("updated_by") @db.VarChar(255)
   updatedIp    String?       @map("updated_ip") @db.VarChar(45)
   games        Game[]
@@ -122,56 +117,53 @@ model Ruleset {
   uma          Uma           @relation(fields: [umaId], references: [id])
 
   @@map("ruleset")
-  
 }
 
 model Season {
-  id           Int             @id @default(autoincrement())
-  name         String          @db.VarChar(255)
-  startDate    DateTime        @map("start_date") @db.Date
-  endDate      DateTime        @map("end_date") @db.Date
-  isActive     Boolean         @default(false) @map("is_active")
-  isClosed     Boolean         @default(false) @map("is_closed")
-  extraData    Json?           @map("extra_data")
-  version      Int             @default(0)
-  deleted      Boolean         @default(false)
-  createdAt      DateTime        @default(now()) @map("created_at")
-  createdBy    String?         @map("created_by") @db.VarChar(255)
-  createdIp    String?         @map("created_ip") @db.VarChar(45)
-  updatedAt      DateTime        @updatedAt @map("updated_at")
-  updatedBy      String?         @map("updated_by") @db.VarChar(255)
-  updatedIp      String?         @map("updated_ip") @db.VarChar(45)
-  games        Game[]
-  pendingGames PendingGame[]
-  tournaments  Tournament[]
+  id            Int            @id @default(autoincrement())
+  name          String         @db.VarChar(255)
+  startDate     DateTime       @map("start_date") @db.Date
+  endDate       DateTime       @map("end_date") @db.Date
+  isActive      Boolean        @default(false) @map("is_active")
+  isClosed      Boolean        @default(false) @map("is_closed")
+  extraData     Json?          @map("extra_data")
+  version       Int            @default(0)
+  deleted       Boolean        @default(false)
+  createdAt     DateTime       @default(now()) @map("created_at")
+  createdBy     String?        @map("created_by") @db.VarChar(255)
+  createdIp     String?        @map("created_ip") @db.VarChar(45)
+  updatedAt     DateTime?      @updatedAt @map("updated_at")
+  updatedBy     String?        @map("updated_by") @db.VarChar(255)
+  updatedIp     String?        @map("updated_ip") @db.VarChar(45)
+  games         Game[]
+  pendingGames  PendingGame[]
+  tournaments   Tournament[]
   seasonConfigs SeasonConfig[]
-  seasonResults  SeasonResult[]
+  seasonResults SeasonResult[]
 
   @@map("season")
-  
 }
 
 model Location {
-  id          Int          @id @default(autoincrement())
-  name        String       @db.VarChar(255)
-  address     String?
-  city        String?      @db.VarChar(255)
-  country     String?      @db.VarChar(255)
-  extraData   Json?        @map("extra_data")
-  version     Int          @default(0)
-  deleted     Boolean      @default(false)
-  createdAt     DateTime     @default(now()) @map("created_at")
-  createdBy   String?      @map("created_by") @db.VarChar(255)
-  createdIp   String?      @map("created_ip") @db.VarChar(45)
-  updatedAt     DateTime     @updatedAt @map("updated_at")
-  updatedBy     String?      @map("updated_by") @db.VarChar(255)
-  updatedIp     String?      @map("updated_ip") @db.VarChar(45)
-  games       Game[]
-  tournaments Tournament[]
+  id           Int           @id @default(autoincrement())
+  name         String        @db.VarChar(255)
+  address      String?
+  city         String?       @db.VarChar(255)
+  country      String?       @db.VarChar(255)
+  extraData    Json?         @map("extra_data")
+  version      Int           @default(0)
+  deleted      Boolean       @default(false)
+  createdAt    DateTime      @default(now()) @map("created_at")
+  createdBy    String?       @map("created_by") @db.VarChar(255)
+  createdIp    String?       @map("created_ip") @db.VarChar(45)
+  updatedAt    DateTime?     @updatedAt @map("updated_at")
+  updatedBy    String?       @map("updated_by") @db.VarChar(255)
+  updatedIp    String?       @map("updated_ip") @db.VarChar(45)
+  games        Game[]
+  tournaments  Tournament[]
   pendingGames PendingGame[]
 
   @@map("location")
-  
 }
 
 model PendingGame {
@@ -219,12 +211,12 @@ model PendingGame {
   gameId             Int?              @map("game_id")
   version            Int               @default(0)
   deleted            Boolean           @default(false)
-  createdAt            DateTime          @default(now()) @map("created_at")
+  createdAt          DateTime          @default(now()) @map("created_at")
   createdBy          String?           @map("created_by") @db.VarChar(255)
   createdIp          String?           @map("created_ip") @db.VarChar(45)
-  updatedAt            DateTime          @updatedAt @map("updated_at")
-  updatedBy            String?           @map("updated_by") @db.VarChar(255)
-  updatedIp            String?           @map("updated_ip") @db.VarChar(45)
+  updatedAt          DateTime?         @updatedAt @map("updated_at")
+  updatedBy          String?           @map("updated_by") @db.VarChar(255)
+  updatedIp          String?           @map("updated_ip") @db.VarChar(45)
   game               Game?             @relation("PendingGameGame", fields: [gameId], references: [id])
   player1            Player            @relation("PendingGamePlayer1", fields: [player1Id], references: [id])
   player2            Player            @relation("PendingGamePlayer2", fields: [player2Id], references: [id])
@@ -236,7 +228,6 @@ model PendingGame {
   location           Location?         @relation(fields: [locationId], references: [id])
 
   @@map("pending_game")
-  
 }
 
 model Game {
@@ -252,12 +243,12 @@ model Game {
   extraData    Json?         @map("extra_data")
   version      Int           @default(0)
   deleted      Boolean       @default(false)
-  createdAt      DateTime      @default(now()) @map("created_at")
+  createdAt    DateTime      @default(now()) @map("created_at")
   createdBy    String?       @map("created_by") @db.VarChar(255)
   createdIp    String?       @map("created_ip") @db.VarChar(45)
-  updatedAt      DateTime      @updatedAt @map("updated_at")
-  updatedBy      String?       @map("updated_by") @db.VarChar(255)
-  updatedIp      String?       @map("updated_ip") @db.VarChar(45)
+  updatedAt    DateTime?     @updatedAt @map("updated_at")
+  updatedBy    String?       @map("updated_by") @db.VarChar(255)
+  updatedIp    String?       @map("updated_ip") @db.VarChar(45)
   location     Location?     @relation(fields: [locationId], references: [id])
   ruleset      Ruleset       @relation(fields: [rulesetId], references: [id])
   season       Season?       @relation(fields: [seasonId], references: [id])
@@ -268,37 +259,35 @@ model Game {
 
   @@index([seasonId], name: "idx_game_season_id")
   @@index([gameDate], name: "idx_game_game_date")
-  @@map("game")  
+  @@map("game")
 }
 
 model GameResult {
-  id              Int      @id @default(autoincrement())
-  gameId          Int      @map("game_id")
-  playerId        Int      @map("player_id")
-  finalPosition   Int      @map("final_position")
-  finalScore      Decimal  @map("final_score") @db.Decimal(10, 1)
-  danPointsEarned    Decimal  @map("dan_points_earned") @db.Decimal(10, 4)
-  rateChange         Decimal  @map("rate_change") @db.Decimal(10, 4)
-  seasonPointsEarned Decimal? @map("season_points_earned") @db.Decimal(10, 4)
-  extraData          Json?    @map("extra_data")
-  version         Int      @default(0)
-  deleted         Boolean  @default(false)
-  createdAt         DateTime @default(now()) @map("created_at")
-  createdBy       String?  @map("created_by") @db.VarChar(255)
-  createdIp       String?  @map("created_ip") @db.VarChar(45)
-  updatedAt         DateTime @updatedAt @map("updated_at")
-  updatedBy       String?  @map("updated_by") @db.VarChar(255)
-  updatedIp       String?  @map("updated_ip") @db.VarChar(45)
-  game            Game     @relation(fields: [gameId], references: [id])
-  player          Player   @relation(fields: [playerId], references: [id])
+  id                 Int       @id @default(autoincrement())
+  gameId             Int       @map("game_id")
+  playerId           Int       @map("player_id")
+  finalPosition      Int       @map("final_position")
+  finalScore         Decimal   @map("final_score") @db.Decimal(10, 1)
+  danPointsEarned    Decimal   @map("dan_points_earned") @db.Decimal(10, 4)
+  rateChange         Decimal   @map("rate_change") @db.Decimal(10, 4)
+  seasonPointsEarned Decimal?  @map("season_points_earned") @db.Decimal(10, 4)
+  extraData          Json?     @map("extra_data")
+  version            Int       @default(0)
+  deleted            Boolean   @default(false)
+  createdAt          DateTime  @default(now()) @map("created_at")
+  createdBy          String?   @map("created_by") @db.VarChar(255)
+  createdIp          String?   @map("created_ip") @db.VarChar(45)
+  updatedAt          DateTime? @updatedAt @map("updated_at")
+  updatedBy          String?   @map("updated_by") @db.VarChar(255)
+  updatedIp          String?   @map("updated_ip") @db.VarChar(45)
+  game               Game      @relation(fields: [gameId], references: [id])
+  player             Player    @relation(fields: [playerId], references: [id])
 
+  @@unique([gameId, playerId])
   @@index([gameId], name: "idx_game_result_game_id")
   @@index([playerId], name: "idx_game_result_player_id")
   @@index([gameId, playerId], name: "idx_game_result_game_id_player_id")
-
-  @@unique([gameId, playerId])
   @@map("game_result")
-  
 }
 
 model Tournament {
@@ -318,12 +307,12 @@ model Tournament {
   extraData         Json?              @map("extra_data")
   version           Int                @default(0)
   deleted           Boolean            @default(false)
-  createdAt           DateTime           @default(now()) @map("created_at")
+  createdAt         DateTime           @default(now()) @map("created_at")
   createdBy         String?            @map("created_by") @db.VarChar(255)
   createdIp         String?            @map("created_ip") @db.VarChar(45)
-  updatedAt           DateTime           @updatedAt @map("updated_at")
-  updatedBy           String?            @map("updated_by") @db.VarChar(255)
-  updatedIp           String?            @map("updated_ip") @db.VarChar(45)
+  updatedAt         DateTime?          @updatedAt @map("updated_at")
+  updatedBy         String?            @map("updated_by") @db.VarChar(255)
+  updatedIp         String?            @map("updated_ip") @db.VarChar(45)
   location          Location?          @relation(fields: [locationId], references: [id])
   season            Season?            @relation(fields: [seasonId], references: [id])
   games             Game[]
@@ -332,7 +321,6 @@ model Tournament {
   points            Points[]
 
   @@map("tournament")
-  
 }
 
 model TournamentResult {
@@ -345,10 +333,10 @@ model TournamentResult {
   extraData    Json?      @map("extra_data")
   version      Int        @default(0)
   deleted      Boolean    @default(false)
-  createdAt      DateTime   @default(now()) @map("created_at")
+  createdAt    DateTime   @default(now()) @map("created_at")
   createdBy    String?    @map("created_by") @db.VarChar(255)
   createdIp    String?    @map("created_ip") @db.VarChar(45)
-  updatedAt      DateTime   @updatedAt @map("updated_at")
+  updatedAt    DateTime?  @updatedAt @map("updated_at")
   updatedBy    String?    @map("updated_by") @db.VarChar(255)
   updatedIp    String?    @map("updated_ip") @db.VarChar(45)
   player       Player     @relation(fields: [playerId], references: [id])
@@ -356,77 +344,74 @@ model TournamentResult {
 
   @@unique([tournamentId, playerId])
   @@map("tournament_result")
-  
 }
 
 model Points {
-  id           Int        @id @default(autoincrement())
-  playerId     Int        @map("player_id")
-  player       Player     @relation(fields: [playerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_points_player_id")
-  seasonId     Int        @map("season_id")
-  pointsValue  Decimal    @map("points_value") @db.Decimal(15, 10)
+  id           Int         @id @default(autoincrement())
+  playerId     Int         @map("player_id")
+  player       Player      @relation(fields: [playerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_points_player_id")
+  seasonId     Int         @map("season_id")
+  pointsValue  Decimal     @map("points_value") @db.Decimal(15, 10)
   description  String?
-  extraData    Json?      @map("extra_data")
-  version      Int        @default(0)
-  deleted      Boolean    @default(false)
-  createdAt      DateTime   @default(now()) @map("created_at")
-  createdBy    String?    @map("created_by") @db.VarChar(255)
-  createdIp    String?    @map("created_ip") @db.VarChar(45)
-  updatedAt      DateTime   @updatedAt @map("updated_at")
-  updatedBy      String?    @map("updated_by") @db.VarChar(255)
-  updatedIp      String?    @map("updated_ip") @db.VarChar(45)
-  pointsType   PointsType @default(DAN) @map("points_type")
-  gameId       Int?       @map("game_id")
-  game         Game?      @relation(fields: [gameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_points_game_id")
-  tournamentId Int?       @map("tournament_id")
+  extraData    Json?       @map("extra_data")
+  version      Int         @default(0)
+  deleted      Boolean     @default(false)
+  createdAt    DateTime    @default(now()) @map("created_at")
+  createdBy    String?     @map("created_by") @db.VarChar(255)
+  createdIp    String?     @map("created_ip") @db.VarChar(45)
+  updatedAt    DateTime?   @updatedAt @map("updated_at")
+  updatedBy    String?     @map("updated_by") @db.VarChar(255)
+  updatedIp    String?     @map("updated_ip") @db.VarChar(45)
+  pointsType   PointsType  @default(DAN) @map("points_type")
+  gameId       Int?        @map("game_id")
+  game         Game?       @relation(fields: [gameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_points_game_id")
+  tournamentId Int?        @map("tournament_id")
   tournament   Tournament? @relation(fields: [tournamentId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_points_tournament_id")
-  isSanma      Boolean    @default(false) @map("is_sanma")
+  isSanma      Boolean     @default(false) @map("is_sanma")
 
   @@map("points")
-  
 }
 
 model PlayerRanking {
-  id              Int      @id @default(autoincrement())
-  playerId        Int      @map("player_id")
-  isSanma         Boolean  @default(false) @map("is_sanma") // 3-player vs 4-player
-  totalGames      Int      @default(0) @map("total_games")
-  averagePosition Float    @default(2.5) @map("average_position")
-  danPoints       Float    @default(1000) @map("dan_points")
-  ratePoints      Float    @default(1500) @map("rate_points")
-  seasonPoints    Float    @default(0) @map("season_points") // acumulado de temporada
-  seasonTotalGames      Int      @default(0) @map("season_total_games")
-  seasonAveragePosition Float    @default(0) @map("season_average_position")
-  seasonFirstPlaceH     Int      @default(0) @map("season_first_place_h")
-  seasonSecondPlaceH    Int      @default(0) @map("season_second_place_h")
-  seasonThirdPlaceH     Int      @default(0) @map("season_third_place_h")
-  seasonFourthPlaceH    Int      @default(0) @map("season_fourth_place_h")
-  seasonFirstPlaceT     Int      @default(0) @map("season_first_place_t")
-  seasonSecondPlaceT    Int      @default(0) @map("season_second_place_t")
-  seasonThirdPlaceT     Int      @default(0) @map("season_third_place_t")
-  seasonFourthPlaceT    Int      @default(0) @map("season_fourth_place_t")
-  maxRate         Float    @default(1500) @map("max_rate")
-  firstPlaceH     Int      @default(0) @map("first_place_h")
-  secondPlaceH    Int      @default(0) @map("second_place_h")
-  thirdPlaceH     Int      @default(0) @map("third_place_h")
-  fourthPlaceH    Int      @default(0) @map("fourth_place_h")
-  firstPlaceT     Int      @default(0) @map("first_place_t")
-  secondPlaceT    Int      @default(0) @map("second_place_t")
-  thirdPlaceT     Int      @default(0) @map("third_place_t")
-  fourthPlaceT    Int      @default(0) @map("fourth_place_t")
-  version         Int      @default(0)
-  deleted         Boolean  @default(false)
-  createdAt         DateTime @default(now()) @map("created_at")
-  createdBy       String?  @map("created_by") @db.VarChar(255)
-  createdIp       String?  @map("created_ip") @db.VarChar(45)
-  updatedAt         DateTime @updatedAt @map("updated_at")
-  updatedBy         String?  @map("updated_by") @db.VarChar(255)
-  updatedIp         String?  @map("updated_ip") @db.VarChar(45)
-  player          Player   @relation(fields: [playerId], references: [id])
+  id                    Int       @id @default(autoincrement())
+  playerId              Int       @map("player_id")
+  isSanma               Boolean   @default(false) @map("is_sanma") // 3-player vs 4-player
+  totalGames            Int       @default(0) @map("total_games")
+  averagePosition       Float     @default(2.5) @map("average_position")
+  danPoints             Float     @default(1000) @map("dan_points")
+  ratePoints            Float     @default(1500) @map("rate_points")
+  seasonPoints          Float     @default(0) @map("season_points") // acumulado de temporada
+  seasonTotalGames      Int       @default(0) @map("season_total_games")
+  seasonAveragePosition Float     @default(0) @map("season_average_position")
+  seasonFirstPlaceH     Int       @default(0) @map("season_first_place_h")
+  seasonSecondPlaceH    Int       @default(0) @map("season_second_place_h")
+  seasonThirdPlaceH     Int       @default(0) @map("season_third_place_h")
+  seasonFourthPlaceH    Int       @default(0) @map("season_fourth_place_h")
+  seasonFirstPlaceT     Int       @default(0) @map("season_first_place_t")
+  seasonSecondPlaceT    Int       @default(0) @map("season_second_place_t")
+  seasonThirdPlaceT     Int       @default(0) @map("season_third_place_t")
+  seasonFourthPlaceT    Int       @default(0) @map("season_fourth_place_t")
+  maxRate               Float     @default(1500) @map("max_rate")
+  firstPlaceH           Int       @default(0) @map("first_place_h")
+  secondPlaceH          Int       @default(0) @map("second_place_h")
+  thirdPlaceH           Int       @default(0) @map("third_place_h")
+  fourthPlaceH          Int       @default(0) @map("fourth_place_h")
+  firstPlaceT           Int       @default(0) @map("first_place_t")
+  secondPlaceT          Int       @default(0) @map("second_place_t")
+  thirdPlaceT           Int       @default(0) @map("third_place_t")
+  fourthPlaceT          Int       @default(0) @map("fourth_place_t")
+  version               Int       @default(0)
+  deleted               Boolean   @default(false)
+  createdAt             DateTime  @default(now()) @map("created_at")
+  createdBy             String?   @map("created_by") @db.VarChar(255)
+  createdIp             String?   @map("created_ip") @db.VarChar(45)
+  updatedAt             DateTime? @updatedAt @map("updated_at")
+  updatedBy             String?   @map("updated_by") @db.VarChar(255)
+  updatedIp             String?   @map("updated_ip") @db.VarChar(45)
+  player                Player    @relation(fields: [playerId], references: [id])
 
   @@unique([playerId, isSanma])
   @@map("player_ranking")
-  
 }
 
 model Account {
@@ -446,7 +431,6 @@ model Account {
 
   @@unique([provider, providerAccountId])
   @@map("account")
-  
 }
 
 model Session {
@@ -457,37 +441,35 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("session")
-  
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime? @map("email_verified")
-  image         String?
-  role          UserRole  @default(USER)
-  authorities   String[]  @default([])
-  isActive      Boolean   @default(true) @map("is_active")
-  sessionInvalidatedAt DateTime? @map("session_invalidated_at") // Para forzar logout de tokens JWT
-  receiveGameNotifications Boolean @default(true) @map("receive_game_notifications")
-  receiveLinkNotifications Boolean @default(true) @map("receive_link_notifications")
-  version       Int       @default(0)
-  deleted       Boolean   @default(false)
-  createdAt       DateTime  @default(now()) @map("created_at")
-  createdBy     String?   @map("created_by") @db.VarChar(255)
-  createdIp     String?   @map("created_ip") @db.VarChar(45)
-  updatedAt       DateTime  @updatedAt @map("updated_at")
-  updatedBy       String?   @map("updated_by") @db.VarChar(255)
-  updatedIp       String?   @map("updated_ip") @db.VarChar(45)
-  accounts      Account[]
-  sessions      Session[]
-  userPlayerLink        UserPlayerLink[]        @relation("User_UserPlayerLink")
-  userPlayerLinkRequests UserPlayerLinkRequest[] @relation("User_UserPlayerLinkRequest")
+  id                       String                  @id @default(cuid())
+  name                     String?
+  email                    String                  @unique
+  emailVerified            DateTime?               @map("email_verified")
+  image                    String?
+  role                     UserRole                @default(USER)
+  authorities              String[]                @default([])
+  isActive                 Boolean                 @default(true) @map("is_active")
+  sessionInvalidatedAt     DateTime?               @map("session_invalidated_at") // Para forzar logout de tokens JWT
+  receiveGameNotifications Boolean                 @default(true) @map("receive_game_notifications")
+  receiveLinkNotifications Boolean                 @default(true) @map("receive_link_notifications")
+  version                  Int                     @default(0)
+  deleted                  Boolean                 @default(false)
+  createdAt                DateTime                @default(now()) @map("created_at")
+  createdBy                String?                 @map("created_by") @db.VarChar(255)
+  createdIp                String?                 @map("created_ip") @db.VarChar(45)
+  updatedAt                DateTime?               @updatedAt @map("updated_at")
+  updatedBy                String?                 @map("updated_by") @db.VarChar(255)
+  updatedIp                String?                 @map("updated_ip") @db.VarChar(45)
+  accounts                 Account[]
+  sessions                 Session[]
+  userPlayerLink           UserPlayerLink[]        @relation("User_UserPlayerLink")
+  userPlayerLinkRequests   UserPlayerLinkRequest[] @relation("User_UserPlayerLinkRequest")
   // Sin relación con PendingGame - submittedBy es solo string
 
   @@map("user")
-  
 }
 
 model VerificationToken {
@@ -497,75 +479,71 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verification_token")
-  
 }
 
 model OnlineUser {
-  id        Int      @id @default(autoincrement())
-  playerId   Int      @map("player_id")
-  platform  String   @db.VarChar(50)
-  username  String   @db.VarChar(255)
-  idOnline  String?  @map("id_online") @db.VarChar(255)
-  userId    String?  @map("user_id") @db.VarChar(255)
-  isActive  Boolean  @default(true) @map("is_active")
-  version   Int      @default(0)
-  deleted   Boolean  @default(false)
-  createdAt   DateTime @default(now()) @map("created_at")
-  createdBy String?  @map("created_by") @db.VarChar(255)
-  createdIp String?  @map("created_ip") @db.VarChar(45)
-  updatedAt   DateTime @updatedAt @map("updated_at")
-  updatedBy String?  @map("updated_by") @db.VarChar(255)
-  updatedIp String?  @map("updated_ip") @db.VarChar(45)
-  player    Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  id        Int       @id @default(autoincrement())
+  playerId  Int       @map("player_id")
+  platform  String    @db.VarChar(50)
+  username  String    @db.VarChar(255)
+  idOnline  String?   @map("id_online") @db.VarChar(255)
+  userId    String?   @map("user_id") @db.VarChar(255)
+  isActive  Boolean   @default(true) @map("is_active")
+  version   Int       @default(0)
+  deleted   Boolean   @default(false)
+  createdAt DateTime  @default(now()) @map("created_at")
+  createdBy String?   @map("created_by") @db.VarChar(255)
+  createdIp String?   @map("created_ip") @db.VarChar(45)
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  updatedBy String?   @map("updated_by") @db.VarChar(255)
+  updatedIp String?   @map("updated_ip") @db.VarChar(45)
+  player    Player    @relation(fields: [playerId], references: [id], onDelete: Cascade)
 
   @@map("online_user")
-  
 }
 
 model UserPlayerLink {
-  id        Int      @id @default(autoincrement())
-  userId    String   @map("user_id") @db.VarChar(255)
-  playerId   Int      @map("player_id")
-  version   Int      @default(0)
-  deleted   Boolean  @default(false)
-  createdAt   DateTime @default(now()) @map("created_at")
-  createdBy String?  @map("created_by") @db.VarChar(255)
-  createdIp String?  @map("created_ip") @db.VarChar(45)
-  updatedAt   DateTime @updatedAt @map("updated_at")
-  updatedBy   String?  @map("updated_by") @db.VarChar(255)
-  updatedIp   String?  @map("updated_ip") @db.VarChar(45)
-  user      User     @relation("User_UserPlayerLink", fields: [userId], references: [id], onDelete: Cascade)
-  player    Player   @relation("Player_UserPlayerLink", fields: [playerId], references: [id], onDelete: Cascade)
+  id        Int       @id @default(autoincrement())
+  userId    String    @map("user_id") @db.VarChar(255)
+  playerId  Int       @map("player_id")
+  version   Int       @default(0)
+  deleted   Boolean   @default(false)
+  createdAt DateTime  @default(now()) @map("created_at")
+  createdBy String?   @map("created_by") @db.VarChar(255)
+  createdIp String?   @map("created_ip") @db.VarChar(45)
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  updatedBy String?   @map("updated_by") @db.VarChar(255)
+  updatedIp String?   @map("updated_ip") @db.VarChar(45)
+  user      User      @relation("User_UserPlayerLink", fields: [userId], references: [id], onDelete: Cascade)
+  player    Player    @relation("Player_UserPlayerLink", fields: [playerId], references: [id], onDelete: Cascade)
 
   @@unique([userId])
   @@unique([playerId])
   @@map("user_player_link")
-  
 }
 
 model UserPlayerLinkRequest {
-  id         Int                 @id @default(autoincrement())
-  userId     String              @map("user_id") @db.VarChar(255)
-  playerId    Int               @map("player_id")
-  status     LinkRequestStatus   @default(PENDING)
+  id         Int               @id @default(autoincrement())
+  userId     String            @map("user_id") @db.VarChar(255)
+  playerId   Int               @map("player_id")
+  status     LinkRequestStatus @default(PENDING)
   note       String?
-  approvedBy String?             @map("approved_by") @db.VarChar(255)
-  approvedAt DateTime?           @map("approved_at")
-  version    Int                 @default(0)
-  deleted    Boolean             @default(false)
-  createdAt    DateTime            @default(now()) @map("created_at")
-  createdBy  String?             @map("created_by") @db.VarChar(255)
-  createdIp  String?             @map("created_ip") @db.VarChar(45)
-  updatedAt    DateTime            @updatedAt @map("updated_at")
-  updatedBy    String?             @map("updated_by") @db.VarChar(255)
-  updatedIp    String?             @map("updated_ip") @db.VarChar(45)
-  user       User                @relation("User_UserPlayerLinkRequest", fields: [userId], references: [id], onDelete: Cascade)
-  player     Player              @relation("Player_UserPlayerLinkRequest", fields: [playerId], references: [id], onDelete: Cascade)
+  approvedBy String?           @map("approved_by") @db.VarChar(255)
+  approvedAt DateTime?         @map("approved_at")
+  version    Int               @default(0)
+  deleted    Boolean           @default(false)
+  createdAt  DateTime          @default(now()) @map("created_at")
+  createdBy  String?           @map("created_by") @db.VarChar(255)
+  createdIp  String?           @map("created_ip") @db.VarChar(45)
+  updatedAt  DateTime?         @updatedAt @map("updated_at")
+  updatedBy  String?           @map("updated_by") @db.VarChar(255)
+  updatedIp  String?           @map("updated_ip") @db.VarChar(45)
+  user       User              @relation("User_UserPlayerLinkRequest", fields: [userId], references: [id], onDelete: Cascade)
+  player     Player            @relation("Player_UserPlayerLinkRequest", fields: [playerId], references: [id], onDelete: Cascade)
 
   @@index([playerId])
   @@index([userId])
   @@map("user_player_link_request")
-  
 }
 
 enum GameType {
@@ -573,7 +551,6 @@ enum GameType {
   TONPUUSEN
 
   @@map("game_type")
-  
 }
 
 enum TournamentType {
@@ -582,7 +559,6 @@ enum TournamentType {
   LEAGUE
 
   @@map("tournament_type")
-  
 }
 
 enum OnlinePlatform {
@@ -590,7 +566,6 @@ enum OnlinePlatform {
   MAHJONG_SOUL
 
   @@map("online_platform")
-  
 }
 
 enum PointsType {
@@ -599,7 +574,6 @@ enum PointsType {
   SEASON
 
   @@map("points_type")
-  
 }
 
 enum LinkRequestStatus {
@@ -608,7 +582,6 @@ enum LinkRequestStatus {
   REJECTED
 
   @@map("link_request_status")
-  
 }
 
 enum PendingGameStatus {
@@ -617,7 +590,6 @@ enum PendingGameStatus {
   REJECTED
 
   @@map("pending_game_status")
-  
 }
 
 enum UserRole {
@@ -628,153 +600,147 @@ enum UserRole {
   USER
 
   @@map("user_role")
-  
 }
 
 model EmailAccount {
-  id                    Int      @id @default(autoincrement())
-  name                  String   @db.VarChar(255)
-  isPrimary             Boolean  @default(false) @map("is_primary")
-  origin                String   @db.VarChar(255)
-  fromAddress           String   @map("from_address") @db.VarChar(255)
-  replyAddress          String?  @map("reply_address") @db.VarChar(255)
-  organization          String?  @db.VarChar(255)
-  server                String   @db.VarChar(255)
-  port                  Int
-  username              String   @db.VarChar(255)
-  password              String   @db.VarChar(255)
-  connectionSecurity    String   @map("connection_security") @db.VarChar(50)
-  isActive              Boolean  @default(true) @map("is_active")
-  version               Int      @default(0)
-  deleted               Boolean  @default(false)
-  createdAt               DateTime @default(now()) @map("created_at")
-  createdBy             String?  @map("created_by") @db.VarChar(255)
-  createdIp             String?  @map("created_ip") @db.VarChar(45)
-  updatedAt               DateTime @updatedAt @map("updated_at")
-  updatedBy               String?  @map("updated_by") @db.VarChar(255)
-  updatedIp               String?  @map("updated_ip") @db.VarChar(45)
+  id                 Int       @id @default(autoincrement())
+  name               String    @db.VarChar(255)
+  isPrimary          Boolean   @default(false) @map("is_primary")
+  origin             String    @db.VarChar(255)
+  fromAddress        String    @map("from_address") @db.VarChar(255)
+  replyAddress       String?   @map("reply_address") @db.VarChar(255)
+  organization       String?   @db.VarChar(255)
+  server             String    @db.VarChar(255)
+  port               Int
+  username           String    @db.VarChar(255)
+  password           String    @db.VarChar(255)
+  connectionSecurity String    @map("connection_security") @db.VarChar(50)
+  isActive           Boolean   @default(true) @map("is_active")
+  version            Int       @default(0)
+  deleted            Boolean   @default(false)
+  createdAt          DateTime  @default(now()) @map("created_at")
+  createdBy          String?   @map("created_by") @db.VarChar(255)
+  createdIp          String?   @map("created_ip") @db.VarChar(45)
+  updatedAt          DateTime? @updatedAt @map("updated_at")
+  updatedBy          String?   @map("updated_by") @db.VarChar(255)
+  updatedIp          String?   @map("updated_ip") @db.VarChar(45)
 
   @@map("email_account")
-  
 }
 
 model DanConfig {
-  id          Int      @id @default(autoincrement())
-  rank        String   @db.VarChar(50) // "新人", "9級", "初段", etc.
-  sanma       Boolean  @default(false)
-  minPoints   Int      @map("min_points")
-  maxPoints   Int?     @map("max_points")
-  firstPlace  Int      @map("first_place")
-  secondPlace Int      @map("second_place")
-  thirdPlace  Int      @map("third_place")
-  fourthPlace Int?     @map("fourth_place")
-  isProtected Boolean  @default(false) @map("is_protected")
-  color       String   @db.VarChar(7) // Hex color
-  cssClass    String   @db.VarChar(50) @map("css_class")
-  isLastRank  Boolean  @default(false) @map("is_last_rank")
-  version     Int      @default(0)
-  deleted     Boolean  @default(false)
-  createdAt     DateTime @default(now()) @map("created_at")
-  createdBy   String?  @map("created_by") @db.VarChar(255)
-  createdIp   String?  @map("created_ip") @db.VarChar(45)
-  updatedAt     DateTime @updatedAt @map("updated_at")
-  updatedBy   String?  @map("updated_by") @db.VarChar(255)
-  updatedIp   String?  @map("updated_ip") @db.VarChar(45)
+  id          Int       @id @default(autoincrement())
+  rank        String    @db.VarChar(50) // "新人", "9級", "初段", etc.
+  sanma       Boolean   @default(false)
+  minPoints   Int       @map("min_points")
+  maxPoints   Int?      @map("max_points")
+  firstPlace  Int       @map("first_place")
+  secondPlace Int       @map("second_place")
+  thirdPlace  Int       @map("third_place")
+  fourthPlace Int?      @map("fourth_place")
+  isProtected Boolean   @default(false) @map("is_protected")
+  color       String    @db.VarChar(7) // Hex color
+  cssClass    String    @map("css_class") @db.VarChar(50)
+  isLastRank  Boolean   @default(false) @map("is_last_rank")
+  version     Int       @default(0)
+  deleted     Boolean   @default(false)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  createdBy   String?   @map("created_by") @db.VarChar(255)
+  createdIp   String?   @map("created_ip") @db.VarChar(45)
+  updatedAt   DateTime? @updatedAt @map("updated_at")
+  updatedBy   String?   @map("updated_by") @db.VarChar(255)
+  updatedIp   String?   @map("updated_ip") @db.VarChar(45)
 
   @@unique([rank, sanma])
   @@map("dan_config")
-  
 }
 
 model RateConfig {
-  id              Int      @id @default(autoincrement())
-  name            String   @db.VarChar(255)
-  sanma           Boolean  @default(false)
-  firstPlace      Int      @map("first_place")
-  secondPlace     Int      @map("second_place")
-  thirdPlace      Int      @map("third_place")
-  fourthPlace     Int?     @map("fourth_place")
-  adjustmentRate  Float    @map("adjustment_rate") // Factor de ajuste (ej: 0.002)
-  adjustmentLimit Int      @map("adjustment_limit") // Límite de juegos para ajuste (ej: 400)
-  minAdjustment   Float    @map("min_adjustment") // Ajuste mínimo (ej: 0.2)
-  version         Int      @default(0)
-  deleted         Boolean  @default(false)
-  createdAt         DateTime @default(now()) @map("created_at")
-  createdBy       String?  @map("created_by") @db.VarChar(255)
-  createdIp       String?  @map("created_ip") @db.VarChar(45)
-  updatedAt         DateTime @updatedAt @map("updated_at")
-  updatedBy         String?  @map("updated_by") @db.VarChar(255)
-  updatedIp         String?  @map("updated_ip") @db.VarChar(45)
+  id              Int       @id @default(autoincrement())
+  name            String    @db.VarChar(255)
+  sanma           Boolean   @default(false)
+  firstPlace      Int       @map("first_place")
+  secondPlace     Int       @map("second_place")
+  thirdPlace      Int       @map("third_place")
+  fourthPlace     Int?      @map("fourth_place")
+  adjustmentRate  Float     @map("adjustment_rate") // Factor de ajuste (ej: 0.002)
+  adjustmentLimit Int       @map("adjustment_limit") // Límite de juegos para ajuste (ej: 400)
+  minAdjustment   Float     @map("min_adjustment") // Ajuste mínimo (ej: 0.2)
+  version         Int       @default(0)
+  deleted         Boolean   @default(false)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  createdBy       String?   @map("created_by") @db.VarChar(255)
+  createdIp       String?   @map("created_ip") @db.VarChar(45)
+  updatedAt       DateTime? @updatedAt @map("updated_at")
+  updatedBy       String?   @map("updated_by") @db.VarChar(255)
+  updatedIp       String?   @map("updated_ip") @db.VarChar(45)
 
   @@unique([name, sanma])
   @@map("rate_config")
-  
 }
 
 model SeasonConfig {
-  id          Int      @id @default(autoincrement())
-  name        String   @db.VarChar(255)
-  sanma       Boolean  @default(false)
-  firstPlace  Int      @map("first_place")
-  secondPlace Int      @map("second_place")
-  thirdPlace  Int      @map("third_place")
-  fourthPlace Int?     @map("fourth_place")
-  seasonId    Int?     @map("season_id")
-  isDefault   Boolean  @default(false) @map("is_default")
-  version     Int      @default(0)
-  deleted     Boolean  @default(false)
-  createdAt     DateTime @default(now()) @map("created_at")
-  createdBy   String?  @map("created_by") @db.VarChar(255)
-  createdIp   String?  @map("created_ip") @db.VarChar(45)
-  updatedAt     DateTime @updatedAt @map("updated_at")
-  updatedBy     String?  @map("updated_by") @db.VarChar(255)
-  updatedIp     String?  @map("updated_ip") @db.VarChar(45)
-  season      Season?  @relation(fields: [seasonId], references: [id], onDelete: SetNull)
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(255)
+  sanma       Boolean   @default(false)
+  firstPlace  Int       @map("first_place")
+  secondPlace Int       @map("second_place")
+  thirdPlace  Int       @map("third_place")
+  fourthPlace Int?      @map("fourth_place")
+  seasonId    Int?      @map("season_id")
+  isDefault   Boolean   @default(false) @map("is_default")
+  version     Int       @default(0)
+  deleted     Boolean   @default(false)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  createdBy   String?   @map("created_by") @db.VarChar(255)
+  createdIp   String?   @map("created_ip") @db.VarChar(45)
+  updatedAt   DateTime? @updatedAt @map("updated_at")
+  updatedBy   String?   @map("updated_by") @db.VarChar(255)
+  updatedIp   String?   @map("updated_ip") @db.VarChar(45)
+  season      Season?   @relation(fields: [seasonId], references: [id], onDelete: SetNull)
 
   @@index([name, sanma, seasonId])
   @@index([name, sanma, isDefault])
   @@map("season_config")
-  
 }
 
 model SeasonResult {
-  id                  Int      @id @default(autoincrement())
-  seasonId            Int      @map("season_id")
-  playerId            Int      @map("player_id")
-  isSanma             Boolean  @default(false) @map("is_sanma")
+  id       Int     @id @default(autoincrement())
+  seasonId Int     @map("season_id")
+  playerId Int     @map("player_id")
+  isSanma  Boolean @default(false) @map("is_sanma")
 
   // Aggregates for the season
-  seasonTotalGames    Int      @default(0) @map("season_total_games")
+  seasonTotalGames      Int     @default(0) @map("season_total_games")
   seasonAveragePosition Decimal @default(0) @map("season_avg_position") @db.Decimal(10, 4)
 
   // Hanchan breakdown
-  seasonFirstPlaceH   Int      @default(0) @map("season_first_h")
-  seasonSecondPlaceH  Int      @default(0) @map("season_second_h")
-  seasonThirdPlaceH   Int      @default(0) @map("season_third_h")
-  seasonFourthPlaceH  Int      @default(0) @map("season_fourth_h")
+  seasonFirstPlaceH  Int @default(0) @map("season_first_h")
+  seasonSecondPlaceH Int @default(0) @map("season_second_h")
+  seasonThirdPlaceH  Int @default(0) @map("season_third_h")
+  seasonFourthPlaceH Int @default(0) @map("season_fourth_h")
 
   // Tonpu breakdown
-  seasonFirstPlaceT   Int      @default(0) @map("season_first_t")
-  seasonSecondPlaceT  Int      @default(0) @map("season_second_t")
-  seasonThirdPlaceT   Int      @default(0) @map("season_third_t")
-  seasonFourthPlaceT  Int      @default(0) @map("season_fourth_t")
+  seasonFirstPlaceT  Int @default(0) @map("season_first_t")
+  seasonSecondPlaceT Int @default(0) @map("season_second_t")
+  seasonThirdPlaceT  Int @default(0) @map("season_third_t")
+  seasonFourthPlaceT Int @default(0) @map("season_fourth_t")
 
-  seasonPoints        Decimal  @default(0) @map("season_points") @db.Decimal(10, 4)
+  seasonPoints Decimal @default(0) @map("season_points") @db.Decimal(10, 4)
 
-  extraData           Json?    @map("extra_data")
-  version             Int      @default(0)
-  deleted             Boolean  @default(false)
-  createdAt             DateTime @default(now()) @map("created_at")
-  createdBy           String?  @map("created_by") @db.VarChar(255)
-  createdIp           String?  @map("created_ip") @db.VarChar(45)
-  updatedAt           DateTime @updatedAt @map("updated_at")
-  updatedBy           String?  @map("updated_by") @db.VarChar(255)
-  updatedIp           String?  @map("updated_ip") @db.VarChar(45)
+  extraData Json?     @map("extra_data")
+  version   Int       @default(0)
+  deleted   Boolean   @default(false)
+  createdAt DateTime  @default(now()) @map("created_at")
+  createdBy String?   @map("created_by") @db.VarChar(255)
+  createdIp String?   @map("created_ip") @db.VarChar(45)
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  updatedBy String?   @map("updated_by") @db.VarChar(255)
+  updatedIp String?   @map("updated_ip") @db.VarChar(45)
 
-  season              Season   @relation(fields: [seasonId], references: [id])
-  player              Player   @relation(fields: [playerId], references: [id])
+  season Season @relation(fields: [seasonId], references: [id])
+  player Player @relation(fields: [playerId], references: [id])
 
   @@unique([seasonId, playerId, isSanma])
   @@map("season_result")
-  
 }
