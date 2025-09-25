@@ -4,7 +4,6 @@ import { FormField } from "@/components/admin/abm/generic-form";
 import { GridAction, GridColumn } from "@/components/admin/abm/generic-grid-responsive";
 import UnifiedABMLayout from "@/components/admin/abm/unified-abm-layout";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink } from "@/components/ui/icons";
 import { useCrud } from "@/hooks/use-crud";
 import { useEnumI18n } from "@/hooks/use-enum-i18n";
 import { useEffect, useMemo, useState } from "react";
@@ -157,19 +156,8 @@ export default function TournamentsABMPage() {
         }
     ], [getTournamentTypeLabel]);
 
-    // Usamos acciones genéricas del grid
-    const actions: GridAction[] = useMemo(() => [
-        {
-            key: 'manage-results',
-            label: 'Gestionar Resultados',
-            icon: ExternalLink,
-            variant: 'outline',
-            onClick: () => {
-                window.open('/admin/abm/tournament-results', '_blank');
-            },
-            show: () => true
-        }
-    ], []);
+    // Usamos acciones genéricas del grid (vacío para que aparezcan los botones estándar)
+    const actions: GridAction[] = useMemo(() => [], []);
 
     // ===== Form =====
     const formFields: FormField[] = useMemo(() => [

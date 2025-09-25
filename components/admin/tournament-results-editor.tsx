@@ -59,8 +59,10 @@ export function TournamentResultsEditor({
             try {
                 const response = await fetch('/api/abm/players');
                 if (response.ok) {
-                    const data = await response.json();
-                    setPlayers(data);
+                    const result = await response.json();
+                    // El endpoint genérico devuelve { success: true, data: rows }
+                    const data = result.success ? result.data : result;
+                    setPlayers(Array.isArray(data) ? data : []);
                 }
             } catch (error) {
                 handleError(error, 'Cargar jugadores');

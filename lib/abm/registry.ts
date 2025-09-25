@@ -36,7 +36,27 @@ export const registry: Record<string, ResourceConfig> = {
     tournaments: {
         model: prisma.tournament,
         searchable: ['name', 'description'],
-        include: { season: { select: { id: true, name: true } }, location: { select: { id: true, name: true } } },
+        include: {
+            season: { select: { id: true, name: true } },
+            location: { select: { id: true, name: true } },
+            tournamentResults: {
+                where: { deleted: false },
+                select: {
+                    id: true,
+                    position: true,
+                    pointsWon: true,
+                    prizeWon: true,
+                    playerId: true,
+                    player: {
+                        select: {
+                            id: true,
+                            nickname: true,
+                            fullname: true
+                        }
+                    }
+                }
+            }
+        },
         orderBy: { id: 'asc' },
         mapCreate: (data: any) => {
             // Filtrar campos que no deben enviarse a Prisma

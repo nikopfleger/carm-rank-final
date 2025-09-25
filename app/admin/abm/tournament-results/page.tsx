@@ -58,10 +58,12 @@ export default function TournamentResultsSpecialPage() {
   const loadTournaments = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/abm/tournaments?includeResults=true');
+      const response = await fetch('/api/abm/tournaments');
       if (response.ok) {
-        const data = await response.json();
-        setTournaments(data);
+        const result = await response.json();
+        // El endpoint genérico devuelve { success: true, data: rows }
+        const data = result.success ? result.data : result;
+        setTournaments(Array.isArray(data) ? data : []);
       } else {
         throw new Error('Error cargando torneos');
       }
