@@ -20,7 +20,17 @@ export async function GET(
 
         return NextResponse.json({ success: true, data: row });
     } catch (err: any) {
-        return NextResponse.json({ success: false, error: err.message || 'Error' }, { status: 500 });
+        // Prisma known errors
+        const code: string | undefined = err?.code;
+        if (code === 'P2002') {
+            // Unique constraint failed
+            const target = Array.isArray(err?.meta?.target) ? err.meta.target.join(',') : err?.meta?.target;
+            return NextResponse.json({ success: false, error: 'Unique constraint failed', target }, { status: 409 });
+        }
+        if (code === 'P2025') {
+            return NextResponse.json({ success: false, error: 'Registro no encontrado para actualizar' }, { status: 404 });
+        }
+        return NextResponse.json({ success: false, error: err?.message || 'Error', code, meta: err?.meta }, { status: 500 });
     }
 }
 
@@ -32,22 +42,58 @@ export async function PATCH(
         const { resource, id } = await context.params;
         const cfg = getResource(resource);
         const body = await request.json();
+        console.log(`[ABM][PATCH] ${resource}/${id}`, body);
 
         const data = cfg.mapUpdate ? cfg.mapUpdate(body) : body;
 
         // Manejar diferentes tipos de ID (String vs Number)
         const idValue = resource === 'users' ? id : Number(id);
+        // Validación genérica de unicidad (excluyendo el propio registro)
+        if (cfg.uniqueFields && cfg.uniqueFields.length > 0) {
+            for (const field of cfg.uniqueFields) {
+                if (data[field] !== undefined && data[field] !== null && data[field] !== '') {
+                    const exists = await cfg.model.findFirst({
+                        where: {
+                            [field]: data[field],
+                            NOT: { [cfg.idField!]: idValue },
+                        },
+                    });
+                    if (exists) {
+                        return NextResponse.json({ success: false, error: `${field} ya está en uso` }, { status: 400 });
+                    }
+                }
+            }
+        }
+
+        // Optimistic locking: requerimos 'version' en el WHERE
+        const versionInBody = (data as any)?.version;
+        if (versionInBody === undefined || versionInBody === null || Number.isNaN(Number(versionInBody))) {
+            return NextResponse.json({ success: false, error: `[${resource.slice(0, 1).toUpperCase() + resource.slice(1)}] Falta 'version' en WHERE para optimistic locking. Debe incluir la versión esperada del registro.` }, { status: 400 });
+        }
+        // Evitar que Prisma intente setear version manualmente (lo maneja el interceptor)
+        const { version, ...dataWithoutVersion } = data as any;
+
         const updated = await cfg.model.update({
-            where: { [cfg.idField!]: idValue },
-            data,
+            where: { [cfg.idField!]: idValue, version: Number(versionInBody) },
+            data: dataWithoutVersion,
             select: cfg.select,
             include: cfg.include,
         });
+        console.log(`[ABM][PATCH] OK ${resource}/${id}`);
 
         return NextResponse.json({ success: true, data: updated });
     } catch (err: any) {
         return NextResponse.json({ success: false, error: err.message || 'Error' }, { status: 500 });
     }
+}
+
+// Aceptar PUT como alias de PATCH para compatibilidad con clientes existentes
+export async function PUT(
+    request: Request,
+    context: { params: Promise<{ resource: string; id: string }> }
+) {
+    console.log(`[ABM][PUT] hit`);
+    return PATCH(request, context);
 }
 
 export async function DELETE(

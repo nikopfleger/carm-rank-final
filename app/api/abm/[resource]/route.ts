@@ -70,6 +70,18 @@ export async function POST(
 
         const data = cfg.mapCreate ? cfg.mapCreate(body) : body;
 
+        // Validación genérica de unicidad (metadatos en registry)
+        if (cfg.uniqueFields && cfg.uniqueFields.length > 0) {
+            for (const field of cfg.uniqueFields) {
+                if (data[field] !== undefined && data[field] !== null && data[field] !== '') {
+                    const exists = await cfg.model.findFirst({ where: { [field]: data[field] } });
+                    if (exists) {
+                        return NextResponse.json({ success: false, error: `${field} ya está en uso` }, { status: 400 });
+                    }
+                }
+            }
+        }
+
         const created = await cfg.model.create({
             data,
             select: cfg.select,

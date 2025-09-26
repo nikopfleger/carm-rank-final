@@ -135,6 +135,8 @@ export async function getPlayersWithRanking(
     const rankings = await prisma.playerRanking.findMany({
       where: {
         ...(sanma !== undefined ? { isSanma: sanma } : {}),
+        // Excluir siempre jugadores eliminados del ranking
+        player: { deleted: false },
       },
       include: {
         player: { include: { country: true } },

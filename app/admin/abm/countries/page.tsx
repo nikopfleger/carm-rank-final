@@ -41,13 +41,6 @@ export default function CountriesABMPage() {
       sortable: true
     },
     {
-      key: 'version',
-      label: 'Versión',
-      type: 'badge',
-      width: '80px',
-      sortable: true
-    },
-    {
       key: 'deleted',
       label: 'Estado',
       type: 'boolean',
@@ -58,13 +51,7 @@ export default function CountriesABMPage() {
         </Badge>
       )
     },
-    {
-      key: 'updatedAt',
-      label: 'Última Modificación',
-      type: 'date',
-      width: '150px',
-      sortable: true
-    }
+
   ], []);
 
   // Usamos acciones genéricas del grid (sin confirm del browser)
@@ -97,7 +84,9 @@ export default function CountriesABMPage() {
       type: 'text',
       required: true,
       placeholder: 'ej: Argentino, Estadounidense, Japonés'
-    }
+    },
+    // Campo oculto para optimistic locking, no se muestra en UI
+    { key: 'version', label: 'version', type: 'hidden' }
   ], []);
 
   return (

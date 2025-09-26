@@ -5,6 +5,7 @@ type ResourceConfig = {
     idField?: string;
     searchable?: string[];
     searchableNumeric?: string[];
+    uniqueFields?: string[];
     select?: any;
     include?: any;
     orderBy?: any;
@@ -22,6 +23,45 @@ export const registry: Record<string, ResourceConfig> = {
         model: prisma.player,
         searchable: ['nickname', 'fullname'],
         searchableNumeric: ['playerNumber'],
+        uniqueFields: ['playerNumber', 'nickname'],
+        mapCreate: (data: any) => {
+            // Whitelist de columnas válidas
+            const allowed: any = {
+                nickname: undefined,
+                fullname: undefined,
+                countryId: undefined,
+                playerNumber: undefined,
+                birthday: undefined,
+                version: undefined,
+            };
+            const clean: any = {};
+            for (const k of Object.keys(allowed)) if (k in data) clean[k] = (data as any)[k];
+            if (clean.playerNumber != null) clean.playerNumber = Number(clean.playerNumber);
+            if (clean.countryId != null) clean.countryId = Number(clean.countryId);
+            if (typeof clean.nickname === 'string') clean.nickname = clean.nickname.trim();
+            if (typeof clean.fullname === 'string') clean.fullname = clean.fullname.trim();
+            if (clean.birthday && typeof clean.birthday === 'string') clean.birthday = new Date(clean.birthday);
+            return clean;
+        },
+        mapUpdate: (data: any) => {
+            // Whitelist de columnas válidas (+version para optimistic locking)
+            const allowed: any = {
+                nickname: undefined,
+                fullname: undefined,
+                countryId: undefined,
+                playerNumber: undefined,
+                birthday: undefined,
+                version: undefined,
+            };
+            const clean: any = {};
+            for (const k of Object.keys(allowed)) if (k in data) clean[k] = (data as any)[k];
+            if (clean.playerNumber != null) clean.playerNumber = Number(clean.playerNumber);
+            if (clean.countryId != null) clean.countryId = Number(clean.countryId);
+            if (typeof clean.nickname === 'string') clean.nickname = clean.nickname.trim();
+            if (typeof clean.fullname === 'string') clean.fullname = clean.fullname.trim();
+            if (clean.birthday && typeof clean.birthday === 'string') clean.birthday = new Date(clean.birthday);
+            return clean;
+        },
         include: {
             country: { select: { id: true, fullName: true } },
             onlineUsers: { where: { deleted: false }, select: { id: true, platform: true, username: true, idOnline: true, isActive: true } }

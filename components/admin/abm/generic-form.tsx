@@ -34,6 +34,7 @@ export interface FormField {
   required?: boolean;
   placeholder?: string;
   options?: { value: any; label: string }[];
+  coerceToNumber?: boolean;
   validation?: {
     min?: number;
     max?: number;
@@ -210,18 +211,25 @@ export function GenericForm({
         ) : field.type === "select" ? (
           <Select
             value={value !== "" && value !== null && value !== undefined ? String(value) : undefined}
-            onValueChange={(newValue) => handleInputChange(field.key, newValue)}
-          // Radix gestiona rols ARIA, el nombre accesible sale del label
+            onValueChange={(newValue) => handleInputChange(field.key, field.coerceToNumber ? Number(newValue) : newValue)}
           >
             <SelectTrigger
               id={baseId}
-              aria-labelledby={labelId} // ✅ asocia el label
+              aria-labelledby={labelId}
               className={hasError ? "border-red-500" : ""}
               disabled={field.disabled}
               data-testid={testId}
               name={field.nameAttr ?? field.key}
             >
-              <SelectValue placeholder={field.placeholder ?? "Seleccionar"} />
+              {(() => {
+                const opts = field.options || [];
+                const selected = opts.find(o => String(o.value) === String(value));
+                return selected ? (
+                  <span>{selected.label}</span>
+                ) : (
+                  <SelectValue placeholder={field.placeholder ?? "Seleccionar"} />
+                );
+              })()}
             </SelectTrigger>
             <SelectContent>
               {field.options?.map((option) => (
@@ -295,14 +303,21 @@ export function GenericForm({
 
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {fields.map((field) => (
-              <div
-                key={field.key}
-                className={field.type === "textarea" ? "md:col-span-2" : ""}
-              >
-                {renderField(field)}
-              </div>
-            ))}
+            {/* Auto-inyectar campo oculto 'version' para optimistic locking si no está declarado */}
+            {(() => {
+              const hasVersionField = fields.some(f => f.key === 'version');
+              const autoFields = hasVersionField || formData?.version === undefined
+                ? fields
+                : [...fields, { key: 'version', label: 'version', type: 'hidden' as const }];
+              return autoFields.map((field) => (
+                <div
+                  key={field.key}
+                  className={field.type === "textarea" ? "md:col-span-2" : ""}
+                >
+                  {renderField(field)}
+                </div>
+              ));
+            })()}
           </div>
 
           {extraContent}

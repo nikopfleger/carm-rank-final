@@ -26,6 +26,7 @@ interface UnifiedABMLayoutProps<T = any> {
     formErrors?: Record<string, string>;
     formSuccess?: boolean;
     successMessage?: string;
+    initialFormData?: any;
 
     // Configuración de búsqueda y filtros
     searchable?: boolean;
@@ -38,6 +39,7 @@ interface UnifiedABMLayoutProps<T = any> {
     onRefresh(): void;
     onFormSubmit(data: any): Promise<void>;
     onFormCancel(): void;
+    validateAsyncMap?: Record<string, (value: any, formData: any) => Promise<string | null>>;
 
     // Acciones genéricas del grid (para usar confirm modal unificado)
     onEditRow?: (row: any) => void;
@@ -72,6 +74,7 @@ export function UnifiedABMLayout<T = any>({
     formErrors = {},
     formSuccess = false,
     successMessage = "Elemento guardado correctamente",
+    initialFormData,
     searchable = true,
     searchPlaceholder,
     showDeleted = false,
@@ -80,6 +83,7 @@ export function UnifiedABMLayout<T = any>({
     onRefresh,
     onFormSubmit,
     onFormCancel,
+    validateAsyncMap,
     onEditRow,
     onDeleteRow,
     onRestoreRow,
@@ -114,12 +118,13 @@ export function UnifiedABMLayout<T = any>({
                     <GenericForm
                         title={defaultFormTitle}
                         fields={formFields}
-                        initialData={editingItem ? { ...editingItem } : {}}
+                        initialData={editingItem ? { ...editingItem } : (initialFormData || {})}
                         onSubmit={onFormSubmit}
                         onCancel={onFormCancel}
                         errors={formErrors}
                         success={formSuccess}
                         successMessage={successMessage}
+                        validateAsyncMap={validateAsyncMap}
                     />
 
                     {/* Contenido adicional del formulario (para sub-ABMs, etc.) */}

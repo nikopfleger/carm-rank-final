@@ -41,6 +41,7 @@ export default function PlayersABMPageUnified() {
     const [countries, setCountries] = useState<Country[]>([]);
     const abm = useCrud<Player>({ resource: 'players' });
     const abmService = useAbmService();
+    const [initialFormData, setInitialFormData] = useState<any | undefined>(undefined);
 
     // ==== Cargar países SOLO UNA VEZ ====
     const didLoadCountries = useRef(false);
@@ -107,14 +108,43 @@ export default function PlayersABMPageUnified() {
                 type: "select",
                 required: true,
                 options: countries.map((c) => ({ value: String(c.id), label: c.name_es })),
+                coerceToNumber: true,
             },
             { key: "playerNumber", label: "Legajo", type: "number", required: true },
             { key: "birthday", label: "Fecha de Nacimiento", type: "date", required: false },
+            // version se usa solo para optimistic locking en el update
+            { key: "version", label: "version", type: "hidden" },
         ],
         [countries]
     );
 
     const actions: GridAction[] = useMemo(() => [], []);
+
+    // Prefill de legajo cuando es NUEVO (no en edición)
+    useEffect(() => {
+        if (abm.showForm && !abm.editingItem) {
+            // Fallback rápido con datos locales
+            const localNext = (() => {
+                const nums = (abm.data || []).map((p: any) => Number(p.playerNumber)).filter(n => !Number.isNaN(n));
+                if (!nums.length) return undefined;
+                return Math.max(...nums) + 1;
+            })();
+            if (typeof localNext === 'number') {
+                setInitialFormData((prev: any) => ({ ...(prev || {}), playerNumber: localNext }));
+            }
+
+            // Valor definitivo desde el server
+            (async () => {
+                try {
+                    const res = await fetch(`/api/abm/players/next-available?field=playerNumber`, { cache: 'no-store' });
+                    const json = await res.json();
+                    if (json?.success && typeof json?.value === 'number') {
+                        setInitialFormData((prev: any) => ({ ...(prev || {}), playerNumber: json.value }));
+                    }
+                } catch { }
+            })();
+        }
+    }, [abm.showForm, abm.editingItem, abm.data]);
 
     return (
         <UnifiedABMLayout
@@ -141,6 +171,38 @@ export default function PlayersABMPageUnified() {
             onRestoreRow={abm.handleRestore}
             onFormSubmit={abm.handleFormSubmit}
             onFormCancel={abm.handleCancel}
+            initialFormData={initialFormData}
+            // Validación asíncrona de unicidad para legajo y nickname
+            validateAsyncMap={{
+                playerNumber: async (value: any, form: any) => {
+                    if (value === undefined || value === null || value === '') return null;
+                    try {
+                        const id = abm.editingItem?.id;
+                        const params = new URLSearchParams({ resource: 'players', field: 'playerNumber', value: String(value) });
+                        if (id) params.append('excludeId', String(id));
+                        const res = await fetch(`/api/abm/validate-unique?${params.toString()}`, { cache: 'no-store' });
+                        const json = await res.json();
+                        if (json?.exists) return `Legajo ${value} ya está en uso`;
+                        return null;
+                    } catch (e) {
+                        return null;
+                    }
+                },
+                nickname: async (value: any) => {
+                    if (!value) return null;
+                    try {
+                        const id = abm.editingItem?.id;
+                        const params = new URLSearchParams({ resource: 'players', field: 'nickname', value: String(value) });
+                        if (id) params.append('excludeId', String(id));
+                        const res = await fetch(`/api/abm/validate-unique?${params.toString()}`, { cache: 'no-store' });
+                        const json = await res.json();
+                        if (json?.exists) return `Nickname "${value}" ya está en uso`;
+                        return null;
+                    } catch (e) {
+                        return null;
+                    }
+                },
+            }}
             emptyMessage="No hay jugadores registrados"
         />
     );

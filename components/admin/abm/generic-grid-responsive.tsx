@@ -136,7 +136,9 @@ function GenericGrid({
                 icon: Trash2,
                 variant: 'destructive',
                 onClick: (row: any) => {
-                    console.log('🔴 Modal DELETE abierto para:', row);
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('🔴 Modal DELETE abierto para:', row);
+                    }
                     setDeleteConfirm({ isOpen: true, item: row });
                 },
                 show: (row: any) => !row.deleted
@@ -149,7 +151,9 @@ function GenericGrid({
                 icon: RefreshCw,
                 variant: 'outline',
                 onClick: (row: any) => {
-                    console.log('🔵 Modal RESTORE abierto para:', row);
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('🔵 Modal RESTORE abierto para:', row);
+                    }
                     setRestoreConfirm({ isOpen: true, item: row });
                 },
                 show: (row: any) => row.deleted
@@ -168,22 +172,30 @@ function GenericGrid({
     }, [actions, onEdit, onDelete, onRestore, onView, includeEditButton, includeDeleteButton, includeRestoreButton]);
 
     const handleConfirmDelete = () => {
-        console.log('🔴 Modal DELETE confirmado para:', deleteConfirm.item);
+        if (process.env.NODE_ENV === 'development') {
+            console.log('🔴 Modal DELETE confirmado para:', deleteConfirm.item);
+        }
         if (deleteConfirm.item && onDelete) onDelete(deleteConfirm.item);
         setDeleteConfirm({ isOpen: false, item: null });
     };
     const handleCancelDelete = () => {
-        console.log('🔴 Modal DELETE cancelado');
+        if (process.env.NODE_ENV === 'development') {
+            console.log('🔴 Modal DELETE cancelado');
+        }
         setDeleteConfirm({ isOpen: false, item: null });
     };
 
     const handleConfirmRestore = () => {
-        console.log('🔵 Modal RESTORE confirmado para:', restoreConfirm.item);
+        if (process.env.NODE_ENV === 'development') {
+            console.log('🔵 Modal RESTORE confirmado para:', restoreConfirm.item);
+        }
         if (restoreConfirm.item && onRestore) onRestore(restoreConfirm.item);
         setRestoreConfirm({ isOpen: false, item: null });
     };
     const handleCancelRestore = () => {
-        console.log('🔵 Modal RESTORE cancelado');
+        if (process.env.NODE_ENV === 'development') {
+            console.log('🔵 Modal RESTORE cancelado');
+        }
         setRestoreConfirm({ isOpen: false, item: null });
     };
 
