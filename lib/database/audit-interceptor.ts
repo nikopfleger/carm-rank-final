@@ -3,6 +3,8 @@ import type { PrismaClient } from '@prisma/client';
 import { handleConcurrencyError } from './concurrency-handler';
 
 // Modelos que NO deben tener auditoría (OAuth de NextAuth)
+// Account, Session, VerificationToken no tienen campos de auditoría
+// User sí tiene campos de auditoría pero se maneja por NextAuth
 const EXCLUDED_MODELS = ['Account', 'Session', 'VerificationToken'];
 
 // Helper: acceder al delegate dinámico del modelo
@@ -106,13 +108,7 @@ export function createAuditInterceptor(prisma: PrismaClient) {
 
                 async update({ args, query, model }) {
                     if (EXCLUDED_MODELS.includes(model)) {
-                        const auditInfo = await getAuditInfo();
-                        (args as any).data = {
-                            ...(args as any).data,
-                            updatedAt: auditInfo.timestamp,
-                            updatedBy: auditInfo.userId,
-                            updatedIp: auditInfo.userIp,
-                        };
+                        // Para modelos excluidos (NextAuth), pasar directamente sin campos de auditoría
                         return delegateOf(model, prisma).update(args);
                     }
 
