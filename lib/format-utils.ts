@@ -64,6 +64,25 @@ export function formatPercentage(
 export const fmtInt = formatInteger;
 export const fmtPct1 = (num: number) => formatPercentage(num, 1);
 
+/**
+ * Formatea un porcentaje que ya está en escala 0-100 (no divide por 100)
+ * @param num - Número a formatear (0-100)
+ * @param decimals - Número de decimales
+ * @returns Porcentaje formateado con símbolo % pero sin dividir por 100
+ */
+export function formatPercentageRaw(
+    num: number,
+    decimals: number = 1
+): string {
+    return formatNumber(num, {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+    }) + '%';
+}
+
+// Función de compatibilidad para porcentajes ya calculados
+export const fmtPct1Raw = (num: number) => formatPercentageRaw(num, 1);
+
 // Colores para posiciones (mantenido para compatibilidad)
 export const POSITION_COLORS = {
     1: '#FFD700', // Oro

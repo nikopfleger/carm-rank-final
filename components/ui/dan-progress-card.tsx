@@ -4,7 +4,7 @@ import { useI18nContext } from '@/components/providers/i18n-provider';
 import { Card } from '@/components/ui/card';
 import { RankBadgeAuto } from '@/components/ui/rank-badge-auto';
 import { unifiedStyles } from '@/components/ui/unified-styles';
-import { fmtInt, fmtPct1 } from '@/lib/format-utils';
+import { fmtInt, fmtPct1Raw } from '@/lib/format-utils';
 import { cn } from '@/lib/utils';
 
 interface DanConfig {
@@ -95,7 +95,7 @@ export function DanProgressCard({
                 {/* label + porcentaje en la misma fila */}
                 <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground tabular-nums">
                     <span>{t('player.profilePage.progressWithinBand', 'Progreso dentro del rango')}</span>
-                    <span>{fmtPct1(progressPct)}</span>
+                    <span>{fmtPct1Raw(progressPct)}</span>
                 </div>
 
                 {/* barra */}

@@ -3,7 +3,7 @@
 import { useI18nContext } from '@/components/providers/i18n-provider';
 import { Button } from '@/components/ui/button';
 import { unifiedStyles } from '@/components/ui/unified-styles';
-import { fmtInt, fmtPct1, POSITION_COLORS } from '@/lib/format-utils';
+import { fmtInt, fmtPct1Raw, POSITION_COLORS } from '@/lib/format-utils';
 import { useMemo, useState } from 'react';
 import {
     Bar,
@@ -60,7 +60,7 @@ type DataMode = 'general' | 'season';
 /** Label renderer que evita comparar floats y siempre toma el payload correcto */
 const BarRightLabel = (props: any) => {
     const { x, y, width, height, value, payload } = props;
-    const pct = fmtPct1(Number(value ?? 0));
+    const pct = fmtPct1Raw(Number(value ?? 0));
     const textX = (x ?? 0) + (width ?? 0) + 6;
     const textY = (y ?? 0) + (height ?? 0) / 2 + 4;
     return (
@@ -245,10 +245,10 @@ export function PositionDistributionChart({
                 role="img"
                 aria-label={[
                     t('player.profilePage.positionDistribution'),
-                    `${t('player.profilePage.firstShort', '1°')}: ${fmtPct1(currentStats?.firstPercent || 0)}`,
-                    `${t('player.profilePage.secondShort', '2°')}: ${fmtPct1(currentStats?.secondPercent || 0)}`,
-                    `${t('player.profilePage.thirdShort', '3°')}: ${fmtPct1(currentStats?.thirdPercent || 0)}`,
-                    `${t('player.profilePage.fourthShort', '4°')}: ${fmtPct1(currentStats?.fourthPercent || 0)}`,
+                    `${t('player.profilePage.firstShort', '1°')}: ${fmtPct1Raw(currentStats?.firstPercent || 0)}`,
+                    `${t('player.profilePage.secondShort', '2°')}: ${fmtPct1Raw(currentStats?.secondPercent || 0)}`,
+                    `${t('player.profilePage.thirdShort', '3°')}: ${fmtPct1Raw(currentStats?.thirdPercent || 0)}`,
+                    `${t('player.profilePage.fourthShort', '4°')}: ${fmtPct1Raw(currentStats?.fourthPercent || 0)}`,
                 ].join(' · ')}
             >
                 <ResponsiveContainer width="100%" height="100%">
@@ -268,7 +268,7 @@ export function PositionDistributionChart({
                         <XAxis
                             type="number"
                             domain={domain}
-                            tickFormatter={(v) => fmtPct1(Number(v))}
+                            tickFormatter={(v) => fmtPct1Raw(Number(v))}
                             tick={{ fontSize: 12, fill: 'var(--muted-foreground)' }}
                         />
                         <YAxis type="category" dataKey="label" width={32} />
@@ -282,7 +282,7 @@ export function PositionDistributionChart({
                         <Tooltip
                             formatter={(value: number, _name: string, props: any) => [
                                 <span key="value" style={{ color: '#ffffff', fontWeight: 'bold' }}>
-                                    {`${fmtPct1(value)} — ${fmtInt(props?.payload?.value ?? 0)} ${t('player.profilePage.games')}`}
+                                    {`${fmtPct1Raw(value)} — ${fmtInt(props?.payload?.value ?? 0)} ${t('player.profilePage.games')}`}
                                 </span>,
                                 <span key="label" style={{ color: '#ffffff', fontWeight: 'bold' }}>
                                     {props?.payload?.label}
@@ -308,7 +308,7 @@ export function PositionDistributionChart({
                                     fillOpacity={getCellOpacity(d.label, d.value)}
                                     role={onBarClick ? 'button' : undefined}
                                     tabIndex={onBarClick ? 0 : -1}
-                                    aria-label={`${d.label}: ${fmtInt(d.value)} ${t('player.profilePage.games')} (${fmtPct1(d.pct)})`}
+                                    aria-label={`${d.label}: ${fmtInt(d.value)} ${t('player.profilePage.games')} (${fmtPct1Raw(d.pct)})`}
                                     onClick={() => onBarClick?.(d.label)}
                                     onKeyDown={(e) => {
                                         if (onBarClick && (e.key === 'Enter' || e.key === ' ')) {
@@ -346,7 +346,7 @@ export function PositionDistributionChart({
                             <span className="font-medium">{item.label}</span>
                         </div>
                         <div className="text-right tabular-nums">
-                            <div className="font-semibold">{fmtPct1(item.pct)}</div>
+                            <div className="font-semibold">{fmtPct1Raw(item.pct)}</div>
                             <div className="text-xs text-muted-foreground">
                                 ({fmtInt(item.value)})
                                 {item.value === 1 && (
