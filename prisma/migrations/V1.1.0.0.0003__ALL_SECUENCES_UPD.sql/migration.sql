@@ -1,36 +1,51 @@
 DO $$
 DECLARE
-    seq_name TEXT;
-    table_name TEXT;
-    max_id INTEGER;
-    current_val INTEGER;
+  rec RECORD;
+  v_max BIGINT;
 BEGIN
-    -- Loop through all sequences
-    FOR seq_name IN 
-        SELECT sequence_name 
-        FROM information_schema.sequences 
-        WHERE sequence_schema = 'carm'
-        AND sequence_name LIKE '%_id_seq'
-    LOOP
-        -- Extract table name from sequence name (remove _id_seq suffix)
-        table_name := replace(seq_name, '_id_seq', '');
-        
-        -- Get max ID from the corresponding table
-        EXECUTE format('SELECT COALESCE(MAX(id), 0) FROM %I', table_name) INTO max_id;
-        
-        IF max_id > 0 THEN
-            -- Get current sequence value
-            EXECUTE format('SELECT last_value FROM %I', seq_name) INTO current_val;
-            
-            -- Only update if current value is less than max_id
-            IF current_val < max_id THEN
-                EXECUTE format('SELECT pg_catalog.setval(%L, %s, true)', seq_name, max_id);
-                RAISE NOTICE 'Updated sequence % to start from %', seq_name, max_id;
-            ELSE
-                RAISE NOTICE 'Sequence % is already correct (current: %, max: %)', seq_name, current_val, max_id;
-            END IF;
-        ELSE
-            RAISE NOTICE 'Table % is empty, skipping sequence %', table_name, seq_name;
-        END IF;
-    END LOOP;
-END $$;
+  FOR rec IN
+    SELECT
+      n.nspname  AS schema_name,
+      c.relname  AS table_name,
+      a.attname  AS column_name,
+      s.relname  AS sequence_name,
+      format('%I.%I', n.nspname, c.relname) AS fq_table,
+      format('%I.%I', sn.nspname, s.relname) AS fq_sequence,
+      ps.min_value,
+      ps.max_value
+    FROM pg_class s
+    JOIN pg_namespace sn ON sn.oid = s.relnamespace
+    JOIN pg_depend d ON d.objid = s.oid AND d.deptype = 'a'
+    JOIN pg_class c ON c.oid = d.refobjid AND c.relkind = 'r'
+    JOIN pg_namespace n ON n.oid = c.relnamespace
+    JOIN pg_attribute a ON a.attrelid = c.oid AND a.attnum = d.refobjsubid
+    JOIN pg_sequences ps
+      ON ps.schemaname = sn.nspname AND ps.sequencename = s.relname
+    WHERE s.relkind = 'S'
+      AND n.nspname NOT IN (
+        'pg_catalog','information_schema',
+        'auth','storage','extensions',
+        'graphql','realtime','vault','pgbouncer'
+      )
+  LOOP
+    -- MAX(id) de la columna (si no hay filas, 0)
+    EXECUTE format('SELECT COALESCE(MAX(%I),0) FROM %s', rec.column_name, rec.fq_table)
+      INTO v_max;
+
+    IF v_max <= 0 THEN
+      -- Tabla vacía: dejar la secuencia en su mínimo; próximo nextval() = min_value
+      EXECUTE format('SELECT pg_catalog.setval(%L, %s, false)', rec.fq_sequence, rec.min_value);
+      RAISE NOTICE 'Secuencia % inicializada (tabla vacía) a min=% (nextval=%)',
+        rec.fq_sequence, rec.min_value, rec.min_value;
+    ELSIF v_max >= rec.max_value THEN
+      -- Raro: se alcanzó el max de la secuencia
+      RAISE WARNING 'Secuencia % no puede ajustarse: MAX(id)=% >= max_value=%',
+        rec.fq_sequence, v_max, rec.max_value;
+    ELSE
+      -- Tabla con datos: próximo será MAX(id)+1
+      EXECUTE format('SELECT pg_catalog.setval(%L, %s, true)', rec.fq_sequence, v_max);
+      RAISE NOTICE 'Secuencia % sincronizada a % (nextval=%)',
+        rec.fq_sequence, v_max, v_max+1;
+    END IF;
+  END LOOP;
+END$$;
