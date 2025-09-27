@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import React, { useMemo, useState } from "react";
 
+
 export interface GridColumn {
     key: string;
     label: string;
@@ -265,7 +266,18 @@ function GenericGrid({
                     </Badge>
                 );
             case 'date':
-                return actualValue ? new Date(actualValue).toLocaleDateString() : '-';
+                if (actualValue) {
+                    // Si viene como "2025-09-27T00:00:00.000Z", extraer solo la fecha
+                    const dateStr = actualValue.toString();
+                    if (dateStr.includes('T')) {
+                        const dateOnly = dateStr.split('T')[0];
+                        const [year, month, day] = dateOnly.split('-').map(Number);
+                        const localDate = new Date(year, month - 1, day);
+                        return localDate.toLocaleDateString('es-AR');
+                    }
+                    return new Date(actualValue).toLocaleDateString('es-AR');
+                }
+                return '-';
             case 'badge':
                 return <Badge variant="outline">{actualValue ?? '-'}</Badge>;
             default:

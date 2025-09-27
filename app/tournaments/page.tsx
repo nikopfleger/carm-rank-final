@@ -4,47 +4,49 @@ import { useI18nContext } from "@/components/providers/i18n-provider";
 import { usePublicService } from "@/components/providers/services-provider";
 import { PageHeader } from "@/components/shared/page-header";
 import { TournamentStatusBadge } from "@/components/tournaments/tournament-status-badge";
-import { Button } from "@/components/ui/button";
-import { Award, Calendar, Clock, Trophy, Users } from "@/components/ui/icons";
+import { Award, Calendar, Clock, Trophy } from "@/components/ui/icons";
 import { TournamentsPageSkeleton } from "@/components/ui/loading-skeleton";
 import { SectionTitle } from "@/components/ui/section-title";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 import { unifiedStyles } from "@/components/ui/unified-styles";
 import { useErrorHandler } from "@/hooks/use-error-handler";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
+
+/* Helpers */
+const labelOf = (v: any): string => (typeof v === "string" ? v : v?.name ?? "");
+const dateOnly = (v: string | Date | undefined) => {
+  if (!v) return undefined;
+  const d = typeof v === "string" ? new Date(v) : v;
+  d.setHours(0, 0, 0, 0);
+  return d;
+};
+
+type NameRef = string | { id: number; name: string } | null;
 
 interface Tournament {
   id: number;
   name: string;
-  type: string;
+  type: NameRef;
   startDate: string;
   endDate: string;
   isCompleted: boolean;
   participants?: number;
   maxParticipants?: number;
   prize?: string;
-  location?: string;
-  seasonId?: number; // Fallback
-  season?: {
-    id: number;
-    name: string;
-  };
+  location?: NameRef;        // "Online" o un objeto {id, name}
+  seasonId?: number;
+  season?: { id: number; name: string };
   tournamentResults?: any[];
 }
 
-interface Season {
-  id: number;
-  name: string;
-  isActive: boolean;
-}
+interface Season { id: number; name: string; isActive: boolean; }
 
 export default function TournamentsPage() {
-  const router = useRouter();
   const { handleError } = useErrorHandler();
   const { t } = useI18nContext();
   const publicService = usePublicService();
+
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const [seasons, setSeasons] = useState<Season[]>([]);
   const [selectedSeason, setSelectedSeason] = useState<string>("");
@@ -59,196 +61,186 @@ export default function TournamentsPage() {
           publicService.getTournaments(),
           publicService.getSeasons(),
         ]);
-
         const tournamentsData = (tournamentsResponse as any)?.data || tournamentsResponse;
         const seasonsData = (seasonsResponse as any)?.data || seasonsResponse;
 
         setTournaments(Array.isArray(tournamentsData) ? tournamentsData : []);
         setSeasons(Array.isArray(seasonsData) ? seasonsData : []);
-        setSelectedSeasonName(t('ui.allSeasons', 'Todas las temporadas'));
-      } catch (error) {
-        handleError(error, "Cargar datos");
-        setTournaments([]);
-        setSeasons([]);
-        setSelectedSeasonName(t('ui.allSeasons', 'Todas las temporadas'));
-      } finally {
-        setLoading(false);
-      }
+        setSelectedSeasonName(t("ui.allSeasons", "Todas las temporadas"));
+      } catch (e) {
+        handleError(e, "Cargar datos");
+        setTournaments([]); setSeasons([]);
+        setSelectedSeasonName(t("ui.allSeasons", "Todas las temporadas"));
+      } finally { setLoading(false); }
     };
     loadData();
   }, [publicService, t, handleError]);
 
-  // Filtrar torneos por temporada
-  const filteredTournaments = tournaments.filter((t) => {
+  /* Filtro y categorías */
+  const filteredTournaments = tournaments.filter((tr) => {
     if (!selectedSeason) return true;
-    const seasonId = t.season?.id || (t as any).seasonId;
+    const seasonId = tr.season?.id || (tr as any).seasonId;
     return seasonId && seasonId.toString() === selectedSeason;
   });
 
-  const upcomingTournaments = filteredTournaments.filter((t) => !t.isCompleted);
+  const today0 = (() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; })();
+
+  const upcomingTournaments = filteredTournaments.filter((t) => (dateOnly(t.startDate) ?? today0) > today0);
   const completedTournaments = filteredTournaments.filter((t) => t.isCompleted);
+  const ongoingTournaments = filteredTournaments.filter((t) => (dateOnly(t.startDate) ?? today0) <= today0 && !t.isCompleted);
 
   const handleSeasonChange = (seasonId: string) => {
     setSelectedSeason(seasonId);
-    if (seasonId === "") {
-      setSelectedSeasonName("Todas las temporadas");
-    } else {
-      const season = seasons.find((s) => s.id.toString() === seasonId);
-      setSelectedSeasonName(season ? `${season.name} ${season.isActive ? "(Activa)" : ""}` : "Todas las temporadas");
+    if (!seasonId) setSelectedSeasonName("Todas las temporadas");
+    else {
+      const s = seasons.find((x) => x.id.toString() === seasonId);
+      setSelectedSeasonName(s ? `${s.name} ${s.isActive ? "(Activa)" : ""}` : "Todas las temporadas");
     }
   };
 
-  // Colores por temporada
-  const getSeasonColor = (seasonId: number | null | undefined) => {
-    const colorMap = {
+  /* Colores por temporada */
+  const getSeasonColor = (seasonId?: number | null) => {
+    const map = {
       1: {
-        bg: "bg-blue-500",
-        icon: "from-blue-400 via-blue-500 to-blue-600",
-        border: "hover:border-blue-300 dark:hover:border-blue-600",
-        accent: "text-blue-500",
-        completed: {
-          icon: "from-blue-300 via-blue-400 to-blue-500",
-          border: "hover:border-blue-200 dark:hover:border-blue-700",
-          accent: "text-blue-400",
-        },
+        bg: "bg-blue-500", icon: "from-blue-400 via-blue-500 to-blue-600", border: "hover:border-blue-300 dark:hover:border-blue-600", accent: "text-blue-500",
+        completed: { icon: "from-blue-300 via-blue-400 to-blue-500", border: "hover:border-blue-200 dark:hover:border-blue-700", accent: "text-blue-400" }
       },
       2: {
-        bg: "bg-green-500",
-        icon: "from-green-400 via-green-500 to-green-600",
-        border: "hover:border-green-300 dark:hover:border-green-600",
-        accent: "text-green-500",
-        completed: {
-          icon: "from-green-300 via-green-400 to-green-500",
-          border: "hover:border-green-200 dark:hover:border-green-700",
-          accent: "text-green-400",
-        },
+        bg: "bg-green-500", icon: "from-green-400 via-green-500 to-green-600", border: "hover:border-green-300 dark:hover:border-green-600", accent: "text-green-500",
+        completed: { icon: "from-green-300 via-green-400 to-green-500", border: "hover:border-green-200 dark:hover:border-green-700", accent: "text-green-400" }
       },
       3: {
-        bg: "bg-purple-500",
-        icon: "from-purple-400 via-purple-500 to-purple-600",
-        border: "hover:border-purple-300 dark:hover:border-purple-600",
-        accent: "text-purple-500",
-        completed: {
-          icon: "from-purple-300 via-purple-400 to-purple-500",
-          border: "hover:border-purple-200 dark:hover:border-purple-700",
-          accent: "text-purple-400",
-        },
+        bg: "bg-purple-500", icon: "from-purple-400 via-purple-500 to-purple-600", border: "hover:border-purple-300 dark:hover:border-purple-600", accent: "text-purple-500",
+        completed: { icon: "from-purple-300 via-purple-400 to-purple-500", border: "hover:border-purple-200 dark:hover:border-purple-700", accent: "text-purple-400" }
       },
       4: {
-        bg: "bg-orange-500",
-        icon: "from-orange-400 via-orange-500 to-orange-600",
-        border: "hover:border-orange-300 dark:hover:border-orange-600",
-        accent: "text-orange-500",
-        completed: {
-          icon: "from-orange-300 via-orange-400 to-orange-500",
-          border: "hover:border-orange-200 dark:hover:border-orange-700",
-          accent: "text-orange-400",
-        },
+        bg: "bg-orange-500", icon: "from-orange-400 via-orange-500 to-orange-600", border: "hover:border-orange-300 dark:hover:border-orange-600", accent: "text-orange-500",
+        completed: { icon: "from-orange-300 via-orange-400 to-orange-500", border: "hover:border-orange-200 dark:hover:border-orange-700", accent: "text-orange-400" }
       },
       5: {
-        bg: "bg-pink-500",
-        icon: "from-pink-400 via-pink-500 to-pink-600",
-        border: "hover:border-pink-300 dark:hover:border-pink-600",
-        accent: "text-pink-500",
-        completed: {
-          icon: "from-pink-300 via-pink-400 to-pink-500",
-          border: "hover:border-pink-200 dark:hover:border-pink-700",
-          accent: "text-pink-400",
-        },
+        bg: "bg-pink-500", icon: "from-pink-400 via-pink-500 to-pink-600", border: "hover:border-pink-300 dark:hover:border-pink-600", accent: "text-pink-500",
+        completed: { icon: "from-pink-300 via-pink-400 to-pink-500", border: "hover:border-pink-200 dark:hover:border-pink-700", accent: "text-pink-400" }
       },
-    };
+    } as const;
 
-    if (!seasonId || seasonId <= 0 || isNaN(seasonId)) {
+    if (!seasonId || seasonId <= 0 || Number.isNaN(seasonId))
       return {
-        bg: "bg-indigo-500",
-        icon: "from-indigo-400 via-indigo-500 to-indigo-600",
-        border: "hover:border-indigo-300 dark:hover:border-indigo-600",
-        accent: "text-indigo-500",
-        completed: {
-          icon: "from-indigo-300 via-indigo-400 to-indigo-500",
-          border: "hover:border-indigo-200 dark:hover:border-indigo-700",
-          accent: "text-indigo-400",
-        },
+        bg: "bg-indigo-500", icon: "from-indigo-400 via-indigo-500 to-indigo-600",
+        border: "hover:border-indigo-300 dark:hover:border-indigo-600", accent: "text-indigo-500",
+        completed: { icon: "from-indigo-300 via-indigo-400 to-indigo-500", border: "hover:border-indigo-200 dark:hover:border-indigo-700", accent: "text-indigo-400" }
       };
-    }
 
     const idx = ((seasonId - 1) % 5) + 1;
-    return (colorMap as any)[idx] || (colorMap as any)[1];
+    // @ts-ignore
+    return map[idx] ?? map[1];
   };
 
-  const getBadgeColor = (t: Tournament) => {
-    const seasonId = t.season?.id ?? t.seasonId ?? 0;
-    return getSeasonColor(seasonId).bg;
-  };
-
-  const getBadgeTextColor = (bgColor: string) => {
-    if (bgColor.includes("yellow") || bgColor.includes("orange") || bgColor.includes("lime") || bgColor.includes("amber")) {
-      return "text-black";
-    }
-    return "text-white";
-  };
-
+  const getBadgeColor = (t: Tournament) => getSeasonColor(t.season?.id ?? t.seasonId ?? 0).bg;
+  const getBadgeTextColor = (bg: string) => (/(yellow|orange|lime|amber)/.test(bg) ? "text-black" : "text-white");
   const getTournamentColors = (t: Tournament) => {
-    const seasonId = t.season?.id ?? t.seasonId ?? 0;
-    const colorData = getSeasonColor(seasonId);
-    return { icon: colorData.icon, border: colorData.border, accent: colorData.accent };
+    const s = t.season?.id ?? t.seasonId ?? 0;
+    const c = getSeasonColor(s);
+    return { icon: c.icon, border: c.border, accent: c.accent };
   };
 
-  if (loading) {
-    return <TournamentsPageSkeleton />;
-  }
+  if (loading) return <TournamentsPageSkeleton />;
 
-  // ===== Header compacto que SIEMPRE envuelve (sin ellipsis) =====
-  const CardHeader = (tournament: Tournament, colors: { icon: string; border: string; accent: string }) => {
-    const bgColor = getBadgeColor(tournament);
-    const textColor = getBadgeTextColor(bgColor);
-    const seasonLabel = tournament.season?.name || (tournament.seasonId ? `Temporada ${tournament.seasonId}` : "");
+  /* Header (fila 1 + 2) */
+  const CardHeader = (t: Tournament, colors: { icon: string; border: string; accent: string }) => {
+    const bg = getBadgeColor(t);
+    const tx = getBadgeTextColor(bg);
+    const seasonLabel = t.season?.name || (t.seasonId ? `Temporada ${t.seasonId}` : "");
 
     return (
-      <div className="flex items-start gap-3 mb-4">
-        {/* Icono */}
-        <div
-          className={`w-11 h-11 bg-gradient-to-br ${colors.icon} rounded-xl flex items-center justify-center text-white shadow-lg flex-shrink-0`}
-        >
-          <Trophy className="w-5 h-5" />
+      <>
+        {/* Fila 1: Título (clamp 2 líneas, alto fijo por grid) */}
+        <div className={`${styles.rowTitle} flex items-start gap-3`}>
+          <div className={`w-11 h-11 bg-gradient-to-br ${colors.icon} rounded-xl flex items-center justify-center text-white shadow-lg flex-shrink-0`}>
+            <Trophy className="w-5 h-5" />
+          </div>
+          <h3 className={`text-lg sm:text-xl font-bold text-gray-900 dark:text-white leading-snug ${styles.clamp2}`}>{t.name}</h3>
         </div>
 
-        {/* Título + meta */}
-        <div className="flex-1">
-          {/* Título: múltiples líneas, sin ellipsis */}
-          <h3 className="text-[clamp(1rem,1.7vw,1.125rem)] sm:text-xl font-bold text-gray-900 dark:text-white leading-snug break-words whitespace-normal">
-            {tournament.name}
-          </h3>
+        {/* Fila 2: Meta - Individual y Pendiente en misma línea */}
+        <div className={`${styles.rowMeta} flex items-center gap-3`}>
+          <div className="flex items-center gap-2 shrink-0">
+            <Award className={`w-4 h-4 ${colors.accent}`} />
+            <span className="text-sm text-gray-600 dark:text-gray-400">{labelOf(t.type)}</span>
+          </div>
 
-          {/* Meta: tipo, temporada y estado. Permite wrap y que el badge baje de línea. */}
-          <div className="mt-1 flex flex-wrap items-center gap-2 sm:gap-3">
-            <div className="flex items-center gap-2">
-              <Award className={`w-4 h-4 ${colors.accent} flex-shrink-0`} />
-              <span className="text-sm text-gray-600 dark:text-gray-400 break-words whitespace-normal">
-                {tournament.type}
-              </span>
-            </div>
-
+          <div className="shrink-0">
             <TournamentStatusBadge
               tournament={{
-                id: tournament.id,
-                name: tournament.name,
-                startDate: new Date(tournament.startDate),
-                endDate: tournament.endDate ? new Date(tournament.endDate) : undefined,
-                isCompleted: tournament.isCompleted,
-                tournamentResults: tournament.tournamentResults
+                id: t.id,
+                name: t.name,
+                startDate: new Date(t.startDate),
+                endDate: t.endDate ? new Date(t.endDate) : undefined,
+                isCompleted: t.isCompleted,
+                tournamentResults: t.tournamentResults,
               }}
               className="text-[12px] sm:text-xs"
             />
+          </div>
+        </div>
 
-            {seasonLabel && (
-              <span
-                className={`${bgColor} ${textColor} text-[12px] sm:text-xs md:text-sm px-3 py-1 rounded-full font-medium
-                            inline-block w-auto max-w-full break-words whitespace-normal leading-tight`}
-              >
-                {seasonLabel}
+        {/* Fila 3: Temporada - línea separada */}
+        {seasonLabel && (
+          <div className={`${styles.rowSeason} flex items-center`}>
+            <span
+              className={`${bg} ${tx} text-[12px] sm:text-xs md:text-sm px-3 py-1 rounded-full font-medium`}
+              title={seasonLabel}
+            >
+              {seasonLabel}
+            </span>
+          </div>
+        )}
+      </>
+    );
+  };
+
+  /* Card con slots fijos */
+  const Card = (t: Tournament, section: "ongoing" | "upcoming" | "completed") => {
+    const sId = t.season?.id ?? t.seasonId ?? 0;
+    const sc = getSeasonColor(sId);
+    const colors = section === "completed"
+      ? { icon: sc.completed.icon, border: sc.completed.border, accent: sc.completed.accent }
+      : { icon: sc.icon, border: sc.border, accent: sc.accent };
+
+
+    // Si no hay ubicación, mostramos "Online" como fallback (pedido: que SIEMPRE esté abajo)
+    const locationText = labelOf(t.location) || "Online";
+
+    return (
+      <div className={`group relative ${unifiedStyles.card} ${colors.border} overflow-hidden ${styles.cardItem}`}>
+        <div className={styles.cardBody}>
+          {/* 1+2) Título + Meta */}
+          {CardHeader(t, colors)}
+
+          {/* 4) Fecha (dos líneas: rango de fechas + estado) */}
+          <div className={`${styles.rowDate} flex items-start gap-3`}>
+            <Calendar className={`w-4 h-4 mt-0.5 ${colors.accent}`} />
+            <div>
+              <div className={`text-sm font-medium ${section === "completed" ? "text-gray-700 dark:text-gray-300" : "text-gray-900 dark:text-white"}`}>
+                {t.endDate
+                  ? `${new Date(t.startDate).toLocaleDateString("es-AR")} - ${new Date(t.endDate).toLocaleDateString("es-AR")}`
+                  : new Date(t.startDate).toLocaleDateString("es-AR")
+                }
+              </div>
+              <div className={`text-xs ${section === "completed" ? "text-gray-500 dark:text-gray-500" : "text-gray-500 dark:text-gray-400"}`}>
+                {section === "completed" ? "Completado" : "En curso"}
+              </div>
+            </div>
+          </div>
+
+
+          {/* 5) Ubicación/Online — SIEMPRE en la misma altura (última fila del grid) */}
+          <div className={styles.rowLocation}>
+            <div className="flex items-center gap-3">
+              <Clock className={`w-4 h-4 ${colors.accent}`} />
+              <span className={`${section === "completed" ? "text-sm text-gray-500 dark:text-gray-500" : "text-sm text-gray-600 dark:text-gray-400"}`}>
+                {locationText}
               </span>
-            )}
+            </div>
           </div>
         </div>
       </div>
@@ -257,109 +249,47 @@ export default function TournamentsPage() {
 
   return (
     <div className={styles.tournamentsPage}>
-      {/* Hero Section */}
       <PageHeader icon={Trophy} title="Torneos" subtitle="Torneos oficiales de la comunidad CARM" variant="tournaments" />
 
-      {/* Main Content */}
       <div className="py-8">
-        {/* Filtro de Temporada */}
-        <div className="mb-8">
-          <div className="flex items-center gap-4 justify-center">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Filtrar por temporada:</label>
-            <Select value={selectedSeason} onValueChange={handleSeasonChange}>
-              <SelectTrigger className={`${unifiedStyles.selectTrigger} w-[250px]`}>
-                <span className="truncate">{selectedSeasonName}</span>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">Todas las temporadas</SelectItem>
-                {seasons.map((s) => (
-                  <SelectItem key={s.id} value={s.id.toString()}>
-                    {s.name} {s.isActive && "(Activa)"}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+        {/* Filtro */}
+        <div className="mb-8 flex items-center gap-4 justify-center">
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Filtrar por temporada:</label>
+          <Select value={selectedSeason} onValueChange={handleSeasonChange}>
+            <SelectTrigger className={`${unifiedStyles.selectTrigger} w-[250px]`}>
+              <span className="truncate">{selectedSeasonName}</span>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">Todas las temporadas</SelectItem>
+              {seasons.map((s) => (
+                <SelectItem key={s.id} value={s.id.toString()}>
+                  {s.name} {s.isActive && "(Activa)"}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
-        {/* Próximos torneos */}
+        {/* En curso */}
+        {ongoingTournaments.length > 0 && (
+          <div className={styles.section}>
+            <SectionTitle title="Torneos en Curso" variant="tournaments" />
+            <div className={styles.tournamentsGrid}>
+              {ongoingTournaments.map((t) => Card(t, "ongoing"))}
+            </div>
+          </div>
+        )}
+
+        {/* Próximos */}
         <div className={styles.section}>
           <SectionTitle title="Próximos Torneos" variant="tournaments" />
           {upcomingTournaments.length === 0 ? (
-            <div className="text-center py-12">
-              <Trophy className="h-16 w-16 mx-auto text-gray-400 mb-4" />
-              <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">No hay torneos próximos</h3>
-              <p className="text-gray-500 dark:text-gray-500">
-                {selectedSeason ? `No hay torneos próximos en la temporada seleccionada.` : "No hay torneos próximos programados en este momento."}
-              </p>
+            <div className="text-center py-12 text-gray-500 dark:text-gray-500">
+              No hay torneos próximos programados.
             </div>
           ) : (
             <div className={styles.tournamentsGrid}>
-              {upcomingTournaments.map((t) => {
-                const colors = getTournamentColors(t);
-                return (
-                  <div key={t.id} className={`group relative ${unifiedStyles.card} ${colors.border} overflow-hidden`}>
-                    <div className="relative p-4 sm:p-6">
-                      {CardHeader(t, colors)}
-
-                      {/* Info del torneo */}
-                      <div className="space-y-3 mb-6">
-                        <div className="flex items-start gap-3">
-                          <Calendar className={`w-4 h-4 mt-0.5 ${colors.accent}`} />
-                          <div>
-                            <div className="text-sm font-medium text-gray-900 dark:text-white">
-                              {new Date(t.startDate).toLocaleDateString("es-AR", {
-                                weekday: "long",
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })}
-                            </div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400">
-                              {new Date(t.startDate).toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" })}
-                            </div>
-                          </div>
-                        </div>
-
-                        {t.participants !== undefined && t.maxParticipants !== undefined && (
-                          <div className="flex items-start gap-3">
-                            <Users className={`w-4 h-4 mt-0.5 ${colors.accent}`} />
-                            <div className="w-full">
-                              <div className="text-sm font-medium text-gray-900 dark:text-white">
-                                {t.participants}/{t.maxParticipants} participantes
-                              </div>
-                              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-1">
-                                <div
-                                  className={`bg-gradient-to-r ${colors.icon} h-2 rounded-full transition-all duration-300`}
-                                  style={{ width: `${Math.min(100, (t.participants / Math.max(1, t.maxParticipants)) * 100)}%` }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        )}
-
-                        {t.prize && (
-                          <div className="flex items-start gap-3">
-                            <Award className={`w-4 h-4 mt-0.5 ${colors.accent}`} />
-                            <span className="text-sm text-gray-600 dark:text-gray-400 break-words whitespace-normal">{t.prize}</span>
-                          </div>
-                        )}
-
-                        {t.location && (
-                          <div className="flex items-start gap-3">
-                            <Clock className={`w-4 h-4 mt-0.5 ${colors.accent}`} />
-                            <span className="text-sm text-gray-600 dark:text-gray-400 break-words whitespace-normal">{t.location}</span>
-                          </div>
-                        )}
-                      </div>
-
-                      <Button className={unifiedStyles.primaryButton} onClick={() => router.push(`/tournaments/${t.id}`)}>
-                        Ver Detalles
-                      </Button>
-                    </div>
-                  </div>
-                );
-              })}
+              {upcomingTournaments.map((t) => Card(t, "upcoming"))}
             </div>
           )}
         </div>
@@ -368,79 +298,12 @@ export default function TournamentsPage() {
         <div className={styles.section}>
           <SectionTitle title="Torneos Completados" variant="default" />
           {completedTournaments.length === 0 ? (
-            <div className="text-center py-12">
-              <Trophy className="h-16 w-16 mx-auto text-gray-400 mb-4" />
-              <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">No hay torneos completados</h3>
-              <p className="text-gray-500 dark:text-gray-500">
-                {selectedSeason ? `No hay torneos completados en la temporada seleccionada.` : "No hay torneos completados disponibles."}
-              </p>
+            <div className="text-center py-12 text-gray-500 dark:text-gray-500">
+              No hay torneos completados disponibles.
             </div>
           ) : (
             <div className={styles.tournamentsGrid}>
-              {completedTournaments.map((t) => {
-                const seasonId = t.season?.id ?? t.seasonId ?? 0;
-                const colorData = getSeasonColor(seasonId);
-                const colors = {
-                  icon: colorData.completed.icon,
-                  border: colorData.completed.border,
-                  accent: colorData.completed.accent,
-                };
-
-                return (
-                  <div key={t.id} className={`group relative ${unifiedStyles.card} ${colors.border} overflow-hidden`}>
-                    <div className="relative p-4 sm:p-6">
-                      {CardHeader(t, colors)}
-
-                      <div className="space-y-3 mb-6">
-                        <div className="flex items-start gap-3">
-                          <Calendar className={`w-4 h-4 mt-0.5 ${colors.accent}`} />
-                          <div>
-                            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                              {new Date(t.startDate).toLocaleDateString("es-AR", {
-                                weekday: "long",
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })}
-                            </div>
-                            <div className="text-xs text-gray-500 dark:text-gray-500">Completado</div>
-                          </div>
-                        </div>
-
-                        {t.participants && (
-                          <div className="flex items-start gap-3">
-                            <Users className={`w-4 h-4 mt-0.5 ${colors.accent}`} />
-                            <div className="w-full">
-                              <div className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.participants} participantes</div>
-                              <div className="w-full bg-gray-300 dark:bg-gray-600 rounded-full h-2 mt-1">
-                                <div className={`bg-gradient-to-r ${colors.icon} h-2 rounded-full w-full`} />
-                              </div>
-                            </div>
-                          </div>
-                        )}
-
-                        {t.prize && (
-                          <div className="flex items-start gap-3">
-                            <Award className={`w-4 h-4 mt-0.5 ${colors.accent}`} />
-                            <span className="text-sm text-gray-500 dark:text-gray-500 break-words whitespace-normal">{t.prize}</span>
-                          </div>
-                        )}
-
-                        {t.location && (
-                          <div className="flex items-start gap-3">
-                            <Clock className={`w-4 h-4 mt-0.5 ${colors.accent}`} />
-                            <span className="text-sm text-gray-500 dark:text-gray-500 break-words whitespace-normal">{t.location}</span>
-                          </div>
-                        )}
-                      </div>
-
-                      <Button className={unifiedStyles.primaryButton} onClick={() => router.push(`/tournaments/${t.id}`)}>
-                        Ver Resultados
-                      </Button>
-                    </div>
-                  </div>
-                );
-              })}
+              {completedTournaments.map((t) => Card(t, "completed"))}
             </div>
           )}
         </div>

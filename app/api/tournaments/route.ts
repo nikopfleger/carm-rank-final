@@ -18,6 +18,20 @@ export async function GET(request: NextRequest) {
       ],
     });
 
+    // Debug: ver qué datos devuelve Prisma
+    console.log('🔍 API - Prisma raw data:', tournaments.length, 'tournaments');
+    const iormcTournament = tournaments.find(t => t.name?.includes('IORMC'));
+    if (iormcTournament) {
+      console.log('🔍 API - IORMC Tournament from Prisma:', {
+        name: iormcTournament.name,
+        startDate: iormcTournament.startDate,
+        startDateType: typeof iormcTournament.startDate,
+        endDate: iormcTournament.endDate,
+        endDateType: typeof iormcTournament.endDate,
+        isCompleted: iormcTournament.isCompleted
+      });
+    }
+
     return NextResponse.json({
       success: true,
       data: tournaments,

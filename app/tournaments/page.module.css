@@ -3,104 +3,79 @@
     @apply pt-4;
 }
 
-.hero {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8;
-}
-
-.heroTitle {
-    @apply text-4xl font-bold text-gray-900 dark:text-white mb-2 flex items-center justify-center gap-3;
-}
-
-.heroIcon {
-    @apply h-8 w-8 text-yellow-500;
-}
-
-.heroSubtitle {
-    @apply text-xl text-gray-600 dark:text-gray-400;
-}
-
-.content {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8;
-}
-
 .section {
     @apply mb-8;
 }
 
-.sectionTitle {
-    @apply text-2xl font-bold text-gray-900 dark:text-white mb-4;
-}
-
+/* Contenedor: centrado y mismas alturas de cards con espaciado uniforme */
 .tournamentsGrid {
-    @apply grid gap-6 md:grid-cols-2 lg:grid-cols-3;
+    @apply flex flex-wrap justify-center items-stretch gap-8;
 }
 
-/* Estilos específicos para torneos - ahora usando unifiedStyles */
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 640px) {
-    .hero {
-        @apply px-3 py-6;
-    }
-
-    .heroTitle {
-        @apply text-2xl mb-2 gap-2;
-    }
-
-    .heroIcon {
-        @apply h-6 w-6;
-    }
-
-    .heroSubtitle {
-        @apply text-lg;
-    }
-
-    .content {
-        @apply px-3 pb-6;
-    }
-
-    .section {
-        @apply mb-6;
-    }
-
-    .sectionTitle {
-        @apply text-xl mb-3;
-    }
-
-    .tournamentsGrid {
-        @apply grid-cols-1 gap-4;
-    }
-
-    /* Mejoras específicas para mobile */
-    .tournamentsGrid>div {
-        @apply p-4;
-        /* Reducir padding en mobile */
-    }
-
-    .tournamentsGrid h3 {
-        @apply text-base;
-        /* Título más pequeño en mobile */
-    }
-
-    /* Los estilos de las cards ahora están en unifiedStyles */
+/* Cards más anchas - ancho aumentado 1/5 */
+.cardItem {
+    @apply w-[320px] sm:w-[340px] md:w-[360px] lg:w-[380px];
 }
 
-@media (min-width: 641px) and (max-width: 768px) {
-    .heroTitle {
-        @apply text-3xl;
-    }
+/* Cuerpo como GRID de 5 filas fijas - doble de alto:
+     1) Título (2 líneas)         -> 60px
+     2) Meta (Individual + Pendiente) -> 40px
+     3) Temporada                 -> 32px
+     4) Fecha (2 líneas)          -> 40px
+     5) Ubicación/Online (abajo)  -> 32px
+  */
+.cardBody {
+    /* padding compacto */
+    @apply grid pt-4 pb-4 px-4 sm:px-5 gap-y-2;
 
-    .heroSubtitle {
-        @apply text-xl;
-    }
-
-    .tournamentsGrid {
-        @apply grid-cols-2 gap-5;
-    }
+    /* 1) Título  2) Meta  3) Temporada  4) Fecha  5) Online  */
+    grid-template-rows: 60px 40px 32px 40px 32px;
 }
 
-@media (min-width: 769px) and (max-width: 1024px) {
+/* Slots semánticos (por si querés tunear más) */
+.rowTitle {
+    margin-bottom: 2px;
+}
+
+.rowMeta {}
+
+.rowSeason {}
+
+.rowDate {}
+
+.rowParticipants {}
+
+.rowPrize {}
+
+.rowSpacer {}
+
+.rowLocation {}
+
+/* Título: forzamos 2 líneas como máximo */
+.clamp2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Meta: permite wrap y mantiene altura de su fila */
+.metaRow {
+    @apply flex flex-wrap items-center gap-x-3 sm:gap-x-4 gap-y-2;
+}
+
+/* Responsive pequeños ajustes */
+@media (max-width:640px) {
     .tournamentsGrid {
-        @apply grid-cols-2 gap-6;
+        @apply gap-5;
+    }
+
+    .cardItem {
+        @apply w-[320px];
+    }
+
+    .cardBody {
+        min-height: 220px;
+        grid-template-rows: 56px 40px 32px 40px 36px;
     }
 }

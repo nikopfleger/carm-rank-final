@@ -1,5 +1,15 @@
 import { prisma } from '@/lib/database/client';
 
+// Helper para manejar fechas correctamente (evitar problemas de zona horaria)
+const parseDate = (dateString: string): Date => {
+    // Si la fecha viene como "2025-09-27", crear la fecha en zona horaria local
+    if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
+        const [year, month, day] = dateString.split('-').map(Number);
+        return new Date(year, month - 1, day); // month es 0-indexed en JS
+    }
+    return new Date(dateString);
+};
+
 type ResourceConfig = {
     model: any;
     idField?: string;
@@ -40,7 +50,7 @@ export const registry: Record<string, ResourceConfig> = {
             if (clean.countryId != null) clean.countryId = Number(clean.countryId);
             if (typeof clean.nickname === 'string') clean.nickname = clean.nickname.trim();
             if (typeof clean.fullname === 'string') clean.fullname = clean.fullname.trim();
-            if (clean.birthday && typeof clean.birthday === 'string') clean.birthday = new Date(clean.birthday);
+            if (clean.birthday && typeof clean.birthday === 'string') clean.birthday = parseDate(clean.birthday);
             return clean;
         },
         mapUpdate: (data: any) => {
@@ -59,7 +69,7 @@ export const registry: Record<string, ResourceConfig> = {
             if (clean.countryId != null) clean.countryId = Number(clean.countryId);
             if (typeof clean.nickname === 'string') clean.nickname = clean.nickname.trim();
             if (typeof clean.fullname === 'string') clean.fullname = clean.fullname.trim();
-            if (clean.birthday && typeof clean.birthday === 'string') clean.birthday = new Date(clean.birthday);
+            if (clean.birthday && typeof clean.birthday === 'string') clean.birthday = parseDate(clean.birthday);
             return clean;
         },
         include: {
@@ -104,10 +114,10 @@ export const registry: Record<string, ResourceConfig> = {
 
             // Convertir fechas de string a Date
             if (data.startDate && typeof data.startDate === 'string') {
-                cleanData.startDate = new Date(data.startDate);
+                cleanData.startDate = parseDate(data.startDate);
             }
             if (data.endDate && typeof data.endDate === 'string') {
-                cleanData.endDate = new Date(data.endDate);
+                cleanData.endDate = parseDate(data.endDate);
             }
 
             // Convertir IDs de string a number
@@ -139,10 +149,10 @@ export const registry: Record<string, ResourceConfig> = {
 
             // Convertir fechas de string a Date
             if (data.startDate && typeof data.startDate === 'string') {
-                cleanData.startDate = new Date(data.startDate);
+                cleanData.startDate = parseDate(data.startDate);
             }
             if (data.endDate && typeof data.endDate === 'string') {
-                cleanData.endDate = new Date(data.endDate);
+                cleanData.endDate = parseDate(data.endDate);
             }
 
             // Convertir IDs de string a number
