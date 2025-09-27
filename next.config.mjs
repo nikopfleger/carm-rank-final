@@ -29,16 +29,18 @@ const securityHeaders = [
 
 const nextConfig = {
   // Logging sólo en dev, y filtrable si molestan los requests
-  logging: process.env.NODE_ENV === 'development' ? {
-    incomingRequests: {
-      // ejemplo: ignorar healthchecks si existieran
-      // ignore: [/\api\/v1\/health/],
+  ...(process.env.NODE_ENV === 'development' && {
+    logging: {
+      incomingRequests: {
+        // ejemplo: ignorar healthchecks si existieran
+        // ignore: [/\api\/v1\/health/],
+      },
+      fetches: {
+        fullUrl: false,
+        hmrRefreshes: false,
+      },
     },
-    fetches: {
-      fullUrl: false,
-      hmrRefreshes: false,
-    },
-  } : false,
+  }),
   // Configuración de imágenes
   images: {
     remotePatterns: [
