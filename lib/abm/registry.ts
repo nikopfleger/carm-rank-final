@@ -101,7 +101,8 @@ export const registry: Record<string, ResourceConfig> = {
                         select: {
                             id: true,
                             nickname: true,
-                            fullname: true
+                            fullname: true,
+                            playerNumber: true
                         }
                     }
                 }

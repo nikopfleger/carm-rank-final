@@ -5,13 +5,15 @@
 import enTranslations from './translations/en.json';
 import esTranslations from './translations/es.json';
 import jaTranslations from './translations/ja.json';
+import ptTranslations from './translations/pt.json';
 
-export type SupportedLanguage = 'es' | 'en' | 'ja';
+export type SupportedLanguage = 'es' | 'en' | 'ja' | 'pt';
 
 export const STATIC_TRANSLATIONS = {
     es: esTranslations,
     en: enTranslations,
     ja: jaTranslations,
+    pt: ptTranslations,
 } as const;
 
 export const DEFAULT_LANGUAGE: SupportedLanguage = 'es';
@@ -29,7 +31,7 @@ export function getStoredLanguage(): SupportedLanguage {
 
     try {
         const stored = localStorage.getItem('carm-rank-language') as SupportedLanguage;
-        if (stored && ['es', 'en', 'ja'].includes(stored)) {
+        if (stored && ['es', 'en', 'ja', 'pt'].includes(stored)) {
             return stored;
         }
     } catch (error) {

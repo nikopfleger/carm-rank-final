@@ -1,3 +1,4 @@
+import PlayerSingleAutocomplete, { Player } from "@/components/players/player-single-autocomplete";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -26,15 +27,11 @@ interface TournamentResultData {
         id: number;
         nickname: string;
         fullname?: string;
+        playerNumber?: number;
     };
 }
 
-interface Player {
-    id: number;
-    nickname: string;
-    fullname?: string;
-    playerNumber: number;
-}
+// Player type is now imported from PlayerSingleAutocomplete
 
 interface TournamentResultsEditorProps {
     tournament: Tournament;
@@ -49,28 +46,7 @@ export function TournamentResultsEditor({
 }: TournamentResultsEditorProps) {
     const { handleError } = useErrorHandler();
     const [results, setResults] = useState<TournamentResultData[]>([]);
-    const [players, setPlayers] = useState<Player[]>([]);
-    const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
-
-    // Cargar jugadores disponibles
-    useEffect(() => {
-        const loadPlayers = async () => {
-            try {
-                const response = await fetch('/api/abm/players');
-                if (response.ok) {
-                    const result = await response.json();
-                    // El endpoint genérico devuelve { success: true, data: rows }
-                    const data = result.success ? result.data : result;
-                    setPlayers(Array.isArray(data) ? data : []);
-                }
-            } catch (error) {
-                handleError(error, 'Cargar jugadores');
-            }
-        };
-
-        loadPlayers();
-    }, [handleError]);
 
     // Inicializar resultados existentes
     useEffect(() => {
@@ -115,8 +91,9 @@ export function TournamentResultsEditor({
     // Actualizar resultado
     const updateResult = (index: number, field: keyof TournamentResultData, value: any) => {
         const newResults = [...results];
-        if (field === 'playerId') {
-            const selectedPlayer = players.find(p => p.id === parseInt(value));
+        if (field === 'player') {
+            // value es Player | null del autocomplete
+            const selectedPlayer = value as Player | null;
             if (selectedPlayer) {
                 newResults[index] = {
                     ...newResults[index],
@@ -124,7 +101,19 @@ export function TournamentResultsEditor({
                     player: {
                         id: selectedPlayer.id,
                         nickname: selectedPlayer.nickname,
-                        fullname: selectedPlayer.fullname
+                        fullname: selectedPlayer.fullname,
+                        playerNumber: selectedPlayer.playerNumber
+                    }
+                };
+            } else {
+                // Limpiar selección
+                newResults[index] = {
+                    ...newResults[index],
+                    playerId: 0,
+                    player: {
+                        id: 0,
+                        nickname: '',
+                        fullname: ''
                     }
                 };
             }
@@ -202,7 +191,7 @@ export function TournamentResultsEditor({
                     </Button>
                 </CardHeader>
 
-                <CardContent className="overflow-y-auto max-h-[calc(90vh-120px)]">
+                <CardContent className="flex flex-col max-h-[calc(90vh-120px)]">
                     <div className="space-y-4">
                         {/* Botón para agregar resultado */}
                         <div className="flex justify-between items-center">
@@ -213,82 +202,90 @@ export function TournamentResultsEditor({
                             </Button>
                         </div>
 
-                        {/* Lista de resultados */}
-                        <div className="space-y-3">
-                            {results.map((result, index) => (
-                                <Card key={index} className="p-4">
-                                    <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
-                                        {/* Posición */}
-                                        <div>
-                                            <Label htmlFor={`position-${index}`}>Posición</Label>
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold">
-                                                    {result.position}
+                        {/* Lista de resultados con scroll */}
+                        <div className="space-y-3 overflow-y-auto flex-1 pr-2">
+                            {results.map((result, index) => {
+                                // Obtener IDs de jugadores ya seleccionados (excluyendo el actual)
+                                const excludePlayerIds = results
+                                    .map((r, i) => i !== index ? r.playerId : null)
+                                    .filter((id): id is number => id !== null && id !== 0);
+
+                                // Convertir el jugador actual al formato esperado por el autocomplete
+                                const selectedPlayer = result.playerId && result.playerId !== 0 ? {
+                                    id: result.playerId,
+                                    nickname: result.player.nickname,
+                                    playerNumber: result.player.playerNumber || 0, // Usar el playerNumber si está disponible
+                                    fullname: result.player.fullname
+                                } as Player : null;
+
+                                return (
+                                    <Card key={index} className="p-4">
+                                        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+                                            {/* Posición */}
+                                            <div>
+                                                <Label htmlFor={`position-${index}`}>Posición</Label>
+                                                <div className="flex items-center gap-2">
+                                                    <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold">
+                                                        {result.position}
+                                                    </div>
+                                                    <span className="text-sm text-gray-600">
+                                                        {result.position === 1 ? '🥇' : result.position === 2 ? '🥈' : result.position === 3 ? '🥉' : '🏅'}
+                                                    </span>
                                                 </div>
-                                                <span className="text-sm text-gray-600">
-                                                    {result.position === 1 ? '🥇' : result.position === 2 ? '🥈' : result.position === 3 ? '🥉' : '🏅'}
-                                                </span>
+                                            </div>
+
+                                            {/* Jugador con autocomplete */}
+                                            <div>
+                                                <Label htmlFor={`player-${index}`}>Jugador</Label>
+                                                <PlayerSingleAutocomplete
+                                                    selected={selectedPlayer}
+                                                    onChange={(player) => updateResult(index, 'player', player)}
+                                                    excludePlayerIds={excludePlayerIds}
+                                                    placeholder="Buscar jugador..."
+                                                />
+                                            </div>
+
+                                            {/* Puntos */}
+                                            <div>
+                                                <Label htmlFor={`points-${index}`}>Puntos</Label>
+                                                <Input
+                                                    id={`points-${index}`}
+                                                    type="number"
+                                                    step="0.1"
+                                                    value={result.pointsWon}
+                                                    onChange={(e) => updateResult(index, 'pointsWon', e.target.value)}
+                                                    placeholder="0.0"
+                                                />
+                                            </div>
+
+                                            {/* Premio (opcional) */}
+                                            <div>
+                                                <Label htmlFor={`prize-${index}`}>Premio (opcional)</Label>
+                                                <Input
+                                                    id={`prize-${index}`}
+                                                    type="number"
+                                                    step="0.01"
+                                                    value={result.prizeWon || ''}
+                                                    onChange={(e) => updateResult(index, 'prizeWon', e.target.value)}
+                                                    placeholder="0.00"
+                                                />
+                                            </div>
+
+                                            {/* Acciones */}
+                                            <div>
+                                                <Button
+                                                    variant="destructive"
+                                                    size="sm"
+                                                    onClick={() => removeResult(index)}
+                                                    disabled={results.length <= 1}
+                                                >
+                                                    <Minus className="h-4 w-4" />
+                                                </Button>
                                             </div>
                                         </div>
-
-                                        {/* Jugador */}
-                                        <div>
-                                            <Label htmlFor={`player-${index}`}>Jugador</Label>
-                                            <select
-                                                id={`player-${index}`}
-                                                value={result.playerId}
-                                                onChange={(e) => updateResult(index, 'playerId', e.target.value)}
-                                                className="w-full p-2 border rounded-md"
-                                            >
-                                                <option value={0}>Seleccionar jugador...</option>
-                                                {players.map((player) => (
-                                                    <option key={player.id} value={player.id}>
-                                                        {player.nickname} ({player.playerNumber})
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-
-                                        {/* Puntos */}
-                                        <div>
-                                            <Label htmlFor={`points-${index}`}>Puntos</Label>
-                                            <Input
-                                                id={`points-${index}`}
-                                                type="number"
-                                                step="0.1"
-                                                value={result.pointsWon}
-                                                onChange={(e) => updateResult(index, 'pointsWon', e.target.value)}
-                                                placeholder="0.0"
-                                            />
-                                        </div>
-
-                                        {/* Premio (opcional) */}
-                                        <div>
-                                            <Label htmlFor={`prize-${index}`}>Premio (opcional)</Label>
-                                            <Input
-                                                id={`prize-${index}`}
-                                                type="number"
-                                                step="0.01"
-                                                value={result.prizeWon || ''}
-                                                onChange={(e) => updateResult(index, 'prizeWon', e.target.value)}
-                                                placeholder="0.00"
-                                            />
-                                        </div>
-
-                                        {/* Acciones */}
-                                        <div>
-                                            <Button
-                                                variant="destructive"
-                                                size="sm"
-                                                onClick={() => removeResult(index)}
-                                                disabled={results.length <= 1}
-                                            >
-                                                <Minus className="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </Card>
-                            ))}
+                                    </Card>
+                                );
+                            })}
                         </div>
 
                         {/* Información adicional */}

@@ -48,6 +48,10 @@
         "abm": "ABM",
         "submitGame": "Enviar Juego",
         "validateGame": "Validar Juego",
+        "submitGamePage": {
+            "title": "Anotar Juego - Planilla Digital",
+            "description": "Completa la planilla como en una partida presencial. El sistema calculará automáticamente Uma, Oka y posiciones finales."
+        },
         "seasonManagement": "Gestión de Temporadas",
         "statisticsDescription": "Análisis detallado del sistema de ranking y actividad de jugadores",
         "validateDescription": "Revisa y valida los juegos enviados. Los juegos se procesan en orden de envío.",
@@ -359,10 +363,62 @@
         "locations": "Ubicaciones",
         "rulesets": "Reglas",
         "onlineUsers": "Usuarios Online",
-        "tournamentResults": "Resultados Torneos",
+        "tournamentResultsABM": "Resultados Torneos",
         "users": "Usuarios",
         "emailAccounts": "Casillas de Email",
         "linkRequests": "Solicitudes de Vinculación",
+        "tournamentResults": {
+            "title": "Resultados de Torneos",
+            "description": "Gestiona los resultados de los torneos - selecciona un torneo para editar sus resultados",
+            "searchPlaceholder": "Buscar torneos...",
+            "emptyMessage": "No hay torneos registrados",
+            "editResults": "Editar Resultados:",
+            "tournamentInfo": "Información del Torneo",
+            "type": "Tipo:",
+            "date": "Fecha:",
+            "status": "Estado:",
+            "participants": "Participantes:",
+            "completed": "Completado",
+            "inProgress": "En Curso",
+            "tournamentResults": "Resultados del Torneo",
+            "addPlayer": "Agregar Jugador",
+            "position": "Posición",
+            "player": "Jugador",
+            "points": "Puntos",
+            "prize": "Premio (opcional)",
+            "searchPlayer": "Buscar jugador...",
+            "validation": {
+                "playerRequired": "Debe seleccionar un jugador para la posición",
+                "duplicatePlayer": "El jugador ya está asignado a otra posición",
+                "pointsRequired": "Debe ingresar los puntos para la posición",
+                "invalidPoints": "Los puntos deben ser un número válido",
+                "invalidPrize": "El premio debe ser un número válido",
+                "duplicatePosition": "La posición ya está asignada"
+            },
+            "cannotRemove": "No se puede eliminar un resultado ya guardado",
+            "columnHeaders": {
+                "tournament": "Torneo",
+                "type": "Tipo",
+                "date": "Fecha",
+                "participants": "Participantes",
+                "status": "Estado",
+                "actions": "Acciones"
+            },
+            "statusLabels": {
+                "draft": "Borrador",
+                "completed": "Completado",
+                "cancelled": "Cancelado"
+            },
+            "errors": {
+                "loadTournaments": "Error cargando torneos",
+                "saveTournamentResults": "Guardar resultados del torneo",
+                "validationErrors": "Errores de validación:"
+            },
+            "success": {
+                "resultsSaved": "Resultados del torneo guardados exitosamente",
+                "resultsAndPointsLoaded": "Resultados guardados y puntos de temporada cargados exitosamente"
+            }
+        },
         "generic": {
             "noData": "No hay datos disponibles",
             "validation": {

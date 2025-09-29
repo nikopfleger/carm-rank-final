@@ -48,6 +48,10 @@
         "abm": "ABM",
         "submitGame": "対局登録",
         "validateGame": "対局認証",
+        "submitGamePage": {
+            "title": "対局記録 - デジタル記録用紙",
+            "description": "対面対局と同じように記録用紙を記入してください。システムが自動的にウマ、オカ、最終順位を計算します。"
+        },
         "seasonManagement": "シーズン管理",
         "statisticsDescription": "ランキングシステムと選手活動の詳細分析",
         "validateDescription": "送信された対局を確認・認証。対局は送信順に処理されます。",
@@ -359,10 +363,62 @@
         "locations": "場所",
         "rulesets": "ルール",
         "onlineUsers": "オンラインユーザー",
-        "tournamentResults": "大会結果",
+        "tournamentResultsABM": "大会結果",
         "users": "ユーザー",
         "emailAccounts": "メールアカウント",
         "linkRequests": "リンク要求",
+        "tournamentResults": {
+            "title": "大会結果",
+            "description": "大会結果を管理 - 大会を選択して結果を編集",
+            "searchPlaceholder": "大会を検索...",
+            "emptyMessage": "登録された大会がありません",
+            "editResults": "結果を編集:",
+            "tournamentInfo": "大会情報",
+            "type": "種類:",
+            "date": "日付:",
+            "status": "状態:",
+            "participants": "参加者:",
+            "completed": "完了",
+            "inProgress": "進行中",
+            "tournamentResults": "大会結果",
+            "addPlayer": "選手を追加",
+            "position": "順位",
+            "player": "選手",
+            "points": "ポイント",
+            "prize": "賞金（任意）",
+            "searchPlayer": "選手を検索...",
+            "validation": {
+                "playerRequired": "順位に選手を選択してください",
+                "duplicatePlayer": "選手は既に他の順位に割り当てられています",
+                "pointsRequired": "順位のポイントを入力してください",
+                "invalidPoints": "ポイントは有効な数値である必要があります",
+                "invalidPrize": "賞金は有効な数値である必要があります",
+                "duplicatePosition": "順位は既に割り当てられています"
+            },
+            "cannotRemove": "保存済みの結果は削除できません",
+            "columnHeaders": {
+                "tournament": "大会",
+                "type": "種類",
+                "date": "日付",
+                "participants": "参加者",
+                "status": "状態",
+                "actions": "アクション"
+            },
+            "statusLabels": {
+                "draft": "下書き",
+                "completed": "完了",
+                "cancelled": "キャンセル"
+            },
+            "errors": {
+                "loadTournaments": "大会読み込みエラー",
+                "saveTournamentResults": "大会結果保存",
+                "validationErrors": "検証エラー:"
+            },
+            "success": {
+                "resultsSaved": "大会結果が正常に保存されました",
+                "resultsAndPointsLoaded": "結果が保存され、シーズンポイントが正常に読み込まれました"
+            }
+        },
         "generic": {
             "noData": "利用可能なデータがありません",
             "validation": {

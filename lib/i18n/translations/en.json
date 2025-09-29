@@ -48,6 +48,10 @@
         "abm": "CRUD",
         "submitGame": "Submit Game",
         "validateGame": "Validate Game",
+        "submitGamePage": {
+            "title": "Record Game - Digital Score Sheet",
+            "description": "Fill out the sheet as in an in-person match. The system will automatically calculate Uma, Oka and final positions."
+        },
         "seasonManagement": "Season Management",
         "statisticsDescription": "Detailed analysis of the ranking system and player activity",
         "validateDescription": "Review and validate submitted games. Games are processed in order of submission.",
@@ -359,10 +363,62 @@
         "locations": "Locations",
         "rulesets": "Rulesets",
         "onlineUsers": "Online Users",
-        "tournamentResults": "Tournament Results",
+        "tournamentResultsABM": "Tournament Results",
         "users": "Users",
         "emailAccounts": "Email Accounts",
         "linkRequests": "Linking Requests",
+        "tournamentResults": {
+            "title": "Tournament Results",
+            "description": "Manage tournament results - select a tournament to edit its results",
+            "searchPlaceholder": "Search tournaments...",
+            "emptyMessage": "No tournaments registered",
+            "editResults": "Edit Results:",
+            "tournamentInfo": "Tournament Information",
+            "type": "Type:",
+            "date": "Date:",
+            "status": "Status:",
+            "participants": "Participants:",
+            "completed": "Completed",
+            "inProgress": "In Progress",
+            "tournamentResults": "Tournament Results",
+            "addPlayer": "Add Player",
+            "position": "Position",
+            "player": "Player",
+            "points": "Points",
+            "prize": "Prize (optional)",
+            "searchPlayer": "Search player...",
+            "validation": {
+                "playerRequired": "Must select a player for the position",
+                "duplicatePlayer": "Player is already assigned to another position",
+                "pointsRequired": "Must enter points for the position",
+                "invalidPoints": "Points must be a valid number",
+                "invalidPrize": "Prize must be a valid number",
+                "duplicatePosition": "Position is already assigned"
+            },
+            "cannotRemove": "Cannot remove an already saved result",
+            "columnHeaders": {
+                "tournament": "Tournament",
+                "type": "Type",
+                "date": "Date",
+                "participants": "Participants",
+                "status": "Status",
+                "actions": "Actions"
+            },
+            "statusLabels": {
+                "draft": "Draft",
+                "completed": "Completed",
+                "cancelled": "Cancelled"
+            },
+            "errors": {
+                "loadTournaments": "Error loading tournaments",
+                "saveTournamentResults": "Save tournament results",
+                "validationErrors": "Validation errors:"
+            },
+            "success": {
+                "resultsSaved": "Tournament results saved successfully",
+                "resultsAndPointsLoaded": "Results saved and season points loaded successfully"
+            }
+        },
         "generic": {
             "noData": "No data available",
             "validation": {

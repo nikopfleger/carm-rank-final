@@ -2,12 +2,16 @@
 
 import { GridColumn } from "@/components/admin/abm/generic-grid-responsive";
 import { UnifiedABMLayout } from "@/components/admin/abm/unified-abm-layout";
-import { TournamentResultsEditor } from "@/components/admin/tournament-results-editor";
+import PlayerSingleAutocomplete, { Player } from "@/components/players/player-single-autocomplete";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Card } from "@/components/ui/card";
+// Dialog ya no se usa - finalización automática
+import { useI18nContext } from "@/components/providers/i18n-provider";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useErrorHandler } from "@/hooks/use-error-handler";
-import { AlertTriangle, CheckCircle, Edit, Trophy, Users } from "lucide-react";
+import { Edit, Minus, Plus, Trophy, Users } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 interface Tournament {
@@ -19,6 +23,7 @@ interface Tournament {
   isCompleted: boolean;
   participantsCount?: number;
   gamesCount?: number;
+  version: number;
   location?: {
     id: number;
     name: string;
@@ -40,19 +45,22 @@ interface TournamentResultData {
     id: number;
     nickname: string;
     fullname?: string;
+    playerNumber?: number;
   };
 }
 
 export default function TournamentResultsSpecialPage() {
   const { handleError, handleSuccess } = useErrorHandler();
+  const { t } = useI18nContext();
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const [loading, setLoading] = useState(false);
+
+  // Estado para el editor de resultados unificado
+  const [showResultsEditor, setShowResultsEditor] = useState(false);
   const [editingTournament, setEditingTournament] = useState<Tournament | null>(null);
-  const [showEditor, setShowEditor] = useState(false);
-  const [finalizeConfirm, setFinalizeConfirm] = useState<{ isOpen: boolean; tournament: Tournament | null }>({
-    isOpen: false,
-    tournament: null
-  });
+  const [results, setResults] = useState<TournamentResultData[]>([]);
+
+  // Nota: La finalización ahora es automática al guardar resultados
 
   // Cargar torneos
   const loadTournaments = useCallback(async () => {
@@ -65,10 +73,10 @@ export default function TournamentResultsSpecialPage() {
         const data = result.success ? result.data : result;
         setTournaments(Array.isArray(data) ? data : []);
       } else {
-        throw new Error('Error cargando torneos');
+        throw new Error(t('abm.tournamentResults.errors.loadTournaments'));
       }
     } catch (error) {
-      handleError(error, 'Cargar torneos');
+      handleError(error, t('abm.tournamentResults.errors.loadTournaments'));
     } finally {
       setLoading(false);
     }
@@ -89,20 +97,20 @@ export default function TournamentResultsSpecialPage() {
     },
     {
       key: 'name',
-      label: 'Nombre del Torneo',
+      label: t('abm.tournamentResults.columnHeaders.tournament'),
       sortable: true,
       type: 'text'
     },
     {
       key: 'type',
-      label: 'Tipo',
+      label: t('abm.tournamentResults.columnHeaders.type'),
       sortable: true,
       type: 'text',
       width: '120px'
     },
     {
       key: 'startDate',
-      label: 'Fecha Inicio',
+      label: t('abm.tournamentResults.columnHeaders.date'),
       sortable: true,
       type: 'date',
       width: '120px'
@@ -133,19 +141,19 @@ export default function TournamentResultsSpecialPage() {
     },
     {
       key: 'isCompleted',
-      label: 'Estado',
+      label: t('abm.tournamentResults.columnHeaders.status'),
       sortable: true,
       type: 'boolean',
       width: '120px',
       render: (value: boolean) => (
         <Badge variant={value ? 'default' : 'secondary'}>
-          {value ? 'Completado' : 'En Curso'}
+          {value ? t('abm.tournamentResults.completed') : t('abm.tournamentResults.inProgress')}
         </Badge>
       )
     },
     {
       key: 'participantsCount',
-      label: 'Participantes',
+      label: t('abm.tournamentResults.columnHeaders.participants'),
       sortable: true,
       type: 'number',
       width: '120px',
@@ -173,11 +181,111 @@ export default function TournamentResultsSpecialPage() {
   // Manejar edición de resultados
   const handleEditResults = (tournament: Tournament) => {
     setEditingTournament(tournament);
-    setShowEditor(true);
+
+    // Inicializar resultados
+    if (tournament.tournamentResults && tournament.tournamentResults.length > 0) {
+      setResults([...tournament.tournamentResults].sort((a, b) => a.position - b.position));
+    } else {
+      // Inicializar con un resultado vacío
+      setResults([createEmptyResult(1)]);
+    }
+
+    setShowResultsEditor(true);
+  };
+
+  // Crear resultado vacío
+  const createEmptyResult = (position: number): TournamentResultData => ({
+    position,
+    pointsWon: 0,
+    prizeWon: 0,
+    playerId: 0,
+    player: {
+      id: 0,
+      nickname: '',
+      fullname: '',
+      playerNumber: 0
+    }
+  });
+
+  // Agregar nuevo resultado
+  const addResult = () => {
+    const newPosition = results.length + 1;
+    setResults([...results, createEmptyResult(newPosition)]);
+  };
+
+  // Eliminar resultado (solo para resultados nuevos sin ID)
+  const removeResult = (index: number) => {
+    const result = results[index];
+    // Solo permitir eliminar resultados que no tienen ID (no están guardados)
+    if (result.id) {
+      return; // No permitir eliminar resultados ya guardados
+    }
+
+    const newResults = results.filter((_, i) => i !== index);
+    // Reordenar posiciones solo para los nuevos
+    const reorderedResults = newResults.map((result, i) => ({
+      ...result,
+      position: i + 1
+    }));
+    setResults(reorderedResults);
+  };
+
+  // Actualizar resultado (solo para resultados nuevos sin ID)
+  const updateResult = (index: number, field: keyof TournamentResultData, value: any) => {
+    const result = results[index];
+    // Solo permitir editar resultados que no tienen ID (no están guardados)
+    if (result.id) {
+      return; // No permitir editar resultados ya guardados
+    }
+
+    const newResults = [...results];
+    if (field === 'player') {
+      // value es Player | null del autocomplete
+      const selectedPlayer = value as Player | null;
+      if (selectedPlayer) {
+        newResults[index] = {
+          ...newResults[index],
+          playerId: selectedPlayer.id,
+          player: {
+            id: selectedPlayer.id,
+            nickname: selectedPlayer.nickname,
+            fullname: selectedPlayer.fullname,
+            playerNumber: selectedPlayer.playerNumber
+          }
+        };
+      } else {
+        // Limpiar selección
+        newResults[index] = {
+          ...newResults[index],
+          playerId: 0,
+          player: {
+            id: 0,
+            nickname: '',
+            fullname: '',
+            playerNumber: 0
+          }
+        };
+      }
+    } else {
+      newResults[index] = {
+        ...newResults[index],
+        [field]: field === 'pointsWon' || field === 'prizeWon' ? parseFloat(value) || 0 : value
+      };
+    }
+    setResults(newResults);
   };
 
   // Manejar guardado de resultados
-  const handleSaveResults = async (tournamentId: number, results: TournamentResultData[]) => {
+  const handleSaveResults = async () => {
+    if (!editingTournament) return;
+
+    // Validar resultados
+    const errors = validateResults();
+    if (errors.length > 0) {
+      handleError(new Error(`${t('abm.tournamentResults.errors.validationErrors')}\n${errors.join('\n')}`), t('abm.tournamentResults.errors.saveTournamentResults'));
+      return;
+    }
+
     try {
       const response = await fetch(`/api/abm/tournament-results/bulk`, {
         method: 'POST',
@@ -185,89 +293,84 @@ export default function TournamentResultsSpecialPage() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          tournamentId,
+          tournamentId: editingTournament.id,
           results
         })
       });
 
       if (response.ok) {
-        handleSuccess('Resultados del torneo guardados exitosamente', 'Guardado exitoso');
-        setShowEditor(false);
+        const result = await response.json();
+        const message = result.data?.seasonPointsLoaded
+          ? t('abm.tournamentResults.success.resultsAndPointsLoaded')
+          : t('abm.tournamentResults.success.resultsSaved');
+        handleSuccess(message, 'Guardado exitoso');
+        setShowResultsEditor(false);
         setEditingTournament(null);
+        setResults([]);
         await loadTournaments(); // Recargar datos
       } else {
         const error = await response.json();
-        throw new Error(error.error || 'Error guardando resultados');
+        throw new Error(error.error || t('abm.tournamentResults.errors.saveTournamentResults'));
       }
     } catch (error) {
-      handleError(error, 'Guardar resultados del torneo');
+      handleError(error, t('abm.tournamentResults.errors.saveTournamentResults'));
     }
   };
 
-  // Manejar finalización de torneo
-  const handleFinalizeTournament = (tournament: Tournament) => {
-    setFinalizeConfirm({ isOpen: true, tournament });
-  };
+  // Validar resultados
+  const validateResults = (): string[] => {
+    const errors: string[] = [];
+    const usedPlayerIds = new Set<number>();
+    const positions = new Set<number>();
 
-  const handleConfirmFinalize = async () => {
-    if (!finalizeConfirm.tournament) return;
-
-    try {
-      const response = await fetch(`/api/abm/tournament-results/${finalizeConfirm.tournament.id}/finalize`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (response.ok) {
-        handleSuccess('Torneo finalizado exitosamente. Los puntos de temporada han sido cargados.', 'Finalización exitosa');
-        setFinalizeConfirm({ isOpen: false, tournament: null });
-        await loadTournaments(); // Recargar datos
+    results.forEach((result, index) => {
+      if (!result.playerId || result.playerId === 0) {
+        errors.push(`${t('abm.tournamentResults.position')} ${index + 1}: ${t('abm.tournamentResults.validation.playerRequired')}`);
+      } else if (usedPlayerIds.has(result.playerId)) {
+        errors.push(`${t('abm.tournamentResults.position')} ${index + 1}: ${t('abm.tournamentResults.validation.duplicatePlayer')}`);
       } else {
-        const error = await response.json();
-        throw new Error(error.error || 'Error finalizando torneo');
+        usedPlayerIds.add(result.playerId);
       }
-    } catch (error) {
-      handleError(error, 'Finalizar torneo');
-      setFinalizeConfirm({ isOpen: false, tournament: null });
-    }
+
+      if (positions.has(result.position)) {
+        errors.push(`${t('abm.tournamentResults.position')} ${result.position}: ${t('abm.tournamentResults.validation.duplicatePosition')}`);
+      } else {
+        positions.add(result.position);
+      }
+
+      if (result.pointsWon < 0) {
+        errors.push(`${t('abm.tournamentResults.position')} ${index + 1}: ${t('abm.tournamentResults.validation.invalidPoints')}`);
+      }
+    });
+
+    return errors;
   };
 
-  const handleCancelFinalize = () => {
-    setFinalizeConfirm({ isOpen: false, tournament: null });
-  };
+  // Nota: La finalización de torneos ahora es automática al guardar resultados
 
   // Configuración de acciones del grid
   const actions = [
     {
       key: 'edit-results',
-      label: 'Editar Resultados',
+      label: t('abm.tournamentResults.editResults'),
       icon: Edit,
       variant: 'outline' as const,
       onClick: (row: Tournament) => handleEditResults(row),
       show: () => true
-    },
-    {
-      key: 'finalize',
-      label: 'Finalizar Torneo',
-      icon: CheckCircle,
-      variant: 'default' as const,
-      onClick: (row: Tournament) => handleFinalizeTournament(row),
-      show: (row: Tournament) => !row.isCompleted && (row.tournamentResults?.length || 0) > 0
     }
+    // Nota: "Finalizar Torneo" se hace automáticamente al guardar resultados
   ];
 
   return (
     <>
       <UnifiedABMLayout<Tournament>
-        title="Resultados de Torneos"
-        description="Gestiona los resultados de los torneos - selecciona un torneo para editar sus resultados"
+        title={t('abm.tournamentResults.title')}
+        description={t('abm.tournamentResults.description')}
 
-        // Estado del formulario (no usado, pero requerido)
-        showForm={false}
-        editingItem={null}
-        formTitle=""
+        // Estado del formulario - ahora usado para editor de resultados
+        showForm={showResultsEditor}
+        editingItem={editingTournament}
+        formTitle={editingTournament ? `${t('abm.tournamentResults.editResults')} ${editingTournament.name}` : ""}
 
         // Configuración del grid
         data={tournaments}
@@ -279,80 +382,163 @@ export default function TournamentResultsSpecialPage() {
         includeDeleteButton={false}
         includeRestoreButton={false}
 
-        // Configuración del formulario (no usado)
+        // Configuración del formulario (no usado - usamos contenido personalizado)
         formFields={[]}
         formErrors={{}}
         formSuccess={false}
         successMessage=""
 
         // Configuración de búsqueda y filtros
-        searchPlaceholder="Buscar torneos..."
+        searchPlaceholder={t('abm.tournamentResults.searchPlaceholder')}
         showDeleted={false}
         onToggleShowDeleted={undefined}
 
-        // Callbacks (no usados para este ABM especial)
+        // Callbacks
         onAdd={() => { }} // No agregamos torneos desde aquí
         onRefresh={loadTournaments}
-        onFormSubmit={() => Promise.resolve()}
-        onFormCancel={() => { }}
+        onFormSubmit={async () => await handleSaveResults()}
+        onFormCancel={() => {
+          setShowResultsEditor(false);
+          setEditingTournament(null);
+          setResults([]);
+        }}
 
         // Mensajes personalizados
-        emptyMessage="No hay torneos registrados"
+        emptyMessage={t('abm.tournamentResults.emptyMessage')}
+
+        // Contenido adicional personalizado para el editor de resultados
+        additionalFormContent={showResultsEditor && editingTournament && (
+          <div className="space-y-6">
+            {/* Información del torneo */}
+            <Card className="p-4 bg-blue-50 dark:bg-blue-900/20">
+              <div className="flex items-start gap-2">
+                <Trophy className="h-5 w-5 text-blue-600 mt-0.5" />
+                <div>
+                  <h4 className="font-medium text-blue-900 dark:text-blue-100">
+                    {t('abm.tournamentResults.tournamentInfo')}
+                  </h4>
+                  <div className="text-sm text-blue-700 dark:text-blue-200 mt-1 space-y-1">
+                    <p><strong>{t('abm.tournamentResults.type')}</strong> {editingTournament.type}</p>
+                    <p><strong>{t('abm.tournamentResults.date')}</strong> {new Date(editingTournament.startDate).toLocaleDateString()}</p>
+                    <p><strong>{t('abm.tournamentResults.status')}</strong> {editingTournament.isCompleted ? t('abm.tournamentResults.completed') : t('abm.tournamentResults.inProgress')}</p>
+                    <p><strong>{t('abm.tournamentResults.participants')}</strong> {results.length}</p>
+                  </div>
+                </div>
+              </div>
+            </Card>
+
+            {/* Botón para agregar resultado */}
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-medium">{t('abm.tournamentResults.tournamentResults')}</h3>
+              <Button onClick={addResult} variant="outline" size="sm">
+                <Plus className="h-4 w-4 mr-2" />
+                {t('abm.tournamentResults.addPlayer')}
+              </Button>
+            </div>
+
+            {/* Lista de resultados con scroll */}
+            <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
+              {results.map((result, index) => {
+                // Obtener IDs de jugadores ya seleccionados (excluyendo el actual)
+                const excludePlayerIds = results
+                  .map((r, i) => i !== index ? r.playerId : null)
+                  .filter((id): id is number => id !== null && id !== 0);
+
+                // Convertir el jugador actual al formato esperado por el autocomplete
+                const selectedPlayer = result.playerId && result.playerId !== 0 ? {
+                  id: result.playerId,
+                  nickname: result.player.nickname,
+                  playerNumber: result.player.playerNumber || 0,
+                  fullname: result.player.fullname
+                } as Player : null;
+
+                const isExistingResult = !!result.id; // Resultado ya guardado
+                const isEditable = !isExistingResult; // Solo editable si no está guardado
+
+                return (
+                  <Card key={index} className={`p-4 ${isExistingResult ? 'bg-gray-50 dark:bg-gray-900/50' : ''}`}>
+                    <div className="grid grid-cols-1 md:grid-cols-[80px_1fr_120px_120px_60px] gap-4 items-end">
+                      {/* Posición */}
+                      <div>
+                        <Label htmlFor={`position-${index}`}>{t('abm.tournamentResults.position')}</Label>
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold">
+                            {result.position}
+                          </div>
+                          <span className="text-sm text-gray-600">
+                            {result.position === 1 ? '🥇' : result.position === 2 ? '🥈' : result.position === 3 ? '🥉' : '🏅'}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Jugador con autocomplete */}
+                      <div>
+                        <Label htmlFor={`player-${index}`}>{t('abm.tournamentResults.player')}</Label>
+                        {isEditable ? (
+                          <PlayerSingleAutocomplete
+                            selected={selectedPlayer}
+                            onChange={(player) => updateResult(index, 'player', player)}
+                            excludePlayerIds={excludePlayerIds}
+                            placeholder={t('abm.tournamentResults.searchPlayer')}
+                          />
+                        ) : (
+                          <div className="w-full p-2 border rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                            {result.player.nickname} (L{result.player.playerNumber || 'N/A'})
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Puntos */}
+                      <div>
+                        <Label htmlFor={`points-${index}`}>{t('abm.tournamentResults.points')}</Label>
+                        <Input
+                          id={`points-${index}`}
+                          type="number"
+                          step="0.1"
+                          value={result.pointsWon}
+                          onChange={(e) => updateResult(index, 'pointsWon', e.target.value)}
+                          placeholder="0.0"
+                          disabled={!isEditable}
+                          className={!isEditable ? 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300' : ''}
+                        />
+                      </div>
+
+                      {/* Premio (opcional) */}
+                      <div>
+                        <Label htmlFor={`prize-${index}`}>{t('abm.tournamentResults.prize')}</Label>
+                        <Input
+                          id={`prize-${index}`}
+                          type="number"
+                          step="0.01"
+                          value={result.prizeWon || ''}
+                          onChange={(e) => updateResult(index, 'prizeWon', e.target.value)}
+                          placeholder="0.00"
+                          disabled={!isEditable}
+                          className={!isEditable ? 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300' : ''}
+                        />
+                      </div>
+
+                      {/* Acciones */}
+                      <div>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => removeResult(index)}
+                          disabled={!isEditable || results.length <= 1}
+                          title={!isEditable ? t('abm.tournamentResults.cannotRemove') : ''}
+                        >
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+
+          </div>
+        )}
       />
-
-      {/* Editor de resultados */}
-      {showEditor && editingTournament && (
-        <TournamentResultsEditor
-          tournament={editingTournament}
-          onSave={(results) => handleSaveResults(editingTournament.id, results)}
-          onCancel={() => {
-            setShowEditor(false);
-            setEditingTournament(null);
-          }}
-        />
-      )}
-
-      {/* Modal de confirmación de finalización */}
-      <Dialog open={finalizeConfirm.isOpen} onOpenChange={(open) => !open && handleCancelFinalize()}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-amber-500" />
-              Finalizar Torneo
-            </DialogTitle>
-            <DialogDescription className="space-y-3">
-              <div className="font-semibold text-amber-700">
-                ⚠️ Esta acción realizará las siguientes operaciones:
-              </div>
-              <ul className="list-disc list-inside space-y-1 text-sm">
-                <li><strong>Cerrar el torneo:</strong> Se marcará como completado y se establecerá fecha de fin</li>
-                <li><strong>Cargar puntos de temporada:</strong> Se convertirán los resultados en puntos para el ranking</li>
-                <li><strong>Procesar ranking:</strong> Los puntos se aplicarán a la temporada correspondiente</li>
-              </ul>
-              <div className="bg-amber-50 border border-amber-200 rounded-md p-3">
-                <div className="font-medium text-amber-800">
-                  Torneo: <strong>{finalizeConfirm.tournament?.name}</strong>
-                </div>
-                <div className="text-sm text-amber-700">
-                  Esta acción no se puede deshacer.
-                </div>
-              </div>
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={handleCancelFinalize}>
-              Cancelar
-            </Button>
-            <Button
-              onClick={handleConfirmFinalize}
-              className="bg-amber-600 hover:bg-amber-700"
-            >
-              <CheckCircle className="h-4 w-4 mr-2" />
-              Finalizar Torneo
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }

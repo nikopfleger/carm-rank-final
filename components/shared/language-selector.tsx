@@ -66,7 +66,7 @@ export const LanguageSelector = ({
               <>
                 <span>{getLanguageFlag(language)}</span>
                 <span className="font-medium">
-                  {language === 'en' ? 'EN' : language === 'es' ? 'ES' : 'JP'}
+                  {language === 'en' ? 'EN' : language === 'es' ? 'ES' : language === 'ja' ? 'JP' : 'PT'}
                 </span>
               </>
             ) : (
@@ -80,7 +80,7 @@ export const LanguageSelector = ({
               <div className="flex items-center gap-2">
                 <span>{getLanguageFlag(lang)}</span>
                 <span className="font-medium">
-                  {lang === 'en' ? 'EN' : lang === 'es' ? 'ES' : 'JP'}
+                  {lang === 'en' ? 'EN' : lang === 'es' ? 'ES' : lang === 'ja' ? 'JP' : 'PT'}
                 </span>
               </div>
             </SelectItem>

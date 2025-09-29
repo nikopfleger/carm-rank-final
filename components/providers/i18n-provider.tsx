@@ -129,7 +129,8 @@ export const getLanguageName = (code: SupportedLanguage): string => {
   const names = {
     es: 'Español',
     en: 'English',
-    ja: '日本語'
+    ja: '日本語',
+    pt: 'Português'
   };
   return names[code];
 };
@@ -138,9 +139,10 @@ export const getLanguageFlag = (code: SupportedLanguage): string => {
   const flags = {
     es: '🇪🇸',
     en: '🇺🇸',
-    ja: '🇯🇵'
+    ja: '🇯🇵',
+    pt: '🇧🇷'
   };
   return flags[code];
 };
 
-export const SUPPORTED_LANGUAGES: SupportedLanguage[] = ['es', 'en', 'ja'];
+export const SUPPORTED_LANGUAGES: SupportedLanguage[] = ['es', 'en', 'ja', 'pt'];
