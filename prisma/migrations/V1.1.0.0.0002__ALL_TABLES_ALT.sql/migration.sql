@@ -15,7 +15,7 @@ BEGIN
         JOIN information_schema.tables t ON c.table_name = t.table_name
         WHERE c.column_name = 'updated_at' 
         AND c.is_nullable = 'NO'
-        AND t.table_schema = 'carm'
+        AND t.table_schema = current_schema()
     LOOP
         EXECUTE format('ALTER TABLE %I ALTER COLUMN updated_at DROP NOT NULL', table_name);
         RAISE NOTICE 'Changed updated_at to nullable in table: %', table_name;
@@ -33,7 +33,7 @@ BEGIN
         FROM information_schema.columns c
         JOIN information_schema.tables t ON c.table_name = t.table_name
         WHERE c.column_name = 'updated_at' 
-        AND t.table_schema = 'carm'
+        AND t.table_schema = current_schema()
     LOOP
         EXECUTE format('UPDATE %I SET updated_at = NULL WHERE updated_at IS NOT NULL', table_name);
         RAISE NOTICE 'Set updated_at to NULL in table: %', table_name;

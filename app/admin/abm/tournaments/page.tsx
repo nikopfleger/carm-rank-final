@@ -18,6 +18,7 @@ interface Tournament {
     locationId?: number;
     seasonId?: number;
     isCompleted: boolean;
+    sanma: boolean; // Tipo de torneo: true = Sanma (3 jugadores), false = Yonma (4 jugadores)
     maxPlayers?: number;
     entryFee?: number;
     prizePool?: number;
@@ -57,14 +58,26 @@ export default function TournamentsABMPage() {
                     label: loc.name
                 })));
 
-                // Cargar temporadas
-                const seasonsResponse = await fetch("/api/abm/seasons");
+                // Cargar solo la temporada activa
+                const seasonsResponse = await fetch("/api/seasons?active=true");
                 const seasonsResult = await seasonsResponse.json();
-                const seasonsData = seasonsResult.data || seasonsResult;
-                setSeasons(seasonsData.map((season: any) => ({
-                    value: season.id,
-                    label: season.name
-                })));
+                const activeSeason = seasonsResult.data;
+
+                if (activeSeason) {
+                    setSeasons([{
+                        value: activeSeason.id,
+                        label: activeSeason.name
+                    }]);
+                } else {
+                    // Fallback: si no hay temporada activa, cargar todas
+                    const allSeasonsResponse = await fetch("/api/abm/seasons");
+                    const allSeasonsResult = await allSeasonsResponse.json();
+                    const allSeasonsData = allSeasonsResult.data || allSeasonsResult;
+                    setSeasons(allSeasonsData.map((season: any) => ({
+                        value: season.id,
+                        label: season.name
+                    })));
+                }
             } catch (error) {
                 console.error("Error cargando datos relacionados:", error);
             }
@@ -89,6 +102,18 @@ export default function TournamentsABMPage() {
             render: (value: string) => (
                 <Badge variant="outline">
                     {getTournamentTypeLabel(value)}
+                </Badge>
+            )
+        },
+        {
+            key: 'sanma',
+            label: 'Modalidad',
+            type: 'boolean',
+            width: '100px',
+            sortable: true,
+            render: (value: boolean) => (
+                <Badge variant={value ? 'secondary' : 'default'}>
+                    {value ? 'Sanma (3p)' : 'Yonma (4p)'}
                 </Badge>
             )
         },
@@ -177,6 +202,16 @@ export default function TournamentsABMPage() {
                 value: String(o.value).toLowerCase(),
                 label: getTournamentTypeLabel(o.value)
             }))
+        },
+        {
+            key: 'sanma',
+            label: 'Modalidad de Juego',
+            type: 'select',
+            required: true,
+            options: [
+                { value: false, label: 'Yonma (4 jugadores)' },
+                { value: true, label: 'Sanma (3 jugadores)' }
+            ]
         },
         {
             key: 'startDate',

@@ -298,7 +298,7 @@ model Tournament {
   description       String?
   type              TournamentType
   startDate         DateTime           @map("start_date") @db.Date
-  endDate           DateTime           @map("end_date") @db.Date
+  endDate           DateTime?          @map("end_date") @db.Date
   maxPlayers        Int?               @map("max_players")
   entryFee          Decimal?           @map("entry_fee") @db.Money
   prizePool         Decimal?           @map("prize_pool") @db.Money

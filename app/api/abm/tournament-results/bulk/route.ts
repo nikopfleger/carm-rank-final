@@ -134,21 +134,7 @@ export async function POST(request: NextRequest) {
                 createdResults.push(tournamentResult);
             }
 
-            // 3. Actualizar estadísticas del torneo
-            await tx.tournament.update({
-                where: {
-                    id: parseInt(tournamentId),
-                    version: tournament.version // Incluir versión para optimistic locking
-                },
-                data: {
-                    // Marcar como completado y finalizado
-                    isCompleted: true,
-                    endDate: tournament.endDate || new Date().toISOString().split('T')[0],
-                    version: { increment: 1 } // Incrementar versión
-                }
-            });
-
-            // 4. Cargar puntos de temporada si el torneo tiene temporada asociada
+            // 3. Cargar puntos de temporada si el torneo tiene temporada asociada
             if (tournament.seasonId) {
                 // Para cada jugador, obtener su último puntaje de temporada y sumarle los puntos del torneo
                 const seasonPointsData = [];
@@ -245,6 +231,20 @@ export async function POST(request: NextRequest) {
 
                 console.log(`✅ Actualizado PlayerRanking para ${seasonPointsData.length} jugadores`);
             }
+
+            // ÚLTIMO PASO: Actualizar estadísticas del torneo (solo si todo lo anterior fue exitoso)
+            await tx.tournament.update({
+                where: {
+                    id: parseInt(tournamentId),
+                    version: tournament.version // Incluir versión para optimistic locking
+                },
+                data: {
+                    // Marcar como completado y finalizado
+                    isCompleted: true,
+                    endDate: tournament.endDate || new Date().toISOString().split('T')[0],
+                    version: { increment: 1 } // Incrementar versión
+                }
+            });
 
             return createdResults;
         });

@@ -7,10 +7,10 @@ BEGIN
         WHERE table_name = 'tournament' 
         AND column_name = 'start_date' 
         AND data_type != 'date'
-        AND table_schema = 'carm'
+        AND table_schema = current_schema()
     ) THEN
         -- Convertir start_date a DATE si no lo es
-        ALTER TABLE carm.tournament 
+        ALTER TABLE tournament 
         ALTER COLUMN start_date TYPE DATE 
         USING start_date::DATE;
         
@@ -26,10 +26,10 @@ BEGIN
         WHERE table_name = 'tournament' 
         AND column_name = 'end_date' 
         AND data_type != 'date'
-        AND table_schema = 'carm'
+        AND table_schema = current_schema()
     ) THEN
         -- Convertir end_date a DATE si no lo es
-        ALTER TABLE carm.tournament 
+        ALTER TABLE tournament 
         ALTER COLUMN end_date TYPE DATE 
         USING end_date::DATE;
         
