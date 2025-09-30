@@ -38,7 +38,19 @@ interface Tournament {
 }
 
 export default function TournamentsABMPage() {
-    const abm = useCrud<Tournament>({ resource: 'tournaments' });
+    const abm = useCrud<Tournament>({
+        resource: 'tournaments',
+        mapToCreateAction: (data: any) => ({
+            ...data,
+            startDate: data.startDate ? new Date(data.startDate + 'T00:00:00.000Z') : null,
+            endDate: data.endDate ? new Date(data.endDate + 'T00:00:00.000Z') : null
+        }),
+        mapToUpdateAction: (data: any) => ({
+            ...data,
+            startDate: data.startDate ? new Date(data.startDate + 'T00:00:00.000Z') : null,
+            endDate: data.endDate ? new Date(data.endDate + 'T00:00:00.000Z') : null
+        })
+    });
     const { tournamentTypeOptions, getTournamentTypeLabel } = useEnumI18n();
 
     // Estados para opciones de selects
@@ -155,13 +167,6 @@ export default function TournamentsABMPage() {
             )
         },
         {
-            key: 'version',
-            label: 'Versión',
-            type: 'badge',
-            width: '80px',
-            sortable: true
-        },
-        {
             key: 'deleted',
             label: 'Estado',
             type: 'boolean',
@@ -171,13 +176,6 @@ export default function TournamentsABMPage() {
                     {value ? 'Eliminado' : 'Activo'}
                 </Badge>
             )
-        },
-        {
-            key: 'updatedAt',
-            label: 'Última Modificación',
-            type: 'date',
-            width: '150px',
-            sortable: true
         }
     ], [getTournamentTypeLabel]);
 
@@ -186,6 +184,18 @@ export default function TournamentsABMPage() {
 
     // ===== Form =====
     const formFields: FormField[] = useMemo(() => [
+        {
+            key: 'id',
+            label: 'ID',
+            type: 'hidden',
+            required: false
+        },
+        {
+            key: 'version',
+            label: 'version',
+            type: 'hidden',
+            required: false
+        },
         {
             key: 'name',
             label: 'Nombre',

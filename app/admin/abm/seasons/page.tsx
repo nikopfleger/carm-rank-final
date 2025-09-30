@@ -99,13 +99,6 @@ export default function SeasonsABMPage() {
           {value ? "Eliminada" : "Activa"}
         </Badge>
       )
-    },
-    {
-      key: "createdAt",
-      label: "Creada",
-      width: "150px",
-      type: "date",
-      sortable: true
     }
   ];
 

@@ -211,7 +211,16 @@ export function GenericForm({
         ) : field.type === "select" ? (
           <Select
             value={value !== "" && value !== null && value !== undefined ? String(value) : undefined}
-            onValueChange={(newValue) => handleInputChange(field.key, field.coerceToNumber ? Number(newValue) : newValue)}
+            onValueChange={(newValue) => {
+              let finalValue: any = newValue;
+              if (field.coerceToNumber) {
+                finalValue = Number(newValue);
+              } else if (field.options?.some(opt => typeof opt.value === 'boolean')) {
+                // Si las opciones incluyen booleans, reconvertir
+                finalValue = newValue === 'true' ? true : newValue === 'false' ? false : newValue;
+              }
+              handleInputChange(field.key, finalValue);
+            }}
           >
             <SelectTrigger
               id={baseId}

@@ -107,13 +107,6 @@ export default function LocationsUnifiedPage() {
                     <Badge variant="default">Activa</Badge>
                 )
             )
-        },
-        {
-            key: 'createdAt',
-            label: 'Creada',
-            sortable: true,
-            type: 'date',
-            width: '120px'
         }
     ];
 

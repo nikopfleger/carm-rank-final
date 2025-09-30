@@ -67,20 +67,6 @@ export default function RulesetsABMPage() {
           {value ? "Eliminado" : "Activo"}
         </Badge>
       )
-    },
-    {
-      key: "version",
-      label: "Versión",
-      sortable: true,
-      type: "number",
-      width: "100px"
-    },
-    {
-      key: "createdAt",
-      label: "Creado",
-      sortable: true,
-      type: "date",
-      width: "150px"
     }
   ], []);
 

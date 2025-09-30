@@ -199,10 +199,8 @@ export async function POST(request: NextRequest) {
 
                     await tx.playerRanking.upsert({
                         where: {
-                            playerId_isSanma: {
-                                playerId: data.playerId,
-                                isSanma: isSanma
-                            }
+                            playerId: data.playerId,
+                            isSanma: isSanma
                         },
                         update: {
                             seasonPoints: data.pointsValue, // Actualizar con el nuevo valor acumulado
@@ -241,7 +239,7 @@ export async function POST(request: NextRequest) {
                 data: {
                     // Marcar como completado y finalizado
                     isCompleted: true,
-                    endDate: tournament.endDate || new Date().toISOString().split('T')[0],
+                    endDate: tournament.endDate || new Date(),
                     version: { increment: 1 } // Incrementar versión
                 }
             });

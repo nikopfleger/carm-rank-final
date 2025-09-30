@@ -114,13 +114,6 @@ export default function UmaABMPage() {
           {value ? 'Eliminado' : 'Activo'}
         </Badge>
       )
-    },
-    {
-      key: 'createdAt',
-      label: 'Creado',
-      width: '150px',
-      type: 'date',
-      sortable: true
     }
   ], []);
 
