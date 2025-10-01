@@ -1,16 +1,40 @@
+// lib/database/audit-interceptor.ts
 import { getRequestContext } from '@/lib/request-context.server';
 import type { PrismaClient } from '@prisma/client';
 import { handleConcurrencyError } from './concurrency-handler';
 
 // Modelos que NO deben tener auditoría (OAuth de NextAuth)
-// Account, Session, VerificationToken no tienen campos de auditoría
-// User sí tiene campos de auditoría pero se maneja por NextAuth
 const EXCLUDED_MODELS = ['Account', 'Session', 'VerificationToken'];
 
 // Helper: acceder al delegate dinámico del modelo
 function delegateOf(model: string, prisma: PrismaClient) {
     const lc = model.charAt(0).toLowerCase() + model.slice(1);
     return (prisma as any)[lc];
+}
+
+// Normaliza WhereUniqueInput con unique compuesta (p.ej. { playerId_isSanma: { playerId, isSanma } })
+// a un filtro plano usable en findFirst/findMany/updateMany: { playerId, isSanma }
+function normalizeUniqueWhereToFilter(where: any): any {
+    if (!where || typeof where !== 'object' || Array.isArray(where)) return where;
+
+    const keys = Object.keys(where);
+    if (keys.length === 1) {
+        const k = keys[0];
+        const v = (where as any)[k];
+        // Heurística: nombres típicos de uniques compuestas incluyen un '_' o son objetos con varias claves escalares
+        const isCompositeAlias =
+            typeof v === 'object' &&
+            v !== null &&
+            !Array.isArray(v) &&
+            (k.includes('_') || Object.keys(v).length >= 2);
+
+        if (isCompositeAlias) {
+            // Retornamos el objeto interno como filtro plano
+            return { ...v };
+        }
+    }
+
+    return where;
 }
 
 // Obtener información de auditoría del contexto de la request
@@ -38,8 +62,12 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                     // findUnique NO permite agregar más campos al where; usamos findFirst
                     const d = delegateOf(model, prisma);
                     const { where, select, include, orderBy, take, skip } = args as any;
+
+                    // ⚠️ Normalizar unique compuesta a filtro plano
+                    const normalizedWhere = normalizeUniqueWhereToFilter(where);
+
                     return d.findFirst({
-                        where: { ...where, deleted: false },
+                        where: { ...normalizedWhere, deleted: false },
                         select,
                         include,
                         orderBy,
@@ -56,12 +84,17 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                     // Agregar filtro deleted solo si el contexto NO pide includeDeleted
                     const ctx = getRequestContext();
                     const where = (args as any).where || {};
+
+                    // ⚠️ También normalizamos por si alguien pasó alias de unique por error
+                    const normalizedWhere = normalizeUniqueWhereToFilter(where);
+
                     if (ctx?.includeDeleted) {
-                        // eliminar cualquier filtro residual de deleted
-                        if (Object.prototype.hasOwnProperty.call(where, 'deleted')) delete (where as any).deleted;
-                        (args as any).where = where;
+                        if (Object.prototype.hasOwnProperty.call(normalizedWhere, 'deleted')) {
+                            delete (normalizedWhere as any).deleted;
+                        }
+                        (args as any).where = normalizedWhere;
                     } else {
-                        (args as any).where = { ...where, deleted: false };
+                        (args as any).where = { ...normalizedWhere, deleted: false };
                     }
 
                     return query(args);
@@ -72,18 +105,24 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                         return query(args);
                     }
 
-                    // Agregar filtro deleted solo si el contexto NO pide includeDeleted
                     const ctx = getRequestContext();
                     const where = (args as any).where || {};
+
+                    // ⚠️ Normalizamos por si vino un alias compuesto
+                    const normalizedWhere = normalizeUniqueWhereToFilter(where);
+
                     if (ctx?.includeDeleted) {
-                        if (Object.prototype.hasOwnProperty.call(where, 'deleted')) delete (where as any).deleted;
-                        (args as any).where = where;
+                        if (Object.prototype.hasOwnProperty.call(normalizedWhere, 'deleted')) {
+                            delete (normalizedWhere as any).deleted;
+                        }
+                        (args as any).where = normalizedWhere;
                     } else {
-                        (args as any).where = { ...where, deleted: false };
+                        (args as any).where = { ...normalizedWhere, deleted: false };
                     }
 
                     return query(args);
                 },
+
                 async create({ args, query, model }) {
                     if (EXCLUDED_MODELS.includes(model)) {
                         return query(args);
@@ -119,7 +158,9 @@ export function createAuditInterceptor(prisma: PrismaClient) {
 
                         // FORZAR optimistic locking: exigir que toda update lleve version en el where
                         if (!('version' in where)) {
-                            throw new Error(`[${model}] Falta 'version' en WHERE para optimistic locking. Debe incluir la versión esperada del registro.`);
+                            throw new Error(
+                                `[${model}] Falta 'version' en WHERE para optimistic locking. Debe incluir la versión esperada del registro.`
+                            );
                         }
 
                         // Convertir update -> updateMany para poder chequear count
@@ -131,7 +172,7 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                                 updatedAt: audit.timestamp,
                                 updatedBy: audit.userId,
                                 updatedIp: audit.userIp,
-                            }
+                            },
                         });
 
                         if (res.count === 0) {
@@ -141,15 +182,15 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                                 select: { id: true, version: true, updatedAt: true },
                             });
 
-                            const err: any = new Error("OPTIMISTIC_LOCK");
-                            err.code = "OPTIMISTIC_LOCK";
+                            const err: any = new Error('OPTIMISTIC_LOCK');
+                            err.code = 'OPTIMISTIC_LOCK';
                             err.meta = { current };
                             throw err;
                         }
 
                         // Devolver el registro actualizado (sin version en where para obtener el actualizado)
                         return d.findFirst({
-                            where: { id: where.id }
+                            where: { id: where.id },
                         });
                     });
                 },
@@ -213,27 +254,42 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                             ...(!upd.deleted && { version: { increment: 1 } }),
                         };
 
+                        // ⚠️ Normalizar where (porque viene en formato WhereUniqueInput y lo usaremos en findFirst/updateMany)
+                        const rawWhere = (args as any).where;
+                        const normalizedWhere = normalizeUniqueWhereToFilter(rawWhere);
+
                         // upsert manual para poder chequear versión
-                        const existing = await d.findFirst({ where: (args as any).where });
+                        const existing = await d.findFirst({
+                            where: normalizedWhere,
+                        });
 
                         if (!existing) {
                             return d.create({ data: { ...(args as any).create, ...createAudit } });
                         }
 
                         if (expectedVersion != null && existing.version !== expectedVersion) {
-                            const err: any = new Error("OPTIMISTIC_LOCK");
-                            err.code = "OPTIMISTIC_LOCK";
-                            err.meta = { current: { id: existing.id, version: existing.version, updatedAt: existing.updatedAt } };
+                            const err: any = new Error('OPTIMISTIC_LOCK');
+                            err.code = 'OPTIMISTIC_LOCK';
+                            err.meta = {
+                                current: {
+                                    id: existing.id,
+                                    version: existing.version,
+                                    updatedAt: existing.updatedAt,
+                                },
+                            };
                             throw err;
                         }
 
                         // update con versión OK
                         await d.updateMany({
-                            where: { ...(args as any).where, ...(expectedVersion != null ? { version: expectedVersion } : {}) },
+                            where: {
+                                ...normalizedWhere,
+                                ...(expectedVersion != null ? { version: expectedVersion } : {}),
+                            },
                             data: { ...upd, ...updateAudit },
                         });
 
-                        return d.findFirst({ where: (args as any).where });
+                        return d.findFirst({ where: normalizedWhere });
                     });
                 },
 
@@ -277,23 +333,27 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                     });
                 },
 
-
-
                 async count({ args, query, model }) {
                     if (EXCLUDED_MODELS.includes(model)) {
                         return query(args);
                     }
 
                     const ctx = getRequestContext();
+                    const where = (args as any).where || {};
+
+                    // ⚠️ Normalizamos por si llegó alias compuesto
+                    const normalizedWhere = normalizeUniqueWhereToFilter(where);
+
                     if (ctx?.includeDeleted) {
-                        const where = (args as any).where || {};
-                        if (Object.prototype.hasOwnProperty.call(where, 'deleted')) delete (where as any).deleted;
-                        (args as any).where = where;
+                        if (Object.prototype.hasOwnProperty.call(normalizedWhere, 'deleted')) {
+                            delete (normalizedWhere as any).deleted;
+                        }
+                        (args as any).where = normalizedWhere;
                     } else {
-                        if (!args.where) {
-                            args.where = { deleted: false };
+                        if (!normalizedWhere) {
+                            (args as any).where = { deleted: false };
                         } else {
-                            args.where = { ...args.where, deleted: false } as any;
+                            (args as any).where = { ...normalizedWhere, deleted: false } as any;
                         }
                     }
 
