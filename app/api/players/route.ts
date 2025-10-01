@@ -1,4 +1,5 @@
 import {
+  ensureCacheReady,
   getRanking3pGeneralActivos,
   getRanking3pGeneralTodos,
   getRanking3pTemporadaActivos,
@@ -28,6 +29,9 @@ export async function GET(request: NextRequest) {
 
     // Intentar obtener del cache primero
     try {
+      // Asegurar que el cache esté listo
+      await ensureCacheReady();
+
       if (isCacheReady()) {
         const cacheKey = `${sanma ? '3p' : '4p'}_${type.toLowerCase()}_${includeInactive ? 'todos' : 'activos'}`;
 
