@@ -95,9 +95,9 @@ export function RankTableNew({
 
     const [initializing, setInitializing] = useState(true);
     const [isFetching, setIsFetching] = useState(false);
-    const [lastupdatedAt, setLastupdatedAt] = useState<Date | null>(null);
-    const [nextRefreshAt, setNextRefreshAt] = useState<Date | null>(null);
     const [urlParamsLoaded, setUrlParamsLoaded] = useState(false);
+    const lastProcessedParamsRef = useRef<string>('');
+    const suppressNextSearchChangeRef = useRef(false);
 
     const fetchAbortRef = useRef<AbortController | null>(null);
 
@@ -114,6 +114,15 @@ export function RankTableNew({
 
     // init from URL (solo setea estado desde la URL, no hace fetch)
     useEffect(() => {
+        const currentParamsString = searchParams.toString();
+
+        // Evitar procesar los mismos parámetros múltiples veces
+        if (lastProcessedParamsRef.current === currentParamsString) {
+            return;
+        }
+
+        lastProcessedParamsRef.current = currentParamsString;
+
         const page = searchParams.get('page');
         const search = searchParams.get('search');
         const mode = searchParams.get('mode');
@@ -122,13 +131,22 @@ export function RankTableNew({
         const perPage = searchParams.get('perPage');
         const viewAllParam = searchParams.get('viewAll');
 
-        if (page) setCurrentPage(parseInt(page, 10));
-        if (search) setSearchQuery(search);
+
+        // Solo actualizar currentPage si hay un valor explícito en la URL
+        if (page) {
+            const pageNum = parseInt(page, 10);
+            setCurrentPage(pageNum);
+        }
+
+        if (search !== null) setSearchQuery(search || '');
         if (mode) setPlayerCount(mode as '3players' | '4players');
         if (type) setRankingType(type as 'GENERAL' | 'TEMPORADA');
-        if (inactive) setShowInactive(inactive === 'true');
+        if (inactive !== null) setShowInactive(inactive === 'true');
         if (perPage) setItemsPerPage(parseInt(perPage, 10));
-        if (viewAllParam) setViewAll(viewAllParam === 'true');
+        if (viewAllParam !== null) setViewAll(viewAllParam === 'true');
+
+        // 👉 Evitar que el SearchInput (o su debounce) nos dispare onChange al aplicar estos valores
+        suppressNextSearchChangeRef.current = true;
 
         setUrlParamsLoaded(true);
     }, [searchParams]);
@@ -164,7 +182,7 @@ export function RankTableNew({
         }
     };
 
-    // filter by search (en memoria)
+    // filter by search (en memoria) - separamos el filtrado del reseteo de página
     useEffect(() => {
         const list = maxRows ? playerData.slice(0, maxRows) : playerData;
         if (!list.length) {
@@ -182,8 +200,14 @@ export function RankTableNew({
             p.player_id.toString().includes(q)
         );
         setFilteredPlayers(filtered);
-        setCurrentPage(1);
     }, [playerData, searchQuery, maxRows]);
+
+    // Resetear página solo cuando cambia la búsqueda (no cuando cambian los datos)
+    useEffect(() => {
+        if (searchQuery.trim()) {
+            setCurrentPage(1);
+        }
+    }, [searchQuery]);
 
     // pagination
     const paginatedPlayers = useMemo(() => {
@@ -195,12 +219,28 @@ export function RankTableNew({
     const totalPages = Math.ceil(filteredPlayers.length / itemsPerPage);
 
     const handleSearch = (q: string) => {
+        // Ignorá el primer onChange que proviene de sincronización desde URL
+        if (suppressNextSearchChangeRef.current) {
+            suppressNextSearchChangeRef.current = false;
+            return;
+        }
+
         setSearchQuery(q);
         updateURL({ search: q || null, page: 1 });
     };
     const handleSearchClear = () => {
+        if (suppressNextSearchChangeRef.current) {
+            suppressNextSearchChangeRef.current = false;
+            return;
+        }
+
         setSearchQuery('');
-        updateURL({ search: null, page: 1 });
+        // Solo resetear página si realmente había una búsqueda activa
+        if (searchQuery.trim()) {
+            updateURL({ search: null, page: 1 });
+        } else {
+            updateURL({ search: null });
+        }
     };
 
     const handlePageChange = (page: number) => {
@@ -240,8 +280,6 @@ export function RankTableNew({
                 const list = playersResponse.data as any[];
                 setPlayerData(Array.isArray(list) ? list : []);
                 setError(null);
-                if (playersResponse.refreshedAt) setLastupdatedAt(new Date(playersResponse.refreshedAt));
-                if (playersResponse.nextRefreshAt) setNextRefreshAt(new Date(playersResponse.nextRefreshAt));
 
                 // calcular juegos únicos aproximados
                 const seats = opts.sanma ? 3 : 4;
@@ -255,7 +293,6 @@ export function RankTableNew({
         } finally {
             opts.firstLoad ? setInitializing(false) : setIsFetching(false);
             fetchAbortRef.current = null;
-            setLastupdatedAt(new Date());
         }
     }
 
@@ -266,15 +303,6 @@ export function RankTableNew({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [urlParamsLoaded]);
 
-    // auto-refresh cada 5 min (si no hay búsqueda, en page 1 y sin "ver todo")
-    useEffect(() => {
-        const id = setInterval(() => {
-            if (!searchQuery && currentPage === 1 && !viewAll) {
-                fetchPlayers({ includeInactive: showInactive, sanma: playerCount === "3players", type: rankingType });
-            }
-        }, 5 * 60 * 1000);
-        return () => clearInterval(id);
-    }, [showInactive, playerCount, rankingType, searchQuery, currentPage, viewAll]);
 
     const getTrendIcon = (p: PlayerData) => {
         const d = rankingType === 'GENERAL' ? (p.trend_dan_delta10 || 0) : (p.trend_season_delta10 || 0);
@@ -319,15 +347,6 @@ export function RankTableNew({
 
     return (
         <div className={`w-full space-y-6 px-3 sm:px-4 mx-auto max-w-6xl pb-24 lg:pb-0 ${fullBleed ? 'w-screen ml-[50%] -translate-x-[50%]' : ''}`}>
-            {lastupdatedAt && (
-                <div className="text-xs text-muted-foreground text-center py-2 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 rounded-lg">
-                    ✨ Última actualización: {lastupdatedAt.toLocaleTimeString('es-AR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-                    {nextRefreshAt && (
-                        <> • Próxima actualización: {nextRefreshAt.toLocaleTimeString('es-AR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}</>
-                    )}
-                    {isFetching && <> • Actualizando…</>}
-                </div>
-            )}
 
             {showFilters && variant === "main" && (
                 <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm border-b border-border/30 py-6 rounded-xl">

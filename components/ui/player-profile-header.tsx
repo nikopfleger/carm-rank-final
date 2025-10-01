@@ -135,16 +135,9 @@ export function PlayerProfileHeader({
                         )}
 
                         {/* Botones de vinculación */}
-                        {(() => {
-                            console.log('Renderizando botones de vinculación:', { onLinkRequest: !!onLinkRequest, onUnlinkRequest: !!onUnlinkRequest, isLinked, isLinkRequestPending });
-                            return null;
-                        })()}
                         {onLinkRequest && !isLinked && (
                             <Button
-                                onClick={() => {
-                                    console.log('Botón de vincular presionado');
-                                    onLinkRequest();
-                                }}
+                                onClick={onLinkRequest}
                                 disabled={Boolean(isLinkRequestPending) || Boolean(submitting)}
                                 className={unifiedStyles.smallButton}
                             >
@@ -157,10 +150,7 @@ export function PlayerProfileHeader({
                         )}
                         {onUnlinkRequest && isLinkedToCurrentUser && (
                             <Button
-                                onClick={() => {
-                                    console.log('Botón de desvincular presionado');
-                                    onUnlinkRequest();
-                                }}
+                                onClick={onUnlinkRequest}
                                 disabled={submitting}
                                 className={unifiedStyles.secondaryButton}
                             >
