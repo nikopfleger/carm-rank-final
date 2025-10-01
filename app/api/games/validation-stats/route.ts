@@ -1,19 +1,22 @@
 import { prisma } from '@/lib/database/client';
+import { runWithRequestContextAsync } from '@/lib/request-context.server';
 import { NextRequest, NextResponse } from 'next/server';
 
 ;
 
 export async function GET(request: NextRequest) {
     try {
-        // Simple COUNT con GROUP BY status
-        const statusCounts = await prisma.pendingGame.groupBy({
-            by: ['status'],
-            where: {
-                deleted: false
-            },
-            _count: {
-                id: true
-            }
+        // Consulta normal con Prisma
+        const statusCounts = await runWithRequestContextAsync({ includeDeleted: false }, async () => {
+            return prisma.pendingGame.groupBy({
+                by: ['status'],
+                where: {
+                    deleted: false
+                },
+                _count: {
+                    id: true
+                }
+            });
         });
 
         // Convertir a formato más fácil de usar

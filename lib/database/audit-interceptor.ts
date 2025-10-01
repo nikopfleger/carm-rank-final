@@ -94,7 +94,12 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                         }
                         (args as any).where = normalizedWhere;
                     } else {
-                        (args as any).where = { ...normalizedWhere, deleted: false };
+                        // Solo agregar deleted: false si no está ya especificado
+                        if (!Object.prototype.hasOwnProperty.call(normalizedWhere, 'deleted')) {
+                            (args as any).where = { ...normalizedWhere, deleted: false };
+                        } else {
+                            (args as any).where = normalizedWhere;
+                        }
                     }
 
                     return query(args);
@@ -117,7 +122,12 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                         }
                         (args as any).where = normalizedWhere;
                     } else {
-                        (args as any).where = { ...normalizedWhere, deleted: false };
+                        // Solo agregar deleted: false si no está ya especificado
+                        if (!Object.prototype.hasOwnProperty.call(normalizedWhere, 'deleted')) {
+                            (args as any).where = { ...normalizedWhere, deleted: false };
+                        } else {
+                            (args as any).where = normalizedWhere;
+                        }
                     }
 
                     return query(args);

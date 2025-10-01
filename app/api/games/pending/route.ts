@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/database/client';
+import { runWithRequestContextAsync } from '@/lib/request-context.server';
 import { NextRequest, NextResponse } from 'next/server';
 
 ;
@@ -89,22 +90,24 @@ type PendingGameWithRelations = {
 
 export async function GET(request: NextRequest) {
   try {
-    const pendingGamesRaw = await (prisma.pendingGame.findMany({
-      where: {
-        deleted: false,
-        status: 'PENDING' // Solo juegos pendientes
-      },
-      include: {
-        ruleset: {
-          include: { uma: true }
+    const pendingGamesRaw = await runWithRequestContextAsync({ includeDeleted: false }, async () => {
+      return (prisma.pendingGame.findMany({
+        where: {
+          deleted: false,
+          status: 'PENDING' // Solo juegos pendientes
         },
-        season: true,
-        player1: true,
-        player2: true,
-        player3: true,
-        player4: true
-      }
-    } as any));
+        include: {
+          ruleset: {
+            include: { uma: true }
+          },
+          season: true,
+          player1: true,
+          player2: true,
+          player3: true,
+          player4: true
+        }
+      } as any));
+    });
 
     // Ordenar manualmente para manejar nroJuegoDia con nulos al final
     const pendingGames = (pendingGamesRaw as unknown as PendingGameWithRelations[]).sort((a, b) => {
