@@ -2,6 +2,8 @@ import { getCacheStatus } from '@/lib/cache/core-cache';
 import { checkDatabaseHealth } from '@/lib/database/client';
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
     try {
         // Verificar salud de la base de datos

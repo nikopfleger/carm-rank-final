@@ -1,3 +1,4 @@
+import { redisCache } from '@/lib/cache/redis-wrapper';
 import { prisma } from '@/lib/database/client';
 import { getPlayersWithRanking } from '@/lib/database/queries/players-optimized';
 import 'server-only';
@@ -114,6 +115,9 @@ let lastInitAt = 0;
 const INIT_TIMEOUT_MS = 25_000;       // corta warm-up colgado
 const RETRY_COOLDOWN_MS = 30_000;     // evita reintentos en loop si falla
 let lastInitErrorAt = 0;
+
+// Clave Redis (sin TTL - persiste hasta invalidación manual)
+const REDIS_KEY = 'core-cache:v1';
 
 function shouldWarmupNow() {
     // saltar en build o si está deshabilitado explícitamente
@@ -627,7 +631,24 @@ export async function initializeCache(): Promise<void> {
     const startedAt = Date.now();
 
     const doInit = async () => {
-        // Cargamos en paralelo
+        // 1) Intentar leer desde Redis (si está habilitado); si falla o no encuentra datos, seguimos con DB
+        try {
+            console.log('🔍 initializeCache - Intentando leer desde Redis...');
+            const serialized = await redisCache.get(REDIS_KEY);
+            if (serialized) {
+                const parsed = JSON.parse(serialized) as CacheShape;
+                cache = parsed;
+                lastInitAt = Date.now();
+                console.log('📦 Cache cargada desde Redis - Datos obtenidos del CACHE');
+                return;
+            } else {
+                console.warn('⚠️ No se encontró caché en Redis. Cargando desde DB y guardando en Redis...');
+            }
+        } catch (e) {
+            console.warn('⚠️ No se pudo leer caché desde Redis. Cargando desde DB y guardando en Redis:', e);
+        }
+
+        // 2) Cargar desde DB en paralelo (fallback siempre disponible)
         const [
             dan, rate, seasons, ranking,
             r4ga, r4gt, r4ta, r4tt,
@@ -667,7 +688,15 @@ export async function initializeCache(): Promise<void> {
         };
 
         lastInitAt = Date.now();
-        console.log(`🎉 CACHE READY en ${lastInitAt - startedAt}ms`);
+        console.log(`🎉 CACHE READY en ${lastInitAt - startedAt}ms - Datos obtenidos de la DB`);
+
+        // 3) Persistir en Redis (best effort, sin TTL)
+        try {
+            const ok = await redisCache.set(REDIS_KEY, JSON.stringify(cache));
+            if (ok) console.log('📝 Cache persistida en Redis');
+        } catch (e) {
+            console.warn('⚠️ No se pudo persistir caché en Redis:', e);
+        }
     };
 
     // single-flight + timeout + cooldown on error
@@ -829,6 +858,14 @@ export async function upsertDan(input: Omit<DanConfig, 'id'> & { id?: number }) 
         cache.colors[`dan:${saved.id}`] = saved.color;
         cache.colors[`dan:${saved.rank}`] = saved.color;
         cache.lastUpdated = Date.now();
+
+        // Persistir en Redis (best effort, sin TTL)
+        try {
+            const ok = await redisCache.set(REDIS_KEY, JSON.stringify(cache));
+            if (ok) console.log('📝 Dan config persistida en Redis');
+        } catch (e) {
+            console.warn('⚠️ No se pudo persistir dan config en Redis:', e);
+        }
     }
     return saved;
 }
@@ -881,6 +918,14 @@ export async function upsertRate(input: Omit<RateConfig, 'id'> & { id?: number }
         cache.colors[`rate:${saved.id}`] = '#6B7280';
         cache.colors[`rate:${saved.name}`] = '#6B7280';
         cache.lastUpdated = Date.now();
+
+        // Persistir en Redis (best effort, sin TTL)
+        try {
+            const ok = await redisCache.set(REDIS_KEY, JSON.stringify(cache));
+            if (ok) console.log('📝 Rate config persistida en Redis');
+        } catch (e) {
+            console.warn('⚠️ No se pudo persistir rate config en Redis:', e);
+        }
     }
     return saved;
 }
@@ -902,6 +947,14 @@ export async function invalidateRanking() {
 
     cache.lastUpdated = Date.now();
     console.log(`✅ Rankings actualizados - 4p general activos: ${cache.ranking_4p_general_activos.length}, 4p general todos: ${cache.ranking_4p_general_todos.length}, 4p temporada activos: ${cache.ranking_4p_temporada_activos.length}, 4p temporada todos: ${cache.ranking_4p_temporada_todos.length}, 3p general activos: ${cache.ranking_3p_general_activos.length}, 3p general todos: ${cache.ranking_3p_general_todos.length}, 3p temporada activos: ${cache.ranking_3p_temporada_activos.length}, 3p temporada todos: ${cache.ranking_3p_temporada_todos.length} jugadores`);
+
+    // Persistir en Redis (best effort, sin TTL)
+    try {
+        const ok = await redisCache.set(REDIS_KEY, JSON.stringify(cache));
+        if (ok) console.log('📝 Rankings persistidos en Redis');
+    } catch (e) {
+        console.warn('⚠️ No se pudo persistir rankings en Redis:', e);
+    }
 }
 
 export async function invalidateConfigs() {
@@ -916,6 +969,14 @@ export async function invalidateConfigs() {
     cache.lastUpdated = Date.now();
 
     console.log('✅ Configuraciones actualizadas');
+
+    // Persistir en Redis (best effort, sin TTL)
+    try {
+        const ok = await redisCache.set(REDIS_KEY, JSON.stringify(cache));
+        if (ok) console.log('📝 Configuraciones persistidas en Redis');
+    } catch (e) {
+        console.warn('⚠️ No se pudo persistir configuraciones en Redis:', e);
+    }
 }
 
 // === Utilidades ===

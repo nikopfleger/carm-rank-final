@@ -1,29 +1,25 @@
-import { getCacheStatus, isCacheReady } from '@/lib/cache/core-cache';
+import { redisCache } from '@/lib/cache/redis-wrapper';
 import { NextResponse } from 'next/server';
 
-export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export async function GET() {
     try {
-        const status = getCacheStatus();
-        const ready = isCacheReady();
-
-        console.log('🔍 Debug cache status:', { status, ready });
+        const status = await redisCache.getStatus();
 
         return NextResponse.json({
             success: true,
-            ready,
-            status,
+            redis: status,
             timestamp: new Date().toISOString()
         });
 
     } catch (error) {
-        console.error('❌ Error getting cache status:', error);
+        console.error('❌ Error checking Redis health:', error);
         return NextResponse.json(
             {
                 success: false,
+                redis: { enabled: false, provider: 'none', connected: false },
                 error: error instanceof Error ? error.message : 'Unknown error',
-                ready: false,
                 timestamp: new Date().toISOString()
             },
             { status: 500 }

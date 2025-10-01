@@ -61,7 +61,7 @@ export default function Home() {
         </div>
 
         {/* Ranking Table */}
-        <Suspense fallback={<div>Cargando ranking...</div>}>
+        <Suspense fallback={<div className="text-center py-8">Cargando ranking...</div>}>
           <RankTableNew />
         </Suspense>
       </div>

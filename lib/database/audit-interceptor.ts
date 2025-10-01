@@ -6,6 +6,78 @@ import { handleConcurrencyError } from './concurrency-handler';
 // Modelos que NO deben tener auditoría (OAuth de NextAuth)
 const EXCLUDED_MODELS = ['Account', 'Session', 'VerificationToken'];
 
+// Modelos que afectan las configs del cache (Dan, Rate, Season)
+const CONFIG_MODELS = ['DanConfig', 'RateConfig', 'Season'];
+
+// Modelos que afectan el ranking del cache
+const RANKING_MODELS = ['PlayerRanking', 'Game', 'GameResult', 'TournamentResult', 'Points'];
+
+// Estado global (por proceso)
+let pending = { configs: false, ranking: false };
+let flushing = false;
+let debounceTimer: NodeJS.Timeout | null = null;
+
+// Cachear el import dinámico
+let cacheFnsPromise: Promise<{ invalidateConfigs: () => Promise<void>; invalidateRanking: () => Promise<void> }> | null = null;
+function getCacheFns() {
+    if (!cacheFnsPromise) {
+        cacheFnsPromise = import('@/lib/cache/core-cache');
+    }
+    return cacheFnsPromise;
+}
+
+// MARCAR SIEMPRE pendientes (no descartar durante flush)
+function scheduleInvalidation(model: string) {
+    if (CONFIG_MODELS.includes(model)) pending.configs = true;
+    if (RANKING_MODELS.includes(model)) pending.ranking = true;
+}
+
+// Debounce + serialización del flush
+function scheduleFlushInvalidations() {
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => { void flushInvalidations(); }, 100);
+}
+
+async function flushInvalidations() {
+    if (flushing) return;        // serializar
+    flushing = true;
+
+    try {
+        const ctx = getRequestContext();
+
+        const runner = async () => {
+            while (pending.configs || pending.ranking) {
+                const todo = pending;
+                pending = { configs: false, ranking: false };
+
+                const { invalidateConfigs, invalidateRanking } = await getCacheFns();
+                if (todo.configs) {
+                    console.log('🔄 Auto-invalidando configs del cache...');
+                    await invalidateConfigs();
+                }
+                if (todo.ranking) {
+                    console.log('🔄 Auto-invalidando ranking del cache...');
+                    await invalidateRanking();
+                }
+            }
+        };
+
+        // Importar dinámicamente para evitar dependencias circulares
+        try {
+            const { runWithRequestContextAsync } = await import('@/lib/request-context.server');
+            // Evita que invalidaciones internas programen más invalidaciones por writes auxiliares
+            await runWithRequestContextAsync({ ...ctx, isInvalidation: true }, runner);
+        } catch {
+            // Fallback: sin contexto, igual no descartamos eventos (el loop los consumirá)
+            await runner();
+        }
+    } catch (e) {
+        console.error('⚠️ Error auto-invalidando cache:', e);
+    } finally {
+        flushing = false;
+    }
+}
+
 // Helper: acceder al delegate dinámico del modelo
 function delegateOf(model: string, prisma: PrismaClient) {
     const lc = model.charAt(0).toLowerCase() + model.slice(1);
@@ -88,7 +160,15 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                     // ⚠️ También normalizamos por si alguien pasó alias de unique por error
                     const normalizedWhere = normalizeUniqueWhereToFilter(where);
 
-                    if (ctx?.includeDeleted) {
+                    // Si no hay contexto (ej: cache initialization), usar comportamiento por defecto
+                    if (!ctx) {
+                        // Solo agregar deleted: false si no está ya especificado
+                        if (!Object.prototype.hasOwnProperty.call(normalizedWhere, 'deleted')) {
+                            (args as any).where = { ...normalizedWhere, deleted: false };
+                        } else {
+                            (args as any).where = normalizedWhere;
+                        }
+                    } else if (ctx.includeDeleted) {
                         if (Object.prototype.hasOwnProperty.call(normalizedWhere, 'deleted')) {
                             delete (normalizedWhere as any).deleted;
                         }
@@ -116,7 +196,15 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                     // ⚠️ Normalizamos por si vino un alias compuesto
                     const normalizedWhere = normalizeUniqueWhereToFilter(where);
 
-                    if (ctx?.includeDeleted) {
+                    // Si no hay contexto (ej: cache initialization), usar comportamiento por defecto
+                    if (!ctx) {
+                        // Solo agregar deleted: false si no está ya especificado
+                        if (!Object.prototype.hasOwnProperty.call(normalizedWhere, 'deleted')) {
+                            (args as any).where = { ...normalizedWhere, deleted: false };
+                        } else {
+                            (args as any).where = normalizedWhere;
+                        }
+                    } else if (ctx.includeDeleted) {
                         if (Object.prototype.hasOwnProperty.call(normalizedWhere, 'deleted')) {
                             delete (normalizedWhere as any).deleted;
                         }
@@ -152,7 +240,16 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                         ...auditFields,
                     };
 
-                    return query(args);
+                    const result = await query(args);
+
+                    // Programar invalidación del cache si corresponde (evitar durante invalidaciones)
+                    const ctx = getRequestContext();
+                    if (!ctx?.isInvalidation) {
+                        await scheduleInvalidation(model);
+                        scheduleFlushInvalidations();
+                    }
+
+                    return result;
                 },
 
                 async update({ args, query, model }) {
@@ -199,9 +296,18 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                         }
 
                         // Devolver el registro actualizado (sin version en where para obtener el actualizado)
-                        return d.findFirst({
+                        const result = await d.findFirst({
                             where: { id: where.id },
                         });
+
+                        // Programar invalidación del cache si corresponde (evitar durante invalidaciones)
+                        const ctx = getRequestContext();
+                        if (!ctx?.isInvalidation) {
+                            await scheduleInvalidation(model);
+                            scheduleFlushInvalidations();
+                        }
+
+                        return result;
                     });
                 },
 
@@ -224,7 +330,16 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                             ...auditFields,
                         };
 
-                        return query(args);
+                        const result = await query(args);
+
+                        // Programar invalidación del cache si corresponde (evitar durante invalidaciones)
+                        const ctx = getRequestContext();
+                        if (!ctx?.isInvalidation) {
+                            await scheduleInvalidation(model);
+                            scheduleFlushInvalidations();
+                        }
+
+                        return result;
                     });
                 },
 
@@ -273,33 +388,43 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                             where: normalizedWhere,
                         });
 
+                        let result;
                         if (!existing) {
-                            return d.create({ data: { ...(args as any).create, ...createAudit } });
-                        }
+                            result = await d.create({ data: { ...(args as any).create, ...createAudit } });
+                        } else {
+                            if (expectedVersion != null && existing.version !== expectedVersion) {
+                                const err: any = new Error('OPTIMISTIC_LOCK');
+                                err.code = 'OPTIMISTIC_LOCK';
+                                err.meta = {
+                                    current: {
+                                        id: existing.id,
+                                        version: existing.version,
+                                        updatedAt: existing.updatedAt,
+                                    },
+                                };
+                                throw err;
+                            }
 
-                        if (expectedVersion != null && existing.version !== expectedVersion) {
-                            const err: any = new Error('OPTIMISTIC_LOCK');
-                            err.code = 'OPTIMISTIC_LOCK';
-                            err.meta = {
-                                current: {
-                                    id: existing.id,
-                                    version: existing.version,
-                                    updatedAt: existing.updatedAt,
+                            // update con versión OK
+                            await d.updateMany({
+                                where: {
+                                    ...normalizedWhere,
+                                    ...(expectedVersion != null ? { version: expectedVersion } : {}),
                                 },
-                            };
-                            throw err;
+                                data: { ...upd, ...updateAudit },
+                            });
+
+                            result = await d.findFirst({ where: normalizedWhere });
                         }
 
-                        // update con versión OK
-                        await d.updateMany({
-                            where: {
-                                ...normalizedWhere,
-                                ...(expectedVersion != null ? { version: expectedVersion } : {}),
-                            },
-                            data: { ...upd, ...updateAudit },
-                        });
+                        // Programar invalidación del cache si corresponde (evitar durante invalidaciones)
+                        const ctx = getRequestContext();
+                        if (!ctx?.isInvalidation) {
+                            await scheduleInvalidation(model);
+                            scheduleFlushInvalidations();
+                        }
 
-                        return d.findFirst({ where: normalizedWhere });
+                        return result;
                     });
                 },
 
@@ -311,7 +436,7 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                     // Convertir delete a soft delete usando update
                     const auditInfo = await getAuditInfo();
 
-                    return (prisma as any)[model.toLowerCase()].update({
+                    const result = await (prisma as any)[model.toLowerCase()].update({
                         where: args.where,
                         data: {
                             deleted: true,
@@ -321,6 +446,15 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                             version: { increment: 1 },
                         },
                     });
+
+                    // Programar invalidación del cache si corresponde (evitar durante invalidaciones)
+                    const ctx = getRequestContext();
+                    if (!ctx?.isInvalidation) {
+                        await scheduleInvalidation(model);
+                        scheduleFlushInvalidations();
+                    }
+
+                    return result;
                 },
 
                 async deleteMany({ args, query, model }) {
@@ -331,7 +465,7 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                     // Convertir deleteMany a soft delete usando updateMany
                     const auditInfo = await getAuditInfo();
 
-                    return (prisma as any)[model.toLowerCase()].updateMany({
+                    const result = await (prisma as any)[model.toLowerCase()].updateMany({
                         where: args.where,
                         data: {
                             deleted: true,
@@ -341,6 +475,15 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                             version: { increment: 1 },
                         },
                     });
+
+                    // Programar invalidación del cache si corresponde (evitar durante invalidaciones)
+                    const ctx = getRequestContext();
+                    if (!ctx?.isInvalidation) {
+                        await scheduleInvalidation(model);
+                        scheduleFlushInvalidations();
+                    }
+
+                    return result;
                 },
 
                 async count({ args, query, model }) {
@@ -351,19 +494,21 @@ export function createAuditInterceptor(prisma: PrismaClient) {
                     const ctx = getRequestContext();
                     const where = (args as any).where || {};
 
-                    // ⚠️ Normalizamos por si llegó alias compuesto
-                    const normalizedWhere = normalizeUniqueWhereToFilter(where);
-
-                    if (ctx?.includeDeleted) {
-                        if (Object.prototype.hasOwnProperty.call(normalizedWhere, 'deleted')) {
-                            delete (normalizedWhere as any).deleted;
+                    // Si no hay contexto (ej: cache initialization), usar comportamiento por defecto
+                    if (!ctx) {
+                        // Solo agregar deleted: false si no está ya especificado
+                        if (!Object.prototype.hasOwnProperty.call(where, 'deleted')) {
+                            (args as any).where = { ...where, deleted: false };
                         }
-                        (args as any).where = normalizedWhere;
+                    } else if (ctx.includeDeleted) {
+                        // No modificar el where si se incluyen eliminados
+                        if (Object.prototype.hasOwnProperty.call(where, 'deleted')) {
+                            delete where.deleted;
+                        }
                     } else {
-                        if (!normalizedWhere) {
-                            (args as any).where = { deleted: false };
-                        } else {
-                            (args as any).where = { ...normalizedWhere, deleted: false } as any;
+                        // Solo agregar deleted: false si no está ya especificado
+                        if (!Object.prototype.hasOwnProperty.call(where, 'deleted')) {
+                            (args as any).where = { ...where, deleted: false };
                         }
                     }
 

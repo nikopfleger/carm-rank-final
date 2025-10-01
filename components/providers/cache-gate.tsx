@@ -18,6 +18,8 @@ export default async function CacheGate({ children }: CacheGateProps) {
     console.log('🚪 CacheGate: Iniciando...');
 
     try {
+        console.log('🚪 CacheGate: Llamando a ensureCacheReady...');
+
         // (opcional) proteger con timeout para no atascar el render
         const withTimeout = <T,>(p: Promise<T>, ms: number) =>
             Promise.race([
@@ -33,6 +35,7 @@ export default async function CacheGate({ children }: CacheGateProps) {
         return <>{children}</>;
     } catch (e: any) {
         console.error('💥 CacheGate: error inicializando cache:', e);
+        console.log('🚪 CacheGate: Continuando sin cache...');
         // Sugerencia: no tirar una UI de error dura; dejá pasar y logueá
         return <>{children}</>;
     }

@@ -15,7 +15,6 @@ $apiFiles = @(
     "app/api/abm/seasons/route.ts",
     "app/api/abm/season-results/route.ts",
     "app/api/abm/online-users/route.ts",
-    "app/api/internal/refresh-ranking/route.ts",
     "app/api/config/rate/route.ts",
     "app/api/config/season/route.ts",
     "app/api/config/dan/route.ts",

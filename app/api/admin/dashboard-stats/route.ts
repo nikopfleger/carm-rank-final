@@ -2,8 +2,6 @@ import { prisma } from '@/lib/database/client';
 import { runWithRequestContextAsync } from '@/lib/request-context.server';
 import { NextRequest, NextResponse } from 'next/server';
 
-;
-
 export async function GET(request: NextRequest) {
   try {
     const dashboardData = await runWithRequestContextAsync({ includeDeleted: false }, async () => {

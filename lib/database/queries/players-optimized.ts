@@ -119,8 +119,13 @@ export async function getPlayersWithRanking(
   sanma?: boolean,
 ): Promise<PlayerWithRanking[]> {
   try {
+    console.log('🔍 getPlayersWithRanking - Iniciando consulta a DB (no cache)');
+    console.log('🔍 getPlayersWithRanking - Parámetros:', { seasonId, type, includeInactive, sanma });
+
     // Cargamos configs de Dan desde DB para evitar ciclo con la caché
+    console.log('🔍 getPlayersWithRanking - Cargando configs de Dan desde DB...');
     const danConfigs = await fetchDanConfigs();
+    console.log(`🔍 getPlayersWithRanking - Configs de Dan cargadas: ${danConfigs.length} configs`);
 
     // Si necesitás, podés usar la fecha límite (no se usa directo acá)
     // const oneYearAgo = new Date(); oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
@@ -132,6 +137,7 @@ export async function getPlayersWithRanking(
     });
 
     // Datos precalculados desde PlayerRanking
+    console.log('🔍 getPlayersWithRanking - Consultando PlayerRanking desde DB...');
     const rankings = await prisma.playerRanking.findMany({
       where: {
         ...(sanma !== undefined ? { isSanma: sanma } : {}),
@@ -150,6 +156,7 @@ export async function getPlayersWithRanking(
         return orderBy;
       })(),
     });
+    console.log(`🔍 getPlayersWithRanking - Rankings obtenidos desde DB: ${rankings.length} registros`);
 
     // Precargamos tendencias en batch
     const playerIds = rankings.map(r => r.player.id);
@@ -317,6 +324,7 @@ export async function getPlayersWithRanking(
       return activePlayers.map((p, i) => ({ ...p, position: i + 1 }));
     }
 
+    console.log(`🔍 getPlayersWithRanking - Procesamiento completado: ${playersWithRanking.length} jugadores finales`);
     return playersWithRanking;
   } catch (error) {
     console.error('❌ Error en consulta optimizada:', error);

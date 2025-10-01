@@ -100,12 +100,14 @@ export function RankTableNew({
     const suppressNextSearchChangeRef = useRef(false);
 
     const fetchAbortRef = useRef<AbortController | null>(null);
+    const didFetchOnce = useRef(false);
+    const cacheRef = useRef<Map<string, { ts: number; data: PlayerData[] }>>(new Map());
+    const TTL_MS = 60_000; // 1 minuto
 
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(50);
     const [searchQuery, setSearchQuery] = useState('');
     const [viewAll, setViewAll] = useState(false);
-    const [filteredPlayers, setFilteredPlayers] = useState<PlayerData[]>([]);
 
     // Notificar a la página contenedora cuando el primer load terminó
     useEffect(() => {
@@ -116,8 +118,8 @@ export function RankTableNew({
     useEffect(() => {
         const currentParamsString = searchParams.toString();
 
-        // Evitar procesar los mismos parámetros múltiples veces
-        if (lastProcessedParamsRef.current === currentParamsString) {
+        // Solo procesar si no hemos procesado antes O si los parámetros cambiaron
+        if (lastProcessedParamsRef.current === currentParamsString && lastProcessedParamsRef.current !== '') {
             return;
         }
 
@@ -182,24 +184,19 @@ export function RankTableNew({
         }
     };
 
-    // filter by search (en memoria) - separamos el filtrado del reseteo de página
-    useEffect(() => {
+    // filter by search (en memoria) - useMemo evita renders innecesarios
+    const filteredPlayers = useMemo(() => {
         const list = maxRows ? playerData.slice(0, maxRows) : playerData;
-        if (!list.length) {
-            setFilteredPlayers([]);
-            return;
-        }
-        if (!searchQuery.trim()) {
-            setFilteredPlayers(list);
-            return;
-        }
-        const q = searchQuery.toLowerCase().trim();
-        const filtered = list.filter(p =>
+        if (!list.length) return [];
+
+        const q = searchQuery.trim().toLowerCase();
+        if (!q) return list;
+
+        return list.filter(p =>
             p.nickname.toLowerCase().includes(q) ||
             p.fullname?.toLowerCase().includes(q) ||
             p.player_id.toString().includes(q)
         );
-        setFilteredPlayers(filtered);
     }, [playerData, searchQuery, maxRows]);
 
     // Resetear página solo cuando cambia la búsqueda (no cuando cambian los datos)
@@ -267,6 +264,25 @@ export function RankTableNew({
     };
 
     async function fetchPlayers(opts: { includeInactive: boolean; sanma: boolean; type: 'GENERAL' | 'TEMPORADA'; firstLoad?: boolean }) {
+        // Generar key para caché
+        const cacheKey = JSON.stringify({ includeInactive: opts.includeInactive, sanma: opts.sanma, type: opts.type });
+        const cached = cacheRef.current.get(cacheKey);
+        const now = Date.now();
+
+        // Verificar caché
+        if (cached && (now - cached.ts) < TTL_MS) {
+            opts.firstLoad ? setInitializing(false) : setIsFetching(false);
+            setPlayerData(cached.data);
+            setError(null);
+
+            // Calcular juegos únicos
+            const seats = opts.sanma ? 3 : 4;
+            const total = cached.data.reduce((s, p) => s + (p.total_games || 0), 0);
+            setUniqueGames(Math.round(total / seats));
+            return;
+        }
+
+        // Abortar fetch anterior si existe
         if (fetchAbortRef.current) fetchAbortRef.current.abort();
         const controller = new AbortController();
         fetchAbortRef.current = controller;
@@ -277,14 +293,17 @@ export function RankTableNew({
             const playersResponse = await playersApi.getAll({ includeInactive: opts.includeInactive, sanma: opts.sanma, type: opts.type });
 
             if (playersResponse.success && playersResponse.data) {
-                const list = playersResponse.data as any[];
-                setPlayerData(Array.isArray(list) ? list : []);
+                const list = Array.isArray(playersResponse.data) ? playersResponse.data as PlayerData[] : [];
+                setPlayerData(list);
                 setError(null);
 
-                // calcular juegos únicos aproximados
+                // Guardar en caché
+                cacheRef.current.set(cacheKey, { ts: now, data: list });
+
+                // Calcular juegos únicos
                 const seats = opts.sanma ? 3 : 4;
-                const approx = Math.round((Array.isArray(list) ? list.reduce((s, p: any) => s + (p.total_games || 0), 0) : 0) / seats);
-                setUniqueGames(approx);
+                const total = list.reduce((s, p) => s + (p.total_games || 0), 0);
+                setUniqueGames(Math.round(total / seats));
             } else {
                 setError(playersResponse.error || "Error cargando el ranking");
             }
@@ -298,11 +317,18 @@ export function RankTableNew({
 
     // initial load: SOLO una vez cuando ya leímos la URL
     useEffect(() => {
-        if (!urlParamsLoaded) return;
-        fetchPlayers({ includeInactive: showInactive, sanma: playerCount === "3players", type: rankingType, firstLoad: true });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [urlParamsLoaded]);
+        if (!urlParamsLoaded || didFetchOnce.current) return;
 
+        didFetchOnce.current = true;
+        fetchPlayers({ includeInactive: showInactive, sanma: playerCount === "3players", type: rankingType, firstLoad: true });
+    }, [urlParamsLoaded]); // <- solo depende de urlParamsLoaded, una sola vez
+
+    // Cleanup: abortar fetch al desmontar
+    useEffect(() => {
+        return () => {
+            fetchAbortRef.current?.abort();
+        };
+    }, []);
 
     const getTrendIcon = (p: PlayerData) => {
         const d = rankingType === 'GENERAL' ? (p.trend_dan_delta10 || 0) : (p.trend_season_delta10 || 0);

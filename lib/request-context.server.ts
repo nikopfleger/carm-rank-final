@@ -5,6 +5,7 @@ export interface RequestAuditContext {
     userId?: string;
     userIp?: string;
     includeDeleted?: boolean;
+    isInvalidation?: boolean;
 }
 
 // ALS solo en server
