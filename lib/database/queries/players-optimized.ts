@@ -58,8 +58,6 @@ async function batchCheckPlayersActivity(playerNumbers: number[]): Promise<Playe
   try {
     if (playerNumbers.length === 0) return [];
 
-    console.log(`🔍 Verificando actividad para ${playerNumbers.length} jugadores`);
-
     const rows = await prisma.$queryRaw<PlayerActivity[]>`
       WITH active_season AS (
         SELECT s.id
@@ -119,16 +117,8 @@ export async function getPlayersWithRanking(
   sanma?: boolean,
 ): Promise<PlayerWithRanking[]> {
   try {
-    console.log('🔍 getPlayersWithRanking - Iniciando consulta a DB (no cache)');
-    console.log('🔍 getPlayersWithRanking - Parámetros:', { seasonId, type, includeInactive, sanma });
-
     // Cargamos configs de Dan desde DB para evitar ciclo con la caché
-    console.log('🔍 getPlayersWithRanking - Cargando configs de Dan desde DB...');
     const danConfigs = await fetchDanConfigs();
-    console.log(`🔍 getPlayersWithRanking - Configs de Dan cargadas: ${danConfigs.length} configs`);
-
-    // Si necesitás, podés usar la fecha límite (no se usa directo acá)
-    // const oneYearAgo = new Date(); oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
 
     // Temporada activa (para tendencias)
     const activeSeason = await prisma.season.findFirst({
@@ -137,26 +127,19 @@ export async function getPlayersWithRanking(
     });
 
     // Datos precalculados desde PlayerRanking
-    console.log('🔍 getPlayersWithRanking - Consultando PlayerRanking desde DB...');
     const rankings = await prisma.playerRanking.findMany({
       where: {
         ...(sanma !== undefined ? { isSanma: sanma } : {}),
-        // Excluir siempre jugadores eliminados del ranking
         player: { deleted: false },
       },
       include: {
         player: { include: { country: true } },
       },
-      orderBy: (() => {
-        const orderBy =
-          type === 'TEMPORADA'
-            ? [{ seasonPoints: 'desc' as const }, { seasonAveragePosition: 'asc' as const }]
-            : [{ danPoints: 'desc' as const }, { ratePoints: 'desc' as const }, { averagePosition: 'asc' as const }];
-        console.log(`📊 OrderBy para ${type}:`, JSON.stringify(orderBy));
-        return orderBy;
-      })(),
+      orderBy:
+        type === 'TEMPORADA'
+          ? [{ seasonPoints: 'desc' as const }, { seasonAveragePosition: 'asc' as const }]
+          : [{ danPoints: 'desc' as const }, { ratePoints: 'desc' as const }, { averagePosition: 'asc' as const }],
     });
-    console.log(`🔍 getPlayersWithRanking - Rankings obtenidos desde DB: ${rankings.length} registros`);
 
     // Precargamos tendencias en batch
     const playerIds = rankings.map(r => r.player.id);
@@ -291,7 +274,6 @@ export async function getPlayersWithRanking(
 
     // Orden extra para TEMPORADA
     if (type === 'TEMPORADA') {
-      console.log(`🔄 Aplicando ordenamiento JavaScript para TEMPORADA`);
       playersWithRanking.sort((a, b) => {
         const aHasGames = (a.total_games || 0) > 0 ? 1 : 0;
         const bHasGames = (b.total_games || 0) > 0 ? 1 : 0;
@@ -311,7 +293,6 @@ export async function getPlayersWithRanking(
 
     // Filtrar inactivos si corresponde
     if (!includeInactive) {
-      console.log(`🔍 Filtrando jugadores inactivos. Total antes del filtro: ${playersWithRanking.length}`);
       const playerNumbers = playersWithRanking.map(p => p.player_id);
       const activityRows = await batchCheckPlayersActivity(playerNumbers);
       const activityByPlayer = new Map(activityRows.map(r => [r.player_number, r]));
@@ -320,11 +301,9 @@ export async function getPlayersWithRanking(
         if (!flags) return false;
         return type === 'TEMPORADA' ? flags.active_seasonal : flags.active_general;
       });
-      console.log(`✅ Jugadores activos encontrados: ${activePlayers.length}`);
       return activePlayers.map((p, i) => ({ ...p, position: i + 1 }));
     }
 
-    console.log(`🔍 getPlayersWithRanking - Procesamiento completado: ${playersWithRanking.length} jugadores finales`);
     return playersWithRanking;
   } catch (error) {
     console.error('❌ Error en consulta optimizada:', error);

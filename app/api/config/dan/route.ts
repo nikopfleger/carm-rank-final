@@ -1,4 +1,4 @@
-import { ensureCacheReady, getDan } from '@/lib/cache/core-cache';
+import { ensureCacheReady, getDan, getDanDirect } from '@/lib/cache/core-cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -13,7 +13,17 @@ export async function GET(request: NextRequest) {
         let data: any;
 
         await ensureCacheReady();
-        const danConfigs = getDan();
+
+        let danConfigs: any[];
+        try {
+            // Intentar usar cache (Redis)
+            danConfigs = getDan();
+            console.log('✅ getDan: Datos obtenidos del CACHE (Redis)');
+        } catch (error) {
+            // Si falla, ir directo a DB
+            danConfigs = await getDanDirect();
+            console.log('📊 getDan: Datos obtenidos de DB (Redis no disponible)');
+        }
 
         if (rank) {
             // Obtener configuración específica por rango

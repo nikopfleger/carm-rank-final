@@ -1,11 +1,12 @@
-import { redisCache } from '@/lib/cache/redis-wrapper';
+import { getRedisCache } from '@/lib/cache/redis-wrapper';
 import { NextResponse } from 'next/server';
 
 export const runtime = 'nodejs';
 
 export async function GET() {
     try {
-        const status = await redisCache.getStatus();
+        const redisCache = getRedisCache();
+        const status = redisCache ? await redisCache.getStatus() : { enabled: false, provider: 'none', connected: false };
 
         return NextResponse.json({
             success: true,

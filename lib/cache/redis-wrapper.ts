@@ -1,201 +1,222 @@
+// lib/cache/redis-wrapper.ts
 import { Redis } from '@upstash/redis';
 import { Redis as IoRedis } from 'ioredis';
 import 'server-only';
 
-// Configuración de Redis
-const REDIS_ENABLED = process.env.REDIS_ENABLED === '1';
-const IS_BUILD = process.env.STAGE === 'build' || process.env.NEXT_PHASE === 'phase-production-build';
+// Flags de fase
+const IS_BUILD =
+    process.env.NEXT_PHASE === 'phase-production-build' ||
+    process.env.STAGE === 'build';
 
-// Detectar si usar Upstash (Vercel) o IoRedis (local)
+// Configuración
+const REDIS_ENABLED = process.env.REDIS_ENABLED === '1';
 const isUpstash = !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
 const isIoRedis = !!(process.env.REDIS_URL && !isUpstash);
 
+// Estado global (por proceso)
 let redisClient: Redis | IoRedis | null = null;
-let redisDisabled = false; // Circuit breaker para límites
-let redisDisabledUntil = 0; // Timestamp hasta cuándo está deshabilitado
+let redisDisabled = false;          // por límites/cuotas
+let redisDisabledUntil = 0;
+let connectionFailed = false;       // por errores de conexión
+let connectionFailedUntil = 0;
 
-// Inicializar cliente Redis
+// Crear cliente sólo bajo demanda
 function getRedisClient(): Redis | IoRedis | null {
-    if (!REDIS_ENABLED) {
-        if (!IS_BUILD) console.log('🔧 Redis disabled via REDIS_ENABLED=0');
-        return null;
-    }
-
-    if (redisClient) {
-        return redisClient;
-    }
+    if (IS_BUILD) return null;                 // nunca durante build
+    if (!REDIS_ENABLED) return null;          // feature flag
+    if (connectionFailed && Date.now() < connectionFailedUntil) return null;
+    if (redisClient) return redisClient;
 
     try {
         if (isUpstash) {
-            if (!IS_BUILD) console.log('🔧 Using Upstash Redis (Vercel)');
             redisClient = new Redis({
                 url: process.env.KV_REST_API_URL!,
                 token: process.env.KV_REST_API_TOKEN!,
             });
         } else if (isIoRedis) {
-            if (!IS_BUILD) console.log('🔧 Using IoRedis (Local)');
-            redisClient = new IoRedis(process.env.REDIS_URL!, {
-                maxRetriesPerRequest: 3,
-                lazyConnect: true,
+            // ioredis en local / server
+            const client = new IoRedis(process.env.REDIS_URL!, {
+                lazyConnect: true,                  // no conecta hasta el primer comando
+                enableReadyCheck: false,
+                maxRetriesPerRequest: 0,
+                autoResubscribe: false,
+                autoResendUnfulfilledCommands: false,
+                connectTimeout: 5000,
             });
+
+            client.on('error', (error) => {
+                // ECONNREFUSED / Connection is closed, etc.
+                const msg = (error as any)?.message || String(error);
+                console.error('❌ Redis connection error:', msg);
+                connectionFailed = true;
+                connectionFailedUntil = Date.now() + 5 * 60 * 1000; // 5 min
+                try { client.disconnect(); } catch { /* no-op */ }
+            });
+
+            client.on('connect', () => {
+                connectionFailed = false;
+                connectionFailedUntil = 0;
+            });
+
+            redisClient = client;
         } else {
-            if (!IS_BUILD) console.warn('⚠️ No Redis configuration found');
             return null;
         }
-    } catch (error) {
-        console.error('❌ Failed to initialize Redis client:', error);
+    } catch (e) {
+        console.error('❌ Failed to create Redis client:', e);
         return null;
     }
-
     return redisClient;
 }
 
-// Wrapper con API consistente
+// API wrapper
 export class RedisCache {
-    private client: Redis | IoRedis | null;
+    private get client(): Redis | IoRedis | null {
+        return getRedisClient();
+    }
 
-    constructor() {
-        this.client = getRedisClient();
+    private isRedisDisabled(): boolean {
+        // Por límites
+        if (redisDisabled) {
+            if (Date.now() > redisDisabledUntil) {
+                redisDisabled = false;
+                redisDisabledUntil = 0;
+                return false;
+            }
+            return true;
+        }
+        // Por conexión
+        if (connectionFailed) {
+            if (Date.now() > connectionFailedUntil) {
+                connectionFailed = false;
+                connectionFailedUntil = 0;
+                redisClient = null; // nuevo intento en próximo get
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private isLimitError(error: any): boolean {
+        if (!error) return false;
+        const msg = (error.message || '').toLowerCase();
+        const code = (error.code || '').toLowerCase();
+        return msg.includes('limit') || msg.includes('quota') || msg.includes('exceeded') ||
+            code.includes('limit') || code.includes('quota');
     }
 
     async get(key: string): Promise<string | null> {
-        if (!this.client || this.isRedisDisabled()) return null;
+        const c = this.client;
+        if (!c || this.isRedisDisabled()) return null;
 
         try {
             if (isUpstash) {
-                return await (this.client as Redis).get(key);
+                return await (c as Redis).get<string | null>(key);
             } else {
-                return await (this.client as IoRedis).get(key);
+                return await (c as IoRedis).get(key);
             }
-        } catch (error) {
-            console.error(`❌ Redis GET error for key ${key}:`, error);
-            // Si es error de límite, deshabilitar Redis por 1 día
-            if (this.isLimitError(error)) {
+        } catch (e) {
+            console.error(`❌ Redis GET error (${key}):`, e);
+            if (this.isLimitError(e)) {
                 redisDisabled = true;
-                redisDisabledUntil = Date.now() + (24 * 60 * 60 * 1000); // 1 día
-                console.warn('⚠️ Redis deshabilitado por límite alcanzado. Usando solo DB por 24 horas.');
+                redisDisabledUntil = Date.now() + 24 * 60 * 60 * 1000;
             }
             return null;
         }
     }
 
     async set(key: string, value: string, ttlSeconds?: number): Promise<boolean> {
-        if (!this.client || this.isRedisDisabled()) return false;
+        const c = this.client;
+        if (!c || this.isRedisDisabled()) return false;
 
         try {
             if (isUpstash) {
-                await (this.client as Redis).set(key, value, ttlSeconds ? { ex: ttlSeconds } : undefined as any);
+                await (c as Redis).set(key, value, ttlSeconds ? { ex: ttlSeconds } : undefined as any);
             } else {
-                if (ttlSeconds) {
-                    await (this.client as IoRedis).setex(key, ttlSeconds, value);
-                } else {
-                    await (this.client as IoRedis).set(key, value);
-                }
+                if (ttlSeconds) await (c as IoRedis).setex(key, ttlSeconds, value);
+                else await (c as IoRedis).set(key, value);
             }
             return true;
-        } catch (error) {
-            console.error(`❌ Redis SET error for key ${key}:`, error);
-            // Si es error de límite, deshabilitar Redis por 1 día
-            if (this.isLimitError(error)) {
+        } catch (e) {
+            console.error(`❌ Redis SET error (${key}):`, e);
+            if (this.isLimitError(e)) {
                 redisDisabled = true;
-                redisDisabledUntil = Date.now() + (24 * 60 * 60 * 1000); // 1 día
-                console.warn('⚠️ Redis deshabilitado por límite alcanzado. Usando solo DB por 24 horas.');
+                redisDisabledUntil = Date.now() + 24 * 60 * 60 * 1000;
             }
             return false;
         }
     }
 
     async del(key: string): Promise<boolean> {
-        if (!this.client) return false;
-
+        const c = this.client;
+        if (!c) return false;
         try {
-            if (isUpstash) {
-                await (this.client as Redis).del(key);
-            } else {
-                await (this.client as IoRedis).del(key);
-            }
+            if (isUpstash) await (c as Redis).del(key);
+            else await (c as IoRedis).del(key);
             return true;
-        } catch (error) {
-            console.error(`❌ Redis DEL error for key ${key}:`, error);
+        } catch (e) {
+            console.error(`❌ Redis DEL error (${key}):`, e);
             return false;
         }
     }
 
     async exists(key: string): Promise<boolean> {
-        if (!this.client) return false;
-
+        const c = this.client;
+        if (!c) return false;
         try {
             if (isUpstash) {
-                const result = await (this.client as Redis).exists(key);
-                return (result as unknown as number) > 0;
+                const r = await (c as Redis).exists(key);
+                return (r as unknown as number) > 0;
             } else {
-                const result = await (this.client as IoRedis).exists(key);
-                return result === 1;
+                const r = await (c as IoRedis).exists(key);
+                return r === 1;
             }
-        } catch (error) {
-            console.error(`❌ Redis EXISTS error for key ${key}:`, error);
+        } catch (e) {
+            console.error(`❌ Redis EXISTS error (${key}):`, e);
             return false;
         }
     }
 
+    // ping sólo bajo demanda (NO en build)
     async ping(): Promise<boolean> {
-        if (!this.client) return false;
-
+        const c = this.client;
+        if (!c) return false;
         try {
-            if (isUpstash) {
-                await (this.client as Redis).ping();
-            } else {
-                await (this.client as IoRedis).ping();
-            }
+            if (isUpstash) await (c as Redis).ping();
+            else await (c as IoRedis).ping();
             return true;
-        } catch (error) {
-            console.error('❌ Redis PING error:', error);
+        } catch (e) {
+            console.error('❌ Redis PING error:', e);
             return false;
         }
     }
 
-    private isRedisDisabled(): boolean {
-        if (!redisDisabled) return false;
+    async getStatus(opts?: { withPing?: boolean }) {
+        const withPing = !!opts?.withPing && !IS_BUILD;
+        const c = this.client;
+        const pingOk = withPing ? await this.ping() : false;
 
-        // Si ya pasó el cooldown, reactivar Redis
-        if (Date.now() > redisDisabledUntil) {
-            redisDisabled = false;
-            redisDisabledUntil = 0;
-            console.log('🔄 Redis reactivado tras cooldown de 24 horas');
-            return false;
-        }
-
-        return true;
-    }
-
-    private isLimitError(error: any): boolean {
-        if (!error) return false;
-        const message = error.message?.toLowerCase() || '';
-        const code = error.code?.toLowerCase() || '';
-
-        // Detectar errores de límite comunes
-        return message.includes('limit') ||
-            message.includes('quota') ||
-            message.includes('exceeded') ||
-            code.includes('limit') ||
-            code.includes('quota');
-    }
-
-    async getStatus() {
-        const isDisabled = this.isRedisDisabled();
-        const timeLeft = redisDisabledUntil > 0 ? Math.max(0, redisDisabledUntil - Date.now()) : 0;
+        const disabled = this.isRedisDisabled();
+        const timeLeft = redisDisabled ? Math.max(0, redisDisabledUntil - Date.now()) : 0;
+        const connLeft = connectionFailed ? Math.max(0, connectionFailedUntil - Date.now()) : 0;
 
         return {
-            enabled: REDIS_ENABLED && !isDisabled,
+            enabled: REDIS_ENABLED && !IS_BUILD,
             provider: isUpstash ? 'upstash' : isIoRedis ? 'ioredis' : 'none',
-            connected: await this.ping(),
-            disabled: isDisabled,
-            disabledUntil: redisDisabledUntil,
+            connected: withPing ? pingOk : !IS_BUILD && !!c,
+            disabled,
             cooldownLeftMs: timeLeft,
-            cooldownLeftHours: Math.ceil(timeLeft / (60 * 60 * 1000)),
+            connectionFailed,
+            connectionCooldownLeftMs: connLeft,
         };
     }
 }
 
-// Singleton instance
-export const redisCache = new RedisCache();
+// Singleton lazy
+let _instance: RedisCache | null = null;
+export function getRedisCache(): RedisCache | null {
+    if (IS_BUILD || !REDIS_ENABLED) return null;
+    if (!_instance) _instance = new RedisCache();
+    return _instance;
+}

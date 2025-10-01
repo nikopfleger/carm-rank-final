@@ -1,4 +1,4 @@
-import { ensureCacheReady, getSeasons } from '@/lib/cache/core-cache';
+import { ensureCacheReady, getSeasons, getSeasonsDirect } from '@/lib/cache/core-cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -13,7 +13,17 @@ export async function GET(request: NextRequest) {
         let data;
 
         await ensureCacheReady();
-        const seasons = getSeasons();
+
+        let seasons: any[];
+        try {
+            // Intentar usar cache (Redis)
+            seasons = getSeasons();
+            console.log('✅ getSeasons: Datos obtenidos del CACHE (Redis)');
+        } catch (error) {
+            // Si falla, ir directo a DB
+            seasons = await getSeasonsDirect();
+            console.log('📊 getSeasons: Datos obtenidos de DB (Redis no disponible)');
+        }
 
         if (name) {
             // Obtener temporada específica por nombre
