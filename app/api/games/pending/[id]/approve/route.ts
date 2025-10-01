@@ -1,5 +1,4 @@
 import { prisma } from '@/lib/database/client';
-import { cleanupImage } from '@/lib/image-cleanup-simple';
 import { ensureGameValidate } from '@/lib/server-authorization';
 import { emailNotificationService } from '@/lib/services/email-notification-service';
 import { NextRequest, NextResponse } from 'next/server';
@@ -495,10 +494,10 @@ export async function POST(
       });
     });
 
-    // 10) LIMPIEZA DE IMAGEN - Eliminar imagen temporal (solo validación)
-    if (pendingGame.imageFileName) {
-      await cleanupImage(pendingGame.imageFileName, pendingGame.imageUrl || undefined);
-    }
+    // 10) LIMPIEZA DE IMAGEN - Comentado para manejo manual
+    // if (pendingGame.imageFileName) {
+    //   await cleanupImage(pendingGame.imageFileName, pendingGame.imageUrl || undefined);
+    // }
 
     // 📧 Enviar notificación de juego aceptado
     try {
