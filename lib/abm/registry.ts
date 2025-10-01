@@ -185,6 +185,42 @@ export const registry: Record<string, ResourceConfig> = {
         searchable: ['name'],
         include: { uma: true },
         orderBy: { id: 'asc' },
+        mapCreate: (data: any) => {
+            const clean: any = {};
+            // Campos básicos
+            if (data.name) clean.name = data.name.trim();
+            if (data.description) clean.description = data.description.trim();
+
+            // Campos específicos de ruleset
+            if (data.umaId !== undefined) clean.umaId = Number(data.umaId);
+            if (data.oka !== undefined) clean.oka = Number(data.oka);
+            if (data.chonbo !== undefined) clean.chonbo = Number(data.chonbo);
+            if (data.aka !== undefined) clean.aka = Boolean(data.aka);
+            if (data.inPoints !== undefined) clean.inPoints = Number(data.inPoints);
+            if (data.outPoints !== undefined) clean.outPoints = Number(data.outPoints);
+            if (data.sanma !== undefined) clean.sanma = Boolean(data.sanma);
+            if (data.extraData !== undefined) clean.extraData = data.extraData;
+
+            return clean;
+        },
+        mapUpdate: (data: any) => {
+            const clean: any = {};
+            // Campos básicos
+            if (data.name) clean.name = data.name.trim();
+            if (data.description !== undefined) clean.description = data.description ? data.description.trim() : null;
+
+            // Campos específicos de ruleset
+            if (data.umaId !== undefined) clean.umaId = Number(data.umaId);
+            if (data.oka !== undefined) clean.oka = Number(data.oka);
+            if (data.chonbo !== undefined) clean.chonbo = Number(data.chonbo);
+            if (data.aka !== undefined) clean.aka = Boolean(data.aka);
+            if (data.inPoints !== undefined) clean.inPoints = Number(data.inPoints);
+            if (data.outPoints !== undefined) clean.outPoints = Number(data.outPoints);
+            if (data.sanma !== undefined) clean.sanma = Boolean(data.sanma);
+            if (data.extraData !== undefined) clean.extraData = data.extraData;
+
+            return clean;
+        },
     },
     uma: {
         model: prisma.uma,
