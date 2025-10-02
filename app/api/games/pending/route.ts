@@ -15,9 +15,9 @@ export async function GET(_request: NextRequest) {
       where: { deleted: false, status: 'PENDING' },
       orderBy: [
         { gameDate: 'asc' },
-        // @ts-ignore: prisma supports nulls option in SQL dialects that allow it
+        // Prisma permite nulls en algunos dialectos. En otros será ignorado pero no afecta.
         { nroJuegoDia: { sort: 'asc', nulls: 'last' } as any },
-        { createdAt: 'asc' }
+        { createdAt: 'asc' },
       ],
       include: {
         ruleset: { include: { uma: true } },
@@ -26,8 +26,8 @@ export async function GET(_request: NextRequest) {
         player1: true,
         player2: true,
         player3: true,
-        player4: true
-      }
+        player4: true,
+      },
     });
 
     const games = pendingGames.map((pg: any) => ({
@@ -57,7 +57,7 @@ export async function GET(_request: NextRequest) {
         },
       },
       players: [
-        pg.player1 ? {
+        pg.player1 && {
           id: pg.player1.id,
           nickname: pg.player1.nickname || pg.player1.fullname,
           fullname: pg.player1.fullname || null,
@@ -68,8 +68,8 @@ export async function GET(_request: NextRequest) {
           chonbos: pg.player1Chonbos ?? 0,
           finalScore: pg.player1FinalScore ?? null,
           finalPosition: pg.player1FinalPosition ?? null,
-        } : null,
-        pg.player2 ? {
+        },
+        pg.player2 && {
           id: pg.player2.id,
           nickname: pg.player2.nickname || pg.player2.fullname,
           fullname: pg.player2.fullname || null,
@@ -80,8 +80,8 @@ export async function GET(_request: NextRequest) {
           chonbos: pg.player2Chonbos ?? 0,
           finalScore: pg.player2FinalScore ?? null,
           finalPosition: pg.player2FinalPosition ?? null,
-        } : null,
-        pg.player3 ? {
+        },
+        pg.player3 && {
           id: pg.player3.id,
           nickname: pg.player3.nickname || pg.player3.fullname,
           fullname: pg.player3.fullname || null,
@@ -92,8 +92,8 @@ export async function GET(_request: NextRequest) {
           chonbos: pg.player3Chonbos ?? 0,
           finalScore: pg.player3FinalScore ?? null,
           finalPosition: pg.player3FinalPosition ?? null,
-        } : null,
-        (!pg.sanma && pg.player4) ? {
+        },
+        !pg.sanma && pg.player4 && {
           id: pg.player4.id,
           nickname: pg.player4.nickname || pg.player4.fullname,
           fullname: pg.player4.fullname || null,
@@ -104,7 +104,7 @@ export async function GET(_request: NextRequest) {
           chonbos: pg.player4Chonbos ?? 0,
           finalScore: pg.player4FinalScore ?? null,
           finalPosition: pg.player4FinalPosition ?? null,
-        } : null,
+        },
       ].filter(Boolean),
     }));
 
@@ -113,8 +113,8 @@ export async function GET(_request: NextRequest) {
       {
         headers: {
           'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
-          'Pragma': 'no-cache',
-          'Expires': '0',
+          Pragma: 'no-cache',
+          Expires: '0',
           'CDN-Cache-Control': 'no-store',
           'Vercel-CDN-Cache-Control': 'no-store',
         },
