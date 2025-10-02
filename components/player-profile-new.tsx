@@ -12,6 +12,7 @@ import { useErrorHandler } from "@/hooks/use-error-handler";
 import { DanConfig, getDanRank, getNextDanRank } from "@/lib/game-helpers-client";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+
 interface PlayerData {
   id: number;
   playerId: number;
@@ -161,97 +162,9 @@ interface PlayerProfileProps {
 }
 
 export function PlayerProfileNew({ legajo, initial }: PlayerProfileProps) {
-  const { t, language, isReady } = useI18nContext();
+  const { t, isReady } = useI18nContext();
   const { data: session, status } = useSession();
   const { handleError, handleSuccess } = useErrorHandler();
-
-
-
-
-
-
-
-  // Función para obtener estadísticas generales filtradas
-  const getFilteredGeneralStats = (currentPlayerCount: 'four' | 'three', currentGameTypeFilter: 'HANCHAN' | 'TONPUUSEN' | 'TOTAL') => {
-    if (!stats) return null;
-
-    // Obtener las estadísticas del modo seleccionado
-    const hanchanKey = `${currentPlayerCount}PlayerHanchan` as keyof PlayerStats;
-    const tonpuusenKey = `${currentPlayerCount}PlayerTonpuusen` as keyof PlayerStats;
-
-    const hanchanStats = stats[hanchanKey] as any;
-    const tonpuusenStats = stats[tonpuusenKey] as any;
-
-    // Usar valores específicos según el modo (3p/4p)
-    const maxRateForMode = isSanma ? (stats.maxRateSanma || 0) : (stats.maxRateYonma || stats.maxRate || 0);
-    const seasonPointsForMode = isSanma ? (stats.seasonPointsSanma || 0) : (stats.seasonPointsYonma || stats.seasonPoints || 0);
-
-    if (currentGameTypeFilter === 'HANCHAN') {
-      return {
-        maxRate: maxRateForMode,
-        avgPosition: hanchanStats.avgPosition || 0,
-        seasonPoints: seasonPointsForMode
-      };
-    } else if (currentGameTypeFilter === 'TONPUUSEN') {
-      return {
-        maxRate: maxRateForMode,
-        avgPosition: tonpuusenStats.avgPosition || 0,
-        seasonPoints: seasonPointsForMode
-      };
-    } else { // TOTAL
-      return {
-        maxRate: maxRateForMode,
-        avgPosition: hanchanStats.total + tonpuusenStats.total > 0
-          ? (hanchanStats.avgPosition * hanchanStats.total + tonpuusenStats.avgPosition * tonpuusenStats.total) / (hanchanStats.total + tonpuusenStats.total)
-          : 0,
-        seasonPoints: seasonPointsForMode
-      };
-    }
-  };
-
-  // Función para obtener estadísticas filtradas por tipo de juego
-  const getFilteredStats = (currentPlayerCount: 'four' | 'three', currentGameTypeFilter: 'HANCHAN' | 'TONPUUSEN' | 'TOTAL') => {
-    if (!stats) return null;
-
-    const hanchanKey = `${currentPlayerCount}PlayerHanchan` as keyof PlayerStats;
-    const tonpuusenKey = `${currentPlayerCount}PlayerTonpuusen` as keyof PlayerStats;
-
-    const hanchanStats = stats[hanchanKey] as any;
-    const tonpuusenStats = stats[tonpuusenKey] as any;
-
-    if (currentGameTypeFilter === 'HANCHAN') {
-      return hanchanStats;
-    } else if (currentGameTypeFilter === 'TONPUUSEN') {
-      return tonpuusenStats;
-    } else { // TOTAL
-      return {
-        total: hanchanStats.total + tonpuusenStats.total,
-        avgPosition: hanchanStats.total + tonpuusenStats.total > 0
-          ? (hanchanStats.avgPosition * hanchanStats.total + tonpuusenStats.avgPosition * tonpuusenStats.total) / (hanchanStats.total + tonpuusenStats.total)
-          : 0,
-        first: hanchanStats.first + tonpuusenStats.first,
-        second: hanchanStats.second + tonpuusenStats.second,
-        third: hanchanStats.third + tonpuusenStats.third,
-        fourth: hanchanStats.fourth + tonpuusenStats.fourth,
-        firstPercent: hanchanStats.total + tonpuusenStats.total > 0
-          ? ((hanchanStats.first + tonpuusenStats.first) / (hanchanStats.total + tonpuusenStats.total)) * 100
-          : 0,
-        secondPercent: hanchanStats.total + tonpuusenStats.total > 0
-          ? ((hanchanStats.second + tonpuusenStats.second) / (hanchanStats.total + tonpuusenStats.total)) * 100
-          : 0,
-        thirdPercent: hanchanStats.total + tonpuusenStats.total > 0
-          ? ((hanchanStats.third + tonpuusenStats.third) / (hanchanStats.total + tonpuusenStats.total)) * 100
-          : 0,
-        fourthPercent: hanchanStats.total + tonpuusenStats.total > 0
-          ? ((hanchanStats.fourth + tonpuusenStats.fourth) / (hanchanStats.total + tonpuusenStats.total)) * 100
-          : 0,
-        rentaiRate: hanchanStats.total + tonpuusenStats.total > 0
-          ? ((hanchanStats.first + tonpuusenStats.first + hanchanStats.second + tonpuusenStats.second) / (hanchanStats.total + tonpuusenStats.total)) * 100
-          : 0
-      };
-    }
-  };
-
 
   const [playerData, setPlayerData] = useState<PlayerData | null>(initial?.player ?? null);
   const [stats, setStats] = useState<PlayerStats | null>(initial?.stats ?? null);
@@ -262,151 +175,104 @@ export function PlayerProfileNew({ legajo, initial }: PlayerProfileProps) {
   const [danConfigsSanma, setDanConfigsSanma] = useState<DanConfig[]>(initial?.danConfigsSanma ?? []);
   const [loading, setLoading] = useState(false);
   const [gameTypeFilter, setGameTypeFilter] = useState<'HANCHAN' | 'TONPUUSEN' | 'TOTAL'>('TOTAL');
-  const [isSanma, setIsSanma] = useState<boolean>(false); // false = 4 jugadores, true = 3 jugadores
+  const [isSanma, setIsSanma] = useState<boolean>(false);
   const [chartType, setChartType] = useState<'dan' | 'rate' | 'position' | 'season'>('dan');
   const [submitting, setSubmitting] = useState(false);
-
   const [error, setError] = useState<string | null>(null);
 
-
-  // Estados para vinculación
+  // Vinculación
   const [linkMessage, setLinkMessage] = useState<string | null>(null);
   const [linkedPlayerId, setLinkedPlayerId] = useState<number | null>(null);
   const [hasPendingRequest, setHasPendingRequest] = useState(initial?.hasPendingRequest ?? false);
-  const [userHasAnyLink, setUserHasAnyLink] = useState(initial?.userHasAnyLink ?? false); // ✅ Nuevo estado para verificar si el usuario ya está vinculado a algún jugador
-  const [userHasRejectedRequest, setUserHasRejectedRequest] = useState(initial?.userHasRejectedRequest ?? false); // ✅ Nuevo estado para verificar si el usuario tiene solicitudes rechazadas
+  const [userHasAnyLink, setUserHasAnyLink] = useState(initial?.userHasAnyLink ?? false);
+  const [userHasRejectedRequest, setUserHasRejectedRequest] = useState(initial?.userHasRejectedRequest ?? false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [isUnlinking, setIsUnlinking] = useState(false);
 
-  // Render directo del gráfico histórico (sin carga diferida)
+  const getFilteredGeneralStats = (
+    currentPlayerCount: 'four' | 'three',
+    currentGameTypeFilter: 'HANCHAN' | 'TONPUUSEN' | 'TOTAL',
+  ) => {
+    if (!stats) return null;
 
-  // Función para abrir modal de edición
-  const handleEditProfile = () => {
-    setIsEditModalOpen(true);
+    const hanchanKey = `${currentPlayerCount}PlayerHanchan` as keyof PlayerStats;
+    const tonpuusenKey = `${currentPlayerCount}PlayerTonpuusen` as keyof PlayerStats;
+
+    const hanchanStats = stats[hanchanKey] as any;
+    const tonpuusenStats = stats[tonpuusenKey] as any;
+
+    const maxRateForMode = isSanma ? stats.maxRateSanma || 0 : stats.maxRateYonma || stats.maxRate || 0;
+    const seasonPointsForMode = isSanma ? stats.seasonPointsSanma || 0 : stats.seasonPointsYonma || stats.seasonPoints || 0;
+
+    if (currentGameTypeFilter === 'HANCHAN') {
+      return { maxRate: maxRateForMode, avgPosition: hanchanStats?.avgPosition || 0, seasonPoints: seasonPointsForMode };
+    } else if (currentGameTypeFilter === 'TONPUUSEN') {
+      return { maxRate: maxRateForMode, avgPosition: tonpuusenStats?.avgPosition || 0, seasonPoints: seasonPointsForMode };
+    }
+    // TOTAL
+    const total = (hanchanStats?.total || 0) + (tonpuusenStats?.total || 0);
+    const avg =
+      total > 0
+        ? ((hanchanStats?.avgPosition || 0) * (hanchanStats?.total || 0) +
+          (tonpuusenStats?.avgPosition || 0) * (tonpuusenStats?.total || 0)) /
+        total
+        : 0;
+
+    return { maxRate: maxRateForMode, avgPosition: avg, seasonPoints: seasonPointsForMode };
   };
 
-  // Función para guardar cambios del perfil
-  const handleSaveProfile = async (data: {
-    fullname?: string;
-    country?: string;
-    birthday?: string;
-  }) => {
-    if (!playerData) return;
+  const getFilteredStats = (
+    currentPlayerCount: 'four' | 'three',
+    currentGameTypeFilter: 'HANCHAN' | 'TONPUUSEN' | 'TOTAL',
+  ) => {
+    if (!stats) return null;
 
-    try {
-      const response = await fetch(`/api/players/${playerData.playerId}/update`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+    const hanchanKey = `${currentPlayerCount}PlayerHanchan` as keyof PlayerStats;
+    const tonpuusenKey = `${currentPlayerCount}PlayerTonpuusen` as keyof PlayerStats;
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Error al actualizar perfil');
-      }
+    const hanchanStats = stats[hanchanKey] as any;
+    const tonpuusenStats = stats[tonpuusenKey] as any;
 
-      // Actualizar los datos del jugador localmente
-      setPlayerData(prev => ({
-        ...prev!,
-        fullname: data.fullname || prev!.fullname,
-        country: data.country ? { fullName: data.country, isoCode: data.country } : prev!.country,
-        birthday: data.birthday || prev!.birthday,
-      }));
+    if (currentGameTypeFilter === 'HANCHAN') return hanchanStats;
+    if (currentGameTypeFilter === 'TONPUUSEN') return tonpuusenStats;
 
-      setIsEditModalOpen(false);
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      throw error;
-    }
-  };
+    // TOTAL
+    const total = (hanchanStats?.total || 0) + (tonpuusenStats?.total || 0);
+    const avg =
+      total > 0
+        ? ((hanchanStats?.avgPosition || 0) * (hanchanStats?.total || 0) +
+          (tonpuusenStats?.avgPosition || 0) * (tonpuusenStats?.total || 0)) /
+        total
+        : 0;
 
-  // Función para enviar solicitud de vinculación
-  const handleLinkRequest = async () => {
-    console.log('handleLinkRequest ejecutándose');
-    console.log('playerData:', playerData);
-    console.log('session?.user:', session?.user);
-
-    if (!playerData || !session?.user) {
-      console.log('No se puede enviar solicitud: falta playerData o session');
-      return;
-    }
-
-    setSubmitting(true);
-    try {
-      const response = await fetch('/api/link-requests', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          playerId: playerData.id,
-          note: `Solicitud de vinculación para el jugador ${playerData.nickname}`
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Error al enviar solicitud');
-      }
-
-      const result = await response.json();
-      setHasPendingRequest(true);
-      setLinkMessage(t('player.profilePage.requestSent'));
-      handleSuccess(t('player.profilePage.requestSent'));
-    } catch (error) {
-      console.error('Error enviando solicitud de vinculación:', error);
-      setLinkMessage(error instanceof Error ? error.message : 'Error al enviar solicitud');
-      handleError(error, 'Solicitud de vinculación');
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  // Función para desvincular usuario
-  const handleUnlinkRequest = async () => {
-    if (!playerData || !session?.user) {
-      console.log('No se puede desvincular: falta playerData o session');
-      return;
-    }
-
-    setIsUnlinking(true);
-    try {
-      const response = await fetch('/api/link-requests/unlink', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          playerId: playerData.id
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Error al desvincular');
-      }
-
-      const result = await response.json();
-      setLinkMessage('Vinculación eliminada exitosamente');
-      setLinkedPlayerId(null);
-      setPlayerData(prev => prev ? { ...prev, isLinked: false } : null);
-      handleSuccess('Desvinculación exitosa');
-    } catch (error) {
-      console.error('Error desvinculando:', error);
-      setLinkMessage(error instanceof Error ? error.message : 'Error al desvincular');
-      handleError(error, 'Desvincular usuario');
-    } finally {
-      setIsUnlinking(false);
-    }
+    return {
+      total,
+      avgPosition: avg,
+      first: (hanchanStats?.first || 0) + (tonpuusenStats?.first || 0),
+      second: (hanchanStats?.second || 0) + (tonpuusenStats?.second || 0),
+      third: (hanchanStats?.third || 0) + (tonpuusenStats?.third || 0),
+      fourth: (hanchanStats?.fourth || 0) + (tonpuusenStats?.fourth || 0),
+      firstPercent: total > 0 ? (((hanchanStats?.first || 0) + (tonpuusenStats?.first || 0)) / total) * 100 : 0,
+      secondPercent: total > 0 ? (((hanchanStats?.second || 0) + (tonpuusenStats?.second || 0)) / total) * 100 : 0,
+      thirdPercent: total > 0 ? (((hanchanStats?.third || 0) + (tonpuusenStats?.third || 0)) / total) * 100 : 0,
+      fourthPercent: total > 0 ? (((hanchanStats?.fourth || 0) + (tonpuusenStats?.fourth || 0)) / total) * 100 : 0,
+      rentaiRate:
+        total > 0
+          ? (((hanchanStats?.first || 0) +
+            (tonpuusenStats?.first || 0) +
+            (hanchanStats?.second || 0) +
+            (tonpuusenStats?.second || 0)) /
+            total) *
+          100
+          : 0,
+    };
   };
 
   // Limpiar estado de vinculación cuando el usuario se desloguea
   useEffect(() => {
     if (status === "unauthenticated") {
       setLinkedPlayerId(null);
-      setPlayerData(prev => prev ? { ...prev, isLinked: false } : null);
+      setPlayerData((prev) => (prev ? { ...prev, isLinked: false } : null));
       setHasPendingRequest(false);
       setUserHasAnyLink(false);
       setUserHasRejectedRequest(false);
@@ -414,18 +280,12 @@ export function PlayerProfileNew({ legajo, initial }: PlayerProfileProps) {
     }
   }, [status]);
 
-  // Cargar datos del perfil
+  // Cargar datos del perfil (si no vinieron por SSR)
   useEffect(() => {
-    if (!isReady) return; // Esperar a que i18n esté listo
-
-    // Si llegó del server, no pegues el primer fetch
+    if (!isReady) return;
     if (initial?.player && initial?.stats) return;
 
-    // Cargando perfil...
-
-    // ✅ Si no está autenticado, limpiar estado de vinculación pero seguir cargando datos del jugador
     if (status === "unauthenticated") {
-      // Limpiando estado de vinculación para usuario no autenticado
       setLinkedPlayerId(null);
       setHasPendingRequest(false);
       setUserHasAnyLink(false);
@@ -438,30 +298,18 @@ export function PlayerProfileNew({ legajo, initial }: PlayerProfileProps) {
     (async () => {
       try {
         setLoading(true);
-        setError(null); // Limpiar error al empezar
+        setError(null);
         const response = await fetch(`/api/players/${legajo}/profile`, {
           signal: ac.signal,
-          cache: 'no-store' // ✅ Evitar caché del navegador
+          cache: 'no-store',
         });
-        if (!response.ok) {
-          console.error('Error response:', response.status, response.statusText);
-          throw new Error(`Error ${response.status}: ${response.statusText}`);
-        }
+        if (!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`);
 
-        let data;
-        try {
-          data = await response.json();
-        } catch (jsonError) {
-          console.error('Error parsing JSON:', jsonError);
-          throw new Error('Error parsing server response');
-        }
+        const data = await response.json();
 
-        // Datos cargados correctamente
-
-        // Actualizar estados directamente
         setPlayerData({
           ...data.player,
-          isLinked: status === "authenticated" ? (data.isLinked || false) : false // ✅ Forzar false si no está autenticado
+          isLinked: status === "authenticated" ? data.isLinked || false : false,
         });
         setStats(data.stats);
         setRankings(data.rankings);
@@ -469,21 +317,17 @@ export function PlayerProfileNew({ legajo, initial }: PlayerProfileProps) {
         setSeasonData(data.seasonData || []);
         setHasPendingRequest(data.hasPendingRequest || false);
 
-        // ✅ Si no hay sesión, forzar estados de vinculación a false
         if (status === "unauthenticated") {
           setUserHasAnyLink(false);
           setUserHasRejectedRequest(false);
           setLinkedPlayerId(null);
         } else {
-          setUserHasAnyLink(data.userHasAnyLink || false); // ✅ Cargar si el usuario tiene alguna vinculación
-          setUserHasRejectedRequest(data.userHasRejectedRequest || false); // ✅ Cargar si el usuario tiene solicitudes rechazadas
+          setUserHasAnyLink(data.userHasAnyLink || false);
+          setUserHasRejectedRequest(data.userHasRejectedRequest || false);
         }
-
-        setError(null);
       } catch (err: any) {
         if (err.name !== "AbortError") {
-          const errorMessage = err instanceof Error ? err.message : t('common.error');
-          setError(errorMessage);
+          setError(err instanceof Error ? err.message : t('common.error'));
           handleError(err, 'Cargar perfil de jugador');
         }
       } finally {
@@ -491,25 +335,20 @@ export function PlayerProfileNew({ legajo, initial }: PlayerProfileProps) {
       }
     })();
 
-    return () => {
-      ac.abort();
-    };
-  }, [legajo, isReady, t, status, handleError, initial]);
+    return () => ac.abort();
+  }, [legajo, isReady, status, handleError, initial, t]);
 
-  // Cargar configuraciones DAN para ambos modos una sola vez (evita flicker al cambiar)
+  // Cargar DAN configs si no vinieron en SSR
   useEffect(() => {
-    // Si ya tenemos las configs del server, no hacer fetch
     if (initial?.danConfigsYonma && initial?.danConfigsSanma) return;
-
     (async () => {
       try {
-        // Un solo viaje: trae { dan, rate, seasons, colors }
         const res = await fetch("/api/config/cache", { cache: "force-cache" });
         if (!res.ok) return;
         const json = await res.json();
         const dan: DanConfig[] = json?.data?.dan ?? [];
-        setDanConfigsYonma(dan.filter(d => !d.sanma));
-        setDanConfigsSanma(dan.filter(d => d.sanma));
+        setDanConfigsYonma(dan.filter((d) => !d.sanma));
+        setDanConfigsSanma(dan.filter((d) => d.sanma));
       } catch (err) {
         console.error("Error loading DAN configs:", err);
       }
@@ -521,7 +360,6 @@ export function PlayerProfileNew({ legajo, initial }: PlayerProfileProps) {
     if (status !== "authenticated") return;
 
     const ac = new AbortController();
-
     (async () => {
       try {
         const [linkStatusRes, linkRequestsRes] = await Promise.all([
@@ -534,32 +372,103 @@ export function PlayerProfileNew({ legajo, initial }: PlayerProfileProps) {
 
         setLinkedPlayerId(linkStatusData.linked ? linkStatusData.playerId : null);
 
-        const pendingRequest = linkRequestsData.requests?.find((req: any) =>
-          req.playerId === playerData?.id && req.status === 'PENDING'
+        const pendingRequest = linkRequestsData.requests?.find(
+          (req: any) => req.playerId === playerData?.id && req.status === "PENDING",
         );
         setHasPendingRequest(!!pendingRequest);
       } catch (err: any) {
         if (err.name !== "AbortError") {
-          handleError(err, 'Verificar vinculación y solicitudes');
+          handleError(err, "Verificar vinculación y solicitudes");
         }
       }
     })();
 
-    return () => {
-      ac.abort();
-    };
+    return () => ac.abort();
   }, [status, playerData?.id, handleError]);
 
+  const handleEditProfile = () => setIsEditModalOpen(true);
 
+  const handleSaveProfile = async (data: { fullname?: string; country?: string; birthday?: string }) => {
+    if (!playerData) return;
+    try {
+      const response = await fetch(`/api/players/${playerData.playerId}/update`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Error al actualizar perfil");
+      }
+      setPlayerData((prev) =>
+        prev
+          ? {
+            ...prev,
+            fullname: data.fullname ?? prev.fullname,
+            country: data.country ? { fullName: data.country, isoCode: data.country } : prev.country,
+            birthday: data.birthday ?? prev.birthday,
+          }
+          : prev,
+      );
+      setIsEditModalOpen(false);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      throw error;
+    }
+  };
 
+  const handleLinkRequest = async () => {
+    if (!playerData || !session?.user) return;
+    setSubmitting(true);
+    try {
+      const response = await fetch("/api/link-requests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ playerId: playerData.id, note: `Solicitud de vinculación para el jugador ${playerData.nickname}` }),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Error al enviar solicitud");
+      }
+      await response.json();
+      setHasPendingRequest(true);
+      setLinkMessage(t("player.profilePage.requestSent"));
+      handleSuccess(t("player.profilePage.requestSent"));
+    } catch (error) {
+      console.error("Error enviando solicitud de vinculación:", error);
+      setLinkMessage(error instanceof Error ? error.message : "Error al enviar solicitud");
+      handleError(error, "Solicitud de vinculación");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
-  // Filtrar datos del gráfico
-
-
-
-
-
-  // Renderizar gráfico SVG
+  const handleUnlinkRequest = async () => {
+    if (!playerData || !session?.user) return;
+    setIsUnlinking(true);
+    try {
+      const response = await fetch("/api/link-requests/unlink", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ playerId: playerData.id }),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Error al desvincular");
+      }
+      await response.json();
+      setLinkMessage("Vinculación eliminada exitosamente");
+      setLinkedPlayerId(null);
+      setPlayerData((prev) => (prev ? { ...prev, isLinked: false } : null));
+      handleSuccess("Desvinculación exitosa");
+    } catch (error) {
+      console.error("Error desvinculando:", error);
+      setLinkMessage(error instanceof Error ? error.message : "Error al desvincular");
+      handleError(error, "Desvincular usuario");
+    } finally {
+      setIsUnlinking(false);
+    }
+  };
 
   // ===============================
   // UI states de carga/error
@@ -571,24 +480,23 @@ export function PlayerProfileNew({ legajo, initial }: PlayerProfileProps) {
   if (error && !playerData) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-red-600">{t("common.error")}: {error}</div>
+        <div className="text-red-600">
+          {t("common.error")}: {error}
+        </div>
       </div>
     );
   }
 
-
   // ===============================
   // Render principal
   // ===============================
-
   return (
     <div className="max-w-6xl mx-auto">
-      {/* Sticky Header */}
       <StickyPlayerHeader
         nickname={playerData.nickname}
         playerId={playerData.playerId}
         isActive={playerData.isActive}
-        country={typeof playerData.country === 'string' ? playerData.country : playerData.country?.isoCode}
+        country={typeof playerData.country === "string" ? playerData.country : playerData.country?.isoCode}
         isSanma={isSanma}
         onSanmaChange={setIsSanma}
         gameTypeFilter={gameTypeFilter}
@@ -596,91 +504,79 @@ export function PlayerProfileNew({ legajo, initial }: PlayerProfileProps) {
       />
 
       <div className="p-3 sm:p-6 space-y-4 sm:space-y-6">
-        {/* Stats Cards */}
-        {stats && (() => {
-          const currentDanForMode = isSanma ? stats.currentDanSanma ?? 0 : stats.currentDanYonma ?? stats.currentDan;
-          // Usar rate específico por modo
-          const currentRateForMode = isSanma
-            ? (stats.currentRateSanma ?? stats.currentRate ?? 1500)
-            : (stats.currentRateYonma ?? stats.currentRate ?? 1500);
-          const cfg = isSanma ? danConfigsSanma : danConfigsYonma;
-          const currentRank = getDanRank(currentDanForMode, cfg);
-          const nextRank = getNextDanRank(currentDanForMode, cfg);
+        {stats &&
+          (() => {
+            const currentDanForMode = isSanma ? stats.currentDanSanma ?? 0 : stats.currentDanYonma ?? stats.currentDan;
+            const currentRateForMode = isSanma ? stats.currentRateSanma ?? stats.currentRate ?? 1500 : stats.currentRateYonma ?? stats.currentRate ?? 1500;
+            const cfg = isSanma ? danConfigsSanma : danConfigsYonma;
+            const currentRank = getDanRank(currentDanForMode, cfg);
+            const nextRank = getNextDanRank(currentDanForMode, cfg);
 
-          // Usar el color correcto desde la base de datos
-          const dbRankColor = isSanma ? stats.rankColorSanma : stats.rankColorYonma;
-          const currentStats = getFilteredStats(isSanma ? "three" : "four", gameTypeFilter);
-          const generalStats = getFilteredGeneralStats(isSanma ? "three" : "four", gameTypeFilter);
+            const dbRankColor = isSanma ? stats.rankColorSanma : stats.rankColorYonma;
+            const currentStats = getFilteredStats(isSanma ? "three" : "four", gameTypeFilter);
+            const generalStats = getFilteredGeneralStats(isSanma ? "three" : "four", gameTypeFilter);
 
-          // Calcular delta: traer últimos 30 días + 1 mes anterior para comparar
-          const thirtyDaysAgo = new Date();
-          thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-          const sixtyDaysAgo = new Date();
-          sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+            // Delta 30 días (usar datos del cliente/SSR indistinto)
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            const sixtyDaysAgo = new Date();
+            sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
 
-          // Filtrar últimos 60 días y ordenar cronológicamente
-          const recentData = chartData
-            .filter(point => point.sanma === isSanma && new Date(point.gameDate) >= sixtyDaysAgo)
-            .sort((a, b) => new Date(a.gameDate).getTime() - new Date(b.gameDate).getTime());
+            const recentData = chartData
+              .filter((p) => p.sanma === isSanma && new Date(p.gameDate) >= sixtyDaysAgo)
+              .sort((a, b) => new Date(a.gameDate).getTime() - new Date(b.gameDate).getTime());
 
-          // Encontrar el punto de comparación: el más antiguo dentro de la ventana de 30-60 días atrás
-          const baseline = recentData.find(point => new Date(point.gameDate) < thirtyDaysAgo);
+            const baseline = recentData.find((p) => new Date(p.gameDate) < thirtyDaysAgo);
+            const rateDelta = baseline ? currentRateForMode - baseline.ratePoints : 0;
+            const danDelta = baseline ? currentDanForMode - baseline.danPoints : 0;
 
-          const rateDelta = baseline
-            ? currentRateForMode - baseline.ratePoints
-            : 0;
+            const maxRateForMode = isSanma ? stats.maxRateSanma || stats.maxRate || 1500 : stats.maxRateYonma || stats.maxRate || 1500;
 
-          // Calcular delta del Dan usando el punto más antiguo dentro de la ventana
-          const danDelta = baseline
-            ? currentDanForMode - baseline.danPoints
-            : 0;
+            const filteredStats = {
+              currentDan: currentDanForMode,
+              currentRate: currentRateForMode,
+              danDelta,
+              rateDelta,
+              maxRate: maxRateForMode,
+            };
 
-          // Usar max rate del backend filtrado por sanma
-          const maxRateForMode = isSanma ? (stats.maxRateSanma || stats.maxRate || 1500) : (stats.maxRateYonma || stats.maxRate || 1500);
+            return (
+              <UnifiedPlayerCard
+                playerData={{
+                  nickname: playerData.nickname,
+                  playerId: playerData.playerId,
+                  fullname: playerData.fullname,
+                  country: typeof playerData.country === "string" ? playerData.country : playerData.country?.isoCode,
+                  isActive: playerData.isActive,
+                  birthday: playerData.birthday,
+                  onlineUsers: playerData.onlineUsers,
+                }}
+                onEditProfile={playerData.isLinked ? handleEditProfile : undefined}
+                submitting={submitting || isUnlinking}
+                currentDan={currentDanForMode}
+                currentRank={currentRank}
+                nextRank={nextRank}
+                dbRankColor={dbRankColor}
+                stats={filteredStats}
+                generalStats={generalStats}
+                currentStats={currentStats}
+                seasonStats={rankings}
+                isSanma={isSanma}
+                filteredChartData={chartData}
+                // Vinculación
+                isLinked={playerData.isLinked}
+                isLinkedToCurrentUser={playerData.isLinked && linkedPlayerId === playerData.playerId}
+                onLinkRequest={
+                  status === "authenticated" && !userHasAnyLink && !userHasRejectedRequest && linkedPlayerId === null
+                    ? handleLinkRequest
+                    : undefined
+                }
+                onUnlinkRequest={playerData.isLinked && linkedPlayerId === playerData.playerId ? handleUnlinkRequest : undefined}
+                isLinkRequestPending={hasPendingRequest}
+              />
+            );
+          })()}
 
-          // Crear stats filtrados por sanma
-          const filteredStats = {
-            currentDan: currentDanForMode,
-            currentRate: currentRateForMode,
-            danDelta: danDelta,
-            rateDelta: rateDelta,
-            maxRate: maxRateForMode
-          };
-
-          return (
-            <UnifiedPlayerCard
-              playerData={{
-                nickname: playerData.nickname,
-                playerId: playerData.playerId,
-                fullname: playerData.fullname,
-                country: typeof playerData.country === 'string' ? playerData.country : playerData.country?.isoCode,
-                isActive: playerData.isActive,
-                birthday: playerData.birthday,
-                onlineUsers: playerData.onlineUsers
-              }}
-              onEditProfile={playerData.isLinked ? handleEditProfile : undefined}
-              submitting={submitting || isUnlinking}
-              currentDan={currentDanForMode}
-              currentRank={currentRank}
-              nextRank={nextRank}
-              dbRankColor={dbRankColor}
-              stats={filteredStats}
-              generalStats={generalStats}
-              currentStats={currentStats}
-              seasonStats={rankings}
-              isSanma={isSanma}
-              filteredChartData={chartData}
-              // Props de vinculación
-              isLinked={playerData.isLinked}
-              isLinkedToCurrentUser={playerData.isLinked && linkedPlayerId === playerData.playerId}
-              onLinkRequest={status === "authenticated" && !userHasAnyLink && !userHasRejectedRequest && linkedPlayerId === null ? handleLinkRequest : undefined}
-              onUnlinkRequest={playerData.isLinked && linkedPlayerId === playerData.playerId ? handleUnlinkRequest : undefined}
-              isLinkRequestPending={hasPendingRequest}
-            />
-          );
-        })()}
-
-        {/* Gráfico histórico - render directo */}
         {chartData.length > 0 && (
           <Card className={`p-6 ${unifiedStyles.card}`}>
             <HistoricalChart
@@ -695,7 +591,6 @@ export function PlayerProfileNew({ legajo, initial }: PlayerProfileProps) {
         )}
       </div>
 
-      {/* Modal de edición de perfil */}
       {playerData && (
         <EditPlayerModal
           isOpen={isEditModalOpen}
@@ -703,8 +598,8 @@ export function PlayerProfileNew({ legajo, initial }: PlayerProfileProps) {
           playerData={{
             nickname: playerData.nickname,
             fullname: playerData.fullname,
-            country: typeof playerData.country === 'string' ? playerData.country : playerData.country?.isoCode,
-            birthday: playerData.birthday
+            country: typeof playerData.country === "string" ? playerData.country : playerData.country?.isoCode,
+            birthday: playerData.birthday,
           }}
           onSave={handleSaveProfile}
           submitting={submitting}

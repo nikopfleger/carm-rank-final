@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
 import { unifiedStyles } from '@/components/ui/unified-styles';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 interface GamePlayer {
     name: string;
@@ -19,15 +19,15 @@ interface ChartDataPoint {
     position: number;
     seasonPoints: number;
     gameDate: string;
-    gameId?: number;              // ← puede venir vacío en eventos de torneo
+    gameId?: number;               // puede venir vacío en eventos de torneo
     danVariation: number;
     rateVariation: number;
-    seasonVariation: number;      // > 0 / < 0 para juego o torneo
+    seasonVariation: number;       // > 0 / < 0 para juego o torneo
     finalPosition?: number;
     createdAt?: string;
-    tournamentId?: number;        // ← identifica puntos de torneo
-    tournamentName?: string;      // ← opcional para tooltip
-    sanma?: boolean;              // ← para filtrar por 4p/3p
+    tournamentId?: number;         // identifica puntos de torneo
+    tournamentName?: string;       // opcional para tooltip
+    sanma?: boolean;               // para filtrar por 4p/3p
     extraData?: any;
     players?: GamePlayer[];
 }
@@ -42,20 +42,40 @@ interface HistoricalChartProps {
     danConfigs?: Array<{ rank: string; color: string; minPoints: number; maxPoints: number }>;
 }
 
-export function HistoricalChart({ chartData, seasonData = [], isSanma = false, chartType: externalChartType, onChartTypeChange, className, danConfigs = [] }: HistoricalChartProps) {
+export function HistoricalChart({
+    chartData,
+    seasonData = [],
+    isSanma = false,
+    chartType: externalChartType,
+    onChartTypeChange,
+    className,
+    danConfigs = [],
+}: HistoricalChartProps) {
     const { t } = useI18nContext();
-    const [internalChartType, setInternalChartType] = useState<'dan' | 'rate' | 'position' | 'season'>('dan');
+
+    // Evitar SSR/CSR mismatch: no renderizamos el SVG hasta mounted
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => setMounted(true), []);
+
+    const [internalChartType, setInternalChartType] =
+        useState<'dan' | 'rate' | 'position' | 'season'>('dan');
 
     // Usar chartType externo si está disponible, sino usar el interno
     const chartType = externalChartType ?? internalChartType;
     const setChartType = onChartTypeChange ?? setInternalChartType;
-    // Mantener estado inicial estable para SSR/CSR; ajustar en efecto
+
+    // Mantener estado inicial estable para SSR; ajustar luego de hidratar
     const [gameCount, setGameCount] = useState<10 | 20 | 50>(20);
-    const [tooltip, setTooltip] = useState<{ visible: boolean; x: number; y: number; data: ChartDataPoint | null }>({
+    const [tooltip, setTooltip] = useState<{
+        visible: boolean;
+        x: number;
+        y: number;
+        data: ChartDataPoint | null;
+    }>({
         visible: false,
         x: 0,
         y: 0,
-        data: null
+        data: null,
     });
 
     // Estado para zoom del gráfico (solo en mobile)
@@ -66,7 +86,7 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
     useEffect(() => {
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 768);
-            setGameCount(window.innerWidth < 640 ? 10 : 20);
+            setGameCount((window.innerWidth < 640 ? 10 : 20) as 10 | 20 | 50);
         };
 
         checkMobile();
@@ -74,32 +94,45 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
-    // En "season", usamos seasonData separado que incluye eventos de torneo
-    let dataToFilter = chartData;
-    if (chartType === 'season') {
-        dataToFilter = seasonData;
-    }
+    // Helper: parsear fecha como UTC y formatear dd/mm/yy sin depender del timezone del host
+    const formatDateUTC = (iso: string) => {
+        const d = new Date(iso);
+        const dd = String(d.getUTCDate()).padStart(2, '0');
+        const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
+        const yy = String(d.getUTCFullYear()).slice(-2);
+        return `${dd}/${mm}/${yy}`;
+    };
 
-    // Filtrar por sanma (4p/3p) según la selección del usuario
-    const filteredBySanma = dataToFilter.filter(point => point.sanma === isSanma);
+    const dataToFilter = chartType === 'season' ? seasonData : chartData;
 
-    // Los datos ya vienen ordenados correctamente de la base de datos
-    // Para DAN y RATE y POSITION hacer reverse para mostrar cronológicamente (más antiguos a la izquierda)
-    // Para SEASON mantener el orden original (más recientes a la izquierda)
-    const sortedData = (chartType === 'dan' || chartType === 'rate' || chartType === 'position')
-        ? [...filteredBySanma].reverse()
-        : filteredBySanma;
+    // Filtrar por sanma (4p/3p)
+    const filteredBySanma = useMemo(
+        () => dataToFilter.filter((p) => p.sanma === isSanma),
+        [dataToFilter, isSanma],
+    );
 
-    // En "season" el selector "Últimos N" debe aplicar a la lista combinada (juegos+torneos)
-    const filteredData = sortedData.slice(-gameCount);
+    // Orden: dan/rate/position antiguos→nuevos (reverse), season mantiene orden (ya viene reciente→antiguo)
+    const sortedData = useMemo(() => {
+        if (chartType === 'dan' || chartType === 'rate' || chartType === 'position') {
+            return [...filteredBySanma].reverse();
+        }
+        return filteredBySanma;
+    }, [filteredBySanma, chartType]);
+
+    // Últimos N (sobre el orden cronológico ya elegido)
+    const filteredData = useMemo(
+        () => sortedData.slice(-gameCount),
+        [sortedData, gameCount],
+    );
 
     const handleMouseEnter = (event: React.MouseEvent, point: ChartDataPoint) => {
-        if ((event.target as SVGElement).tagName.toLowerCase() === 'circle') {
+        const tag = (event.target as SVGElement).tagName.toLowerCase();
+        if (tag === 'circle') {
             setTooltip({
                 visible: true,
                 x: event.clientX,
                 y: event.clientY - 10,
-                data: point
+                data: point,
             });
         }
     };
@@ -129,13 +162,18 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
         const chartWidth = width - 2 * padding;
         const chartHeight = height - 2 * padding;
 
-        const values = filteredData.map(d => {
+        const values = filteredData.map((d) => {
             switch (chartType) {
-                case 'dan': return d.danPoints;
-                case 'rate': return d.ratePoints;
-                case 'position': return d.position;
-                case 'season': return d.seasonPoints;
-                default: return d.danPoints;
+                case 'dan':
+                    return d.danPoints;
+                case 'rate':
+                    return d.ratePoints;
+                case 'position':
+                    return d.position;
+                case 'season':
+                    return d.seasonPoints;
+                default:
+                    return d.danPoints;
             }
         });
 
@@ -152,7 +190,7 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
             const range = Math.max(1, max - min);
             const rawStep = range / (targetTicks - 1);
             const possibleSteps = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000];
-            const bestStep = possibleSteps.find(s => s >= rawStep) ?? possibleSteps[possibleSteps.length - 1];
+            const bestStep = possibleSteps.find((s) => s >= rawStep) ?? possibleSteps[possibleSteps.length - 1];
 
             const ticks: number[] = [];
             const startTick = Math.floor(min / bestStep) * bestStep;
@@ -165,76 +203,77 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
 
         const yTicks = calculateCleanTicks(adjustedMin, adjustedMax);
 
-        // ✅ Helper para convertir valor->y según el tipo de gráfico
+        // Helper valor -> y
         const yScale = (val: number) => {
             const t = (val - adjustedMin) / adjustedRange; // 0..1
             if (chartType === 'position') {
-                // 1 (mínimo) arriba; máximos abajo
+                // 1 (mejor) arriba; peores abajo
                 return padding + t * chartHeight;
             }
-            // dan / rate / season: valores altos arriba
+            // dan / rate / season: mayores arriba
             return padding + chartHeight - t * chartHeight;
         };
 
         const points = filteredData.map((d, index) => {
             const x = padding + (index / Math.max(1, filteredData.length - 1)) * chartWidth;
             const value =
-                chartType === 'dan' ? d.danPoints :
-                    chartType === 'rate' ? d.ratePoints :
-                        chartType === 'position' ? d.position :
-                            d.seasonPoints;
+                chartType === 'dan'
+                    ? d.danPoints
+                    : chartType === 'rate'
+                        ? d.ratePoints
+                        : chartType === 'position'
+                            ? d.position
+                            : d.seasonPoints;
 
             return { x, y: yScale(value), data: d };
         });
 
         const pathData = points.map((pt, i) => `${i === 0 ? 'M' : 'L'} ${pt.x} ${pt.y}`).join(' ');
 
-        const danReferenceLines = chartType === 'dan' && danConfigs.length > 0 ? (
-            <>
-                {(() => {
-                    const currentDan = filteredData.at(-1)?.danPoints ?? 0;
-                    const nearest = [...danConfigs]
-                        .map(cfg => ({ ...cfg, __dist: Math.abs(cfg.minPoints - currentDan) }))
-                        .sort((a, b) => a.__dist - b.__dist)
-                        .slice(0, 3)
-                        .filter(config => config.minPoints >= adjustedMin && config.minPoints <= adjustedMax);
-                    return nearest.map((config) => (
-                        <g key={`dan-${config.minPoints}`}>
-                            {/* El <title> debe ir primero dentro del grupo para evitar reubicación del navegador */}
-                            <title>{t(`ranks.${config.rank}`, config.rank)}</title>
-                            <line
-                                x1={padding}
-                                y1={yScale(config.minPoints)}
-                                x2={width - padding}
-                                y2={yScale(config.minPoints)}
-                                stroke={config.color}
-                                strokeWidth="2"
-                                strokeDasharray="5 5"
-                                opacity={0.7}
-                            />
-                            <text
-                                x={width - padding - 8}
-                                y={yScale(config.minPoints)}
-                                textAnchor="end"
-                                dominantBaseline="central"
-                                fontSize="11"
-                                fill={config.color}
-                                fontWeight="bold"
-                            >
-                                {config.rank}
-                            </text>
-                        </g>
-                    ));
-                })()}
-            </>
-        ) : null;
+        const danReferenceLines =
+            chartType === 'dan' && danConfigs.length > 0 ? (
+                <>
+                    {(() => {
+                        const currentDan = filteredData.at(-1)?.danPoints ?? 0;
+                        const nearest = [...danConfigs]
+                            .map((cfg) => ({ ...cfg, __dist: Math.abs(cfg.minPoints - currentDan) }))
+                            .sort((a, b) => a.__dist - b.__dist)
+                            .slice(0, 3)
+                            .filter((config) => config.minPoints >= adjustedMin && config.minPoints <= adjustedMax);
+
+                        return nearest.map((config) => (
+                            <g key={`dan-${config.minPoints}`}>
+                                {/* <title> primero en el grupo: evita reubicación del navegador y mismatches */}
+                                <title>{t(`ranks.${config.rank}`, config.rank)}</title>
+                                <line
+                                    x1={padding}
+                                    y1={yScale(config.minPoints)}
+                                    x2={width - padding}
+                                    y2={yScale(config.minPoints)}
+                                    stroke={config.color}
+                                    strokeWidth="2"
+                                    strokeDasharray="5 5"
+                                    opacity={0.7}
+                                />
+                                <text
+                                    x={width - padding - 8}
+                                    y={yScale(config.minPoints)}
+                                    textAnchor="end"
+                                    dominantBaseline="central"
+                                    fontSize="11"
+                                    fill={config.color}
+                                    fontWeight="bold"
+                                >
+                                    {config.rank}
+                                </text>
+                            </g>
+                        ));
+                    })()}
+                </>
+            ) : null;
 
         return (
-            <svg
-                viewBox={`0 0 ${width} ${height}`}
-                className="w-full h-full"
-                preserveAspectRatio="xMidYMid meet"
-            >
+            <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full" preserveAspectRatio="xMidYMid meet">
                 {danReferenceLines}
 
                 <path
@@ -254,10 +293,13 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
                             r="5"
                             fill={
                                 chartType === 'season'
-                                    ? '#F59E0B' // mismo color de línea para season
-                                    : chartType === 'dan' ? '#8B5CF6'
-                                        : chartType === 'rate' ? '#F97316'
-                                            : chartType === 'position' ? '#10B981'
+                                    ? '#F59E0B'
+                                    : chartType === 'dan'
+                                        ? '#8B5CF6'
+                                        : chartType === 'rate'
+                                            ? '#F97316'
+                                            : chartType === 'position'
+                                                ? '#10B981'
                                                 : '#EF4444'
                             }
                             stroke="white"
@@ -283,51 +325,30 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
                 <line x1={padding} y1={padding} x2={padding} y2={height - padding} stroke="#374151" strokeWidth="2" />
                 <line x1={padding} y1={height - padding} x2={width - padding} y2={height - padding} stroke="#374151" strokeWidth="2" />
 
-                {/* Líneas horizontales de cuadrícula */}
+                {/* Grid Y */}
                 {yTicks.map((value, index) => (
-                    <line
-                        key={index}
-                        x1={padding}
-                        y1={yScale(value)}
-                        x2={width - padding}
-                        y2={yScale(value)}
-                        stroke="#374151"
-                        strokeWidth="1"
-                        opacity="0.3"
-                    />
+                    <line key={index} x1={padding} y1={yScale(value)} x2={width - padding} y2={yScale(value)} stroke="#374151" strokeWidth="1" opacity="0.3" />
                 ))}
-
 
                 {/* Ticks Y */}
                 {yTicks.map((value, index) => (
-                    <text
-                        key={index}
-                        x={padding - 10}
-                        y={yScale(value) + 5}
-                        textAnchor="end"
-                        className="text-xs fill-gray-600 dark:fill-gray-400"
-                    >
+                    <text key={index} x={padding - 10} y={yScale(value) + 5} textAnchor="end" className="text-xs fill-gray-600 dark:fill-gray-400">
                         {Math.round(value)}
                     </text>
                 ))}
 
                 {/* Ticks X */}
-                {points.filter((_, idx) => idx % Math.ceil(filteredData.length / 5) === 0).map((pt, idx) => {
-                    const dataIndex = points.indexOf(pt);
-                    const date = new Date(filteredData[dataIndex].gameDate);
-                    const dateStr = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear().toString().slice(-2)}`;
-                    return (
-                        <text
-                            key={idx}
-                            x={pt.x}
-                            y={height - padding + 20}
-                            textAnchor="middle"
-                            className="text-xs fill-gray-600 dark:fill-gray-400"
-                        >
-                            {dateStr}
-                        </text>
-                    );
-                })}
+                {points
+                    .filter((_, idx) => idx % Math.ceil(Math.max(1, filteredData.length) / 5) === 0)
+                    .map((pt, idx) => {
+                        const dataIndex = points.indexOf(pt);
+                        const dateStr = formatDateUTC(filteredData[dataIndex].gameDate);
+                        return (
+                            <text key={idx} x={pt.x} y={height - padding + 20} textAnchor="middle" className="text-xs fill-gray-600 dark:fill-gray-400">
+                                {dateStr}
+                            </text>
+                        );
+                    })}
             </svg>
         );
     };
@@ -335,9 +356,7 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
     if (chartData.length === 0) {
         return (
             <Card className={`p-6 ${className}`}>
-                <div className="text-center text-gray-500 dark:text-gray-400">
-                    {t('player.profilePage.noDataAvailable')}
-                </div>
+                <div className="text-center text-gray-500 dark:text-gray-400">{t('player.profilePage.noDataAvailable')}</div>
             </Card>
         );
     }
@@ -351,17 +370,17 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
                         <span className="sr-only">Gráfico de evolución histórica:</span>
                         {t('player.profilePage.historicalEvolution')}
                     </h4>
-                    <p className="text-sm text-muted-foreground mt-1">
+
+                    {/* Este texto puede diferir por gameCount tras hidratar → suprimir warning */}
+                    <p className="text-sm text-muted-foreground mt-1" suppressHydrationWarning>
                         {filteredData.length > 0
                             ? `Mostrando últimos ${Math.min(filteredData.length, gameCount)} registros`
-                            : 'No hay datos para el tipo de gráfico seleccionado'
-                        }
+                            : 'No hay datos para el tipo de gráfico seleccionado'}
                     </p>
                 </div>
 
-                {/* Controles - Responsive */}
+                {/* Controles */}
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4" role="toolbar" aria-label="Controles del gráfico histórico">
-                    {/* Botones de tipo - Responsive: 2x2 en móvil, línea en desktop */}
                     <div className="grid grid-cols-2 sm:flex gap-2 w-full sm:w-auto" role="group" aria-label="Tipo de datos">
                         <Button
                             className={`${unifiedStyles.secondaryButton} ${chartType === 'dan' ? 'ring-2 ring-blue-500' : ''} text-xs sm:text-sm px-2 sm:px-3`}
@@ -397,8 +416,7 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
                         </Button>
                     </div>
 
-                    {/* Selector de cantidad - Más compacto en móvil */}
-                    <Select value={gameCount.toString()} onValueChange={(v) => setGameCount(parseInt(v) as any)}>
+                    <Select value={String(gameCount)} onValueChange={(v) => setGameCount(parseInt(v, 10) as 10 | 20 | 50)}>
                         <SelectTrigger className={`${unifiedStyles.selectTrigger} w-full sm:w-32`} aria-label="Número de registros a mostrar">
                             <span className="text-xs sm:text-sm">Últimos {gameCount}</span>
                         </SelectTrigger>
@@ -410,68 +428,48 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
                     </Select>
                 </div>
 
-                {/* Controles de zoom para mobile */}
-                {isMobile && filteredData.length > 0 && (
+                {/* Controles de zoom para mobile (solo una vez montado) */}
+                {mounted && isMobile && filteredData.length > 0 && (
                     <div className="flex items-center justify-center gap-2 mb-4 p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setChartZoom(Math.max(0.5, chartZoom - 0.25))}
-                            disabled={chartZoom <= 0.5}
-                        >
+                        <Button variant="outline" size="sm" onClick={() => setChartZoom(Math.max(0.5, chartZoom - 0.25))} disabled={chartZoom <= 0.5}>
                             🔍-
                         </Button>
-                        <span className="text-sm text-gray-600 dark:text-gray-400 min-w-[60px] text-center">
-                            {Math.round(chartZoom * 100)}%
-                        </span>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setChartZoom(Math.min(3, chartZoom + 0.25))}
-                            disabled={chartZoom >= 3}
-                        >
+                        <span className="text-sm text-gray-600 dark:text-gray-400 min-w-[60px] text-center">{Math.round(chartZoom * 100)}%</span>
+                        <Button variant="outline" size="sm" onClick={() => setChartZoom(Math.min(3, chartZoom + 0.25))} disabled={chartZoom >= 3}>
                             🔍+
                         </Button>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setChartZoom(1)}
-                        >
+                        <Button variant="outline" size="sm" onClick={() => setChartZoom(1)}>
                             Reset
                         </Button>
                     </div>
                 )}
 
-                {/* Chart - Responsive height con scroll horizontal en mobile */}
+                {/* Chart container */}
                 <div
                     className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-2 sm:p-4 relative"
                     role="img"
-                    aria-label={`Gráfico de evolución histórica de ${chartType === 'dan' ? 'puntos Dan' :
-                        chartType === 'rate' ? 'puntos Rate' :
-                            chartType === 'position' ? 'posición promedio' :
-                                'puntos de temporada'
+                    aria-label={`Gráfico de evolución histórica de ${chartType === 'dan' ? 'puntos Dan' : chartType === 'rate' ? 'puntos Rate' : chartType === 'position' ? 'posición promedio' : 'puntos de temporada'
                         }. Mostrando los últimos ${gameCount} registros.`}
                     onMouseLeave={handleMouseLeave}
                 >
                     <div
-                        className={`h-64 sm:h-80 w-full ${isMobile ? 'overflow-x-auto overflow-y-hidden' : 'min-w-0'}`}
-                        style={{
-                            touchAction: isMobile ? 'pan-x pan-y' : 'auto'
-                        }}
+                        className={`h-64 sm:h-80 w-full ${mounted && isMobile ? 'overflow-x-auto overflow-y-hidden' : 'min-w-0'}`}
+                        style={{ touchAction: mounted && isMobile ? 'pan-x pan-y' : 'auto' }}
                     >
                         <div
                             style={{
-                                width: isMobile ? `${chartZoom * 100}%` : '100%',
+                                width: mounted && isMobile ? `${chartZoom * 100}%` : '100%',
                                 height: '100%',
-                                minWidth: isMobile ? '100%' : 'auto'
+                                minWidth: mounted && isMobile ? '100%' : 'auto',
                             }}
                         >
-                            {filteredData.length > 0 ? renderChart() : renderNoDataMessage()}
+                            {/* Evitar SSR del SVG para no tener diferencias de layout/fecha → solo render al montar */}
+                            {mounted ? (filteredData.length > 0 ? renderChart() : renderNoDataMessage()) : <div className="h-full w-full" aria-hidden="true" />}
                         </div>
                     </div>
 
-                    {/* Instrucciones para mobile */}
-                    {isMobile && filteredData.length > 0 && (
+                    {/* Instrucciones para mobile (solo montado) */}
+                    {mounted && isMobile && filteredData.length > 0 && (
                         <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 text-center">
                             💡 Usa los botones de zoom arriba o desliza horizontalmente para navegar
                         </div>
@@ -495,37 +493,26 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
                                         <div className="font-medium text-blue-300">
                                             {tooltip.data.tournamentId ? '🏆 Resultados del torneo:' : '🎮 Resultados del juego:'}
                                         </div>
-                                        {tooltip.data.tournamentId && (
-                                            <div className="text-xs text-gray-400 mb-1">
-                                                Top 3 + tu posición
-                                            </div>
-                                        )}
+                                        {tooltip.data.tournamentId && <div className="text-xs text-gray-400 mb-1">Top 3 + tu posición</div>}
                                         {(() => {
                                             if (!tooltip.data.players) return null;
-
                                             const sortedPlayers = [...(tooltip.data.players ?? [])].sort((a, b) => a.position - b.position);
 
-                                            // Para torneos, mostrar solo Top 3 + posición del jugador actual
                                             if (tooltip.data.tournamentId) {
                                                 const top3 = sortedPlayers.slice(0, 3);
                                                 const currentPlayerPosition = tooltip.data.position;
+                                                const playersToShow = [...top3];
 
-                                                // Si el jugador actual está fuera del top 3, lo agregamos
-                                                let playersToShow = [...top3];
                                                 if (currentPlayerPosition && currentPlayerPosition > 3) {
-                                                    const currentPlayer = sortedPlayers.find(p => p.position === currentPlayerPosition);
-                                                    if (currentPlayer) {
-                                                        playersToShow.push(currentPlayer);
-                                                    }
+                                                    const currentPlayer = sortedPlayers.find((p) => p.position === currentPlayerPosition);
+                                                    if (currentPlayer) playersToShow.push(currentPlayer);
                                                 }
 
                                                 return playersToShow.map((p, i) => {
-                                                    // Mostrar "..." entre el top 3 y la posición del jugador si hay gap
                                                     const showDots = i === 3 && p.position > 4;
-                                                    // Resaltar la posición del jugador actual
                                                     const isCurrentPlayer = p.position === currentPlayerPosition;
                                                     return (
-                                                        <div key={i}>
+                                                        <div key={`${p.name}-${i}`}>
                                                             {showDots && (
                                                                 <div className="flex justify-center text-gray-500">
                                                                     <span>...</span>
@@ -537,23 +524,27 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
                                                                     {isCurrentPlayer && <span className="text-blue-300 ml-1">←</span>}
                                                                 </span>
                                                                 <span className={p.finalScore >= 0 ? 'text-green-400' : 'text-red-400'}>
-                                                                    {p.finalScore >= 0 ? '+' : ''}{p.finalScore}
+                                                                    {p.finalScore >= 0 ? '+' : ''}
+                                                                    {p.finalScore}
                                                                 </span>
                                                             </div>
                                                         </div>
                                                     );
                                                 });
-                                            } else {
-                                                // Para juegos normales (4 jugadores), mostrar todos
-                                                return sortedPlayers.map((p, i) => (
-                                                    <div key={i} className="flex justify-between">
-                                                        <span>{p.position}° {p.name}</span>
-                                                        <span className={p.finalScore >= 0 ? 'text-green-400' : 'text-red-400'}>
-                                                            {p.finalScore >= 0 ? '+' : ''}{p.finalScore}
-                                                        </span>
-                                                    </div>
-                                                ));
                                             }
+
+                                            // Juego normal
+                                            return sortedPlayers.map((p, i) => (
+                                                <div key={`${p.name}-${i}`} className="flex justify-between">
+                                                    <span>
+                                                        {p.position}° {p.name}
+                                                    </span>
+                                                    <span className={p.finalScore >= 0 ? 'text-green-400' : 'text-red-400'}>
+                                                        {p.finalScore >= 0 ? '+' : ''}
+                                                        {p.finalScore}
+                                                    </span>
+                                                </div>
+                                            ));
                                         })()}
                                     </>
                                 )}
@@ -564,18 +555,14 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
                                     {chartType === 'dan' && (
                                         <div className="font-medium">
                                             Dan: {Math.round(tooltip.data.danPoints)}
-                                            <span className="text-sm text-gray-400 ml-1">
-                                                ({tooltip.data.danVariation >= 0 ? '+' : ''}{tooltip.data.danVariation.toFixed(1)})
-                                            </span>
+                                            <span className="text-sm text-gray-400 ml-1">({tooltip.data.danVariation >= 0 ? '+' : ''}{tooltip.data.danVariation.toFixed(1)})</span>
                                         </div>
                                     )}
 
                                     {chartType === 'rate' && (
                                         <div className="font-medium">
                                             Rate: {Math.round(tooltip.data.ratePoints)}
-                                            <span className="text-sm text-gray-400 ml-1">
-                                                ({tooltip.data.rateVariation >= 0 ? '+' : ''}{tooltip.data.rateVariation.toFixed(1)})
-                                            </span>
+                                            <span className="text-sm text-gray-400 ml-1">({tooltip.data.rateVariation >= 0 ? '+' : ''}{tooltip.data.rateVariation.toFixed(1)})</span>
                                         </div>
                                     )}
 
@@ -589,15 +576,9 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
                                             {tooltip.data.tournamentId && (
                                                 <div className="mt-2 p-2 bg-blue-900/30 rounded border border-blue-600">
                                                     <div className="text-blue-300 font-medium">🏆 Puntos de Torneo</div>
-                                                    <div className="text-xs text-gray-300">
-                                                        {tooltip.data.tournamentName ?? 'Torneo'}
-                                                    </div>
-                                                    <div className="text-xs text-gray-300">
-                                                        Posición: {tooltip.data.position}°
-                                                    </div>
-                                                    <div className="text-xs text-gray-300">
-                                                        Puntos ganados: {tooltip.data.seasonVariation}
-                                                    </div>
+                                                    <div className="text-xs text-gray-300">{tooltip.data.tournamentName ?? 'Torneo'}</div>
+                                                    <div className="text-xs text-gray-300">Posición: {tooltip.data.position}°</div>
+                                                    <div className="text-xs text-gray-300">Puntos ganados: {tooltip.data.seasonVariation}</div>
                                                 </div>
                                             )}
                                         </div>
@@ -607,15 +588,11 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
                                         <>
                                             <div className="font-medium">
                                                 Dan: {Math.round(tooltip.data.danPoints)}
-                                                <span className="text-sm text-gray-400 ml-1">
-                                                    ({tooltip.data.danVariation >= 0 ? '+' : ''}{tooltip.data.danVariation.toFixed(1)})
-                                                </span>
+                                                <span className="text-sm text-gray-400 ml-1">({tooltip.data.danVariation >= 0 ? '+' : ''}{tooltip.data.danVariation.toFixed(1)})</span>
                                             </div>
                                             <div className="font-medium">
                                                 Rate: {Math.round(tooltip.data.ratePoints)}
-                                                <span className="text-sm text-gray-400 ml-1">
-                                                    ({tooltip.data.rateVariation >= 0 ? '+' : ''}{tooltip.data.rateVariation.toFixed(1)})
-                                                </span>
+                                                <span className="text-sm text-gray-400 ml-1">({tooltip.data.rateVariation >= 0 ? '+' : ''}{tooltip.data.rateVariation.toFixed(1)})</span>
                                             </div>
                                             <div className="font-medium">
                                                 Season: {Math.round(tooltip.data.seasonPoints)}
