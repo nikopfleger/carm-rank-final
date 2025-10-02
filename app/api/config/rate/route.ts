@@ -1,4 +1,4 @@
-import { ensureCacheReady, getRate } from '@/lib/cache/core-cache';
+import { ensureCacheReady, getRate, getRateDirect } from '@/lib/cache/core-cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -12,8 +12,13 @@ export async function GET(request: NextRequest) {
         let data;
 
         await ensureCacheReady();
-
-        const rateConfigs = getRate();
+        // Cache primero, DB si falla
+        let rateConfigs: any[];
+        try {
+            rateConfigs = getRate();
+        } catch (e) {
+            rateConfigs = await getRateDirect();
+        }
 
         if (name) {
             // Obtener configuración específica por nombre

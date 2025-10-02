@@ -1,7 +1,7 @@
 // app/api/dan/configs/route.ts  (o donde esté tu handler)
 ; // evita Edge
 
-import { ensureCacheReady, getDan } from '@/lib/cache/core-cache';
+import { ensureCacheReady, getDan, getDanDirect } from '@/lib/cache/core-cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -14,10 +14,16 @@ export async function GET(request: NextRequest) {
         const { searchParams } = new URL(request.url);
         const sanma = searchParams.get('sanma') === 'true';
 
-        const allDanConfigs = getDan();
-        const danConfigs = allDanConfigs.filter(c => c.sanma === sanma);
+        let allDanConfigs;
+        try {
+            allDanConfigs = getDan();
+        } catch {
+            // Fallback duro a DB cuando no hay cache
+            allDanConfigs = await getDanDirect();
+        }
+        const danConfigs = allDanConfigs.filter((c: any) => c.sanma === sanma);
 
-        const clientConfigs = danConfigs.map(c => ({
+        const clientConfigs = danConfigs.map((c: any) => ({
             rank: c.rank,
             minPoints: c.minPoints,
             maxPoints: c.maxPoints,
