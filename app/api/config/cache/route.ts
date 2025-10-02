@@ -13,16 +13,29 @@ export async function GET() {
         try { rate = getRate(); } catch { rate = await getRateDirect(); }
         let seasons;
         try { seasons = getSeasons(); } catch { seasons = await getSeasonsDirect(); }
-        const colors = getColors();
-        const ranking_4p_general_activos = getRanking4pGeneralActivos();
-        const ranking_4p_general_todos = getRanking4pGeneralTodos();
-        const ranking_4p_temporada_activos = getRanking4pTemporadaActivos();
-        const ranking_4p_temporada_todos = getRanking4pTemporadaTodos();
-        const ranking_3p_general_activos = getRanking3pGeneralActivos();
-        const ranking_3p_general_todos = getRanking3pGeneralTodos();
-        const ranking_3p_temporada_activos = getRanking3pTemporadaActivos();
-        const ranking_3p_temporada_todos = getRanking3pTemporadaTodos();
-        const status = getCacheStatus();
+        // Campos de cache opcionales: si fallan no rompemos la respuesta
+        let colors: any = {};
+        try { colors = getColors(); } catch { }
+        let ranking_4p_general_activos: any[] = [];
+        let ranking_4p_general_todos: any[] = [];
+        let ranking_4p_temporada_activos: any[] = [];
+        let ranking_4p_temporada_todos: any[] = [];
+        let ranking_3p_general_activos: any[] = [];
+        let ranking_3p_general_todos: any[] = [];
+        let ranking_3p_temporada_activos: any[] = [];
+        let ranking_3p_temporada_todos: any[] = [];
+        try {
+            ranking_4p_general_activos = getRanking4pGeneralActivos();
+            ranking_4p_general_todos = getRanking4pGeneralTodos();
+            ranking_4p_temporada_activos = getRanking4pTemporadaActivos();
+            ranking_4p_temporada_todos = getRanking4pTemporadaTodos();
+            ranking_3p_general_activos = getRanking3pGeneralActivos();
+            ranking_3p_general_todos = getRanking3pGeneralTodos();
+            ranking_3p_temporada_activos = getRanking3pTemporadaActivos();
+            ranking_3p_temporada_todos = getRanking3pTemporadaTodos();
+        } catch { }
+        let status: any = { enabled: false };
+        try { status = getCacheStatus(); } catch { }
 
         return NextResponse.json({
             success: true,
@@ -41,7 +54,7 @@ export async function GET() {
                 ranking_3p_temporada_todos
             },
             status,
-            message: 'Configurations retrieved from cache'
+            message: 'Configurations retrieved'
         }, {
             headers: {
                 // 1 hora fresco + SWR un día

@@ -1,14 +1,16 @@
 import { PlayerProfileNew } from "@/components/player-profile-new";
 import { PlayerProfileSkeleton } from "@/components/ui/loading-skeleton";
 import { DanConfig } from "@/lib/game-helpers-client";
+import { getBaseUrlFromHeaders } from "@/lib/get-base-url";
+import { headers } from "next/headers";
 import { Suspense } from "react";
 
 export const dynamic = "force-dynamic"; // o config de revalidate si querés caching
 
 async function getInitialData(legajo: number) {
   try {
-    // Ideal: llamar servicios/DB directo. Si no, podés usar tus APIs internas.
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    // Detectar base URL en server (Vercel/preview) sin hardcodear localhost
+    const baseUrl = getBaseUrlFromHeaders(headers());
     const [profileRes, cacheRes] = await Promise.all([
       fetch(`${baseUrl}/api/players/${legajo}/profile`, {
         cache: "no-store",

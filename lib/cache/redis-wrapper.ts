@@ -9,9 +9,10 @@ const IS_BUILD =
     process.env.STAGE === 'build';
 
 // Configuración
-const REDIS_ENABLED = process.env.REDIS_ENABLED === '1';
 const isUpstash = !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
 const isIoRedis = !!(process.env.REDIS_URL && !isUpstash);
+// Habilitado si y solo si hay proveedor configurado (URL/token válidos)
+const REDIS_ENABLED = isUpstash || isIoRedis;
 
 // Estado global (por proceso)
 let redisClient: Redis | IoRedis | null = null;
@@ -23,7 +24,7 @@ let connectionFailedUntil = 0;
 // Crear cliente sólo bajo demanda
 function getRedisClient(): Redis | IoRedis | null {
     if (IS_BUILD) return null;                 // nunca durante build
-    if (!REDIS_ENABLED) return null;          // feature flag
+    if (!REDIS_ENABLED) return null;          // sin URL => deshabilitado
     if (connectionFailed && Date.now() < connectionFailedUntil) return null;
     if (redisClient) return redisClient;
 
