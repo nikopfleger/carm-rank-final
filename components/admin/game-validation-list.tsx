@@ -91,8 +91,8 @@ export function GameValidationList() {
 
       // Cargar juegos pendientes y estadísticas en paralelo
       const [gamesData, statsData] = await Promise.all([
-        gameService.getPendingGames() as any,
-        gameService.getValidationStats() as any
+        fetch('/api/games/pending', { cache: 'no-store', next: { revalidate: 0 } }).then(r => r.json()),
+        fetch('/api/games/validation-stats', { cache: 'no-store', next: { revalidate: 0 } }).then(r => r.json())
       ]);
 
       if (gamesData.success) {

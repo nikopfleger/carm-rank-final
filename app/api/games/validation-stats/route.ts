@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
             success: true,
             stats
-        });
+        }, { headers: { 'Cache-Control': 'no-store, no-cache, max-age=0, s-maxage=0' } });
 
     } catch (error) {
         console.error('Error fetching validation stats:', error);

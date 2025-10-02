@@ -2,6 +2,8 @@ import { GameValidationList } from "@/components/admin/game-validation-list";
 import { auth } from "@/lib/auth-vercel";
 import { hasAuthority } from "@/lib/authorization";
 import { redirect } from "next/navigation";
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function ValidateGamesPage() {
   // ✅ Verificar autenticación y permisos para validar juegos
