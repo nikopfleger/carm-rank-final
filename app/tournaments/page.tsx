@@ -7,11 +7,11 @@ import { TournamentStatusBadge } from "@/components/tournaments/tournament-statu
 import { Award, Calendar, Clock, Trophy } from "@/components/ui/icons";
 import { TournamentsPageSkeleton } from "@/components/ui/loading-skeleton";
 import { SectionTitle } from "@/components/ui/section-title";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { unifiedStyles } from "@/components/ui/unified-styles";
 import { useErrorHandler } from "@/hooks/use-error-handler";
-import { formatYmdForDisplay, toYmd } from '@/lib/format-utils';
-import { useEffect, useState } from "react";
+import { formatYmdForDisplay, toYmd } from "@/lib/format-utils";
+import { useEffect, useMemo, useState } from "react";
 import styles from "./page.module.css";
 
 /* Helpers */
@@ -35,13 +35,17 @@ interface Tournament {
   participants?: number;
   maxParticipants?: number;
   prize?: string;
-  location?: NameRef;        // "Online" o un objeto {id, name}
+  location?: NameRef; // "Online" o un objeto {id, name}
   seasonId?: number;
   season?: { id: number; name: string };
   tournamentResults?: any[];
 }
 
-interface Season { id: number; name: string; isActive: boolean; }
+interface Season {
+  id: number;
+  name: string;
+  isActive: boolean;
+}
 
 export default function TournamentsPage() {
   const { handleError } = useErrorHandler();
@@ -50,8 +54,7 @@ export default function TournamentsPage() {
 
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const [seasons, setSeasons] = useState<Season[]>([]);
-  const [selectedSeason, setSelectedSeason] = useState<string>("");
-  const [selectedSeasonName, setSelectedSeasonName] = useState<string>("");
+  const [selectedSeasonId, setSelectedSeasonId] = useState<string>("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -67,68 +70,120 @@ export default function TournamentsPage() {
 
         setTournaments(Array.isArray(tournamentsData) ? tournamentsData : []);
         setSeasons(Array.isArray(seasonsData) ? seasonsData : []);
-        setSelectedSeasonName(t("ui.allSeasons", "Todas las temporadas"));
       } catch (e) {
         handleError(e, "Cargar datos");
-        setTournaments([]); setSeasons([]);
-        setSelectedSeasonName(t("ui.allSeasons", "Todas las temporadas"));
-      } finally { setLoading(false); }
+        setTournaments([]);
+        setSeasons([]);
+      } finally {
+        setLoading(false);
+      }
     };
     loadData();
   }, [publicService, t, handleError]);
 
   /* Filtro y categorías */
   const filteredTournaments = tournaments.filter((tr) => {
-    if (!selectedSeason) return true;
+    if (!selectedSeasonId) return true;
     const seasonId = tr.season?.id || (tr as any).seasonId;
-    return seasonId && seasonId.toString() === selectedSeason;
+    return seasonId && seasonId.toString() === selectedSeasonId;
   });
 
-  const today0 = (() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; })();
+  const today0 = (() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  })();
 
   const upcomingTournaments = filteredTournaments.filter((t) => (dateOnly(t.startDate) ?? today0) > today0);
   const completedTournaments = filteredTournaments.filter((t) => t.isCompleted);
-  const ongoingTournaments = filteredTournaments.filter((t) => (dateOnly(t.startDate) ?? today0) <= today0 && !t.isCompleted);
+  const ongoingTournaments = filteredTournaments.filter(
+    (t) => (dateOnly(t.startDate) ?? today0) <= today0 && !t.isCompleted
+  );
 
   const handleSeasonChange = (seasonId: string) => {
-    setSelectedSeason(seasonId);
-    if (!seasonId) setSelectedSeasonName("Todas las temporadas");
-    else {
-      const s = seasons.find((x) => x.id.toString() === seasonId);
-      setSelectedSeasonName(s ? `${s.name} ${s.isActive ? "(Activa)" : ""}` : "Todas las temporadas");
-    }
+    setSelectedSeasonId(seasonId);
   };
+
+  // Calcular el texto a mostrar en el SelectValue
+  const selectedSeasonText = useMemo(() => {
+    if (selectedSeasonId === "") {
+      return t("ui.allSeasons", "Todas las temporadas");
+    }
+    const season = seasons.find(s => s.id.toString() === selectedSeasonId);
+    return season ? `${season.name} ${season.isActive ? "(Activa)" : ""}` : selectedSeasonId;
+  }, [selectedSeasonId, seasons, t]);
 
   /* Colores por temporada */
   const getSeasonColor = (seasonId?: number | null) => {
     const map = {
       1: {
-        bg: "bg-blue-500", icon: "from-blue-400 via-blue-500 to-blue-600", border: "hover:border-blue-300 dark:hover:border-blue-600", accent: "text-blue-500",
-        completed: { icon: "from-blue-300 via-blue-400 to-blue-500", border: "hover:border-blue-200 dark:hover:border-blue-700", accent: "text-blue-400" }
+        bg: "bg-blue-500",
+        icon: "from-blue-400 via-blue-500 to-blue-600",
+        border: "hover:border-blue-300 dark:hover:border-blue-600",
+        accent: "text-blue-500",
+        completed: {
+          icon: "from-blue-300 via-blue-400 to-blue-500",
+          border: "hover:border-blue-200 dark:hover:border-blue-700",
+          accent: "text-blue-400",
+        },
       },
       2: {
-        bg: "bg-green-500", icon: "from-green-400 via-green-500 to-green-600", border: "hover:border-green-300 dark:hover:border-green-600", accent: "text-green-500",
-        completed: { icon: "from-green-300 via-green-400 to-green-500", border: "hover:border-green-200 dark:hover:border-green-700", accent: "text-green-400" }
+        bg: "bg-green-500",
+        icon: "from-green-400 via-green-500 to-green-600",
+        border: "hover:border-green-300 dark:hover:border-green-600",
+        accent: "text-green-500",
+        completed: {
+          icon: "from-green-300 via-green-400 to-green-500",
+          border: "hover:border-green-200 dark:hover:border-green-700",
+          accent: "text-green-400",
+        },
       },
       3: {
-        bg: "bg-purple-500", icon: "from-purple-400 via-purple-500 to-purple-600", border: "hover:border-purple-300 dark:hover:border-purple-600", accent: "text-purple-500",
-        completed: { icon: "from-purple-300 via-purple-400 to-purple-500", border: "hover:border-purple-200 dark:hover:border-purple-700", accent: "text-purple-400" }
+        bg: "bg-purple-500",
+        icon: "from-purple-400 via-purple-500 to-purple-600",
+        border: "hover:border-purple-300 dark:hover:border-purple-600",
+        accent: "text-purple-500",
+        completed: {
+          icon: "from-purple-300 via-purple-400 to-purple-500",
+          border: "hover:border-purple-200 dark:hover:border-purple-700",
+          accent: "text-purple-400",
+        },
       },
       4: {
-        bg: "bg-orange-500", icon: "from-orange-400 via-orange-500 to-orange-600", border: "hover:border-orange-300 dark:hover:border-orange-600", accent: "text-orange-500",
-        completed: { icon: "from-orange-300 via-orange-400 to-orange-500", border: "hover:border-orange-200 dark:hover:border-orange-700", accent: "text-orange-400" }
+        bg: "bg-orange-500",
+        icon: "from-orange-400 via-orange-500 to-orange-600",
+        border: "hover:border-orange-300 dark:hover:border-orange-600",
+        accent: "text-orange-500",
+        completed: {
+          icon: "from-orange-300 via-orange-400 to-orange-500",
+          border: "hover:border-orange-200 dark:hover:border-orange-700",
+          accent: "text-orange-400",
+        },
       },
       5: {
-        bg: "bg-pink-500", icon: "from-pink-400 via-pink-500 to-pink-600", border: "hover:border-pink-300 dark:hover:border-pink-600", accent: "text-pink-500",
-        completed: { icon: "from-pink-300 via-pink-400 to-pink-500", border: "hover:border-pink-200 dark:hover:border-pink-700", accent: "text-pink-400" }
+        bg: "bg-pink-500",
+        icon: "from-pink-400 via-pink-500 to-pink-600",
+        border: "hover:border-pink-300 dark:hover:border-pink-600",
+        accent: "text-pink-500",
+        completed: {
+          icon: "from-pink-300 via-pink-400 to-pink-500",
+          border: "hover:border-pink-200 dark:hover:border-pink-700",
+          accent: "text-pink-400",
+        },
       },
     } as const;
 
     if (!seasonId || seasonId <= 0 || Number.isNaN(seasonId))
       return {
-        bg: "bg-indigo-500", icon: "from-indigo-400 via-indigo-500 to-indigo-600",
-        border: "hover:border-indigo-300 dark:hover:border-indigo-600", accent: "text-indigo-500",
-        completed: { icon: "from-indigo-300 via-indigo-400 to-indigo-500", border: "hover:border-indigo-200 dark:hover:border-indigo-700", accent: "text-indigo-400" }
+        bg: "bg-indigo-500",
+        icon: "from-indigo-400 via-indigo-500 to-indigo-600",
+        border: "hover:border-indigo-300 dark:hover:border-indigo-600",
+        accent: "text-indigo-500",
+        completed: {
+          icon: "from-indigo-300 via-indigo-400 to-indigo-500",
+          border: "hover:border-indigo-200 dark:hover:border-indigo-700",
+          accent: "text-indigo-400",
+        },
       };
 
     const idx = ((seasonId - 1) % 5) + 1;
@@ -156,10 +211,14 @@ export default function TournamentsPage() {
       <>
         {/* Fila 1: Título (clamp 2 líneas, alto fijo por grid) */}
         <div className={`${styles.rowTitle} flex items-start gap-3`}>
-          <div className={`w-11 h-11 bg-gradient-to-br ${colors.icon} rounded-xl flex items-center justify-center text-white shadow-lg flex-shrink-0`}>
+          <div
+            className={`w-11 h-11 bg-gradient-to-br ${colors.icon} rounded-xl flex items-center justify-center text-white shadow-lg flex-shrink-0`}
+          >
             <Trophy className="w-5 h-5" />
           </div>
-          <h3 className={`text-lg sm:text-xl font-bold text-gray-900 dark:text-white leading-snug ${styles.clamp2}`}>{t.name}</h3>
+          <h3 className={`text-lg sm:text-xl font-bold text-gray-900 dark:text-white leading-snug ${styles.clamp2}`}>
+            {t.name}
+          </h3>
         </div>
 
         {/* Fila 2: Meta - Individual y Pendiente en misma línea */}
@@ -203,16 +262,18 @@ export default function TournamentsPage() {
   const Card = ({ tournament: t, section }: { tournament: Tournament; section: "ongoing" | "upcoming" | "completed" }) => {
     const sId = t.season?.id ?? t.seasonId ?? 0;
     const sc = getSeasonColor(sId);
-    const colors = section === "completed"
-      ? { icon: sc.completed.icon, border: sc.completed.border, accent: sc.completed.accent }
-      : { icon: sc.icon, border: sc.border, accent: sc.accent };
-
+    const colors =
+      section === "completed"
+        ? { icon: sc.completed.icon, border: sc.completed.border, accent: sc.completed.accent }
+        : { icon: sc.icon, border: sc.border, accent: sc.accent };
 
     // Si no hay ubicación, mostramos "Online" como fallback (pedido: que SIEMPRE esté abajo)
     const locationText = labelOf(t.location) || "Online";
 
     return (
-      <div className={`group relative ${unifiedStyles.card} ${colors.border} overflow-hidden ${styles.cardItem}`}>
+      <div
+        className={`group relative ${unifiedStyles.card} ${colors.border} overflow-hidden ${styles.cardItem} w-full`}
+      >
         <div className={styles.cardBody}>
           {/* 1+2) Título + Meta */}
           {CardHeader(t, colors)}
@@ -221,14 +282,20 @@ export default function TournamentsPage() {
           <div className={`${styles.rowDate} flex items-start gap-3`}>
             <Calendar className={`w-4 h-4 mt-0.5 ${colors.accent}`} />
             <div>
-              <div className={`text-sm font-medium ${section === "completed" ? "text-gray-700 dark:text-gray-300" : "text-gray-900 dark:text-white"}`}>
+              <div
+                className={`text-sm font-medium ${section === "completed" ? "text-gray-700 dark:text-gray-300" : "text-gray-900 dark:text-white"
+                  }`}
+              >
                 {t.endDate
-                  ? `${formatYmdForDisplay(toYmd(t.startDate), 'es-AR')} - ${formatYmdForDisplay(toYmd(t.endDate), 'es-AR')}`
-                  : formatYmdForDisplay(toYmd(t.startDate), 'es-AR')}
+                  ? `${formatYmdForDisplay(toYmd(t.startDate), "es-AR")} - ${formatYmdForDisplay(
+                    toYmd(t.endDate),
+                    "es-AR"
+                  )}`
+                  : formatYmdForDisplay(toYmd(t.startDate), "es-AR")}
               </div>
               <div className={"text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2"}>
                 <Clock className="w-4 h-4" />
-                <span>{t.isCompleted ? 'Finalizado' : 'Programado'}</span>
+                <span>{t.isCompleted ? "Finalizado" : "Programado"}</span>
               </div>
             </div>
           </div>
@@ -254,25 +321,28 @@ export default function TournamentsPage() {
       <SectionTitle title={t("tournaments.listTitle", "Lista de Torneos")} />
 
       <div className="flex flex-col sm:flex-row gap-4 mb-4">
-        <Select onValueChange={handleSeasonChange} value={selectedSeason}>
-          <SelectTrigger className="w-[180px]">
-            <SelectContent>
-              <SelectItem value="">{t("ui.allSeasons", "Todas las temporadas")}</SelectItem>
-              {seasons.map((season) => (
-                <SelectItem key={season.id} value={season.id.toString()}>
-                  {season.name} {season.isActive ? "(Activa)" : ""}
-                </SelectItem>
-              ))}
-            </SelectContent>
+        <Select onValueChange={handleSeasonChange} value={selectedSeasonId}>
+          <SelectTrigger className="w-[220px]">
+            <SelectValue placeholder={t("ui.allSeasons", "Todas las temporadas")}>
+              {selectedSeasonText}
+            </SelectValue>
           </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">{t("ui.allSeasons", "Todas las temporadas")}</SelectItem>
+            {seasons.map((season) => (
+              <SelectItem key={season.id} value={season.id.toString()}>
+                {season.name} {season.isActive ? "(Activa)" : ""}
+              </SelectItem>
+            ))}
+          </SelectContent>
         </Select>
       </div>
 
-      <div className="grid gap-4">
+      <div className="grid gap-8">
         {upcomingTournaments.length > 0 && (
           <div>
             <h3 className="text-lg font-bold mb-3">{t("tournaments.upcoming", "Próximos Torneos")}</h3>
-            <div className="grid gap-4">
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {upcomingTournaments.map((t) => (
                 <Card key={t.id} tournament={t} section="upcoming" />
               ))}
@@ -283,7 +353,7 @@ export default function TournamentsPage() {
         {ongoingTournaments.length > 0 && (
           <div>
             <h3 className="text-lg font-bold mb-3">{t("tournaments.ongoing", "Torneos en Curso")}</h3>
-            <div className="grid gap-4">
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {ongoingTournaments.map((t) => (
                 <Card key={t.id} tournament={t} section="ongoing" />
               ))}
@@ -294,7 +364,7 @@ export default function TournamentsPage() {
         {completedTournaments.length > 0 && (
           <div>
             <h3 className="text-lg font-bold mb-3">{t("tournaments.completed", "Torneos Completados")}</h3>
-            <div className="grid gap-4">
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {completedTournaments.map((t) => (
                 <Card key={t.id} tournament={t} section="completed" />
               ))}

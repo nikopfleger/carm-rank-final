@@ -82,8 +82,21 @@ const SelectTrigger = React.forwardRef<
 })
 SelectTrigger.displayName = "SelectTrigger"
 
-const SelectValue = ({ placeholder }: { placeholder?: string }) => {
+const SelectValue = ({
+  placeholder,
+  children
+}: {
+  placeholder?: string
+  children?: React.ReactNode
+}) => {
   const { value } = useSelectContext()
+
+  // Si hay children, los mostramos
+  if (children) {
+    return <span>{children}</span>
+  }
+
+  // Fallback al comportamiento original
   return <span>{value || placeholder}</span>
 }
 
