@@ -18,8 +18,16 @@ export class ApiService {
             body: JSON.stringify(data),
         });
         if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || 'Error en la petición');
+            let errorMessage = 'Error en la petición';
+            try {
+                const error = await response.json();
+                errorMessage = error.message || error.error || `HTTP ${response.status}: ${response.statusText}`;
+                console.error(`API Error ${response.status} en ${endpoint}:`, error);
+            } catch (parseError) {
+                errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+                console.error(`Error parseando respuesta de ${endpoint}:`, parseError);
+            }
+            throw new Error(errorMessage);
         }
         return response.json();
     }

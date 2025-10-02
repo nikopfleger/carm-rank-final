@@ -47,7 +47,7 @@ function getRedisClient(): Redis | IoRedis | null {
             client.on('error', (error) => {
                 // ECONNREFUSED / Connection is closed, etc.
                 const msg = (error as any)?.message || String(error);
-                console.error('❌ Redis connection error:', msg);
+                console.warn(`⚠️ Redis connection error (fallback to DB): ${msg}`);
                 connectionFailed = true;
                 connectionFailedUntil = Date.now() + 5 * 60 * 1000; // 5 min
                 try { client.disconnect(); } catch { /* no-op */ }
@@ -63,7 +63,8 @@ function getRedisClient(): Redis | IoRedis | null {
             return null;
         }
     } catch (e) {
-        console.error('❌ Failed to create Redis client:', e);
+        const errorMsg = e instanceof Error ? e.message : String(e);
+        console.warn(`⚠️ Failed to create Redis client (fallback to DB): ${errorMsg}`);
         return null;
     }
     return redisClient;
@@ -117,7 +118,8 @@ export class RedisCache {
                 return await (c as IoRedis).get(key);
             }
         } catch (e) {
-            console.error(`❌ Redis GET error (${key}):`, e);
+            const errorMsg = e instanceof Error ? e.message : String(e);
+            console.warn(`⚠️ Redis GET error (${key}) - fallback to DB: ${errorMsg}`);
             if (this.isLimitError(e)) {
                 redisDisabled = true;
                 redisDisabledUntil = Date.now() + 24 * 60 * 60 * 1000;
@@ -139,7 +141,8 @@ export class RedisCache {
             }
             return true;
         } catch (e) {
-            console.error(`❌ Redis SET error (${key}):`, e);
+            const errorMsg = e instanceof Error ? e.message : String(e);
+            console.warn(`⚠️ Redis SET error (${key}) - fallback to DB: ${errorMsg}`);
             if (this.isLimitError(e)) {
                 redisDisabled = true;
                 redisDisabledUntil = Date.now() + 24 * 60 * 60 * 1000;
@@ -156,7 +159,8 @@ export class RedisCache {
             else await (c as IoRedis).del(key);
             return true;
         } catch (e) {
-            console.error(`❌ Redis DEL error (${key}):`, e);
+            const errorMsg = e instanceof Error ? e.message : String(e);
+            console.warn(`⚠️ Redis DEL error (${key}) - fallback to DB: ${errorMsg}`);
             return false;
         }
     }
@@ -173,7 +177,8 @@ export class RedisCache {
                 return r === 1;
             }
         } catch (e) {
-            console.error(`❌ Redis EXISTS error (${key}):`, e);
+            const errorMsg = e instanceof Error ? e.message : String(e);
+            console.warn(`⚠️ Redis EXISTS error (${key}) - fallback to DB: ${errorMsg}`);
             return false;
         }
     }
@@ -187,7 +192,8 @@ export class RedisCache {
             else await (c as IoRedis).ping();
             return true;
         } catch (e) {
-            console.error('❌ Redis PING error:', e);
+            const errorMsg = e instanceof Error ? e.message : String(e);
+            console.warn(`⚠️ Redis PING error - fallback to DB: ${errorMsg}`);
             return false;
         }
     }

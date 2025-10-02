@@ -105,7 +105,10 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     }
 
     const updatedAt = await prisma.user.update({
-        where: { id },
+        where: {
+            id,
+            version: target.version // Optimistic locking
+        },
         data: {
             isActive: isActive !== undefined ? isActive : undefined,
             role: nextRole,

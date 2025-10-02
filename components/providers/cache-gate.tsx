@@ -31,7 +31,24 @@ export default async function CacheGate({ children }: CacheGateProps) {
 
         await withTimeout(ensureCacheReady(), 8000);
 
-        console.log('🚪 CacheGate: Cache lista, renderizando children');
+        // Verificar si realmente hay cache o si estamos usando DB directo
+        const { getRedisCache } = await import('@/lib/cache/redis-wrapper');
+        const redisCache = getRedisCache();
+
+        if (redisCache) {
+            try {
+                const status = await redisCache.getStatus();
+                if (status.connected) {
+                    console.log('🚪 CacheGate: Cache lista');
+                } else {
+                    console.log('🚪 CacheGate: Redis no disponible, usando DB directo');
+                }
+            } catch (error) {
+                console.log('🚪 CacheGate: Redis no disponible, usando DB directo');
+            }
+        } else {
+            console.log('🚪 CacheGate: Redis no configurado, usando DB directo');
+        }
         return <>{children}</>;
     } catch (e: any) {
         console.error('💥 CacheGate: error inicializando cache:', e);

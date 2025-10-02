@@ -25,7 +25,8 @@ export async function GET(request: NextRequest) {
                 email: true,
                 role: true,
                 receiveGameNotifications: true,
-                receiveLinkNotifications: true
+                receiveLinkNotifications: true,
+                version: true // Incluir versión para optimistic locking
             },
             orderBy: [
                 { role: 'asc' },
@@ -98,6 +99,15 @@ export async function PATCH(request: NextRequest) {
                 role: {
                     in: [UserRole.OWNER, UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MODERATOR]
                 }
+            },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true,
+                receiveGameNotifications: true,
+                receiveLinkNotifications: true,
+                version: true // Incluir versión para optimistic locking
             }
         });
 
@@ -108,9 +118,12 @@ export async function PATCH(request: NextRequest) {
             );
         }
 
-        // Actualizar preferencias de notificación
+        // Actualizar preferencias de notificación con optimistic locking
         const updatedUser = await prisma.user.update({
-            where: { id: userId },
+            where: {
+                id: userId,
+                version: user.version // Optimistic locking
+            },
             data: {
                 receiveGameNotifications: receiveGameNotifications ?? user.receiveGameNotifications,
                 receiveLinkNotifications: receiveLinkNotifications ?? user.receiveLinkNotifications
@@ -121,7 +134,8 @@ export async function PATCH(request: NextRequest) {
                 email: true,
                 role: true,
                 receiveGameNotifications: true,
-                receiveLinkNotifications: true
+                receiveLinkNotifications: true,
+                version: true // Incluir versión en la respuesta
             }
         });
 

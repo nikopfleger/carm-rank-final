@@ -17,6 +17,7 @@ interface NotificationUser {
     role: string;
     receiveGameNotifications: boolean;
     receiveLinkNotifications: boolean;
+    version: number; // Campo para optimistic locking
 }
 
 interface EmailAccount {
@@ -53,6 +54,8 @@ export function EmailNotificationsSettings() {
             const response = await fetch('/api/admin/email-notifications/settings');
             if (response.ok) {
                 const data = await response.json();
+                console.log('📊 Datos recibidos de la API:', data);
+                console.log('👥 Usuarios en la respuesta:', data.users);
                 setSettings(data);
             } else {
                 handleError(await response.json(), 'Cargar configuración de notificaciones');
@@ -76,11 +79,28 @@ export function EmailNotificationsSettings() {
     ) => {
         try {
             setUpdating(userId);
+
+            // Obtener la versión actual del usuario
+            console.log('🔍 Buscando usuario:', userId, 'en settings:', settings);
+            const currentUser = settings?.users?.find(u => u.id === userId);
+            console.log('👤 Usuario encontrado:', currentUser);
+
+            if (!currentUser) {
+                handleError(new Error(`Usuario con ID ${userId} no encontrado en la lista`), 'Actualizar preferencias');
+                return;
+            }
+
+            if (currentUser.version === undefined || currentUser.version === null) {
+                handleError(new Error(`Usuario ${userId} no tiene campo version (valor: ${currentUser.version})`), 'Actualizar preferencias');
+                return;
+            }
+
             const response = await fetch('/api/admin/email-notifications/settings', {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     userId,
+                    version: currentUser.version, // Incluir versión para optimistic locking
                     [field]: value
                 })
             });

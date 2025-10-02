@@ -30,6 +30,7 @@ export async function POST(
     }
 
     // 0) Traer pendingGame + relaciones
+    console.log('🔍 Buscando pendingGame con ID:', pendingGameId);
     const pendingGame = await prisma.pendingGame.findUnique({
       where: { id: pendingGameId },
       include: {
@@ -41,6 +42,7 @@ export async function POST(
         player4: true
       }
     });
+    console.log('📋 PendingGame encontrado:', pendingGame ? 'Sí' : 'No');
 
     if (!pendingGame) {
       return NextResponse.json(
@@ -59,7 +61,7 @@ export async function POST(
     // 0.1) Respetar orden de aprobación
     const firstPendingGame = await prisma.pendingGame.findFirst({
       where: { status: 'PENDING' },
-      orderBy: [{ gameDate: 'asc' }, { createdAt: 'asc' }]
+      orderBy: [{ gameDate: 'asc' }, { nroJuegoDia: 'asc' }, { createdAt: 'asc' }]
     });
     if (!firstPendingGame || firstPendingGame.id !== pendingGameId) {
       return NextResponse.json(
@@ -77,6 +79,7 @@ export async function POST(
     // ===============================
     // Si el juego trae seasonId, debe existir y estar activa.
     // Si NO trae seasonId, NO actualizamos Dan/Rate/Points/maxRate, pero sí contadores/avg en GENERAL (seasonId=null).
+    // Nota: Dan/Rate son globales y SIEMPRE se actualizan cuando hay temporada activa.
     const selectedSeasonId: number | null = (pendingGame as any).seasonId ?? null;
 
     let shouldUpdateRatings = false;
@@ -179,6 +182,7 @@ export async function POST(
     // 7) Calcular posiciones y nuevos Dan/Rate (aunque luego se “gateen”)
 
     // Usar calculateGameResults centralizado para todos los cálculos
+    console.log('🧮 Iniciando cálculos de juego...');
     const { calculateGameResults } = await import('@/lib/game-calculations');
 
     const gameType = pendingGame.duration === 'HANCHAN' ? 'H' : 'T';
@@ -201,6 +205,14 @@ export async function POST(
       });
     }
 
+    console.log('📊 Datos para cálculo:', {
+      playerScores,
+      gameType,
+      isSanma,
+      seasonEligible,
+      averageTableRate
+    });
+
     const calculatedResults = calculateGameResults(
       playerScores,
       gameType,
@@ -210,9 +222,14 @@ export async function POST(
       seasonEligible
     );
 
+    // Resolver calculateGameResults una sola vez
+    console.log('⏳ Resolviendo calculateGameResults...');
+    const results = await calculatedResults;
+    console.log('✅ Resultados calculados:', results);
+
     // 8) Preparar payloads para rankings (no dependen de gameId)
     const rankingsToUpdate: any[] = [];
-    for (const result of await calculatedResults) {
+    for (const result of results) {
       const ranking = rankingsMap.get(result.playerId);
       const isH = pendingGame.duration === 'HANCHAN';
       const isT = !isH;
@@ -278,7 +295,7 @@ export async function POST(
       const newAveragePosition =
         newTotalGames > 0 ? weightedSum / newTotalGames : 0;
 
-      // Dan/Rate SIEMPRE se actualizan (son globales)
+      // Dan/Rate se actualizan solo si hay temporada activa (shouldUpdateRatings)
       const targetDan = result.newDanPoints;
       const targetRate = result.newRatePoints;
       const targetMax = Math.max(current.maxRate, result.newRatePoints);
@@ -342,12 +359,21 @@ export async function POST(
     let newGameId: number | null = null;
 
     await prisma.$transaction(async (tx) => {
+
       // 9.1) Crear el juego dentro de la transacción
       const createdAtGame = await tx.game.create({ data: gameData });
       newGameId = createdAtGame.id;
 
+      console.log('🎮 Juego creado con ID:', createdAtGame.id);
+      console.log('🎮 Datos del juego creado:', JSON.stringify(createdAtGame, null, 2));
+
+      // 9.1.1) SANITY CHECK - Verificar que el juego existe en la MISMA transacción
+      console.log('🔍 Verificando visibilidad del juego en la misma transacción...');
+      const sanityCheck = await tx.$queryRaw`SELECT 1 FROM "game" WHERE id = ${createdAtGame.id} FOR SHARE`;
+      console.log('✅ Sanity check exitoso:', sanityCheck);
+
       // 9.2) GameResults
-      const gameResultsData = (await calculatedResults).map((result) => ({
+      const gameResultsData = results.map((result) => ({
         gameId: createdAtGame.id,
         playerId: result.playerId,
         finalPosition: result.finalPosition,
@@ -360,7 +386,6 @@ export async function POST(
 
       // 9.3) Points (solo si hay temporada seleccionada/activa)
       if (shouldUpdateRatings) {
-        const results = await calculatedResults;
         const pointsData = await Promise.all(results.map(async (result) => {
           const points = [
             {
@@ -415,6 +440,15 @@ export async function POST(
 
       // 9.4) Upsert de rankings (misma fila por jugador+sanma)
       for (const r of rankingsToUpdate) {
+        // Obtener la versión actual del ranking para optimistic locking
+        const currentRanking = await tx.playerRanking.findFirst({
+          where: {
+            playerId: r.playerId,
+            isSanma: r.isSanma
+          },
+          select: { version: true }
+        });
+
         await tx.playerRanking.upsert({
           where: {
             playerId_isSanma: { playerId: r.playerId, isSanma: r.isSanma }
@@ -447,6 +481,7 @@ export async function POST(
             ...(r.seasonSecondPlaceT !== undefined ? { seasonSecondPlaceT: r.seasonSecondPlaceT } : {}),
             ...(r.seasonThirdPlaceT !== undefined ? { seasonThirdPlaceT: r.seasonThirdPlaceT } : {}),
             ...(r.seasonFourthPlaceT !== undefined ? { seasonFourthPlaceT: r.seasonFourthPlaceT } : {}),
+            // ❌ no tocar version acá - lo maneja el interceptor
           },
           create: {
             playerId: r.playerId,
@@ -478,20 +513,56 @@ export async function POST(
             ...(r.seasonSecondPlaceT !== undefined ? { seasonSecondPlaceT: r.seasonSecondPlaceT } : {}),
             ...(r.seasonThirdPlaceT !== undefined ? { seasonThirdPlaceT: r.seasonThirdPlaceT } : {}),
             ...(r.seasonFourthPlaceT !== undefined ? { seasonFourthPlaceT: r.seasonFourthPlaceT } : {}),
+            version: 0, // Versión inicial para nuevos registros
           }
         });
       }
 
-      // 9.5) Vincular el pending game con el juego oficial (también dentro de la transacción)
+      // 9.5) PATRÓN CHECK-THEN-UPDATE para evitar updateMany
+      console.log('🔍 Verificando pendingGame antes del update...');
+      const pg = await tx.pendingGame.findFirst({
+        where: {
+          id: pendingGameId,
+          version: pendingGame.version
+        }
+      });
+
+      if (!pg) {
+        throw Object.assign(new Error('OPTIMISTIC_LOCK'), { code: 'OPTIMISTIC_LOCK' });
+      }
+
+      console.log('✅ PendingGame encontrado, procediendo con update...');
+
+      // 9.6) Vincular el pending game con el juego oficial usando update (no updateMany)
+      console.log('🔗 Actualizando pendingGame:', {
+        pendingGameId,
+        version: pendingGame.version,
+        gameId: createdAtGame.id,
+        gameIdType: typeof createdAtGame.id
+      });
+
+      // Logs de debugging para verificar esquema y tipos
+      console.log('🔍 Verificando esquema y tipos...');
+      const dbInfo = await tx.$queryRaw`SELECT current_database(), current_schema()`;
+      console.log('📊 DB Info:', dbInfo);
+
+      const gameExists = await tx.$queryRaw`SELECT id FROM "game" WHERE id = ${createdAtGame.id}`;
+      console.log('🎮 Game exists check:', gameExists);
+
       await tx.pendingGame.update({
-        where: { id: pendingGameId },
+        where: {
+          id: pendingGameId
+        },
         data: {
           status: 'VALIDATED',
           validatedAt: new Date(),
           validatedBy: (authz.session.user.name || authz.session.user.email || 'Administrador') as any,
-          gameId: createdAtGame.id
+          gameId: createdAtGame.id,
+          version: { increment: 1 } // Incrementar versión para optimistic locking
         }
       });
+
+      console.log('✅ PendingGame actualizado exitosamente');
     });
 
     // 10) LIMPIEZA DE IMAGEN - Comentado para manejo manual
@@ -524,11 +595,24 @@ export async function POST(
       success: true,
       message: 'Juego aprobado exitosamente',
       gameId: newGameId,
-      gameResults: (await calculatedResults).length
+      gameResults: results.length
     });
   } catch (error) {
+    console.error('❌ Error en approve game:', error);
+    console.error('❌ Stack trace:', error instanceof Error ? error.stack : 'No stack trace available');
+
+    // Devolver el error específico en desarrollo, genérico en producción
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    const errorMessage = isDevelopment
+      ? (error instanceof Error ? error.message : 'Error desconocido')
+      : 'Error interno del servidor';
+
     return NextResponse.json(
-      { success: false, message: 'Error interno del servidor' },
+      {
+        success: false,
+        message: errorMessage,
+        ...(isDevelopment && { details: error instanceof Error ? error.stack : error })
+      },
       { status: 500 }
     );
   }

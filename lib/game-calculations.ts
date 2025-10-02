@@ -3,8 +3,35 @@
  * Usa configuraciones dinámicas desde base de datos con cache en memoria
  */
 
-import { getDan, getRate } from '@/lib/cache/core-cache';
+import { getDan, getDanDirect, getRate, getRateDirect } from '@/lib/cache/core-cache';
 
+// ===============================
+// HELPER FUNCTIONS CON FALLBACK
+// ===============================
+
+/**
+ * Obtiene configuración DAN con fallback a DB directa si Redis no está disponible
+ */
+async function getDanWithFallback() {
+  try {
+    return getDan();
+  } catch (error) {
+    console.log('📊 getDan fallback: Redis no disponible, usando DB directo');
+    return await getDanDirect();
+  }
+}
+
+/**
+ * Obtiene configuración RATE con fallback a DB directa si Redis no está disponible
+ */
+async function getRateWithFallback() {
+  try {
+    return getRate();
+  } catch (error) {
+    console.log('📊 getRate fallback: Redis no disponible, usando DB directo');
+    return await getRateDirect();
+  }
+}
 
 // ===============================
 // TIPOS Y INTERFACES
@@ -98,7 +125,7 @@ export async function calculateDanPoints(
   isSanma: boolean = false
 ): Promise<number> {
   // Obtener configuración DAN desde cache
-  const danConfigs = getDan();
+  const danConfigs = await getDanWithFallback();
   const danConfig = danConfigs.find(config =>
     config.sanma === isSanma &&
     currentDanPoints >= config.minPoints &&
@@ -130,7 +157,7 @@ export async function calculateRatePoints(
 ): Promise<number> {
 
   // Obtener configuración RATE desde cache
-  const rateConfigs = getRate();
+  const rateConfigs = await getRateWithFallback();
   const rateConfig = rateConfigs.find(config => config.sanma === isSanma);
   if (!rateConfig) {
     console.warn(`No RATE config found for sanma: ${isSanma}`);
@@ -186,7 +213,7 @@ export async function calculateSeasonPoints(
   seasonId?: number
 ): Promise<number> {
   // Obtener configuración DAN para los puntos de posición
-  const danConfigs = getDan();
+  const danConfigs = await getDanWithFallback();
   const danConfig = danConfigs.find(config =>
     config.sanma === isSanma &&
     currentSeasonPoints >= config.minPoints &&
@@ -345,7 +372,7 @@ export async function calculateDanPointsWithConfig(
  * Obtiene el piso DAN para un jugador (inmunidad)
  */
 export async function getDanFloor(points: number, isSanma: boolean): Promise<number> {
-  const danConfigs = getDan();
+  const danConfigs = await getDanWithFallback();
   const danConfig = danConfigs.find(config =>
     config.sanma === isSanma &&
     points >= config.minPoints &&
@@ -668,7 +695,7 @@ export async function pisoDan(puntos: number, isSanma: boolean = false): Promise
 
 
   // Buscar la configuración actual usando los rangos correctos
-  const danConfigs = getDan();
+  const danConfigs = await getDanWithFallback();
   const config = danConfigs.find(c =>
     c.sanma === isSanma &&
     puntos >= c.minPoints &&

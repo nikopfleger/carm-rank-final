@@ -15,7 +15,7 @@ export async function GET() {
         });
 
     } catch (error) {
-        console.error('❌ Error checking Redis health:', error);
+        console.warn('⚠️ Error checking Redis health (fallback to DB):', error);
         return NextResponse.json(
             {
                 success: false,

@@ -454,7 +454,7 @@ export function GameValidationList() {
                           }}
                           rows={normalizedPlayers.map((p) => ({
                             id: p.id,
-                            displayName: p.fullname || p.nickname,
+                            displayName: p.nickname,
                             wind: p.wind || "",
                             gameScore: p.gameScore,
                             chonbo: p.chonbo ?? 0,
