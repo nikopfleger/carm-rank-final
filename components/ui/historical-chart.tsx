@@ -200,6 +200,8 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
                         .filter(config => config.minPoints >= adjustedMin && config.minPoints <= adjustedMax);
                     return nearest.map((config) => (
                         <g key={`dan-${config.minPoints}`}>
+                            {/* El <title> debe ir primero dentro del grupo para evitar reubicación del navegador */}
+                            <title>{t(`ranks.${config.rank}`, config.rank)}</title>
                             <line
                                 x1={padding}
                                 y1={yScale(config.minPoints)}
@@ -219,7 +221,6 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
                                 fill={config.color}
                                 fontWeight="bold"
                             >
-                                <title>{t(`ranks.${config.rank}`, config.rank)}</title>
                                 {config.rank}
                             </text>
                         </g>
@@ -502,7 +503,7 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
                                         {(() => {
                                             if (!tooltip.data.players) return null;
 
-                                            const sortedPlayers = tooltip.data.players.sort((a, b) => a.position - b.position);
+                                            const sortedPlayers = [...(tooltip.data.players ?? [])].sort((a, b) => a.position - b.position);
 
                                             // Para torneos, mostrar solo Top 3 + posición del jugador actual
                                             if (tooltip.data.tournamentId) {
