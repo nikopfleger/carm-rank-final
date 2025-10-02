@@ -20,6 +20,7 @@ import {
   XCircle,
 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 // ✅ Planilla/cálculos reutilizados
@@ -72,6 +73,7 @@ interface PendingGameData {
 
 export function GameValidationList() {
   const { handleError, handleSuccess } = useErrorHandler();
+  const router = useRouter();
   const gameService = useGameService();
   const [games, setGames] = useState<PendingGameData[]>([]);
   const [selectedGameId, setSelectedGameId] = useState<number | null>(null);
@@ -89,10 +91,11 @@ export function GameValidationList() {
     try {
       setLoading(true);
 
-      // Cargar juegos pendientes y estadísticas en paralelo
+      // Cargar juegos pendientes y estadísticas en paralelo (bypass de CDN/route cache)
+      const ts = Date.now();
       const [gamesData, statsData] = await Promise.all([
-        fetch('/api/games/pending', { cache: 'no-store', next: { revalidate: 0 } }).then(r => r.json()),
-        fetch('/api/games/validation-stats', { cache: 'no-store', next: { revalidate: 0 } }).then(r => r.json())
+        fetch(`/api/games/pending?ts=${ts}`, { cache: 'no-store', next: { revalidate: 0 } }).then(r => r.json()),
+        fetch(`/api/games/validation-stats?ts=${ts}`, { cache: 'no-store', next: { revalidate: 0 } }).then(r => r.json())
       ]);
 
       if (gamesData.success) {
@@ -121,7 +124,8 @@ export function GameValidationList() {
 
   // Orden: fecha, nroJuegoDia (null al final), id
   const sortedPending = useMemo(() => {
-    return games
+    const list = Array.isArray(games) ? games : [];
+    return list
       .slice()
       .sort((a, b) => {
         const ta = new Date(a.gameDate).getTime();
@@ -164,6 +168,7 @@ export function GameValidationList() {
     try {
       await gameService.approveGame(gameId);
       await loadPendingGames();
+      router.refresh();
       setSelectedGameId(null);
       handleSuccess('Juego aprobado exitosamente', 'Aprobación exitosa');
     } catch (error) {
@@ -188,6 +193,7 @@ export function GameValidationList() {
     try {
       await gameService.rejectGame(gameId, reason);
       await loadPendingGames();
+      router.refresh();
       setSelectedGameId(null);
       handleSuccess('Juego rechazado exitosamente', 'Rechazo exitoso');
     } catch (error) {
