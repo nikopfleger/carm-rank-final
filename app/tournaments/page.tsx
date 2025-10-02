@@ -200,7 +200,7 @@ export default function TournamentsPage() {
   };
 
   /* Card con slots fijos */
-  const Card = (t: Tournament, section: "ongoing" | "upcoming" | "completed") => {
+  const Card = ({ tournament: t, section }: { tournament: Tournament; section: "ongoing" | "upcoming" | "completed" }) => {
     const sId = t.season?.id ?? t.seasonId ?? 0;
     const sc = getSeasonColor(sId);
     const colors = section === "completed"
@@ -248,6 +248,7 @@ export default function TournamentsPage() {
       <PageHeader
         title={t("tournaments.title", "Torneos")}
         subtitle={t("tournaments.subtitle", "Gestiona los torneos de tu club")}
+        icon={Trophy}
       />
 
       <SectionTitle title={t("tournaments.listTitle", "Lista de Torneos")} />
@@ -273,7 +274,7 @@ export default function TournamentsPage() {
             <h3 className="text-lg font-bold mb-3">{t("tournaments.upcoming", "Próximos Torneos")}</h3>
             <div className="grid gap-4">
               {upcomingTournaments.map((t) => (
-                <Card key={t.id} t={t} section="upcoming" />
+                <Card key={t.id} tournament={t} section="upcoming" />
               ))}
             </div>
           </div>
@@ -284,7 +285,7 @@ export default function TournamentsPage() {
             <h3 className="text-lg font-bold mb-3">{t("tournaments.ongoing", "Torneos en Curso")}</h3>
             <div className="grid gap-4">
               {ongoingTournaments.map((t) => (
-                <Card key={t.id} t={t} section="ongoing" />
+                <Card key={t.id} tournament={t} section="ongoing" />
               ))}
             </div>
           </div>
@@ -295,7 +296,7 @@ export default function TournamentsPage() {
             <h3 className="text-lg font-bold mb-3">{t("tournaments.completed", "Torneos Completados")}</h3>
             <div className="grid gap-4">
               {completedTournaments.map((t) => (
-                <Card key={t.id} t={t} section="completed" />
+                <Card key={t.id} tournament={t} section="completed" />
               ))}
             </div>
           </div>
