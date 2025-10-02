@@ -1,8 +1,8 @@
 'use client';
 
-import { fmtInt } from '@/lib/format-utils';
 import { cn } from '@/lib/utils';
 import { ReactNode } from 'react';
+import { FormattedNumber } from './formatted-number';
 
 // Tipos de color unificados
 export type StatCardColor = 'purple' | 'blue' | 'green' | 'orange' | 'red' | 'yellow' | 'first' | 'second' | 'third' | 'fourth';
@@ -187,7 +187,8 @@ export function BaseStatCard({
                     role="text"
                     aria-label={`Valor: ${value}`}
                 >
-                    {typeof value === 'number' ? fmtInt(value) : value}
+                    {/* Para evitar hydration mismatch, si el valor es numérico delegamos el formateo al cliente */}
+                    {typeof value === 'number' ? <FormattedNumber value={value} options={{ maximumFractionDigits: 0 }} /> : value}
                 </div>
 
                 {subtitle && (

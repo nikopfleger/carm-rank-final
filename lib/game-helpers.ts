@@ -2,7 +2,7 @@
  * Helpers de utilidad para validación y transformación de datos de juegos
  */
 
-import { ensureCacheReady, getDan } from '@/lib/cache/core-cache';
+import { ensureCacheReady, getDan, getDanDirect } from '@/lib/cache/core-cache';
 import { type Position } from './game-calculations-client';
 
 
@@ -174,8 +174,9 @@ export function calculateAveragePosition(
  */
 export async function getDanRank(danPoints: number, isSanma: boolean = false): Promise<string> {
   await ensureCacheReady();
-  // Obtener el rango más bajo de la cache
-  const danConfigs = getDan();
+  // Obtener el rango más bajo de la cache, con fallback a DB
+  let danConfigs;
+  try { danConfigs = getDan(); } catch { danConfigs = await getDanDirect(); }
   const lowestConfig = danConfigs
     .filter(config => config.sanma === isSanma)
     .sort((a, b) => a.minPoints - b.minPoints)[0];
@@ -199,7 +200,8 @@ export async function getDanRank(danPoints: number, isSanma: boolean = false): P
  */
 export async function getNextDanRank(danPoints: number, isSanma: boolean = false): Promise<{ proximo: string; faltantes: number }> {
   // Obtener el rango más bajo de la cache
-  const danConfigs = getDan();
+  let danConfigs;
+  try { danConfigs = getDan(); } catch { danConfigs = await getDanDirect(); }
   const lowestConfig = danConfigs
     .filter(config => config.sanma === isSanma)
     .sort((a, b) => a.minPoints - b.minPoints)[0];
@@ -251,7 +253,8 @@ export async function getDanRankProgress(danPoints: number, isSanma: boolean = f
   nextRank: string;
 }> {
   // Obtener el rango más bajo de la cache
-  const danConfigs = getDan();
+  let danConfigs;
+  try { danConfigs = getDan(); } catch { danConfigs = await getDanDirect(); }
   const lowestConfig = danConfigs
     .filter(config => config.sanma === isSanma)
     .sort((a, b) => a.minPoints - b.minPoints)[0];
@@ -321,7 +324,8 @@ export async function getDanRankProgress(danPoints: number, isSanma: boolean = f
  * Obtiene las líneas de referencia para el gráfico de Dan
  */
 export async function getDanRankLines(isSanma: boolean = false): Promise<Array<{ value: number; label: string; color: string }>> {
-  const danConfigs = getDan();
+  let danConfigs;
+  try { danConfigs = getDan(); } catch { danConfigs = await getDanDirect(); }
   const allConfigs = danConfigs.filter(config => config.sanma === isSanma);
 
   // Ordenar por puntos mínimos

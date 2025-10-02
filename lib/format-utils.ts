@@ -4,28 +4,27 @@
  * @param options - Opciones de formateo
  * @returns Número formateado según las preferencias del navegador
  */
-export function formatNumber(
-    num: number,
-    options?: Intl.NumberFormatOptions
-): string {
-    // Usar siempre el locale automático del navegador
-    // Esto evita problemas de hidratación porque el resultado es consistente
-    return num.toLocaleString(undefined, options);
-}
+// Factory que recibe locale (inyectado desde contexto por request)
+export const makeFormatters = (locale: string) => ({
+    formatNumber: (num: number, options?: Intl.NumberFormatOptions) => new Intl.NumberFormat(locale, options).format(num),
+    formatInteger: (num: number) => new Intl.NumberFormat(locale, { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(num),
+    formatDecimal: (num: number, decimals: number = 2) => new Intl.NumberFormat(locale, { minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(num),
+    formatPercentage: (num: number, decimals: number = 1) => new Intl.NumberFormat(locale, { minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(num) + '%',
+    formatPercentageRaw: (num: number, decimals: number = 1) => new Intl.NumberFormat(locale, { minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(num) + '%',
+});
 
 /**
  * Formatea un número como entero usando el locale automático del navegador
  * @param num - Número a formatear
  * @returns Número formateado como entero
  */
-export function formatInteger(
-    num: number
-): string {
-    return formatNumber(num, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-    });
-}
+// Backwards-compat helper defaulting to es-AR si no se provee contexto
+const defaultFmt = makeFormatters('es-AR');
+export const formatNumber = defaultFmt.formatNumber;
+export const formatInteger = defaultFmt.formatInteger;
+export const formatDecimal = defaultFmt.formatDecimal;
+export const formatPercentage = defaultFmt.formatPercentage;
+export const formatPercentageRaw = defaultFmt.formatPercentageRaw;
 
 /**
  * Formatea un número con decimales usando el locale automático del navegador
@@ -33,15 +32,7 @@ export function formatInteger(
  * @param decimals - Número de decimales
  * @returns Número formateado con decimales
  */
-export function formatDecimal(
-    num: number,
-    decimals: number = 2
-): string {
-    return formatNumber(num, {
-        minimumFractionDigits: decimals,
-        maximumFractionDigits: decimals
-    });
-}
+// (las funciones arriba ya cubren decimal/percentage)
 
 /**
  * Formatea un porcentaje usando el locale automático del navegador
@@ -49,16 +40,6 @@ export function formatDecimal(
  * @param decimals - Número de decimales
  * @returns Porcentaje formateado
  */
-export function formatPercentage(
-    num: number,
-    decimals: number = 1
-): string {
-    return formatNumber(num, {
-        minimumFractionDigits: decimals,
-        maximumFractionDigits: decimals,
-        style: 'percent'
-    });
-}
 
 // Funciones de compatibilidad con el código existente
 export const fmtInt = formatInteger;
@@ -70,15 +51,7 @@ export const fmtPct1 = (num: number) => formatPercentage(num, 1);
  * @param decimals - Número de decimales
  * @returns Porcentaje formateado con símbolo % pero sin dividir por 100
  */
-export function formatPercentageRaw(
-    num: number,
-    decimals: number = 1
-): string {
-    return formatNumber(num, {
-        minimumFractionDigits: decimals,
-        maximumFractionDigits: decimals
-    }) + '%';
-}
+// (cubrimos con makeFormatters)
 
 // Función de compatibilidad para porcentajes ya calculados
 export const fmtPct1Raw = (num: number) => formatPercentageRaw(num, 1);

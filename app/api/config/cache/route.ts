@@ -1,4 +1,4 @@
-import { ensureCacheReady, getCacheStatus, getColors, getDan, getRanking3pGeneralActivos, getRanking3pGeneralTodos, getRanking3pTemporadaActivos, getRanking3pTemporadaTodos, getRanking4pGeneralActivos, getRanking4pGeneralTodos, getRanking4pTemporadaActivos, getRanking4pTemporadaTodos, getRate, getSeasons } from '@/lib/cache/core-cache';
+import { ensureCacheReady, getCacheStatus, getColors, getDan, getDanDirect, getRanking3pGeneralActivos, getRanking3pGeneralTodos, getRanking3pTemporadaActivos, getRanking3pTemporadaTodos, getRanking4pGeneralActivos, getRanking4pGeneralTodos, getRanking4pTemporadaActivos, getRanking4pTemporadaTodos, getRate, getRateDirect, getSeasons, getSeasonsDirect } from '@/lib/cache/core-cache';
 import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -6,10 +6,13 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
     try {
         await ensureCacheReady();
-
-        const dan = getDan();
-        const rate = getRate();
-        const seasons = getSeasons();
+        // Fallback: si la cache no está disponible, ir directo a DB
+        let dan;
+        try { dan = getDan(); } catch { dan = await getDanDirect(); }
+        let rate;
+        try { rate = getRate(); } catch { rate = await getRateDirect(); }
+        let seasons;
+        try { seasons = getSeasons(); } catch { seasons = await getSeasonsDirect(); }
         const colors = getColors();
         const ranking_4p_general_activos = getRanking4pGeneralActivos();
         const ranking_4p_general_todos = getRanking4pGeneralTodos();

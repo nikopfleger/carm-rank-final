@@ -14,6 +14,8 @@ import { Inter } from "next/font/google";
 import React from "react";
 import "./globals.css";
 // Mover FloatingNav/NotificationProvider a ClientShell (Client Component)
+import LocaleProvider from '@/components/providers/locale-provider';
+import { getRequestLocale } from './lib/locale';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -54,26 +56,29 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = getRequestLocale();
   return (
-    <html lang="es" className="dark">
+    <html lang={locale} className="dark">
       <body className={`${inter.className} bg-background text-foreground`}>
         <CacheGate>
-          <I18nProvider>
-            <AuthSessionProvider>
-              <ServicesProvider>
-                <NotificationProvider>
-                  <ErrorBoundaryWrapper>
-                    <ClientShell>
-                      <main className="min-h-screen pb-20 relative z-10">
-                        <PageContainer>{children}</PageContainer>
-                      </main>
-                      <Footer />
-                    </ClientShell>
-                  </ErrorBoundaryWrapper>
-                </NotificationProvider>
-              </ServicesProvider>
-            </AuthSessionProvider>
-          </I18nProvider>
+          <LocaleProvider locale={locale}>
+            <I18nProvider>
+              <AuthSessionProvider>
+                <ServicesProvider>
+                  <NotificationProvider>
+                    <ErrorBoundaryWrapper>
+                      <ClientShell>
+                        <main className="min-h-screen pb-20 relative z-10">
+                          <PageContainer>{children}</PageContainer>
+                        </main>
+                        <Footer />
+                      </ClientShell>
+                    </ErrorBoundaryWrapper>
+                  </NotificationProvider>
+                </ServicesProvider>
+              </AuthSessionProvider>
+            </I18nProvider>
+          </LocaleProvider>
         </CacheGate>
         <SpeedInsights />
         <Analytics />

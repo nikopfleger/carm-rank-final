@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth-vercel";
-import { ensureCacheReady, getDan } from "@/lib/cache/core-cache";
+import { ensureCacheReady, getDan, getDanDirect } from "@/lib/cache/core-cache";
 import { prisma } from "@/lib/database/client";
 import { getDanRank } from "@/lib/game-helpers";
 import { NextRequest, NextResponse } from "next/server";
@@ -742,7 +742,9 @@ export async function GET(
         const danRankSanma = await getDanRank(danPointsSanma, true);
 
         await ensureCacheReady();
-        const danConfigs = getDan();
+        // Fallback: si no hay cache, cargar directo desde DB
+        let danConfigs;
+        try { danConfigs = getDan(); } catch { danConfigs = await getDanDirect(); }
         const danConfigYonma = danConfigs.find(config =>
             !config.sanma &&
             danPointsYonma >= config.minPoints &&
@@ -862,8 +864,12 @@ export async function GET(
         });
     } catch (error) {
         console.error("Error fetching player profile:", error);
+        const isDev = process.env.NODE_ENV !== 'production';
         return NextResponse.json(
-            { error: "Error interno del servidor" },
+            {
+                error: isDev && error instanceof Error ? error.message : "Error interno del servidor",
+                ...(isDev && error instanceof Error ? { stack: error.stack } : {})
+            },
             { status: 500 }
         );
     }
