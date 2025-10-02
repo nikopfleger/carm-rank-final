@@ -8,8 +8,17 @@ const IS_BUILD =
     process.env.NEXT_PHASE === 'phase-production-build' ||
     process.env.STAGE === 'build';
 
-// Configuración
-const isUpstash = !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
+// Configuración (soportamos múltiples nombres de vars para Upstash)
+const REST_URL = process.env.KV_REST_API_URL
+    || process.env.UPSTASH_REDIS_REST_URL
+    || process.env.UPSTASH_KV_REST_URL
+    || '';
+const REST_TOKEN = process.env.KV_REST_API_TOKEN
+    || process.env.UPSTASH_REDIS_REST_TOKEN
+    || process.env.UPSTASH_KV_REST_TOKEN
+    || '';
+
+const isUpstash = !!(REST_URL && REST_TOKEN);
 const isIoRedis = !!(process.env.REDIS_URL && !isUpstash);
 // Habilitado si y solo si hay proveedor configurado (URL/token válidos)
 const REDIS_ENABLED = isUpstash || isIoRedis;
@@ -31,8 +40,8 @@ function getRedisClient(): Redis | IoRedis | null {
     try {
         if (isUpstash) {
             redisClient = new Redis({
-                url: process.env.KV_REST_API_URL!,
-                token: process.env.KV_REST_API_TOKEN!,
+                url: REST_URL!,
+                token: REST_TOKEN!,
             });
         } else if (isIoRedis) {
             // ioredis en local / server
