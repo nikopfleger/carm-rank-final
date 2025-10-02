@@ -67,3 +67,31 @@ export const POSITION_COLORS = {
     '3°': '#CD7F32', // Bronce con símbolo
     '4°': '#8B4513'  // Marrón con símbolo
 };
+
+// ==========================
+// Fechas (estables por día)
+// ==========================
+
+// Convierte un Date/ISO/YYY-MM-DD a YYY-MM-DD sin aplicar zona horaria del cliente
+export function toYmd(input: Date | string | number | null | undefined): string | null {
+    if (!input) return null;
+    if (typeof input === 'string') {
+        // ISO o Y-M-D
+        if (input.length >= 10) return input.slice(0, 10);
+        return null;
+    }
+    const d = new Date(input);
+    if (isNaN(d.getTime())) return null;
+    const y = d.getUTCFullYear();
+    const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(d.getUTCDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+}
+
+// Formatea un YYYY-MM-DD de forma estable evitando corrimientos por TZ
+export function formatYmdForDisplay(ymd: string | null | undefined, locale: string = 'es-AR'): string {
+    if (!ymd) return '';
+    const [y, m, d] = ymd.split('-').map(Number);
+    const dt = new Date(Date.UTC(y, (m || 1) - 1, d || 1, 12, 0, 0));
+    return dt.toLocaleDateString(locale, { dateStyle: 'medium' } as any);
+}

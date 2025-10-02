@@ -12,6 +12,7 @@ import { GameSheetSkeleton } from "@/components/ui/loading-skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useEnumI18n } from "@/hooks/use-enum-i18n";
 import { useErrorHandler } from "@/hooks/use-error-handler";
+import { formatYmdForDisplay, toYmd } from '@/lib/format-utils';
 import { AlertTriangle, Calendar, CheckCircle, Upload } from "lucide-react";
 
 // Lazy load del componente pesado
@@ -882,7 +883,7 @@ export function ImprovedSubmitGameForm() {
                 <SelectItem value="">Sin torneo específico</SelectItem>
                 {availableTournaments.map((t) => (
                   <SelectItem key={t.id} value={t.name}>
-                    {t.name} ({t.type}) - {new Date(t.startDate).toLocaleDateString()}
+                    {t.name} ({t.type}) - {formatYmdForDisplay(toYmd(t.startDate), 'es-AR')}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -1103,7 +1104,7 @@ export function ImprovedSubmitGameForm() {
                 <SelectItem value="">Sin torneo específico</SelectItem>
                 {availableTournaments.map((t) => (
                   <SelectItem key={t.id} value={t.name}>
-                    {t.name} ({t.type}) - {new Date(t.startDate).toLocaleDateString()}
+                    {t.name} ({t.type}) - {formatYmdForDisplay(toYmd(t.startDate), 'es-AR')}
                   </SelectItem>
                 ))}
               </SelectContent>

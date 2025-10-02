@@ -4,6 +4,7 @@ import { useI18nContext } from "@/components/providers/i18n-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { formatYmdForDisplay, toYmd } from '@/lib/format-utils';
 import { Calendar, CheckCircle, Globe, Link2, User } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
@@ -44,11 +45,7 @@ export function PlayerInfo({
     const formatDate = (dateString: string) => {
         try {
             const date = new Date(dateString);
-            return date.toLocaleDateString('es-AR', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
+            return formatYmdForDisplay(toYmd(date as any), 'es-AR');
         } catch {
             return dateString;
         }

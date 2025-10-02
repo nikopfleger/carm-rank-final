@@ -6,6 +6,7 @@ import { UnifiedABMLayout } from "@/components/admin/abm/unified-abm-layout";
 import { SeasonCloseModal } from "@/components/admin/season-close-modal";
 import { Badge } from "@/components/ui/badge";
 import { useCrud } from "@/hooks/use-crud";
+import { formatYmdForDisplay, toYmd } from '@/lib/format-utils';
 import { Edit, Eye, Power, Trash2 } from "lucide-react";
 import { useCallback, useState } from "react";
 
@@ -63,7 +64,7 @@ export default function SeasonsABMPage() {
       width: "120px",
       type: "date",
       sortable: true,
-      render: (value: string | undefined) => value ? new Date(value).toLocaleDateString() : '-'
+      render: (value: string | undefined) => value ? formatYmdForDisplay(toYmd(value), 'es-AR') : '-'
     },
     {
       key: "isActive",

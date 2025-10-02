@@ -4,6 +4,7 @@ import { useI18nContext } from '@/components/providers/i18n-provider';
 import { Button } from '@/components/ui/button';
 import { SeparatorServer as Separator } from '@/components/ui/separator-server';
 import { unifiedStyles } from '@/components/ui/unified-styles';
+import { formatYmdForDisplay, toYmd } from '@/lib/format-utils';
 import { cn } from '@/lib/utils';
 
 interface PlayerProfileHeaderProps {
@@ -46,19 +47,11 @@ export function PlayerProfileHeader({
             if (dateMatch) {
                 const [year, month, day] = dateMatch[1].split('-').map(Number);
                 const date = new Date(year, month - 1, day); // month - 1 porque Date usa 0-indexado
-                return date.toLocaleDateString('es-AR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
+                return formatYmdForDisplay(toYmd(date), 'es-AR');
             } else {
                 // Para otros formatos, usar el método original
                 const date = new Date(dateString);
-                return date.toLocaleDateString('es-AR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
+                return formatYmdForDisplay(toYmd(date), 'es-AR');
             }
         } catch (error) {
             return dateString;

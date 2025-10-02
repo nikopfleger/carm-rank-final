@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 // Tabs component not available, using simple state-based tabs
 import { useErrorHandler } from "@/hooks/use-error-handler";
-import { formatNumber } from "@/lib/format-utils";
+import { formatNumber, formatYmdForDisplay, toYmd } from "@/lib/format-utils";
 import { Calendar, Edit, Save, Trophy, Users, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -501,7 +501,7 @@ export function SeasonResultsEditor({
                         </CardTitle>
                         <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 flex items-center gap-2">
                             <Calendar className="h-4 w-4" />
-                            {new Date(season.startDate).toLocaleDateString()} - {season.endDate ? new Date(season.endDate).toLocaleDateString() : 'Activa'}
+                            {formatYmdForDisplay(toYmd(season.startDate), 'es-AR')} - {season.endDate ? formatYmdForDisplay(toYmd(season.endDate), 'es-AR') : 'Activa'}
                             {season.isClosed && <span className="ml-2 px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs">Cerrada</span>}
                         </p>
                     </div>

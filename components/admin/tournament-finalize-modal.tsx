@@ -8,6 +8,7 @@ import {
     UnifiedCardContent,
     UnifiedModal
 } from "@/components/ui/unified";
+import { formatYmdForDisplay, toYmd } from '@/lib/format-utils';
 import {
     AlertTriangle,
     Award,
@@ -97,11 +98,7 @@ export function TournamentFinalizeModal({
     };
 
     const formatDate = (date: Date) => {
-        return date.toLocaleDateString('es-AR', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
+        return formatYmdForDisplay(toYmd(date as any), 'es-AR');
     };
 
     const getDuration = (start: Date, end?: Date) => {

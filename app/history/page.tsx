@@ -16,6 +16,7 @@ import { SectionTitle } from "@/components/ui/section-title";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { unifiedStyles } from "@/components/ui/unified-styles";
 import { useErrorHandler } from "@/hooks/use-error-handler";
+import { formatYmdForDisplay, toYmd } from '@/lib/format-utils';
 import { formatGameType, GAME_TYPE_OPTIONS } from "@/lib/game-type-utils";
 import { Calendar, Download, Filter, History as HistoryIcon, MapPin, RotateCcw, Trophy, Users } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -319,7 +320,7 @@ export default function HistoryPage() {
 
             return [
                 game.id,
-                new Date(game.gameDate).toLocaleDateString("es-AR"),
+                formatYmdForDisplay(toYmd(game.gameDate), 'es-AR'),
                 formatGameType(game.gameType),
                 game.location?.name || "",
                 game.season?.name || "",
@@ -621,7 +622,7 @@ export default function HistoryPage() {
                                             <CardTitle className="flex items-center gap-2 text-base sm:text-lg min-w-0">
                                                 <span className="text-muted-foreground text-sm shrink-0">#{game.id}</span>
                                                 <span className="text-sm shrink-0">
-                                                    {game.gameDate ? new Date(game.gameDate).toLocaleDateString("es-AR") : "Sin fecha"}
+                                                    {game.gameDate ? formatYmdForDisplay(toYmd(game.gameDate), 'es-AR') : "Sin fecha"}
                                                 </span>
                                                 {game.extraData?.nroJuegoDia && (
                                                     <Badge variant="outline" className="text-xs px-2 py-1 shrink-0">{t('ui.game', 'Juego')} #{game.extraData.nroJuegoDia}</Badge>

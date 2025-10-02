@@ -33,6 +33,7 @@ export async function GET(_request: NextRequest) {
     const games = pendingGames.map((pg: any) => ({
       id: pg.id,
       gameDate: pg.gameDate instanceof Date ? pg.gameDate.toISOString() : pg.gameDate,
+      gameDateLocal: pg.gameDate instanceof Date ? pg.gameDate.toISOString().slice(0, 10) : String(pg.gameDate).slice(0, 10),
       nroJuegoDia: pg.nroJuegoDia ?? null,
       venue: pg.location?.name ?? null,
       duration: pg.duration,

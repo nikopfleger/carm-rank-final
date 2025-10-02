@@ -16,6 +16,7 @@ import {
     UnifiedCardHeader,
     UnifiedCardTitle
 } from "@/components/ui/unified";
+import { formatYmdForDisplay, toYmd } from '@/lib/format-utils';
 import {
     AlertTriangle,
     BarChart3,
@@ -54,11 +55,7 @@ export function TournamentsDashboard({
     const activeTournaments = getActiveTournaments(tournaments);
 
     const formatDate = (date: Date) => {
-        return date.toLocaleDateString('es-AR', {
-            day: 'numeric',
-            month: 'short',
-            year: 'numeric'
-        });
+        return formatYmdForDisplay(toYmd(date as any), 'es-AR');
     };
 
     const getDaysUntil = (date: Date) => {

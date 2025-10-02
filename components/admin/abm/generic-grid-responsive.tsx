@@ -11,6 +11,7 @@ import {
     UnifiedCardTitle,
     UnifiedInput
 } from "@/components/ui/unified";
+import { formatYmdForDisplay, toYmd } from '@/lib/format-utils';
 import {
     Edit,
     Eye,
@@ -273,9 +274,9 @@ function GenericGrid({
                         const dateOnly = dateStr.split('T')[0];
                         const [year, month, day] = dateOnly.split('-').map(Number);
                         const localDate = new Date(year, month - 1, day);
-                        return localDate.toLocaleDateString('es-AR');
+                        return formatYmdForDisplay(toYmd(localDate as any), 'es-AR');
                     }
-                    return new Date(actualValue).toLocaleDateString('es-AR');
+                    return formatYmdForDisplay(toYmd(actualValue as any), 'es-AR');
                 }
                 return '-';
             case 'badge':

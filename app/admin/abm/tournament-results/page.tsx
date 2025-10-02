@@ -11,6 +11,7 @@ import { useI18nContext } from "@/components/providers/i18n-provider";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useErrorHandler } from "@/hooks/use-error-handler";
+import { formatYmdForDisplay, toYmd } from '@/lib/format-utils';
 import { Edit, Minus, Plus, Trophy, Users } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
@@ -121,7 +122,7 @@ export default function TournamentResultsSpecialPage() {
       sortable: true,
       type: 'date',
       width: '120px',
-      render: (value: string | undefined) => value ? new Date(value).toLocaleDateString() : '-'
+      render: (value: string | undefined) => value ? formatYmdForDisplay(toYmd(value), 'es-AR') : '-'
     },
     {
       key: 'location.name',
@@ -419,7 +420,7 @@ export default function TournamentResultsSpecialPage() {
                   </h4>
                   <div className="text-sm text-blue-700 dark:text-blue-200 mt-1 space-y-1">
                     <p><strong>{t('abm.tournamentResults.type')}</strong> {editingTournament.type}</p>
-                    <p><strong>{t('abm.tournamentResults.date')}</strong> {new Date(editingTournament.startDate).toLocaleDateString()}</p>
+                    <p><strong>{t('abm.tournamentResults.date')}</strong> {formatYmdForDisplay(toYmd(editingTournament.startDate), 'es-AR')}</p>
                     <p><strong>{t('abm.tournamentResults.status')}</strong> {editingTournament.isCompleted ? t('abm.tournamentResults.completed') : t('abm.tournamentResults.inProgress')}</p>
                     <p><strong>{t('abm.tournamentResults.participants')}</strong> {results.length}</p>
                   </div>

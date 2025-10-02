@@ -8,6 +8,7 @@ import { PageSkeleton } from "@/components/ui/loading-skeleton";
 import { PlayerResultCard } from "@/components/ui/player-result-card";
 import { unifiedStyles } from "@/components/ui/unified-styles";
 import { useErrorHandler } from "@/hooks/use-error-handler";
+import { formatYmdForDisplay, toYmd } from '@/lib/format-utils';
 import Link from "next/link";
 import { Suspense, use, useEffect, useState } from "react";
 import styles from "./page.module.css";
@@ -156,7 +157,7 @@ export default function SeasonDetailPage({ params }: { params: Promise<{ id: str
                 <PageHeader
                     icon={Calendar}
                     title={season.name}
-                    subtitle={`${new Date(season.startDate).toLocaleDateString('es-AR')} - ${new Date(season.endDate).toLocaleDateString('es-AR')}`}
+                    subtitle={`${formatYmdForDisplay(toYmd(season.startDate), 'es-AR')} - ${formatYmdForDisplay(toYmd(season.endDate), 'es-AR')}`}
                 />
             </div>
 
@@ -174,7 +175,7 @@ export default function SeasonDetailPage({ params }: { params: Promise<{ id: str
                             <Calendar className="w-4 h-4 text-gray-500" />
                             <div>
                                 <p className="text-sm text-gray-500">Fecha de Inicio</p>
-                                <p className="font-medium">{new Date(season.startDate).toLocaleDateString('es-AR')}</p>
+                                <p className="font-medium">{formatYmdForDisplay(toYmd(season.startDate), 'es-AR')}</p>
                             </div>
                         </div>
 
@@ -182,7 +183,7 @@ export default function SeasonDetailPage({ params }: { params: Promise<{ id: str
                             <Calendar className="w-4 h-4 text-gray-500" />
                             <div>
                                 <p className="text-sm text-gray-500">Fecha de Fin</p>
-                                <p className="font-medium">{new Date(season.endDate).toLocaleDateString('es-AR')}</p>
+                                <p className="font-medium">{formatYmdForDisplay(toYmd(season.endDate), 'es-AR')}</p>
                             </div>
                         </div>
 

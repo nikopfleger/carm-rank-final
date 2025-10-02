@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { formatYmdForDisplay, toYmd } from '@/lib/format-utils';
 import {
     Edit,
     Eye,
@@ -145,7 +146,7 @@ export function GenericGridMobile({
                     </Badge>
                 );
             case 'date':
-                return actualValue ? new Date(actualValue).toLocaleDateString() : '-';
+                return actualValue ? formatYmdForDisplay(toYmd(actualValue as any), 'es-AR') : '-';
             case 'badge':
                 return (
                     <Badge variant="outline" className="text-xs">

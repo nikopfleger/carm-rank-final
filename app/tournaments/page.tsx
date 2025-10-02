@@ -10,6 +10,7 @@ import { SectionTitle } from "@/components/ui/section-title";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 import { unifiedStyles } from "@/components/ui/unified-styles";
 import { useErrorHandler } from "@/hooks/use-error-handler";
+import { formatYmdForDisplay, toYmd } from '@/lib/format-utils';
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
 
@@ -222,25 +223,20 @@ export default function TournamentsPage() {
             <div>
               <div className={`text-sm font-medium ${section === "completed" ? "text-gray-700 dark:text-gray-300" : "text-gray-900 dark:text-white"}`}>
                 {t.endDate
-                  ? `${new Date(t.startDate).toLocaleDateString("es-AR")} - ${new Date(t.endDate).toLocaleDateString("es-AR")}`
-                  : new Date(t.startDate).toLocaleDateString("es-AR")
-                }
+                  ? `${formatYmdForDisplay(toYmd(t.startDate), 'es-AR')} - ${formatYmdForDisplay(toYmd(t.endDate), 'es-AR')}`
+                  : formatYmdForDisplay(toYmd(t.startDate), 'es-AR')}
               </div>
-              <div className={`text-xs ${section === "completed" ? "text-gray-500 dark:text-gray-500" : "text-gray-500 dark:text-gray-400"}`}>
-                {section === "completed" ? "Completado" : "En curso"}
+              <div className={"text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2"}>
+                <Clock className="w-4 h-4" />
+                <span>{t.isCompleted ? 'Finalizado' : 'Programado'}</span>
               </div>
             </div>
           </div>
 
-
-          {/* 5) Ubicación/Online — SIEMPRE en la misma altura (última fila del grid) */}
-          <div className={styles.rowLocation}>
-            <div className="flex items-center gap-3">
-              <Clock className={`w-4 h-4 ${colors.accent}`} />
-              <span className={`${section === "completed" ? "text-sm text-gray-500 dark:text-gray-500" : "text-sm text-gray-600 dark:text-gray-400"}`}>
-                {locationText}
-              </span>
-            </div>
+          {/* 5) Ubicación fija abajo */}
+          <div className={`${styles.rowLocation} mt-2 flex items-center gap-2 text-gray-600 dark:text-gray-300`}>
+            <Clock className="w-4 h-4" />
+            <span className="text-sm">{locationText}</span>
           </div>
         </div>
       </div>
@@ -248,65 +244,62 @@ export default function TournamentsPage() {
   };
 
   return (
-    <div className={styles.tournamentsPage}>
-      <PageHeader icon={Trophy} title="Torneos" subtitle="Torneos oficiales de la comunidad CARM" variant="tournaments" />
+    <div className="container mx-auto p-4">
+      <PageHeader
+        title={t("tournaments.title", "Torneos")}
+        subtitle={t("tournaments.subtitle", "Gestiona los torneos de tu club")}
+      />
 
-      <div className="py-8">
-        {/* Filtro */}
-        <div className="mb-8 flex items-center gap-4 justify-center">
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Filtrar por temporada:</label>
-          <Select value={selectedSeason} onValueChange={handleSeasonChange}>
-            <SelectTrigger className={`${unifiedStyles.selectTrigger} w-[250px]`}>
-              <span className="truncate">{selectedSeasonName}</span>
-            </SelectTrigger>
+      <SectionTitle title={t("tournaments.listTitle", "Lista de Torneos")} />
+
+      <div className="flex flex-col sm:flex-row gap-4 mb-4">
+        <Select onValueChange={handleSeasonChange} value={selectedSeason}>
+          <SelectTrigger className="w-[180px]">
             <SelectContent>
-              <SelectItem value="">Todas las temporadas</SelectItem>
-              {seasons.map((s) => (
-                <SelectItem key={s.id} value={s.id.toString()}>
-                  {s.name} {s.isActive && "(Activa)"}
+              <SelectItem value="">{t("ui.allSeasons", "Todas las temporadas")}</SelectItem>
+              {seasons.map((season) => (
+                <SelectItem key={season.id} value={season.id.toString()}>
+                  {season.name} {season.isActive ? "(Activa)" : ""}
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
-        </div>
+          </SelectTrigger>
+        </Select>
+      </div>
 
-        {/* En curso */}
-        {ongoingTournaments.length > 0 && (
-          <div className={styles.section}>
-            <SectionTitle title="Torneos en Curso" variant="tournaments" />
-            <div className={styles.tournamentsGrid}>
-              {ongoingTournaments.map((t) => Card(t, "ongoing"))}
+      <div className="grid gap-4">
+        {upcomingTournaments.length > 0 && (
+          <div>
+            <h3 className="text-lg font-bold mb-3">{t("tournaments.upcoming", "Próximos Torneos")}</h3>
+            <div className="grid gap-4">
+              {upcomingTournaments.map((t) => (
+                <Card key={t.id} t={t} section="upcoming" />
+              ))}
             </div>
           </div>
         )}
 
-        {/* Próximos */}
-        <div className={styles.section}>
-          <SectionTitle title="Próximos Torneos" variant="tournaments" />
-          {upcomingTournaments.length === 0 ? (
-            <div className="text-center py-12 text-gray-500 dark:text-gray-500">
-              No hay torneos próximos programados.
+        {ongoingTournaments.length > 0 && (
+          <div>
+            <h3 className="text-lg font-bold mb-3">{t("tournaments.ongoing", "Torneos en Curso")}</h3>
+            <div className="grid gap-4">
+              {ongoingTournaments.map((t) => (
+                <Card key={t.id} t={t} section="ongoing" />
+              ))}
             </div>
-          ) : (
-            <div className={styles.tournamentsGrid}>
-              {upcomingTournaments.map((t) => Card(t, "upcoming"))}
-            </div>
-          )}
-        </div>
+          </div>
+        )}
 
-        {/* Completados */}
-        <div className={styles.section}>
-          <SectionTitle title="Torneos Completados" variant="default" />
-          {completedTournaments.length === 0 ? (
-            <div className="text-center py-12 text-gray-500 dark:text-gray-500">
-              No hay torneos completados disponibles.
+        {completedTournaments.length > 0 && (
+          <div>
+            <h3 className="text-lg font-bold mb-3">{t("tournaments.completed", "Torneos Completados")}</h3>
+            <div className="grid gap-4">
+              {completedTournaments.map((t) => (
+                <Card key={t.id} t={t} section="completed" />
+              ))}
             </div>
-          ) : (
-            <div className={styles.tournamentsGrid}>
-              {completedTournaments.map((t) => Card(t, "completed"))}
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

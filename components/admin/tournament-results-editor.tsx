@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useErrorHandler } from "@/hooks/use-error-handler";
+import { formatYmdForDisplay, toYmd } from '@/lib/format-utils';
 import { Minus, Plus, Save, Trophy, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -298,7 +299,7 @@ export function TournamentResultsEditor({
                                     </h4>
                                     <div className="text-sm text-blue-700 dark:text-blue-200 mt-1 space-y-1">
                                         <p><strong>Tipo:</strong> {tournament.type}</p>
-                                        <p><strong>Fecha:</strong> {new Date(tournament.startDate).toLocaleDateString()}</p>
+                                        <p><strong>Fecha:</strong> {formatYmdForDisplay(toYmd(tournament.startDate), 'es-AR')}</p>
                                         <p><strong>Estado:</strong> {tournament.isCompleted ? 'Completado' : 'En Curso'}</p>
                                         <p><strong>Participantes:</strong> {results.length}</p>
                                     </div>

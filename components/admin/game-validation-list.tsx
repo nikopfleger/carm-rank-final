@@ -32,6 +32,7 @@ import GameResultsSheet from "@/components/admin/games/game-results-sheet";
 interface PendingGameData {
   id: number;
   gameDate: string;
+  gameDateLocal?: string;
   nroJuegoDia?: number | null;
   venue?: string | null;
   duration: "HANCHAN" | "TONPUUSEN";
@@ -128,9 +129,11 @@ export function GameValidationList() {
     return list
       .slice()
       .sort((a, b) => {
-        const ta = new Date(a.gameDate).getTime();
-        const tb = new Date(b.gameDate).getTime();
-        if (ta !== tb) return ta - tb;
+        const ad = a.gameDateLocal ?? a.gameDate?.slice(0, 10);
+        const bd = b.gameDateLocal ?? b.gameDate?.slice(0, 10);
+        const ta = ad ? ad.localeCompare(bd) : 0;
+        const tb = 0; // no usado, mantenemos estructura
+        if (ta !== 0) return ta;
         const na = a.nroJuegoDia ?? Number.POSITIVE_INFINITY;
         const nb = b.nroJuegoDia ?? Number.POSITIVE_INFINITY;
         if (na !== nb) return na - nb;
@@ -328,7 +331,15 @@ export function GameValidationList() {
                     <div className="mt-2 grid grid-cols-1 md:grid-cols-4 gap-3 text-sm text-gray-600 dark:text-gray-300">
                       <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
-                        <span>{new Date(game.gameDate).toLocaleDateString(undefined, { dateStyle: "medium" })}</span>
+                        <span>
+                          {(() => {
+                            const ymd = game.gameDateLocal ?? game.gameDate?.slice(0, 10);
+                            if (!ymd) return '';
+                            const [y, m, d] = ymd.split('-').map(Number);
+                            const dt = new Date(Date.UTC(y, (m || 1) - 1, d || 1, 12, 0, 0));
+                            return dt.toLocaleDateString(undefined, { dateStyle: 'medium' });
+                          })()}
+                        </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Users className="w-4 h-4" />

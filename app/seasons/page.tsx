@@ -10,6 +10,7 @@ import { SeasonsPageSkeleton } from "@/components/ui/loading-skeleton";
 import { SectionTitle } from "@/components/ui/section-title";
 import { unifiedStyles } from "@/components/ui/unified-styles";
 import { useErrorHandler } from "@/hooks/use-error-handler";
+import { formatYmdForDisplay, toYmd } from '@/lib/format-utils';
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
@@ -147,7 +148,7 @@ export default function SeasonsPage() {
                         {season.name}
                       </h3>
                       <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
-                        {new Date(season.startDate).toLocaleDateString('es-AR')} - {new Date(season.endDate).toLocaleDateString('es-AR')}
+                        {formatYmdForDisplay(toYmd(season.startDate), 'es-AR')} - {formatYmdForDisplay(toYmd(season.endDate), 'es-AR')}
                       </p>
                     </div>
                   </div>

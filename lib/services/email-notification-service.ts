@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/database/client";
+import { formatYmdForDisplay, toYmd } from '@/lib/format-utils';
 import { UserRole } from "@prisma/client";
 import nodemailer from 'nodemailer';
 
@@ -241,7 +242,7 @@ Ingresa al sistema para revisar y validar: {{validationUrl}}
             const context = {
                 gameId: gameData.id,
                 gameType: gameData.gameType,
-                gameDate: gameData.date.toLocaleDateString('es-AR'),
+                gameDate: formatYmdForDisplay(toYmd(gameData.date as any), 'es-AR'),
                 playerNames: gameData.playerNames.join(', '),
                 submittedBy: gameData.submittedBy,
                 logoUrl: `${baseUrl}/carm-logo.png`,
@@ -314,7 +315,7 @@ El juego ya está registrado en el sistema y los puntos han sido actualizados.
             const context = {
                 gameId: gameData.id,
                 gameType: gameData.gameType,
-                gameDate: gameData.date.toLocaleDateString('es-AR'),
+                gameDate: formatYmdForDisplay(toYmd(gameData.date as any), 'es-AR'),
                 playerNames: gameData.playerNames.join(', '),
                 acceptedBy: gameData.acceptedBy,
                 logoUrl: `${baseUrl}/carm-logo.png`

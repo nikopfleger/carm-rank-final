@@ -8,6 +8,7 @@ import {
     UnifiedCardContent,
     UnifiedModal
 } from "@/components/ui/unified";
+import { formatYmdForDisplay, toYmd } from '@/lib/format-utils';
 import {
     AlertTriangle,
     BarChart3,
@@ -86,11 +87,7 @@ export function SeasonCloseModal({
 
     const formatDate = (date: Date | undefined) => {
         if (!date) return 'No definida';
-        return date.toLocaleDateString('es-AR', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
+        return formatYmdForDisplay(toYmd(date as any), 'es-AR');
     };
 
     const getDuration = (start: Date, end?: Date) => {

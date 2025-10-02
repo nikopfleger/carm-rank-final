@@ -5,6 +5,7 @@ import { SeasonResultsEditor } from "@/components/admin/season-results-editor";
 import { Badge } from "@/components/ui/badge";
 import { Edit, Trophy, Users } from "@/components/ui/icons";
 import { useErrorHandler } from "@/hooks/use-error-handler";
+import { formatYmdForDisplay, toYmd } from '@/lib/format-utils';
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState } from "react";
 const UnifiedABMLayout = dynamic(() => import("@/components/admin/abm/unified-abm-layout").then(m => m.UnifiedABMLayout));
@@ -102,7 +103,7 @@ export default function SeasonResultsSpecialPage() {
             sortable: true,
             type: 'date',
             width: '120px',
-            render: (value: string | undefined) => value ? new Date(value).toLocaleDateString() : '-'
+            render: (value: string | undefined) => value ? formatYmdForDisplay(toYmd(value), 'es-AR') : '-'
         },
         {
             key: 'isActive',

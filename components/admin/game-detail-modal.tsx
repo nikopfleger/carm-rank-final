@@ -2,6 +2,7 @@ import { GameSheet } from "@/components/shared/game-sheet";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { formatYmdForDisplay, toYmd } from '@/lib/format-utils';
 import {
   Calendar,
   CheckCircle,
@@ -139,7 +140,7 @@ export function GameDetailModal({
             <div className="flex items-center gap-4 mt-2 text-sm text-gray-600 dark:text-gray-400">
               <div className="flex items-center gap-1">
                 <Calendar className="w-4 h-4" />
-                {new Date(game.gameDate).toLocaleDateString('es-ES')}
+                {formatYmdForDisplay(toYmd(game.gameDate), 'es-AR')}
               </div>
               {game.venue && (
                 <div className="flex items-center gap-1">
