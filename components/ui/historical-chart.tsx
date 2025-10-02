@@ -49,10 +49,8 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
     // Usar chartType externo si está disponible, sino usar el interno
     const chartType = externalChartType ?? internalChartType;
     const setChartType = onChartTypeChange ?? setInternalChartType;
-    // Mostrar menos juegos por defecto en móvil
-    const [gameCount, setGameCount] = useState<10 | 20 | 50>(
-        typeof window !== 'undefined' && window.innerWidth < 640 ? 10 : 20
-    );
+    // Mantener estado inicial estable para SSR/CSR; ajustar en efecto
+    const [gameCount, setGameCount] = useState<10 | 20 | 50>(20);
     const [tooltip, setTooltip] = useState<{ visible: boolean; x: number; y: number; data: ChartDataPoint | null }>({
         visible: false,
         x: 0,
@@ -64,10 +62,11 @@ export function HistoricalChart({ chartData, seasonData = [], isSanma = false, c
     const [chartZoom, setChartZoom] = useState(1);
     const [isMobile, setIsMobile] = useState(false);
 
-    // Detectar si es mobile
+    // Detectar si es mobile y ajustar gameCount luego de hidratar
     useEffect(() => {
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 768);
+            setGameCount(window.innerWidth < 640 ? 10 : 20);
         };
 
         checkMobile();
