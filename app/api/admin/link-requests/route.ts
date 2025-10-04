@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/database/client";
+import { serializeBigInt } from "@/lib/serialize-bigint";
 import { ensureAbmManage } from "@/lib/server-authorization";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -34,7 +35,7 @@ export async function GET(request: NextRequest) {
             ]
         });
 
-        return NextResponse.json({ requests });
+        return NextResponse.json({ requests: serializeBigInt(requests) });
     } catch (error) {
         console.error("Error listando solicitudes de vinculación:", error);
         return NextResponse.json({ error: "Error interno" }, { status: 500 });

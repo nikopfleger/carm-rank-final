@@ -5,6 +5,7 @@ import {
   type NewPlayerData
 } from '@/lib';
 import { prisma } from '@/lib/database/client';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from 'next/server';
 
 ;
@@ -57,8 +58,8 @@ export async function POST(request: NextRequest) {
     const playerData: NewPlayerData = {
       nickname: normalizedNickname,
       fullname: fullname?.trim() || undefined,
-      countryId: countryId ? parseInt(countryId) : undefined,
-      playerId: playerId ? parseInt(playerId) : undefined
+      countryId: countryId ? BigInt(countryId) : undefined,
+      playerId: playerId ? Number(playerId) : undefined
     };
 
     // Crear el jugador usando el helper

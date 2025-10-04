@@ -1,4 +1,5 @@
 import { ensureCacheReady, getSeasons, getSeasonsDirect } from '@/lib/cache/core-cache';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -39,7 +40,7 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.json({
             success: true,
-            data,
+            data: serializeBigInt(data),
         });
     } catch (error) {
         console.error('Error getting SEASON configs:', error);

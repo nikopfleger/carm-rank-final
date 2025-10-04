@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/database/client";
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { ensureAbmManage } from "@/lib/server-authorization";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -19,10 +20,10 @@ export async function GET(request: NextRequest) {
             ]
         });
 
-        return NextResponse.json({ accounts });
+        return NextResponse.json(serializeBigInt({ accounts }));
     } catch (error) {
         console.error("Error listando cuentas de email:", error);
-        return NextResponse.json({ error: "Error interno" }, { status: 500 });
+        return NextResponse.json(serializeBigInt({ error: "Error interno" }), { status: 500 });
     }
 }
 
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
 
         // Validaciones básicas
         if (!data.name || !data.fromAddress || !data.server || !data.username || !data.password) {
-            return NextResponse.json({ error: "Campos requeridos faltantes" }, { status: 400 });
+            return NextResponse.json(serializeBigInt({ error: "Campos requeridos faltantes" }), { status: 400 });
         }
 
         // Si se marca como principal, desmarcar las otras
@@ -64,9 +65,9 @@ export async function POST(request: NextRequest) {
             }
         });
 
-        return NextResponse.json({ account }, { status: 201 });
+        return NextResponse.json(serializeBigInt({ account }), { status: 201 });
     } catch (error) {
         console.error("Error creando cuenta de email:", error);
-        return NextResponse.json({ error: "Error interno" }, { status: 500 });
+        return NextResponse.json(serializeBigInt({ error: "Error interno" }), { status: 500 });
     }
 }

@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/database/client';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from 'next/server';
 
 ;
@@ -18,7 +19,7 @@ export async function POST(request: NextRequest) {
     const { email, name } = await request.json();
 
     if (!email) {
-      return NextResponse.json({ error: "Email requerido" }, { status: 400 });
+      return NextResponse.json(serializeBigInt({ error: "Email requerido" }), { status: 400 });
     }
 
     const emailLc = String(email).toLowerCase();
@@ -68,6 +69,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Error verificando/creando usuario:", error);
-    return NextResponse.json({ error: "Error interno" }, { status: 500 });
+    return NextResponse.json(serializeBigInt({ error: "Error interno" }), { status: 500 });
   }
 }

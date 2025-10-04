@@ -19,12 +19,12 @@ import {
 export interface NewPlayerData {
   nickname: string;
   fullname?: string;
-  countryId?: number;
+  countryId?: bigint;
   playerId?: number; // Si no se proporciona, se asigna automáticamente
 }
 
 export interface GamePlayerInput {
-  playerId: number; // ID del jugador en la BD
+  playerId: bigint; // ID del jugador en la BD
   gameScore: number; // Puntaje final en el juego
   wind?: string; // Viento (E, S, W, N)
   chonbos?: number; // Cantidad de chonbos
@@ -34,24 +34,24 @@ export interface GamePlayerInput {
 export interface NewGameData {
   gameDate: Date;
   venue?: string;
-  locationId?: number;
+  locationId?: bigint;
   duration: 'HANCHAN' | 'TONPUUSEN';
   sanma: boolean; // true = 3 jugadores, false = 4 jugadores
-  rulesetId: number;
+  rulesetId: bigint;
   players: GamePlayerInput[];
   imageUrl?: string;
 }
 
 export interface GameCreationResult {
   success: boolean;
-  gameId?: number;
+  gameId?: bigint;
   message: string;
   errors?: string[];
 }
 
 export interface PlayerCreationResult {
   success: boolean;
-  playerId?: number;
+  playerId?: bigint;
   playerLegajo?: number;
   message: string;
 }
@@ -88,12 +88,12 @@ export async function createPlayer(
     }
 
     // Obtener país por defecto (Argentina) si no se especifica
-    let countryId = playerData.countryId;
+    let countryId: bigint | undefined = playerData.countryId ? BigInt(playerData.countryId) : undefined;
     if (!countryId) {
       const defaultCountry = await prisma.country.findFirst({
         where: { isoCode: 'AR' }
       });
-      countryId = defaultCountry?.id || 1;
+      countryId = defaultCountry?.id || BigInt(1);
     }
 
     // Crear el jugador
@@ -238,7 +238,7 @@ export async function createGame(
 
     // Calcular posiciones finales basadas en los puntajes
     const playerScores: PlayerScore[] = gameData.players.map(p => ({
-      id: p.playerId,
+      id: BigInt(p.playerId),
       finalScore: p.gameScore
     }));
     const finalPositions = calculateFinalPositions(playerScores);
@@ -355,7 +355,7 @@ export async function createGame(
 
     // Calcular y distribuir Oka si aplica
     if (ruleset.oka && ruleset.oka > 0) {
-      await distributeOka(prisma, newGame.id, gameResults, ruleset.oka);
+      await distributeOka(prisma, Number(newGame.id), gameResults, ruleset.oka);
     }
 
     return {
@@ -417,7 +417,7 @@ function validateGameData(gameData: NewGameData): string[] {
 /**
  * Obtiene el ID de la temporada actual
  */
-async function getCurrentSeasonId(prisma: PrismaClient): Promise<number> {
+async function getCurrentSeasonId(prisma: PrismaClient): Promise<bigint> {
   const currentSeason = await prisma.season.findFirst({
     where: { isActive: true }
   });

@@ -1,5 +1,6 @@
 // app/api/health/route.ts
 import { getCacheStatus } from '@/lib/cache/core-cache';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { prisma } from '@/lib/database/client';
 import { NextResponse } from 'next/server';
 

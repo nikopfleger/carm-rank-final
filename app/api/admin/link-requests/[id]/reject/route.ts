@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/database/client";
 import { emailService } from "@/lib/email-service";
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { ensureAbmManage } from "@/lib/server-authorization";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -16,12 +17,12 @@ export async function POST(
 
     try {
         const { id: idParam } = await params;
-    const requestId = parseInt(idParam);
+        const requestId = parseInt(idParam);
         const data = await request.json();
         const { note } = data;
 
         if (!note || !note.trim()) {
-            return NextResponse.json({ error: "La razón del rechazo es requerida" }, { status: 400 });
+            return NextResponse.json(serializeBigInt({ error: "La razón del rechazo es requerida" }), { status: 500 });
         }
 
         // Verificar que la solicitud existe y está pendiente
@@ -46,11 +47,11 @@ export async function POST(
         });
 
         if (!linkRequest) {
-            return NextResponse.json({ error: "Solicitud no encontrada" }, { status: 404 });
+            return NextResponse.json(serializeBigInt({ error: "Solicitud no encontrada" }), { status: 500 });
         }
 
         if (linkRequest.status !== 'PENDING') {
-            return NextResponse.json({ error: "La solicitud ya fue procesada" }, { status: 400 });
+            return NextResponse.json(serializeBigInt({ error: "La solicitud ya fue procesada" }), { status: 500 });
         }
 
         // Actualizar el estado de la solicitud
@@ -118,6 +119,6 @@ export async function POST(
         });
     } catch (error) {
         console.error("Error rechazando solicitud de vinculación:", error);
-        return NextResponse.json({ error: "Error interno" }, { status: 500 });
+        return NextResponse.json(serializeBigInt({ error: "Error interno" }), { status: 500 });
     }
 }

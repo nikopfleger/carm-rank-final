@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/database/client';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { ensureGameSubmit } from '@/lib/server-authorization';
 import { emailNotificationService } from '@/lib/services/email-notification-service';
 import { hybridImageStorage } from '@/lib/simplified-image-storage';

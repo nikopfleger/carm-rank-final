@@ -33,7 +33,7 @@ export async function ensureGameValidate() {
     return { session } as const;
 }
 
-export async function ensureCanEditPlayer(playerId: number) {
+export async function ensureCanEditPlayer(playerId: bigint) {
     const session = await auth();
     if (!session?.user) return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
     const { role, authorities = [], id } = session.user;

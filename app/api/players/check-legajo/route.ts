@@ -1,7 +1,8 @@
 import { prisma } from '@/lib/database/client';
 
-export const dynamic = 'force-dynamic';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from 'next/server';
+export const dynamic = 'force-dynamic';
 
 ;
 
@@ -13,12 +14,12 @@ export async function GET(request: NextRequest) {
         const excludeId = searchParams.get('excludeId');
 
         if (!legajo) {
-            return NextResponse.json({ error: 'Legajo is required' }, { status: 400 });
+            return NextResponse.json(serializeBigInt({ error: 'Legajo is required' }), { status: 500 });
         }
 
         const legajoNumber = parseInt(legajo);
         if (isNaN(legajoNumber)) {
-            return NextResponse.json({ error: 'Legajo must be a number' }, { status: 400 });
+            return NextResponse.json(serializeBigInt({ error: 'Legajo must be a number' }), { status: 500 });
         }
 
         const whereClause: any = {

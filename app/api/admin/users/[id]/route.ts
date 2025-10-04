@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth-vercel";
 import { canAssignAuthority, canAssignRole, canModifyUser, getAvailableAuthorities, getDefaultAuthoritiesForRole, hasAuthority } from "@/lib/authorization";
 import { prisma } from "@/lib/database/client";
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { UserRole } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -10,14 +11,14 @@ export const dynamic = "force-dynamic";
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const session = await auth();
     if (!session?.user) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        return NextResponse.json(serializeBigInt({ error: "Unauthorized" }), { status: 500 });
     }
 
     const requesterRole = session.user.role as UserRole;
     const requesterAuthorities = session.user.authorities || [];
     const canManageUsers = requesterRole === "SUPER_ADMIN" || requesterRole === "ADMIN" || hasAuthority(requesterAuthorities, "USER_MANAGE");
     if (!canManageUsers) {
-        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+        return NextResponse.json(serializeBigInt({ error: "Forbidden" }), { status: 500 });
     }
 
     const { id: idParam } = await params;
@@ -27,7 +28,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
     const target = await prisma.user.findUnique({ where: { id } });
     if (!target) {
-        return NextResponse.json({ error: "User not found" }, { status: 404 });
+        return NextResponse.json(serializeBigInt({ error: "User not found" }), { status: 500 });
     }
 
     const targetRole = target.role as UserRole;
@@ -35,23 +36,23 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
     // Verificar si el usuario puede modificar al usuario objetivo
     if (!canModifyUser(requesterRole, session.user.id, targetRole, id)) {
-        return NextResponse.json({
+        return NextResponse.json(serializeBigInt({
             error: "No tienes permisos para modificar este usuario"
-        }, { status: 403 });
+        }), { status: 500 });
     }
 
     // No permitir auto-modificación de ciertos campos críticos
     if (isSelf && role && role !== requesterRole) {
-        return NextResponse.json({
+        return NextResponse.json(serializeBigInt({
             error: "No puedes cambiar tu propio rol"
-        }, { status: 400 });
+        }), { status: 500 });
     }
 
     let nextRole: UserRole | undefined = undefined;
     if (role !== undefined) {
         // Validar que el rol es válido
         if (!(Object.values(UserRole) as string[]).includes(role)) {
-            return NextResponse.json({ error: "Invalid role value" }, { status: 400 });
+            return NextResponse.json(serializeBigInt({ error: "Invalid role value" }), { status: 500 });
         }
 
         const newRole = role as UserRole;
@@ -67,17 +68,17 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
             });
 
             if (existingOwners > 0) {
-                return NextResponse.json({
+                return NextResponse.json(serializeBigInt({
                     error: "Solo puede haber un OWNER en el sistema"
-                }, { status: 400 });
+                }), { status: 500 });
             }
         }
 
         // Verificar si puede asignar este rol
         if (!canAssignRole(requesterRole, newRole)) {
-            return NextResponse.json({
+            return NextResponse.json(serializeBigInt({
                 error: "No tienes permisos para asignar este rol"
-            }, { status: 403 });
+            }), { status: 500 });
         }
 
         nextRole = newRole;
@@ -125,6 +126,6 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
         },
     });
 
-    return NextResponse.json({ user: updatedAt });
+    return NextResponse.json(serializeBigInt({ user: updatedAt }));
 }
 

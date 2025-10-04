@@ -1,5 +1,6 @@
 import { getResource } from '@/lib/abm/registry';
 import { getPrismaClient } from '@/lib/database/connection';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextResponse } from 'next/server';
 
 export async function POST(
@@ -81,7 +82,7 @@ export async function POST(
         console.log(`✅ Restored record:`, restored);
 
         console.log(`✅ Successfully restored ${resource} ${id}`);
-        return NextResponse.json({ success: true, data: restored });
+        return NextResponse.json({ success: true, data: serializeBigInt(restored) });
     } catch (err: any) {
         console.error(`❌ Error restoring ${resource} ${id}:`, err);
         console.error('Error details:', {

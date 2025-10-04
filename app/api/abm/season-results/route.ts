@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/database/client';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from 'next/server';
 
 ;
@@ -52,7 +53,7 @@ export async function GET(request: NextRequest) {
             ]
         });
 
-        return NextResponse.json(seasonResults);
+        return NextResponse.json(serializeBigInt(seasonResults));
     } catch (error) {
         console.error('Error fetching season results:', error);
         return NextResponse.json(
@@ -127,7 +128,7 @@ export async function POST(request: NextRequest) {
             }
         });
 
-        return NextResponse.json(seasonResult, { status: 201 });
+        return NextResponse.json(serializeBigInt(seasonResult), { status: 201 });
     } catch (error) {
         console.error('Error creating season result:', error);
         return NextResponse.json(

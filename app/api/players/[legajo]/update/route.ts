@@ -1,4 +1,5 @@
 import { auth } from '@/lib/auth-vercel';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { prisma } from '@/lib/database/client';
 import { NextRequest, NextResponse } from 'next/server';
 

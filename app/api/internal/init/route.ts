@@ -1,4 +1,5 @@
 import { getCacheStatus, initializeCache } from '@/lib/cache/core-cache';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {

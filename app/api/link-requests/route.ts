@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth-vercel";
 import { prisma } from "@/lib/database/client";
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { ensureAbmManage } from "@/lib/server-authorization";
 import { emailNotificationService } from "@/lib/services/email-notification-service";
 import { LinkRequestStatus } from "@prisma/client";
@@ -13,14 +14,14 @@ export async function POST(request: NextRequest) {
     try {
         const session = await auth();
         if (!session?.user?.id) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+            return NextResponse.json(serializeBigInt({ error: "Unauthorized" }), { status: 500 });
         }
 
         const { playerId, note } = await request.json();
         const userId: string = session.user.id;
 
         if (!playerId) {
-            return NextResponse.json({ error: "playerId requerido" }, { status: 400 });
+            return NextResponse.json(serializeBigInt({ error: "playerId requerido" }), { status: 500 });
         }
 
         // Verificar que el usuario existe en la base de datos
@@ -43,14 +44,14 @@ export async function POST(request: NextRequest) {
         });
 
         if (existingLink) {
-            return NextResponse.json({
+            return NextResponse.json(serializeBigInt({
                 error: "Ya estás vinculado a otro jugador. Solo puedes estar vinculado a un jugador a la vez."
-            }, { status: 400 });
+            }), { status: 500 });
         }
 
         const player = await prisma.player.findUnique({ where: { id: Number(playerId) } });
         if (!player) {
-            return NextResponse.json({ error: "Jugador no existe" }, { status: 400 });
+            return NextResponse.json(serializeBigInt({ error: "Jugador no existe" }), { status: 500 });
         }
 
 
@@ -62,7 +63,7 @@ export async function POST(request: NextRequest) {
             }
         });
         if (existingLinkByPlayer) {
-            return NextResponse.json({ error: "El jugador ya está vinculado a un usuario" }, { status: 400 });
+            return NextResponse.json(serializeBigInt({ error: "El jugador ya está vinculado a un usuario" }), { status: 500 });
         }
 
         // ✅ Verificar si el usuario tiene CUALQUIER solicitud rechazada (prevenir spam)
@@ -74,9 +75,9 @@ export async function POST(request: NextRequest) {
         });
 
         if (anyRejectedRequest) {
-            return NextResponse.json({
+            return NextResponse.json(serializeBigInt({
                 error: "Tienes una solicitud de vinculación rechazada. No puedes crear nuevas solicitudes hasta que un administrador elimine las solicitudes rechazadas."
-            }, { status: 400 });
+            }), { status: 500 });
         }
 
         // Verificar solicitudes existentes para este usuario y jugador
@@ -93,7 +94,7 @@ export async function POST(request: NextRequest) {
 
         // Verificar si ya existe una solicitud para la misma combinación usuario-jugador
         const sameUserPlayerRequest = existingRequests.find(req =>
-            req.userId === userId && req.playerId === Number(playerId)
+            req.userId === userId && req.playerId === BigInt(playerId)
         );
 
         if (sameUserPlayerRequest) {
@@ -118,7 +119,7 @@ export async function POST(request: NextRequest) {
             req.userId === userId && req.status === LinkRequestStatus.PENDING
         );
 
-        if (userPendingRequest && userPendingRequest.playerId !== Number(playerId)) {
+        if (userPendingRequest && userPendingRequest.playerId !== BigInt(playerId)) {
             return NextResponse.json({
                 error: "Ya tienes una solicitud pendiente para otro jugador",
                 requestId: userPendingRequest.id,
@@ -128,7 +129,7 @@ export async function POST(request: NextRequest) {
 
         // Verificar si el jugador ya tiene una solicitud pendiente de otro usuario
         const playerPendingRequest = existingRequests.find(req =>
-            req.playerId === Number(playerId) && req.status === LinkRequestStatus.PENDING
+            req.playerId === BigInt(playerId) && req.status === LinkRequestStatus.PENDING
         );
 
         if (playerPendingRequest && playerPendingRequest.userId !== userId) {
@@ -161,10 +162,10 @@ export async function POST(request: NextRequest) {
             // No fallar la solicitud si el email falla
         }
 
-        return NextResponse.json({ request: createdAt }, { status: 201 });
+        return NextResponse.json(serializeBigInt({ request: createdAt }), { status: 500 });
     } catch (error) {
         console.error("Error creando solicitud de vinculación:", error);
-        return NextResponse.json({ error: "Error interno" }, { status: 500 });
+        return NextResponse.json(serializeBigInt({ error: "Error interno" }), { status: 500 });
     }
 }
 
@@ -194,5 +195,5 @@ export async function GET(request: NextRequest) {
         },
     });
 
-    return NextResponse.json({ requests });
+    return NextResponse.json(serializeBigInt({ requests }));
 }

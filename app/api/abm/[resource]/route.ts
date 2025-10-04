@@ -1,5 +1,6 @@
 import { getResource } from '@/lib/abm/registry';
 import { runWithRequestContextAsync } from '@/lib/request-context.server';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -52,7 +53,7 @@ export async function GET(
 
         console.debug('[ABM][GET] resource=%s results=%d', resource, rows.length);
 
-        return NextResponse.json({ success: true, data: rows, total: rows.length });
+        return NextResponse.json({ success: true, data: serializeBigInt(rows), total: rows.length });
     } catch (err: any) {
         console.error('ABM GET error:', err);
         return NextResponse.json({ success: false, error: err.message || 'Error' }, { status: 500 });
@@ -88,7 +89,7 @@ export async function POST(
             include: cfg.include,
         });
 
-        return NextResponse.json({ success: true, data: created }, { status: 201 });
+        return NextResponse.json({ success: true, data: serializeBigInt(created) }, { status: 201 });
     } catch (err: any) {
         console.error('ABM POST error:', err);
         return NextResponse.json({ success: false, error: err.message || 'Error' }, { status: 500 });

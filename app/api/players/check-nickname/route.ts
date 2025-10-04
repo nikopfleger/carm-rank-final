@@ -1,7 +1,8 @@
 import { prisma } from '@/lib/database/client';
 
-export const dynamic = 'force-dynamic';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from 'next/server';
+export const dynamic = 'force-dynamic';
 
 ;
 
@@ -13,7 +14,7 @@ export async function GET(request: NextRequest) {
         const excludeId = searchParams.get('excludeId');
 
         if (!nickname) {
-            return NextResponse.json({ error: 'Nickname is required' }, { status: 400 });
+            return NextResponse.json(serializeBigInt({ error: 'Nickname is required' }), { status: 500 });
         }
 
         const whereClause: any = {

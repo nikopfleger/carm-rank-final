@@ -1,4 +1,5 @@
 import { ensureCacheReady, getCacheStatus, getColors, getDan, getDanDirect, getRanking3pGeneralActivos, getRanking3pGeneralTodos, getRanking3pTemporadaActivos, getRanking3pTemporadaTodos, getRanking4pGeneralActivos, getRanking4pGeneralTodos, getRanking4pTemporadaActivos, getRanking4pTemporadaTodos, getRate, getRateDirect, getSeasons, getSeasonsDirect } from '@/lib/cache/core-cache';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -37,7 +38,7 @@ export async function GET() {
         let status: any = { enabled: false };
         try { status = getCacheStatus(); } catch { }
 
-        return NextResponse.json({
+        return NextResponse.json(serializeBigInt({
             success: true,
             data: {
                 dan,
@@ -55,7 +56,7 @@ export async function GET() {
             },
             status,
             message: 'Configurations retrieved'
-        }, {
+        }), {
             headers: {
                 // 1 hora fresco + SWR un día
                 "Cache-Control": "s-maxage=3600, stale-while-revalidate=86400"

@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth-vercel";
 import { hasAuthority } from "@/lib/authorization";
 import { prisma } from "@/lib/database/client";
+import { serializeBigInt } from "@/lib/serialize-bigint";
 import { NextRequest, NextResponse } from "next/server";
 
 ;
@@ -50,5 +51,5 @@ export async function GET(request: NextRequest) {
         },
     });
 
-    return NextResponse.json({ users });
+    return NextResponse.json({ users: serializeBigInt(users) });
 }

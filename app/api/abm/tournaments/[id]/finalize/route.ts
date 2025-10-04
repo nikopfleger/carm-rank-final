@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/database/client";
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(

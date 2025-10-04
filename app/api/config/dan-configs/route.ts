@@ -2,6 +2,7 @@
 ; // evita Edge
 
 import { ensureCacheReady, getDan, getDanDirect } from '@/lib/cache/core-cache';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -31,9 +32,9 @@ export async function GET(request: NextRequest) {
             cssClass: c.cssClass,
         }));
 
-        return NextResponse.json(clientConfigs);
+        return NextResponse.json(serializeBigInt(clientConfigs));
     } catch (error) {
         console.error('Error fetching DAN configs:', error);
-        return NextResponse.json({ error: 'Failed to fetch DAN configs' }, { status: 500 });
+        return NextResponse.json(serializeBigInt({ error: 'Failed to fetch DAN configs' }), { status: 500 });
     }
 }

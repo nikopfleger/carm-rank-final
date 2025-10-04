@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth-vercel";
 import { prisma } from "@/lib/database/client";
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { ensureAbmManage } from "@/lib/server-authorization";
 import { LinkRequestStatus } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
@@ -17,7 +18,7 @@ export async function PATCH(
 
     const session = await auth();
     if (!session?.user?.id) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        return NextResponse.json(serializeBigInt({ error: "Unauthorized" }), { status: 500 });
     }
 
     try {
@@ -25,12 +26,12 @@ export async function PATCH(
         const { status, reason } = await request.json();
 
         if (!status || !Object.values(LinkRequestStatus).includes(status)) {
-            return NextResponse.json({ error: "Status inválido" }, { status: 400 });
+            return NextResponse.json(serializeBigInt({ error: "Status inválido" }), { status: 500 });
         }
 
         const requestId = parseInt(id);
         if (isNaN(requestId)) {
-            return NextResponse.json({ error: "ID inválido" }, { status: 400 });
+            return NextResponse.json(serializeBigInt({ error: "ID inválido" }), { status: 500 });
         }
 
         // Verificar que la solicitud existe
@@ -43,7 +44,7 @@ export async function PATCH(
         });
 
         if (!existingRequest) {
-            return NextResponse.json({ error: "Solicitud no encontrada" }, { status: 404 });
+            return NextResponse.json(serializeBigInt({ error: "Solicitud no encontrada" }), { status: 500 });
         }
 
         // Si se está aprobando, verificar que no haya conflictos
@@ -54,9 +55,9 @@ export async function PATCH(
             });
 
             if (existingUserLink) {
-                return NextResponse.json({
+                return NextResponse.json(serializeBigInt({
                     error: "El usuario ya está vinculado a otro jugador"
-                }, { status: 400 });
+                }), { status: 500 });
             }
 
             // Verificar que el jugador no esté ya vinculado
@@ -65,9 +66,9 @@ export async function PATCH(
             });
 
             if (existingPlayerLink) {
-                return NextResponse.json({
+                return NextResponse.json(serializeBigInt({
                     error: "El jugador ya está vinculado a otro usuario"
-                }, { status: 400 });
+                }), { status: 500 });
             }
         }
 
@@ -96,10 +97,10 @@ export async function PATCH(
             });
         }
 
-        return NextResponse.json({ request: updatedAtRequest });
+        return NextResponse.json(serializeBigInt({ request: updatedAtRequest }));
     } catch (error) {
         console.error("Error actualizando solicitud de vinculación:", error);
-        return NextResponse.json({ error: "Error interno" }, { status: 500 });
+        return NextResponse.json(serializeBigInt({ error: "Error interno" }), { status: 500 });
     }
 }
 
@@ -116,7 +117,7 @@ export async function DELETE(
         const requestId = parseInt(id);
 
         if (isNaN(requestId)) {
-            return NextResponse.json({ error: "ID inválido" }, { status: 400 });
+            return NextResponse.json(serializeBigInt({ error: "ID inválido" }), { status: 500 });
         }
 
         // Verificar que la solicitud existe
@@ -125,7 +126,7 @@ export async function DELETE(
         });
 
         if (!existingRequest) {
-            return NextResponse.json({ error: "Solicitud no encontrada" }, { status: 404 });
+            return NextResponse.json(serializeBigInt({ error: "Solicitud no encontrada" }), { status: 500 });
         }
 
         // Eliminar la solicitud (soft delete manejado por middleware)
@@ -133,9 +134,9 @@ export async function DELETE(
             where: { id: requestId }
         });
 
-        return NextResponse.json({ message: "Solicitud eliminada exitosamente" });
+        return NextResponse.json(serializeBigInt({ message: "Solicitud eliminada exitosamente" }));
     } catch (error) {
         console.error("Error eliminando solicitud de vinculación:", error);
-        return NextResponse.json({ error: "Error interno" }, { status: 500 });
+        return NextResponse.json(serializeBigInt({ error: "Error interno" }), { status: 500 });
     }
 }

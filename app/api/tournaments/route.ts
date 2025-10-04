@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/database/client";
+import { serializeBigInt } from "@/lib/serialize-bigint";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -32,7 +33,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      data: tournaments,
+      data: serializeBigInt(tournaments),
       total: tournaments.length
     });
   } catch (error) {

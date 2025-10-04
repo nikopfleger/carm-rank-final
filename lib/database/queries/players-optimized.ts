@@ -9,7 +9,7 @@ import type { PlayerWithRanking } from './types';
 // Tipos mínimos locales (lo que realmente usamos)
 // ----------------------------------------------
 type DanConfig = {
-  id: number;
+  id: bigint;
   rank: string;
   sanma: boolean;
   minPoints: number;
@@ -147,7 +147,7 @@ export async function getPlayersWithRanking(
 
     const allDanPointsHistory = await prisma.points.findMany({
       where: { playerId: { in: playerIds }, pointsType: 'DAN', isSanma: sanmaMode },
-      orderBy: [{ playerId: 'asc' }, { id: 'desc' }, { createdAt: 'desc' }],
+      orderBy: [{ playerId: 'asc' }, { id: 'desc' }],
       take: playerIds.length * 5,
     });
 
@@ -159,13 +159,13 @@ export async function getPlayersWithRanking(
           isSanma: sanmaMode,
           seasonId: activeSeason.id,
         },
-        orderBy: [{ playerId: 'asc' }, { id: 'desc' }, { createdAt: 'desc' }],
+        orderBy: [{ playerId: 'asc' }, { id: 'desc' }],
         take: playerIds.length * 5,
       })
       : [];
 
-    const danHistoryByPlayer = new Map<number, any[]>();
-    const seasonHistoryByPlayer = new Map<number, any[]>();
+    const danHistoryByPlayer = new Map<bigint, any[]>();
+    const seasonHistoryByPlayer = new Map<bigint, any[]>();
 
     for (const point of allDanPointsHistory) {
       const arr = danHistoryByPlayer.get(point.playerId) ?? [];

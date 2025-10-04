@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/database/client';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from 'next/server';
 
 // GET /api/abm/season-results/[id] - Get a specific season result
@@ -36,7 +37,7 @@ export async function GET(
             );
         }
 
-        return NextResponse.json(seasonResult);
+        return NextResponse.json(serializeBigInt(seasonResult));
     } catch (error) {
         console.error('Error fetching season result:', error);
         return NextResponse.json(
@@ -110,7 +111,7 @@ export async function PUT(
             }
         });
 
-        return NextResponse.json(seasonResult);
+        return NextResponse.json(serializeBigInt(seasonResult));
     } catch (error) {
         console.error('Error updating season result:', error);
         return NextResponse.json(
@@ -148,7 +149,7 @@ export async function DELETE(
             }
         });
 
-        return NextResponse.json(seasonResult);
+        return NextResponse.json(serializeBigInt(seasonResult));
     } catch (error) {
         console.error('Error deleting season result:', error);
         return NextResponse.json(

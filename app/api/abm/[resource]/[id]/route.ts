@@ -1,5 +1,6 @@
 import { getResource } from '@/lib/abm/registry';
 import { getPrismaClient } from '@/lib/database/connection';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextResponse } from 'next/server';
 
 export async function GET(
@@ -18,7 +19,7 @@ export async function GET(
             include: cfg.include,
         });
 
-        return NextResponse.json({ success: true, data: row });
+        return NextResponse.json({ success: true, data: serializeBigInt(row) });
     } catch (err: any) {
         // Prisma known errors
         const code: string | undefined = err?.code;
@@ -81,7 +82,7 @@ export async function PATCH(
         });
         console.log(`[ABM][PATCH] OK ${resource}/${id}`);
 
-        return NextResponse.json({ success: true, data: updated });
+        return NextResponse.json({ success: true, data: serializeBigInt(updated) });
     } catch (err: any) {
         return NextResponse.json({ success: false, error: err.message || 'Error' }, { status: 500 });
     }
@@ -162,7 +163,7 @@ export async function DELETE(
         const deleted = await directModel.update(updateData);
 
         console.log(`✅ Successfully deleted ${resource} ${id}`);
-        return NextResponse.json({ success: true, data: deleted });
+        return NextResponse.json({ success: true, data: serializeBigInt(deleted) });
     } catch (err: any) {
         console.error(`❌ Error deleting ${resource} ${id}:`, err);
         return NextResponse.json({ success: false, error: err.message || 'Error' }, { status: 500 });

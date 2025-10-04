@@ -5,11 +5,12 @@ import {
 } from '@/lib/game-calculations';
 import { NextRequest, NextResponse } from 'next/server';
 
+import { serializeBigInt } from '@/lib/serialize-bigint';
 export interface GameCalculationRequest {
     players: PlayerScore[];
     gameType: GameType;
     currentRankings: Array<{
-        playerId: number;
+        playerId: bigint;
         danPoints: number;
         ratePoints: number;
         totalGames: number;
@@ -85,7 +86,7 @@ export async function POST(request: NextRequest) {
             tableAverageRate,
             isSanma,
             seasonEligible,
-            seasonId
+            seasonId ? BigInt(seasonId) : undefined
         );
 
         // Debug en desarrollo
@@ -102,7 +103,7 @@ export async function POST(request: NextRequest) {
             });
         }
 
-        return NextResponse.json({ results });
+        return NextResponse.json(serializeBigInt({ results }));
 
     } catch (error) {
         console.error('Error calculating game results:', error);

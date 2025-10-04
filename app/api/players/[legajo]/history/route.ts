@@ -51,7 +51,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     });
 
     // === A) Juegos DAN/RATE (igual que tu lógica) ===
-    const gamesMap = new Map<number, {
+    const gamesMap = new Map<string, {
       gameId: number;
       gameDate: string;
       gameType?: 'HANCHAN' | 'TONPUUSEN';
@@ -78,8 +78,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       // ----- juegos (DAN / RATE / SEASON por juego) -----
       if (p.gameId && p.game) {
         // Armo grupo por juego para DAN/RATE
-        const g = gamesMap.get(p.gameId) ?? {
-          gameId: p.gameId,
+        const g = gamesMap.get(p.gameId.toString()) ?? {
+          gameId: Number(p.gameId),
           gameDate: p.game.gameDate.toISOString().slice(0, 10),
           gameType: p.game.gameType as 'HANCHAN' | 'TONPUUSEN',
           position: p.game.gameResults[0]?.finalPosition,
@@ -87,14 +87,14 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         };
         if (p.pointsType === 'DAN') g.danPoints = pointsValue;
         if (p.pointsType === 'RATE') g.ratePoints = pointsValue;
-        gamesMap.set(p.gameId, g);
+        gamesMap.set(p.gameId.toString(), g);
 
         // Si además este registro es SEASON por juego, lo agrego a la serie
         if (p.pointsType === 'SEASON') {
           seasonEvents.push({
             source: 'GAME',
-            id: p.gameId,
-            poId: p.id, // para orden estable
+            id: Number(p.gameId),
+            poId: Number(p.id), // para orden estable
             date: p.game.gameDate.toISOString().slice(0, 10),
             label: `Juego ${p.gameId}`,
             points: pointsValue
@@ -109,8 +109,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         seasonEvents.push({
           source: 'TOURNAMENT',
           // id lógico para tooltip
-          id: p.tournamentId,
-          poId: p.id,
+          id: Number(p.tournamentId),
+          poId: Number(p.id),
           date: d,
           label: p.tournament.name,
           points: pointsValue
@@ -130,13 +130,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     gamesMap.forEach((v) => { gamesArr.push(v); });
     const games = gamesArr
       .filter(g => g.danPoints !== undefined && g.ratePoints !== undefined)
-      .sort((a, b) => a.gameDate.localeCompare(b.gameDate));
+      .sort((a, b) => a.gameId - b.gameId);
 
-    // Orden cronológico para el gráfico de SEASON (fecha y, ante empates, poId)
-    seasonEvents.sort((a, b) => {
-      const cmp = a.date.localeCompare(b.date);
-      return cmp !== 0 ? cmp : a.poId - b.poId;
-    });
+    // Orden por ID (orden de creación)
+    seasonEvents.sort((a, b) => a.poId - b.poId);
 
     // Acumulado (si tu gráfico lo necesita)
     let running = 0;

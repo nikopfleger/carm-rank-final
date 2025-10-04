@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/database/client";
+import { serializeBigInt } from "@/lib/serialize-bigint";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -20,7 +21,7 @@ export async function GET(request: NextRequest) {
             }
         });
 
-        return NextResponse.json(tournaments);
+        return NextResponse.json(serializeBigInt(tournaments));
     } catch (error) {
         console.error("Error fetching active tournaments:", error);
         return NextResponse.json(

@@ -1,8 +1,9 @@
 import { prisma } from "@/lib/database/client";
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from "next/server";
 
 // Función para cargar puntos de temporada de un torneo
-async function loadTournamentSeasonPoints(tournamentId: number, seasonId: number) {
+async function loadTournamentSeasonPoints(tournamentId: bigint, seasonId: bigint) {
     try {
         // Obtener todos los resultados del torneo
         const tournamentResults = await prisma.tournamentResult.findMany({
@@ -97,7 +98,7 @@ export async function POST(
 
         // Cargar puntos de temporada si el torneo tiene temporada asociada
         if (tournament.seasonId) {
-            await loadTournamentSeasonPoints(tournamentId, tournament.seasonId);
+            await loadTournamentSeasonPoints(BigInt(tournamentId), tournament.seasonId);
         }
 
         return NextResponse.json({

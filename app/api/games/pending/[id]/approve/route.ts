@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/database/client';
+import { calculateGameResults } from '@/lib/game-calculations';
 import { ensureGameValidate } from '@/lib/server-authorization';
 import { emailNotificationService } from '@/lib/services/email-notification-service';
 import { NextRequest, NextResponse } from 'next/server';
@@ -63,7 +64,7 @@ export async function POST(
       where: { status: 'PENDING' },
       orderBy: [{ gameDate: 'asc' }, { nroJuegoDia: 'asc' }, { createdAt: 'asc' }]
     });
-    if (!firstPendingGame || firstPendingGame.id !== pendingGameId) {
+    if (!firstPendingGame || firstPendingGame.id !== BigInt(pendingGameId)) {
       return NextResponse.json(
         {
           success: false,
@@ -122,22 +123,19 @@ export async function POST(
         id: pendingGame.player1.id,
         finalScore: (pendingGame as any).player1FinalScore
           ? parseFloat((pendingGame as any).player1FinalScore.toString())
-          : 0,
-        originalPosition: 1
+          : 0
       },
       {
         id: pendingGame.player2.id,
         finalScore: (pendingGame as any).player2FinalScore
           ? parseFloat((pendingGame as any).player2FinalScore.toString())
-          : 0,
-        originalPosition: 2
+          : 0
       },
       {
         id: pendingGame.player3.id,
         finalScore: (pendingGame as any).player3FinalScore
           ? parseFloat((pendingGame as any).player3FinalScore.toString())
-          : 0,
-        originalPosition: 3
+          : 0
       }
     ];
     if (!pendingGame.sanma && pendingGame.player4) {
@@ -145,22 +143,18 @@ export async function POST(
         id: pendingGame.player4.id,
         finalScore: (pendingGame as any).player4FinalScore
           ? parseFloat((pendingGame as any).player4FinalScore.toString())
-          : 0,
-        originalPosition: 4
+          : 0
       });
     }
 
-    // 3) Para logs
-    const playerScoresForLogs = players.map(p => ({ id: p.id, finalScore: p.finalScore }));
-
-    // 4) Ranking actual por jugador+sanma (una sola fila)
+    // 3) Ranking actual por jugador+sanma (una sola fila)
     const playerRankingsRaw = await prisma.playerRanking.findMany({
       where: {
         playerId: { in: players.map(p => p.id) },
         isSanma: pendingGame.sanma,
       }
     });
-    const rankingsMap = new Map<number, any>();
+    const rankingsMap = new Map<bigint, any>();
     for (const r of playerRankingsRaw) rankingsMap.set(r.playerId, r);
 
     // 5) Promedio de mesa (para Rate)
@@ -171,19 +165,7 @@ export async function POST(
     const averageTableRate =
       currentRates.reduce((sum: number, r: number) => sum + r, 0) / currentRates.length;
 
-    // 6) UMA del ruleset
-    const umaValues = [
-      pendingGame.ruleset.uma.firstPlace,
-      pendingGame.ruleset.uma.secondPlace,
-      pendingGame.ruleset.uma.thirdPlace,
-      pendingGame.ruleset.uma.fourthPlace || 0
-    ];
-
-    // 7) Calcular posiciones y nuevos Dan/Rate (aunque luego se “gateen”)
-
-    // Usar calculateGameResults centralizado para todos los cálculos
-    console.log('🧮 Iniciando cálculos de juego...');
-    const { calculateGameResults } = await import('@/lib/game-calculations');
+    // 6) Calcular posiciones y nuevos Dan/Rate
 
     const gameType = pendingGame.duration === 'HANCHAN' ? 'H' : 'T';
     const isSanma = pendingGame.sanma;
@@ -205,15 +187,7 @@ export async function POST(
       });
     }
 
-    console.log('📊 Datos para cálculo:', {
-      playerScores,
-      gameType,
-      isSanma,
-      seasonEligible,
-      averageTableRate
-    });
-
-    const calculatedResults = calculateGameResults(
+    const calculatedResults = await calculateGameResults(
       playerScores,
       gameType,
       currentRankings,
@@ -222,15 +196,12 @@ export async function POST(
       seasonEligible
     );
 
-    // Resolver calculateGameResults una sola vez
-    console.log('⏳ Resolviendo calculateGameResults...');
     const results = await calculatedResults;
-    console.log('✅ Resultados calculados:', results);
 
     // 8) Preparar payloads para rankings (no dependen de gameId)
     const rankingsToUpdate: any[] = [];
     for (const result of results) {
-      const ranking = rankingsMap.get(result.playerId);
+      const ranking = rankingsMap.get(BigInt(result.playerId));
       const isH = pendingGame.duration === 'HANCHAN';
       const isT = !isH;
 
@@ -356,7 +327,7 @@ export async function POST(
     }
 
     // 9) Transacción: TODO adentro para rollback total
-    let newGameId: number | null = null;
+    let newGameId: bigint | null = null;
 
     await prisma.$transaction(async (tx) => {
 
@@ -580,7 +551,7 @@ export async function POST(
       ];
 
       await emailNotificationService.notifyGameAccepted({
-        id: pendingGame.id,
+        id: Number(pendingGame.id),
         playerNames,
         acceptedBy: authz.session.user.name || authz.session.user.email || 'Administrador',
         date: pendingGame.gameDate,

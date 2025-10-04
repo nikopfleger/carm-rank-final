@@ -2,12 +2,13 @@ import { auth } from "@/lib/auth-vercel";
 import { ensureCacheReady, getDan, getDanDirect } from "@/lib/cache/core-cache";
 import { prisma } from "@/lib/database/client";
 import { getDanRank } from "@/lib/game-helpers";
+import { serializeBigInt } from "@/lib/serialize-bigint";
 import { NextRequest, NextResponse } from "next/server";
 
 ;
 
 // Función para calcular si un jugador está activo
-async function calculatePlayerActivity(playerId: number): Promise<boolean> {
+async function calculatePlayerActivity(playerId: bigint): Promise<boolean> {
     // Obtener la temporada activa actual
     const activeSeason = await prisma.season.findFirst({
         where: { isActive: true },
@@ -333,15 +334,15 @@ export async function GET(
                     }
                 }
             },
-            orderBy: { createdAt: 'asc' }
+            orderBy: { id: 'asc' }
         });
 
         // historicalPoints ya están en orden cronológico (más antiguos primero)
 
         // Crear un mapa gameId -> sanma del juego
-        const gameIdToSanma: Record<number, boolean> = {};
+        const gameIdToSanma: Record<string, boolean> = {};
         for (const gr of recentGames) {
-            gameIdToSanma[gr.game.id] = gr.game.ruleset.sanma;
+            gameIdToSanma[gr.game.id.toString()] = gr.game.ruleset.sanma;
         }
 
         // Debug en desarrollo para verificar historicalPoints
@@ -361,19 +362,19 @@ export async function GET(
         }
 
         // Crear un mapa de puntos por juego, filtrando por isSanma correspondiente
-        const pointsByGame = historicalPoints.reduce((acc: Record<number, Record<string, any>>, point: { gameId: number | null; pointsType: string; pointsValue: number; isSanma: boolean; seasonId: number | null; }) => {
-            if (point.gameId && !acc[point.gameId]) {
-                acc[point.gameId] = {};
+        const pointsByGame = historicalPoints.reduce((acc: Record<string, Record<string, any>>, point: { gameId: bigint | null; pointsType: string; pointsValue: number; isSanma: boolean; seasonId: bigint | null; }) => {
+            if (point.gameId && !acc[point.gameId.toString()]) {
+                acc[point.gameId.toString()] = {};
             }
             if (point.gameId) {
-                const expectedSanma = gameIdToSanma[point.gameId];
+                const expectedSanma = gameIdToSanma[point.gameId.toString()];
                 const isSameSeason = point.pointsType !== 'SEASON' || (activeSeason ? point.seasonId === activeSeason.id : true);
                 if (point.isSanma === expectedSanma && isSameSeason) {
-                    acc[point.gameId][point.pointsType] = point.pointsValue;
+                    acc[point.gameId.toString()][point.pointsType] = point.pointsValue;
                 }
             }
             return acc;
-        }, {} as Record<number, Record<string, any>>);
+        }, {} as Record<string, Record<string, any>>);
 
         // Debug en desarrollo para verificar pointsByGame
         if (process.env.NODE_ENV === 'development') {
@@ -390,7 +391,7 @@ export async function GET(
         console.log('RecentGames orden:', recentGames.slice(0, 3).map(gr => ({ id: gr.game.id, date: gr.game.gameDate })));
         const reversedGames = [...recentGames].reverse();
         const chartData = reversedGames.map((gr, index) => {
-            const gamePoints = pointsByGame[gr.game.id] || {};
+            const gamePoints = pointsByGame[gr.game.id.toString()] || {};
 
             // Para el gráfico: valores acumulados (de Points)
             const danPoints = Number(gamePoints.DAN || 0);
@@ -520,16 +521,16 @@ export async function GET(
 
             // Agrupar por gameId para acceso rápido
             gameResultsMap = gameResults.reduce((acc, result) => {
-                if (!acc[result.gameId]) {
-                    acc[result.gameId] = [];
+                if (!acc[result.gameId.toString()]) {
+                    acc[result.gameId.toString()] = [];
                 }
-                acc[result.gameId].push({
+                acc[result.gameId.toString()].push({
                     name: result.player.nickname,
                     position: result.finalPosition,
                     finalScore: Number(result.finalScore)
                 });
                 return acc;
-            }, {} as { [gameId: number]: any[] });
+            }, {} as { [gameId: string]: any[] });
         }
 
         // Obtener tournamentResults para los torneos que aparecen en seasonEvents
@@ -561,16 +562,16 @@ export async function GET(
 
             // Agrupar por tournamentId para acceso rápido
             tournamentResultsMap = tournamentResults.reduce((acc, result) => {
-                if (!acc[result.tournamentId]) {
-                    acc[result.tournamentId] = [];
+                if (!acc[result.tournamentId.toString()]) {
+                    acc[result.tournamentId.toString()] = [];
                 }
-                acc[result.tournamentId].push({
+                acc[result.tournamentId.toString()].push({
                     name: result.player.nickname,
                     position: result.position,
                     finalScore: Number(result.pointsWon)
                 });
                 return acc;
-            }, {} as { [tournamentId: number]: any[] });
+            }, {} as { [tournamentId: string]: any[] });
 
             // Obtener la posición del jugador específico en cada torneo
             const playerTournamentResults = await prisma.tournamentResult.findMany({
@@ -586,9 +587,9 @@ export async function GET(
 
             // Crear mapa de posiciones del jugador por torneo
             playerTournamentPositions = playerTournamentResults.reduce((acc, result) => {
-                acc[result.tournamentId] = result.position;
+                acc[result.tournamentId.toString()] = result.position;
                 return acc;
-            }, {} as { [tournamentId: number]: number });
+            }, {} as { [tournamentId: string]: number });
         }
 
         // Mapear seasonEvents al formato correcto
@@ -856,7 +857,7 @@ export async function GET(
             }
         };
 
-        return NextResponse.json(response, {
+        return NextResponse.json(serializeBigInt(response), {
             headers: {
                 // 10 segundos fresco + SWR 30 segundos para perfiles
                 "Cache-Control": "s-maxage=10, stale-while-revalidate=30"

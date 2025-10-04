@@ -12,9 +12,11 @@ import {
 } from '@/lib/cache/core-cache';
 import { getPlayersWithRanking } from '@/lib/database/queries/players-optimized';
 import { runWithRequestContextAsync } from '@/lib/request-context.server';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
+
 
 export async function GET(request: NextRequest) {
   try {
@@ -59,7 +61,7 @@ export async function GET(request: NextRequest) {
           console.log(`📦 GET /api/players - Datos obtenidos del CACHE (${cacheKey}): ${players.length} jugadores`);
           return NextResponse.json({
             success: true,
-            data: players,
+            data: serializeBigInt(players),
             source: 'cache'
           });
         }
@@ -84,7 +86,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      data: players,
+      data: serializeBigInt(players),
       source: 'database'
     });
 

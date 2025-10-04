@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/database/client';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { getNuevoRate, puntajeDan } from '@/lib/game-calculations';
 import { ensureGameSubmit } from '@/lib/server-authorization';
 import { NextRequest, NextResponse } from 'next/server';
@@ -176,7 +177,7 @@ export async function POST(request: NextRequest) {
       const rankingUpdates = [];
 
       for (const playerSubmission of validPlayers) {
-        const playerData = playersData.find(p => p.id === playerSubmission.player.id);
+        const playerData = playersData.find(p => p.id === BigInt(playerSubmission.player.id));
         if (!playerData) continue;
 
         // Obtener puntos actuales (desde PlayerRanking si existe, sino defaults)
@@ -195,7 +196,7 @@ export async function POST(request: NextRequest) {
 
         // Obtener rates de todos los jugadores y calcular promedio
         const allPlayerRates = validPlayers.map(p => {
-          const pd = playersData.find(pd => pd.id === p.player.id);
+          const pd = playersData.find(pd => pd.id === BigInt(p.player.id));
           return pd?.rankings?.[0]?.ratePoints || 1500;
         });
         const promedioMesa = allPlayerRates.reduce((sum, rate) => sum + rate, 0) / allPlayerRates.length;

@@ -1,7 +1,8 @@
 import { createSeason, getActiveSeason, getAllSeasons } from '@/lib/database/queries/seasons';
+import { serializeBigInt } from '@/lib/serialize-bigint';
+import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
-import { NextRequest, NextResponse } from 'next/server';
 
 // GET /api/seasons - Get all seasons or active season
 export async function GET(request: NextRequest) {
@@ -14,7 +15,7 @@ export async function GET(request: NextRequest) {
       const activeSeason = await getActiveSeason();
       return NextResponse.json({
         success: true,
-        data: activeSeason
+        data: serializeBigInt(activeSeason)
       });
     }
 
@@ -22,7 +23,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      data: seasons,
+      data: serializeBigInt(seasons),
       total: seasons.length
     });
   } catch (error) {
@@ -103,7 +104,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      data: season,
+      data: serializeBigInt(season),
       message: 'Season createdAt successfully'
     }, { status: 201 });
   } catch (error) {

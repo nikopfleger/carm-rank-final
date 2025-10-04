@@ -1,7 +1,7 @@
 import { prisma } from '../client';
 
 export interface Season {
-  id: number;
+  id: bigint;
   name: string;
   startDate: Date;
   endDate: Date;

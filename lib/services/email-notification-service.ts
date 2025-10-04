@@ -182,7 +182,7 @@ export class EmailNotificationService {
      * Notificar nuevo juego pendiente de validación
      */
     async notifyNewPendingGame(gameData: {
-        id: number;
+        id: bigint;
         playerNames: string[];
         submittedBy: string;
         date: Date;
@@ -333,7 +333,7 @@ El juego ya está registrado en el sistema y los puntos han sido actualizados.
      * Notificar nueva solicitud de vinculación de jugador
      */
     async notifyPlayerLinkRequest(requestData: {
-        id: number;
+        id: bigint;
         playerName: string;
         requestedBy: string;
         email: string;

@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/database/client";
+import { serializeBigInt } from "@/lib/serialize-bigint";
 import { ensureAbmManage } from "@/lib/server-authorization";
 import { UserRole } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
@@ -50,7 +51,7 @@ export async function GET(request: NextRequest) {
             }
         });
 
-        return NextResponse.json({
+        return NextResponse.json(serializeBigInt({
             users,
             emailAccount,
             notificationTypes: {
@@ -65,7 +66,7 @@ export async function GET(request: NextRequest) {
                     field: 'receiveLinkNotifications'
                 }
             }
-        });
+        }));
 
     } catch (error) {
         console.error('Error obteniendo configuración de notificaciones:', error);
@@ -139,7 +140,7 @@ export async function PATCH(request: NextRequest) {
             }
         });
 
-        return NextResponse.json({ user: updatedUser });
+        return NextResponse.json({ user: serializeBigInt(updatedUser) });
 
     } catch (error) {
         console.error('Error actualizando configuración de notificaciones:', error);

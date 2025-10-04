@@ -1,4 +1,5 @@
 import { getPlayerByLegajo } from '@/lib/database/queries/players-corrected';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from 'next/server';
 
 // GET /api/players/[legajo] - Get player by legajo

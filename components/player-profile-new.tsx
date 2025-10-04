@@ -481,7 +481,7 @@ export function PlayerProfileNew({ legajo, initial }: PlayerProfileProps) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-red-600">
-          {t("common.error")}: {error}
+          {t("common.error")}: {typeof error === 'string' ? error : JSON.stringify(error)}
         </div>
       </div>
     );

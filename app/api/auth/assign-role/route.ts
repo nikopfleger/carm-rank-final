@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/database/client';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from 'next/server';
 
 ;
@@ -18,7 +19,7 @@ export async function POST(request: NextRequest) {
     const { email } = await request.json();
 
     if (!email) {
-      return NextResponse.json({ error: "Email requerido" }, { status: 400 });
+      return NextResponse.json(serializeBigInt({ error: "Email requerido" }), { status: 400 });
     }
 
     const emailLc = String(email).toLowerCase();
@@ -40,7 +41,7 @@ export async function POST(request: NextRequest) {
         },
       });
       console.log(`Usuario ${emailLc} configurado como OWNER (whitelist)`);
-      return NextResponse.json({ role: "OWNER" });
+      return NextResponse.json(serializeBigInt({ role: "OWNER" }));
     } else {
       await prisma.user.upsert({
         where: { email: emailLc },
@@ -57,10 +58,10 @@ export async function POST(request: NextRequest) {
         },
       });
       console.log(`Usuario ${emailLc} configurado como USER normal`);
-      return NextResponse.json({ role: "USER" });
+      return NextResponse.json(serializeBigInt({ role: "USER" }));
     }
   } catch (error) {
     console.error("Error asignando rol:", error);
-    return NextResponse.json({ error: "Error interno" }, { status: 500 });
+    return NextResponse.json(serializeBigInt({ error: "Error interno" }), { status: 500 });
   }
 }

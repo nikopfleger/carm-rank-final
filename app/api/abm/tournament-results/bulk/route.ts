@@ -1,5 +1,6 @@
 // app/api/abm/tournament-results/bulk/route.ts
 import { prisma } from '@/lib/database/client';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from 'next/server';
 
 interface TournamentResultInput {
@@ -100,7 +101,7 @@ export async function POST(request: NextRequest) {
 
         if (existingPlayers.length !== playerIdsArray.length) {
             const existingIds = new Set(existingPlayers.map((p) => p.id));
-            const missing = playerIdsArray.filter((id) => !existingIds.has(id));
+            const missing = playerIdsArray.filter((id) => !existingIds.has(BigInt(id)));
             return NextResponse.json(
                 { error: `Los siguientes jugadores no existen: ${missing.join(', ')}` },
                 { status: 400 }
@@ -158,6 +159,7 @@ export async function POST(request: NextRequest) {
 
                 for (const tr of created) {
                     // Buscar último acumulado de temporada (SEASON) del jugador en esta season
+                    // Orden: Solo por ID (orden de creación)
                     const lastSeasonPoint = await tx.points.findFirst({
                         where: {
                             playerId: tr.playerId,
@@ -165,9 +167,7 @@ export async function POST(request: NextRequest) {
                             seasonId: tournament.seasonId,
                         },
                         orderBy: [
-                            { game: { gameDate: 'desc' } }, // si existe game asociado
-                            { tournament: { endDate: 'desc' } }, // si existe tournament asociado
-                            { id: 'desc' }, // desempate
+                            { id: 'desc' }, // Solo por ID (orden de creación)
                         ],
                         include: {
                             game: { select: { gameDate: true } },
@@ -180,8 +180,8 @@ export async function POST(request: NextRequest) {
                     const newAccumulated = previousPoints + tournamentPoints;
 
                     seasonPointsData.push({
-                        playerId: tr.playerId,
-                        seasonId: tournament.seasonId,
+                        playerId: Number(tr.playerId),
+                        seasonId: Number(tournament.seasonId),
                         pointsValue: newAccumulated,
                         description: `Puntos de torneo - Posición ${tr.position}`,
                         pointsType: 'SEASON',
@@ -250,7 +250,7 @@ export async function POST(request: NextRequest) {
             return created;
         });
 
-        return NextResponse.json({
+        return NextResponse.json(serializeBigInt({
             success: true,
             message: tournament.seasonId
                 ? 'Resultados del torneo guardados y puntos de temporada cargados exitosamente'
@@ -261,7 +261,7 @@ export async function POST(request: NextRequest) {
                 results: createdResults,
                 seasonPointsLoaded: !!tournament.seasonId,
             },
-        });
+        }));
     } catch (error) {
         console.error('❌ Error actualizando resultados de torneo:', error);
         return NextResponse.json(

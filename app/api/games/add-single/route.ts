@@ -6,6 +6,7 @@ import {
   type NewGameData
 } from '@/lib';
 import { prisma } from '@/lib/database/client';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { ensureGameSubmit } from '@/lib/server-authorization';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -65,12 +66,12 @@ export async function POST(request: NextRequest) {
     const gameData: NewGameData = {
       gameDate: parsedDate,
       venue,
-      locationId: locationId ? parseInt(locationId) : undefined,
+      locationId: locationId ? BigInt(parseInt(locationId)) : undefined,
       duration: duration.toUpperCase(),
       sanma: Boolean(sanma),
-      rulesetId: parseInt(rulesetId),
+      rulesetId: BigInt(rulesetId),
       players: players.map((p: any) => ({
-        playerId: parseInt(p.playerId),
+        playerId: BigInt(parseInt(p.playerId)),
         gameScore: parseInt(p.gameScore),
         wind: p.wind,
         chonbos: parseInt(p.chonbos || 0),

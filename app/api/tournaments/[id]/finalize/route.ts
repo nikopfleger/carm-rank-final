@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/database/client";
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from "next/server";
 
 interface TournamentFinalizeRequest {
@@ -98,8 +99,8 @@ export async function POST(
             }
 
             // 2. Agrupar por jugador y calcular totales
-            const playerTotals = new Map<number, {
-                playerId: number;
+            const playerTotals = new Map<bigint, {
+                playerId: bigint;
                 playerNickname: string;
                 totalPoints: number;
                 gamesPlayed: number;
@@ -274,8 +275,8 @@ export async function GET(
         });
 
         // Agrupar por jugador
-        const playerTotals = new Map<number, {
-            playerId: number;
+        const playerTotals = new Map<bigint, {
+            playerId: bigint;
             playerNickname: string;
             totalPoints: number;
             gamesPlayed: number;

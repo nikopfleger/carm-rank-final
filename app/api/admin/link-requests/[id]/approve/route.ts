@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/database/client";
 import { emailService } from "@/lib/email-service";
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { ensureAbmManage } from "@/lib/server-authorization";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -16,7 +17,7 @@ export async function POST(
 
     try {
         const { id: idParam } = await params;
-    const requestId = parseInt(idParam);
+        const requestId = parseInt(idParam);
 
         // Verificar que la solicitud existe y está pendiente
         const linkRequest = await prisma.userPlayerLinkRequest.findUnique({
@@ -40,16 +41,16 @@ export async function POST(
         });
 
         if (!linkRequest) {
-            return NextResponse.json({ error: "Solicitud no encontrada" }, { status: 404 });
+            return NextResponse.json(serializeBigInt({ error: "Solicitud no encontrada" }), { status: 500 });
         }
 
         if (linkRequest.status !== 'PENDING') {
-            return NextResponse.json({ error: "La solicitud ya fue procesada" }, { status: 400 });
+            return NextResponse.json(serializeBigInt({ error: "La solicitud ya fue procesada" }), { status: 500 });
         }
 
         // Validar que el jugador existe
         if (!linkRequest.player) {
-            return NextResponse.json({ error: "Jugador no encontrado en la solicitud" }, { status: 400 });
+            return NextResponse.json(serializeBigInt({ error: "Jugador no encontrado en la solicitud" }), { status: 500 });
         }
 
         console.log('Datos de la solicitud:', {
@@ -69,9 +70,9 @@ export async function POST(
         });
 
         if (existingLink) {
-            return NextResponse.json({
+            return NextResponse.json(serializeBigInt({
                 error: "Ya existe un vínculo para este usuario o jugador"
-            }, { status: 400 });
+            }), { status: 500 });
         }
 
         // Usar transacción para aprobar la solicitud y crear el vínculo
@@ -149,6 +150,6 @@ export async function POST(
         });
     } catch (error) {
         console.error("Error aprobando solicitud de vinculación:", error);
-        return NextResponse.json({ error: "Error interno" }, { status: 500 });
+        return NextResponse.json(serializeBigInt({ error: "Error interno" }), { status: 500 });
     }
 }

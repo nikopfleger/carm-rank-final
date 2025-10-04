@@ -1,4 +1,5 @@
 import { activateSeason, archiveSeason, getSeasonStatistics, updateSeason } from '@/lib/database/queries/seasons';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';

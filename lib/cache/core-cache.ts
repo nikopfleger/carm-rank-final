@@ -5,21 +5,26 @@ import { getPlayersWithRanking } from '@/lib/database/queries/players-optimized'
 import 'server-only';
 
 export type DanConfig = {
-    id: number; rank: string; sanma: boolean;
+    id: bigint; rank: string; sanma: boolean;
     minPoints: number; maxPoints: number;
     firstPlace: number; secondPlace: number; thirdPlace: number; fourthPlace: number | null;
     isProtected: boolean; color: string; cssClass: string; isLastRank: boolean;
 };
 export type RateConfig = {
-    id: number; name: string; sanma: boolean;
+    id: bigint; name: string; sanma: boolean;
     firstPlace: number; secondPlace: number; thirdPlace: number; fourthPlace: number | null;
     adjustmentRate: number; adjustmentLimit: number; minAdjustment: number;
 };
 export type SeasonConfig = {
-    id: number; name: string; startDate: Date; endDate: Date; isActive: boolean; isClosed: boolean;
+    id: bigint; name: string; startDate: Date; endDate: Date; isActive: boolean; isClosed: boolean;
+};
+export type SeasonConfigCache = {
+    id: bigint; name: string; sanma: boolean;
+    firstPlace: number; secondPlace: number; thirdPlace: number; fourthPlace: number | null;
+    seasonId: bigint | null; isDefault: boolean;
 };
 export type PlayerRanking = {
-    id: number; nickname: string; fullname: string | null; country_id: number; player_id: number;
+    id: bigint; nickname: string; fullname: string | null; country_id: bigint; player_id: number;
     birthday: Date | null; country_iso: string; country_name: string; createdAt: Date; updatedAt: Date | null;
     position: number; total_games: number; average_position: number; dan_points: number; rate_points: number; max_rate: number;
     win_rate: number; rank: string; rank_spanish?: string; rank_color?: string;
@@ -30,7 +35,7 @@ export type PlayerRanking = {
     trend_dan_delta10?: number; trend_season_delta10?: number;
 };
 export type CacheShape = {
-    dan: DanConfig[]; rate: RateConfig[]; seasons: SeasonConfig[]; ranking: PlayerRanking[];
+    dan: DanConfig[]; rate: RateConfig[]; seasons: SeasonConfig[]; seasonConfigs: SeasonConfigCache[]; ranking: PlayerRanking[];
     ranking_4p_general_activos: PlayerRanking[]; ranking_4p_general_todos: PlayerRanking[];
     ranking_4p_temporada_activos: PlayerRanking[]; ranking_4p_temporada_todos: PlayerRanking[];
     ranking_3p_general_activos: PlayerRanking[]; ranking_3p_general_todos: PlayerRanking[];
@@ -107,6 +112,14 @@ async function loadSeasons(): Promise<SeasonConfig[]> {
     const raw = await prisma.season.findMany({ where: { deleted: false }, orderBy: { startDate: 'desc' } });
     return raw.map(r => ({
         id: r.id, name: r.name, startDate: r.startDate, endDate: r.endDate, isActive: r.isActive, isClosed: r.isClosed,
+    }));
+}
+async function loadSeasonConfigs(): Promise<SeasonConfigCache[]> {
+    const raw = await prisma.seasonConfig.findMany({ where: { deleted: false }, orderBy: { name: 'asc' } });
+    return raw.map(r => ({
+        id: r.id, name: r.name, sanma: r.sanma,
+        firstPlace: r.firstPlace, secondPlace: r.secondPlace, thirdPlace: r.thirdPlace, fourthPlace: r.fourthPlace,
+        seasonId: r.seasonId, isDefault: r.isDefault,
     }));
 }
 async function loadRanking(): Promise<PlayerRanking[]> {
@@ -232,6 +245,10 @@ export async function getRankingDirect(): Promise<PlayerRanking[]> {
     console.log('📊 getRankingDirect: Cargando desde DB');
     return await loadRanking();
 }
+export async function getSeasonConfigsDirect(): Promise<SeasonConfigCache[]> {
+    console.log('📊 getSeasonConfigsDirect: Cargando desde DB');
+    return await loadSeasonConfigs();
+}
 export function getRate(): RateConfig[] {
     if (!cache) throw new Error('Cache not initialized');
     return cache.rate;
@@ -239,6 +256,10 @@ export function getRate(): RateConfig[] {
 export function getSeasons(): SeasonConfig[] {
     if (!cache) throw new Error('Cache not initialized');
     return cache.seasons;
+}
+export function getSeasonConfigs(): SeasonConfigCache[] {
+    if (!cache) throw new Error('Cache not initialized');
+    return cache.seasonConfigs;
 }
 export function getRanking(): PlayerRanking[] {
     if (!cache) throw new Error('Cache not initialized');
@@ -282,7 +303,7 @@ export function getColors(): Record<string, string> {
 }
 
 // === Mutaciones (write-through) ===
-export async function upsertDan(input: Omit<DanConfig, 'id'> & { id?: number }) {
+export async function upsertDan(input: Omit<DanConfig, 'id'> & { id?: bigint }) {
     const saved = await prisma.danConfig.upsert({
         where: { id: input.id ?? -1 },
         create: {
@@ -316,7 +337,7 @@ export async function upsertDan(input: Omit<DanConfig, 'id'> & { id?: number }) 
     return saved;
 }
 
-export async function upsertRate(input: Omit<RateConfig, 'id'> & { id?: number }) {
+export async function upsertRate(input: Omit<RateConfig, 'id'> & { id?: bigint }) {
     const saved = await prisma.rateConfig.upsert({
         where: { id: input.id ?? -1 },
         create: {
@@ -370,8 +391,8 @@ export async function invalidateRanking() {
 
 export async function invalidateConfigs() {
     if (!cache) return;
-    const [dan, rate, seasons] = await Promise.all([loadDan(), loadRate(), loadSeasons()]);
-    cache.dan = dan; cache.rate = rate; cache.seasons = seasons;
+    const [dan, rate, seasons, seasonConfigs] = await Promise.all([loadDan(), loadRate(), loadSeasons(), loadSeasonConfigs()]);
+    cache.dan = dan; cache.rate = rate; cache.seasons = seasons; cache.seasonConfigs = seasonConfigs;
     cache.colors = await loadColors(dan, rate);
     cache.lastUpdated = Date.now();
     try {

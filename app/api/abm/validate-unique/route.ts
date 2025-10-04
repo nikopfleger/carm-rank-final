@@ -1,4 +1,5 @@
 import { getResource } from '@/lib/abm/registry';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { runWithRequestContextAsync } from '@/lib/request-context.server';
 import { NextResponse } from 'next/server';
 

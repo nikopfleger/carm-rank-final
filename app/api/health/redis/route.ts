@@ -1,4 +1,5 @@
 import { getRedisCache } from '@/lib/cache/redis-wrapper';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextResponse } from 'next/server';
 
 export const runtime = 'nodejs';

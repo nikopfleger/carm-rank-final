@@ -3,7 +3,7 @@
  * Usa configuraciones dinámicas desde base de datos con cache en memoria
  */
 
-import { getDan, getDanDirect, getRate, getRateDirect } from '@/lib/cache/core-cache';
+import { getDan, getDanDirect, getRate, getRateDirect, getSeasonConfigs, getSeasonConfigsDirect } from '@/lib/cache/core-cache';
 
 // ===============================
 // HELPER FUNCTIONS CON FALLBACK
@@ -33,6 +33,18 @@ async function getRateWithFallback() {
   }
 }
 
+/**
+ * Obtiene configuración SEASON con fallback a DB directa si Redis no está disponible
+ */
+async function getSeasonConfigsWithFallback() {
+  try {
+    return getSeasonConfigs();
+  } catch (error) {
+    console.log('📊 getSeasonConfigs fallback: Redis no disponible, usando DB directo');
+    return await getSeasonConfigsDirect();
+  }
+}
+
 // ===============================
 // TIPOS Y INTERFACES
 // ===============================
@@ -41,12 +53,12 @@ export type GameType = 'H' | 'T'; // Hanchan | Tonpuusen
 export type Position = 1 | 2 | 3 | 4;
 
 export interface PlayerScore {
-  id: number;
+  id: bigint;
   finalScore: number; // Puntaje final del jugador (puede ser negativo)
 }
 
 export interface PlayerPosition {
-  id: number;
+  id: bigint;
   finalPosition: Position;
   finalScore: number;
 }
@@ -54,7 +66,7 @@ export interface PlayerPosition {
 // Las interfaces DanConfig, RateConfig y SeasonConfig están ahora en config-cache.ts
 
 export interface GameCalculationResult {
-  playerId: number;
+  playerId: bigint;
   finalPosition: Position;
   finalScore: number;
   newDanPoints: number;
@@ -210,25 +222,34 @@ export async function calculateSeasonPoints(
   currentSeasonPoints: number,
   isSanma: boolean,
   finalPositions: PlayerPosition[],
-  seasonId?: number
+  seasonId?: bigint
 ): Promise<number> {
-  // Obtener configuración DAN para los puntos de posición
-  const danConfigs = await getDanWithFallback();
-  const danConfig = danConfigs.find(config =>
+  // Obtener configuración SEASON para los puntos de posición
+  const seasonConfigs = await getSeasonConfigsWithFallback();
+
+  // Buscar configuración específica para la temporada o usar la por defecto
+  let seasonConfig = seasonConfigs.find(config =>
     config.sanma === isSanma &&
-    currentSeasonPoints >= config.minPoints &&
-    (config.maxPoints === null || currentSeasonPoints <= config.maxPoints)
+    config.seasonId === seasonId
   );
 
-  if (!danConfig) {
-    console.warn(`No DAN config found for season points ${currentSeasonPoints}, sanma: ${isSanma}`);
+  // Si no hay configuración específica para la temporada, usar la por defecto
+  if (!seasonConfig) {
+    seasonConfig = seasonConfigs.find(config =>
+      config.sanma === isSanma &&
+      config.isDefault
+    );
+  }
+
+  if (!seasonConfig) {
+    console.warn(`No SEASON config found for sanma: ${isSanma}, seasonId: ${seasonId}`);
     return currentSeasonPoints;
   }
 
   // Puntos base según posición
   const basePoints = isSanma
-    ? [danConfig.firstPlace, danConfig.secondPlace, danConfig.thirdPlace]
-    : [danConfig.firstPlace, danConfig.secondPlace, danConfig.thirdPlace, danConfig.fourthPlace || 0];
+    ? [seasonConfig.firstPlace, seasonConfig.secondPlace, seasonConfig.thirdPlace]
+    : [seasonConfig.firstPlace, seasonConfig.secondPlace, seasonConfig.thirdPlace, seasonConfig.fourthPlace || 0];
 
   // Usar calcularUmaConEmpates para manejo consistente de empates
   const posicionesArray = finalPositions?.map(p => p.finalPosition) || [position];
@@ -257,11 +278,11 @@ export async function calculateSeasonPoints(
 export async function calculateGameResults(
   players: PlayerScore[],
   gameType: GameType,
-  currentRankings: Map<number, { danPoints: number; ratePoints: number; totalGames: number; seasonPoints?: number }>,
+  currentRankings: Map<bigint, { danPoints: number; ratePoints: number; totalGames: number; seasonPoints?: number }>,
   tableAverageRate: number,
   isSanma: boolean,
   seasonEligible: boolean,
-  seasonId?: number
+  seasonId?: bigint
 ): Promise<GameCalculationResult[]> {
   // 1. Calcular posiciones finales
   const finalPositions = calculateFinalPositions(players);

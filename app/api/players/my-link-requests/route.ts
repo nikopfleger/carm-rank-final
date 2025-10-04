@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth-vercel";
 import { prisma } from "@/lib/database/client";
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextResponse } from "next/server";
 
 export const dynamic = 'force-dynamic';
@@ -8,7 +9,7 @@ export async function GET() {
     try {
         const session = await auth();
         if (!session?.user?.id) {
-            return NextResponse.json({ requests: [] });
+            return NextResponse.json(serializeBigInt({ requests: [] }));
         }
 
         const requests = await prisma.userPlayerLinkRequest.findMany({
@@ -21,9 +22,9 @@ export async function GET() {
             },
         });
 
-        return NextResponse.json({ requests });
+        return NextResponse.json(serializeBigInt({ requests }));
     } catch (error) {
         console.error("Error in my-link-requests:", error);
-        return NextResponse.json({ requests: [] }, { status: 500 });
+        return NextResponse.json(serializeBigInt({ requests: [] }), { status: 500 });
     }
 }

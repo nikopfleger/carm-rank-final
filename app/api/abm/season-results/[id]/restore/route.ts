@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/database/client';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from 'next/server';
 
 // POST /api/abm/season-results/[id]/restore - Restore a soft-deleted season result
@@ -30,7 +31,7 @@ export async function POST(
       }
     });
 
-    return NextResponse.json(seasonResult);
+    return NextResponse.json(serializeBigInt(seasonResult));
   } catch (error) {
     console.error('Error restoring season result:', error);
     return NextResponse.json(

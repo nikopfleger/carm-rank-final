@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/database/client";
 
+import { serializeBigInt } from '@/lib/serialize-bigint';
 export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from "next/server";
 
@@ -35,7 +36,7 @@ export async function GET(request: NextRequest) {
         playerNumber: Number(player.playerNumber)
       }));
 
-      return NextResponse.json(sanitizedDefaultPlayers);
+      return NextResponse.json(serializeBigInt(sanitizedDefaultPlayers));
     }
 
     const query = q.trim();
@@ -102,7 +103,7 @@ export async function GET(request: NextRequest) {
       playerNumber: Number(player.playerNumber)
     }));
 
-    return NextResponse.json(sanitizedPlayers);
+    return NextResponse.json(serializeBigInt(sanitizedPlayers));
   } catch (error) {
     console.error("Error searching players:", error);
     return NextResponse.json(

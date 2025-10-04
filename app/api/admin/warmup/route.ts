@@ -1,4 +1,5 @@
 import { getCacheStatus, initializeCache } from '@/lib/cache/core-cache';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextResponse } from 'next/server';
 
 ;

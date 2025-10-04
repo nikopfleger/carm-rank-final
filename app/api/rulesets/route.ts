@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/database/client';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest) {
       orderBy: { name: 'asc' }
     });
 
-    return NextResponse.json(rulesets);
+    return NextResponse.json(serializeBigInt(rulesets));
   } catch (error) {
     console.error('Error fetching rulesets:', error);
     return NextResponse.json(

@@ -1,5 +1,5 @@
 export interface ClassModel {
-    id: number | undefined;
+    id: bigint | undefined;
     version: number;
     createdAt: Date;
     createdBy: String;

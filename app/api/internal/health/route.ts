@@ -1,4 +1,5 @@
 import { getCacheStatus } from '@/lib/cache/core-cache';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { checkDatabaseHealth } from '@/lib/database/client';
 import { NextRequest, NextResponse } from 'next/server';
 

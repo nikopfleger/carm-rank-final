@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/database/client";
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -42,7 +43,7 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(tournamentResult);
+    return NextResponse.json(serializeBigInt(tournamentResult));
   } catch (error) {
     console.error("Error fetching tournament result:", error);
     return NextResponse.json(
@@ -70,7 +71,7 @@ export async function PUT(
     const body = await request.json();
     const expectedVersion = Number(body?.version ?? body?.__expectedVersion ?? body?.expectedVersion);
     if (!Number.isFinite(expectedVersion)) {
-      return NextResponse.json({ error: "Falta versión para optimistic locking" }, { status: 409 });
+      return NextResponse.json(serializeBigInt({ error: "Falta versión para optimistic locking" }), { status: 409 });
     }
 
     // Verificar que el resultado existe
@@ -160,7 +161,7 @@ export async function PUT(
       }
     });
 
-    return NextResponse.json(tournamentResult);
+    return NextResponse.json(serializeBigInt(tournamentResult));
   } catch (error) {
     console.error("Error updating tournament result:", error);
     return NextResponse.json(
@@ -202,7 +203,7 @@ export async function DELETE(
       where: { id }
     });
 
-    return NextResponse.json({ message: "Resultado de torneo eliminado correctamente" });
+    return NextResponse.json(serializeBigInt({ message: "Resultado de torneo eliminado correctamente" }));
   } catch (error) {
     console.error("Error deleting tournament result:", error);
     return NextResponse.json(

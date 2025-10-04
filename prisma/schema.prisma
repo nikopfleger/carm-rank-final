@@ -23,7 +23,7 @@ generator client {
 //   updatedIp String?  @map("updated_ip") @db.VarChar(45)
 
 model Country {
-  id          Int       @id @default(autoincrement())
+  id          BigInt    @id @default(autoincrement())
   isoCode     String    @unique @map("iso_code") @db.VarChar(3)
   fullName    String    @map("full_name") @db.VarChar(255)
   nationality String    @db.VarChar(255)
@@ -41,10 +41,10 @@ model Country {
 }
 
 model Player {
-  id                    Int           @id @default(autoincrement())
+  id                    BigInt        @id @default(autoincrement())
   nickname              String        @unique @db.VarChar(255)
   fullname              String?       @db.VarChar(255)
-  countryId             Int           @map("country_id")
+  countryId             BigInt        @map("country_id")
   playerNumber          Int           @unique @map("player_number")
   birthday              DateTime?     @db.Date
   version               Int           @default(0)
@@ -74,7 +74,7 @@ model Player {
 }
 
 model Uma {
-  id          Int       @id @default(autoincrement())
+  id          BigInt    @id @default(autoincrement())
   name        String    @db.VarChar(255)
   firstPlace  Int       @map("first_place")
   secondPlace Int       @map("second_place")
@@ -94,9 +94,9 @@ model Uma {
 }
 
 model Ruleset {
-  id           Int           @id @default(autoincrement())
+  id           BigInt        @id @default(autoincrement())
   name         String        @db.VarChar(255)
-  umaId        Int           @map("uma_id")
+  umaId        BigInt        @map("uma_id")
   oka          Int
   chonbo       Int
   aka          Boolean       @default(false)
@@ -120,7 +120,7 @@ model Ruleset {
 }
 
 model Season {
-  id            Int            @id @default(autoincrement())
+  id            BigInt         @id @default(autoincrement())
   name          String         @db.VarChar(255)
   startDate     DateTime       @map("start_date") @db.Date
   endDate       DateTime       @map("end_date") @db.Date
@@ -145,7 +145,7 @@ model Season {
 }
 
 model Location {
-  id           Int           @id @default(autoincrement())
+  id           BigInt        @id @default(autoincrement())
   name         String        @db.VarChar(255)
   address      String?
   city         String?       @db.VarChar(255)
@@ -167,37 +167,37 @@ model Location {
 }
 
 model PendingGame {
-  id                 Int               @id @default(autoincrement())
+  id                 BigInt            @id @default(autoincrement())
   gameDate           DateTime          @map("game_date") @db.Date
   nroJuegoDia        Int?              @map("nro_juego_dia")
-  locationId         Int?              @map("location_id")
+  locationId         BigInt?           @map("location_id")
   duration           GameType          @map("duration")
   sanma              Boolean           @default(false)
-  seasonId           Int?              @map("season_id")
-  tournamentId       Int?              @map("tournament_id")
-  rulesetId          Int               @map("ruleset_id")
+  seasonId           BigInt?           @map("season_id")
+  tournamentId       BigInt?           @map("tournament_id")
+  rulesetId          BigInt            @map("ruleset_id")
   imageUrl           String?           @map("image_url")
   imageFileName      String?           @map("image_file_name")
   imageFormat        String?           @map("image_format")
-  player1Id          Int               @map("player1_id")
+  player1Id          BigInt            @map("player1_id")
   player1Wind        String?           @map("player1_wind") @db.VarChar(1)
   player1OorasuScore Int?              @map("player1_oorasu_score")
   player1GameScore   Int               @map("player1_game_score")
   player1Chonbos     Int               @default(0) @map("player1_chonbos")
   player1FinalScore  Decimal?          @map("player1_final_score") @db.Decimal(10, 1)
-  player2Id          Int               @map("player2_id")
+  player2Id          BigInt            @map("player2_id")
   player2Wind        String?           @map("player2_wind") @db.VarChar(1)
   player2OorasuScore Int?              @map("player2_oorasu_score")
   player2GameScore   Int               @map("player2_game_score")
   player2Chonbos     Int               @default(0) @map("player2_chonbos")
   player2FinalScore  Decimal?          @map("player2_final_score") @db.Decimal(10, 1)
-  player3Id          Int               @map("player3_id")
+  player3Id          BigInt            @map("player3_id")
   player3Wind        String?           @map("player3_wind") @db.VarChar(1)
   player3OorasuScore Int?              @map("player3_oorasu_score")
   player3GameScore   Int               @map("player3_game_score")
   player3Chonbos     Int               @default(0) @map("player3_chonbos")
   player3FinalScore  Decimal?          @map("player3_final_score") @db.Decimal(10, 1)
-  player4Id          Int?              @map("player4_id")
+  player4Id          BigInt?           @map("player4_id")
   player4Wind        String?           @map("player4_wind") @db.VarChar(1)
   player4OorasuScore Int?              @map("player4_oorasu_score")
   player4GameScore   Int?              @map("player4_game_score")
@@ -208,7 +208,7 @@ model PendingGame {
   validatedBy        String?           @map("validated_by")
   validatedAt        DateTime?         @map("validated_at")
   rejectedReason     String?           @map("rejected_reason")
-  gameId             Int?              @map("game_id")
+  gameId             BigInt?           @map("game_id")
   version            Int               @default(0)
   deleted            Boolean           @default(false)
   createdAt          DateTime          @default(now()) @map("created_at")
@@ -231,11 +231,11 @@ model PendingGame {
 }
 
 model Game {
-  id           Int           @id @default(autoincrement())
-  seasonId     Int?          @map("season_id")
-  rulesetId    Int           @map("ruleset_id")
-  locationId   Int?          @map("location_id")
-  tournamentId Int?          @map("tournament_id")
+  id           BigInt        @id @default(autoincrement())
+  seasonId     BigInt?       @map("season_id")
+  rulesetId    BigInt        @map("ruleset_id")
+  locationId   BigInt?       @map("location_id")
+  tournamentId BigInt?       @map("tournament_id")
   gameType     GameType      @map("game_type")
   gameDate     DateTime      @map("game_date") @db.Date
   isValidated  Boolean       @default(false) @map("is_validated")
@@ -263,9 +263,9 @@ model Game {
 }
 
 model GameResult {
-  id                 Int       @id @default(autoincrement())
-  gameId             Int       @map("game_id")
-  playerId           Int       @map("player_id")
+  id                 BigInt    @id @default(autoincrement())
+  gameId             BigInt    @map("game_id")
+  playerId           BigInt    @map("player_id")
   finalPosition      Int       @map("final_position")
   finalScore         Decimal   @map("final_score") @db.Decimal(10, 1)
   danPointsEarned    Decimal   @map("dan_points_earned") @db.Decimal(10, 4)
@@ -291,9 +291,9 @@ model GameResult {
 }
 
 model Tournament {
-  id                Int                @id @default(autoincrement())
-  seasonId          Int?               @map("season_id")
-  locationId        Int?               @map("location_id")
+  id                BigInt             @id @default(autoincrement())
+  seasonId          BigInt?            @map("season_id")
+  locationId        BigInt?            @map("location_id")
   name              String             @db.VarChar(255)
   description       String?
   type              TournamentType
@@ -324,9 +324,9 @@ model Tournament {
 }
 
 model TournamentResult {
-  id           Int        @id @default(autoincrement())
-  tournamentId Int        @map("tournament_id")
-  playerId     Int        @map("player_id")
+  id           BigInt     @id @default(autoincrement())
+  tournamentId BigInt     @map("tournament_id")
+  playerId     BigInt     @map("player_id")
   position     Int        @map("position")
   pointsWon    Int        @map("points_won")
   prizeWon     Decimal?   @map("prize_won") @db.Money
@@ -347,10 +347,10 @@ model TournamentResult {
 }
 
 model Points {
-  id           Int         @id @default(autoincrement())
-  playerId     Int         @map("player_id")
+  id           BigInt      @id @default(autoincrement())
+  playerId     BigInt      @map("player_id")
   player       Player      @relation(fields: [playerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_points_player_id")
-  seasonId     Int         @map("season_id")
+  seasonId     BigInt      @map("season_id")
   pointsValue  Decimal     @map("points_value") @db.Decimal(15, 10)
   description  String?
   extraData    Json?       @map("extra_data")
@@ -363,9 +363,9 @@ model Points {
   updatedBy    String?     @map("updated_by") @db.VarChar(255)
   updatedIp    String?     @map("updated_ip") @db.VarChar(45)
   pointsType   PointsType  @default(DAN) @map("points_type")
-  gameId       Int?        @map("game_id")
+  gameId       BigInt?     @map("game_id")
   game         Game?       @relation(fields: [gameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_points_game_id")
-  tournamentId Int?        @map("tournament_id")
+  tournamentId BigInt?     @map("tournament_id")
   tournament   Tournament? @relation(fields: [tournamentId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_points_tournament_id")
   isSanma      Boolean     @default(false) @map("is_sanma")
 
@@ -373,8 +373,8 @@ model Points {
 }
 
 model PlayerRanking {
-  id                    Int       @id @default(autoincrement())
-  playerId              Int       @map("player_id")
+  id                    BigInt    @id @default(autoincrement())
+  playerId              BigInt    @map("player_id")
   isSanma               Boolean   @default(false) @map("is_sanma") // 3-player vs 4-player
   totalGames            Int       @default(0) @map("total_games")
   averagePosition       Float     @default(2.5) @map("average_position")
@@ -482,8 +482,8 @@ model VerificationToken {
 }
 
 model OnlineUser {
-  id        Int       @id @default(autoincrement())
-  playerId  Int       @map("player_id")
+  id        BigInt    @id @default(autoincrement())
+  playerId  BigInt    @map("player_id")
   platform  String    @db.VarChar(50)
   username  String    @db.VarChar(255)
   idOnline  String?   @map("id_online") @db.VarChar(255)
@@ -503,9 +503,9 @@ model OnlineUser {
 }
 
 model UserPlayerLink {
-  id        Int       @id @default(autoincrement())
+  id        BigInt    @id @default(autoincrement())
   userId    String    @map("user_id") @db.VarChar(255)
-  playerId  Int       @map("player_id")
+  playerId  BigInt    @map("player_id")
   version   Int       @default(0)
   deleted   Boolean   @default(false)
   createdAt DateTime  @default(now()) @map("created_at")
@@ -523,9 +523,9 @@ model UserPlayerLink {
 }
 
 model UserPlayerLinkRequest {
-  id         Int               @id @default(autoincrement())
+  id         BigInt            @id @default(autoincrement())
   userId     String            @map("user_id") @db.VarChar(255)
-  playerId   Int               @map("player_id")
+  playerId   BigInt            @map("player_id")
   status     LinkRequestStatus @default(PENDING)
   note       String?
   approvedBy String?           @map("approved_by") @db.VarChar(255)
@@ -603,7 +603,7 @@ enum UserRole {
 }
 
 model EmailAccount {
-  id                 Int       @id @default(autoincrement())
+  id                 BigInt    @id @default(autoincrement())
   name               String    @db.VarChar(255)
   isPrimary          Boolean   @default(false) @map("is_primary")
   origin             String    @db.VarChar(255)
@@ -629,7 +629,7 @@ model EmailAccount {
 }
 
 model DanConfig {
-  id          Int       @id @default(autoincrement())
+  id          BigInt    @id @default(autoincrement())
   rank        String    @db.VarChar(50) // "新人", "9級", "初段", etc.
   sanma       Boolean   @default(false)
   minPoints   Int       @map("min_points")
@@ -656,7 +656,7 @@ model DanConfig {
 }
 
 model RateConfig {
-  id              Int       @id @default(autoincrement())
+  id              BigInt    @id @default(autoincrement())
   name            String    @db.VarChar(255)
   sanma           Boolean   @default(false)
   firstPlace      Int       @map("first_place")
@@ -680,14 +680,14 @@ model RateConfig {
 }
 
 model SeasonConfig {
-  id          Int       @id @default(autoincrement())
+  id          BigInt    @id @default(autoincrement())
   name        String    @db.VarChar(255)
   sanma       Boolean   @default(false)
   firstPlace  Int       @map("first_place")
   secondPlace Int       @map("second_place")
   thirdPlace  Int       @map("third_place")
   fourthPlace Int?      @map("fourth_place")
-  seasonId    Int?      @map("season_id")
+  seasonId    BigInt?   @map("season_id")
   isDefault   Boolean   @default(false) @map("is_default")
   version     Int       @default(0)
   deleted     Boolean   @default(false)
@@ -705,9 +705,9 @@ model SeasonConfig {
 }
 
 model SeasonResult {
-  id       Int     @id @default(autoincrement())
-  seasonId Int     @map("season_id")
-  playerId Int     @map("player_id")
+  id       BigInt  @id @default(autoincrement())
+  seasonId BigInt  @map("season_id")
+  playerId BigInt  @map("player_id")
   isSanma  Boolean @default(false) @map("is_sanma")
 
   // Aggregates for the season

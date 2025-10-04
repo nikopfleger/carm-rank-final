@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/database/client';
 import { runWithRequestContextAsync } from '@/lib/request-context.server';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -142,7 +143,7 @@ export async function GET(request: NextRequest) {
 
       // Combinar ambos conjuntos (temporada actual O último año)
       // Construir set de jugadores activos sin usar spread de Set (compatibilidad TS)
-      const activePlayerIds = new Set<number>([
+      const activePlayerIds = new Set<bigint>([
         ...currentSeasonPlayers.map(g => g.playerId),
         ...lastYearPlayers.map(g => g.playerId)
       ]);
@@ -208,7 +209,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      data: dashboardData
+      data: serializeBigInt(dashboardData)
     });
 
   } catch (error) {

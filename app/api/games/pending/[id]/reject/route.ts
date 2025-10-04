@@ -62,7 +62,7 @@ export async function POST(
       ]
     });
 
-    if (!firstPendingGame || firstPendingGame.id !== pendingGameId) {
+    if (!firstPendingGame || firstPendingGame.id !== BigInt(pendingGameId)) {
       return NextResponse.json(
         { success: false, message: 'Solo se puede rechazar el primer juego en orden. Debe respetar el orden por fecha y número de juego.' },
         { status: 400 }

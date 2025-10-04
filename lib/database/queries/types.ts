@@ -1,9 +1,9 @@
 // Types for player data
 export interface Player {
-  id: number;
+  id: bigint;
   nickname: string;
   fullname: string | null;
-  countryId: number;
+  countryId: bigint;
   playerId: number; // legajo
   birthday: Date | null;
   createdAt: Date;
@@ -12,14 +12,14 @@ export interface Player {
 
 // Additional types for common.ts
 export interface Country {
-  id: number;
+  id: bigint;
   iso_code: string;
   name_es: string;
   name_en?: string;
 }
 
 export interface Location {
-  id: number;
+  id: bigint;
   name: string;
   address?: string;
   online_platform?: string;
@@ -28,13 +28,13 @@ export interface Location {
 }
 
 export interface Ruleset {
-  id: number;
+  id: bigint;
   name: string;
   description?: string;
   createdAt: Date;
   updatedAt: Date | null;
   // Real fields from schema
-  umaId: number;
+  umaId: bigint;
   oka: number;
   chonbo: number;
   aka: boolean;
@@ -45,7 +45,7 @@ export interface Ruleset {
 }
 
 export interface Uma {
-  id: number;
+  id: bigint;
   name: string;
   first_place: number;
   second_place: number;
@@ -65,10 +65,10 @@ export interface OnlineApp {
 
 // Type for player with full ranking information
 export interface PlayerWithRanking {
-  id: number;
+  id: bigint;
   nickname: string;
   fullname: string | null;
-  country_id: number;
+  country_id: bigint;
   player_id: number; // legajo
   birthday: Date | null;
   country_iso: string;

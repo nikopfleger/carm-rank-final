@@ -8,6 +8,7 @@ import {
 } from '@/lib/database/queries/common';
 import { NextRequest, NextResponse } from 'next/server';
 
+import { serializeBigInt } from '@/lib/serialize-bigint';
 export const dynamic = 'force-dynamic';
 
 // GET /api/common?type=countries|locations|rulesets|uma|online_apps|health

@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/database/client";
+import { serializeBigInt } from "@/lib/serialize-bigint";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -54,12 +55,12 @@ export async function GET(request: NextRequest) {
             activePlayers = lastYearPlayers.length;
         }
 
-        return NextResponse.json({
+        return NextResponse.json(serializeBigInt({
             totalPlayers,
             activePlayers,
             samplePlayers,
             message: "Debug info de jugadores"
-        });
+        }));
 
     } catch (error) {
         console.error("Error en debug de jugadores:", error);

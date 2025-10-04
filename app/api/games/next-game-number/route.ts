@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/database/client";
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { ensureGameSubmit } from "@/lib/server-authorization";
 import { PendingGameStatus } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";

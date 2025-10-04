@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/database/client';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { unstable_noStore as noStore } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 

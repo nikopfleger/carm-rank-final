@@ -3,6 +3,7 @@
 
 import { prisma } from '@/lib/database/client';
 
+import { serializeBigInt } from '@/lib/serialize-bigint';
 export const dynamic = 'force-dynamic';
 import { Prisma } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';

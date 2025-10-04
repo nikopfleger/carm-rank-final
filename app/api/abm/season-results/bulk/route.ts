@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/database/client';
+import { serializeBigInt } from '@/lib/serialize-bigint';
 import { NextRequest, NextResponse } from 'next/server';
 
 ;
@@ -112,7 +113,7 @@ export async function POST(request: NextRequest) {
 
         if (existingPlayers.length !== playerIds.length) {
             const existingPlayerIds = existingPlayers.map(p => p.id);
-            const missingPlayerIds = playerIds.filter(id => !existingPlayerIds.includes(id));
+            const missingPlayerIds = playerIds.filter(id => !existingPlayerIds.includes(BigInt(id)));
             return NextResponse.json(
                 { error: `Los siguientes jugadores no existen: ${missingPlayerIds.join(', ')}` },
                 { status: 400 }
@@ -166,7 +167,7 @@ export async function POST(request: NextRequest) {
 
         console.log(`✅ Resultados de temporada ${seasonId} actualizados: ${result.length} resultados`);
 
-        return NextResponse.json({
+        return NextResponse.json(serializeBigInt({
             success: true,
             message: `Resultados de la temporada actualizados exitosamente`,
             data: {
@@ -174,7 +175,7 @@ export async function POST(request: NextRequest) {
                 resultsCount: result.length,
                 results: result
             }
-        });
+        }));
 
     } catch (error) {
         console.error("❌ Error actualizando resultados de temporada:", error);
